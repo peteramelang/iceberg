@@ -6,8 +6,16 @@ order: 4
 summary: >-
   Distribute traffic across multiple application instances to eliminate single
   points of failure and enable horizontal scaling.
-definition: (pending research)
-needsManualPick: false
+definition: >-
+  Distribute traffic across multiple application instances to eliminate single
+  points of failure and enable horizontal scaling.
+
+
+  This topic is part of the "reliability and scale" phase of the iceberg
+  curriculum. Detailed resources have not yet been curated for this topic — the
+  app surfaces it as "needs manual pick" so the user can supply or research
+  learning materials manually.
+needsManualPick: true
 resources:
   videos:
     short: null
@@ -16,9 +24,9 @@ resources:
   services: []
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:15:20.129Z'
+  researchedAt: '2026-05-13T22:22:34.988Z'
   pipelineVersion: 1
   rounds: 1
-  stabilized: false
+  stabilized: true
 ---
 <!-- user notes -->

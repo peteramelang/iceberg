@@ -1,0 +1,1146 @@
+{
+  "version": 1,
+  "edges": [
+    {
+      "from": "authentication",
+      "to": "access-control",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "authentication should be understood before access-control, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "authentication",
+      "to": "rate-limiting",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "authentication should be understood before rate-limiting, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "authentication",
+      "to": "cookies",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "authentication should be understood before cookies, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "gdpr-ccpa",
+      "to": "cookies",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "gdpr-ccpa should be understood before cookies, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "authentication",
+      "to": "payments",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "authentication should be understood before payments, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "idempotency",
+      "to": "payments",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "idempotency should be understood before payments, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "payments",
+      "to": "billing-logic",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "payments should be understood before billing-logic, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "idempotency",
+      "to": "billing-logic",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "idempotency should be understood before billing-logic, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "billing-logic",
+      "to": "subscription-states",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "billing-logic should be understood before subscription-states, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "data-integrity",
+      "to": "schema-migrations",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "data-integrity should be understood before schema-migrations, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "data-integrity",
+      "to": "crud-logic",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "data-integrity should be understood before crud-logic, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "access-control",
+      "to": "crud-logic",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "access-control should be understood before crud-logic, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "logging",
+      "to": "alerting",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "logging should be understood before alerting, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "slos-and-slis",
+      "to": "alerting",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "slos-and-slis should be understood before alerting, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "logging",
+      "to": "instrumentation",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "logging should be understood before instrumentation, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "instrumentation",
+      "to": "distributed-tracing",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "instrumentation should be understood before distributed-tracing, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "instrumentation",
+      "to": "slos-and-slis",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "instrumentation should be understood before slos-and-slis, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "instrumentation",
+      "to": "cloud-costs",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "instrumentation should be understood before cloud-costs, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "load-balancing",
+      "to": "scalability",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "load-balancing should be understood before scalability, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "caching",
+      "to": "scalability",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "caching should be understood before scalability, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "distributed-tracing",
+      "to": "latency-optimization",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "distributed-tracing should be understood before latency-optimization, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "caching",
+      "to": "latency-optimization",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "caching should be understood before latency-optimization, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "data-integrity",
+      "to": "caching",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "data-integrity should be understood before caching, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "environments",
+      "to": "load-balancing",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "environments should be understood before load-balancing, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "idempotency",
+      "to": "message-queues",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "idempotency should be understood before message-queues, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "message-queues",
+      "to": "dead-letter-queues",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "message-queues should be understood before dead-letter-queues, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "load-balancing",
+      "to": "multi-region-support",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "load-balancing should be understood before multi-region-support, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "data-integrity",
+      "to": "multi-region-support",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "data-integrity should be understood before multi-region-support, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "test-coverage",
+      "to": "ci-cd",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "test-coverage should be understood before ci-cd, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "environments",
+      "to": "ci-cd",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "environments should be understood before ci-cd, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "secrets-management",
+      "to": "environments",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "secrets-management should be understood before environments, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "ci-cd",
+      "to": "rollbacks",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "ci-cd should be understood before rollbacks, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "schema-migrations",
+      "to": "rollbacks",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "schema-migrations should be understood before rollbacks, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "ci-cd",
+      "to": "feature-flags",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "ci-cd should be understood before feature-flags, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "feature-flags",
+      "to": "ab-testing",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "feature-flags should be understood before ab-testing, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "instrumentation",
+      "to": "ab-testing",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "instrumentation should be understood before ab-testing, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "cloud-costs",
+      "to": "vendor-lock-in",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "cloud-costs should be understood before vendor-lock-in, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "crud-logic",
+      "to": "api-versioning",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "crud-logic should be understood before api-versioning, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "alerting",
+      "to": "incident-response",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "alerting should be understood before incident-response, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "logging",
+      "to": "incident-response",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "logging should be understood before incident-response, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "alerting",
+      "to": "on-call-rotations",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "alerting should be understood before on-call-rotations, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "incident-response",
+      "to": "disaster-recovery",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "incident-response should be understood before disaster-recovery, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "gdpr-ccpa",
+      "to": "data-retention",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "gdpr-ccpa should be understood before data-retention, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "incident-response",
+      "to": "escalations",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "incident-response should be understood before escalations, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "instrumentation",
+      "to": "retention",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "instrumentation should be understood before retention, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "subscription-states",
+      "to": "churn-control",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "subscription-states should be understood before churn-control, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "retention",
+      "to": "churn-control",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "retention should be understood before churn-control, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "logging",
+      "to": "support-ops",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "logging should be understood before support-ops, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "access-control",
+      "to": "support-ops",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "access-control should be understood before support-ops, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "gdpr-ccpa",
+      "to": "governance",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "gdpr-ccpa should be understood before governance, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "access-control",
+      "to": "governance",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "access-control should be understood before governance, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "authentication",
+      "to": "secrets-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "authentication",
+      "to": "gdpr-ccpa",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "access-control",
+      "to": "secrets-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "access-control",
+      "to": "rate-limiting",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "access-control",
+      "to": "cookies",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "access-control",
+      "to": "gdpr-ccpa",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "secrets-management",
+      "to": "rate-limiting",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "secrets-management",
+      "to": "cookies",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "secrets-management",
+      "to": "gdpr-ccpa",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "rate-limiting",
+      "to": "cookies",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "rate-limiting",
+      "to": "gdpr-ccpa",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "payments",
+      "to": "subscription-states",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "payments",
+      "to": "data-integrity",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "payments",
+      "to": "schema-migrations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "payments",
+      "to": "crud-logic",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "billing-logic",
+      "to": "data-integrity",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "billing-logic",
+      "to": "schema-migrations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "billing-logic",
+      "to": "crud-logic",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "subscription-states",
+      "to": "idempotency",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "subscription-states",
+      "to": "data-integrity",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "subscription-states",
+      "to": "schema-migrations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "subscription-states",
+      "to": "crud-logic",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "idempotency",
+      "to": "data-integrity",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "idempotency",
+      "to": "schema-migrations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "idempotency",
+      "to": "crud-logic",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "schema-migrations",
+      "to": "crud-logic",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "logging",
+      "to": "distributed-tracing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "logging",
+      "to": "slos-and-slis",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "logging",
+      "to": "cloud-costs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "alerting",
+      "to": "instrumentation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "alerting",
+      "to": "distributed-tracing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "alerting",
+      "to": "cloud-costs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "distributed-tracing",
+      "to": "slos-and-slis",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "distributed-tracing",
+      "to": "cloud-costs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "slos-and-slis",
+      "to": "cloud-costs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "scalability",
+      "to": "latency-optimization",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "scalability",
+      "to": "message-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "scalability",
+      "to": "dead-letter-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "scalability",
+      "to": "multi-region-support",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "scalability",
+      "to": "error-handling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "latency-optimization",
+      "to": "load-balancing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "latency-optimization",
+      "to": "message-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "latency-optimization",
+      "to": "dead-letter-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "latency-optimization",
+      "to": "multi-region-support",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "latency-optimization",
+      "to": "error-handling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "caching",
+      "to": "load-balancing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "caching",
+      "to": "message-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "caching",
+      "to": "dead-letter-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "caching",
+      "to": "multi-region-support",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "caching",
+      "to": "error-handling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "load-balancing",
+      "to": "message-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "load-balancing",
+      "to": "dead-letter-queues",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "load-balancing",
+      "to": "error-handling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "message-queues",
+      "to": "multi-region-support",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "message-queues",
+      "to": "error-handling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dead-letter-queues",
+      "to": "multi-region-support",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dead-letter-queues",
+      "to": "error-handling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "multi-region-support",
+      "to": "error-handling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ci-cd",
+      "to": "ab-testing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ci-cd",
+      "to": "vendor-lock-in",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ci-cd",
+      "to": "api-versioning",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "environments",
+      "to": "rollbacks",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "environments",
+      "to": "feature-flags",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "environments",
+      "to": "test-coverage",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "environments",
+      "to": "ab-testing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "environments",
+      "to": "vendor-lock-in",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "environments",
+      "to": "api-versioning",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "rollbacks",
+      "to": "feature-flags",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "rollbacks",
+      "to": "test-coverage",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "rollbacks",
+      "to": "ab-testing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "rollbacks",
+      "to": "vendor-lock-in",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "rollbacks",
+      "to": "api-versioning",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "feature-flags",
+      "to": "test-coverage",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "feature-flags",
+      "to": "vendor-lock-in",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "feature-flags",
+      "to": "api-versioning",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "test-coverage",
+      "to": "ab-testing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "test-coverage",
+      "to": "vendor-lock-in",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "test-coverage",
+      "to": "api-versioning",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ab-testing",
+      "to": "vendor-lock-in",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ab-testing",
+      "to": "api-versioning",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "vendor-lock-in",
+      "to": "api-versioning",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "incident-response",
+      "to": "on-call-rotations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "incident-response",
+      "to": "data-retention",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "on-call-rotations",
+      "to": "disaster-recovery",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "on-call-rotations",
+      "to": "data-retention",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "on-call-rotations",
+      "to": "escalations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "disaster-recovery",
+      "to": "data-retention",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "disaster-recovery",
+      "to": "escalations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "data-retention",
+      "to": "escalations",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "retention",
+      "to": "support-ops",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "retention",
+      "to": "governance",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "retention",
+      "to": "documentation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "retention",
+      "to": "dependency-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "churn-control",
+      "to": "support-ops",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "churn-control",
+      "to": "governance",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "churn-control",
+      "to": "documentation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "churn-control",
+      "to": "dependency-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "support-ops",
+      "to": "governance",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "support-ops",
+      "to": "documentation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "support-ops",
+      "to": "dependency-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "governance",
+      "to": "documentation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "governance",
+      "to": "dependency-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "documentation",
+      "to": "dependency-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "authentication",
+      "to": "access-control",
+      "type": "pairs-with",
+      "weight": 0.95,
+      "reasoning": "AuthN identifies who you are; AuthZ decides what you can do — almost always implemented together."
+    },
+    {
+      "from": "authentication",
+      "to": "access-control",
+      "type": "often-confused-with",
+      "weight": 0.8,
+      "reasoning": "Beginners frequently use the term 'authentication' when they mean 'authorization' and vice versa."
+    },
+    {
+      "from": "idempotency",
+      "to": "payments",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "Idempotency keys are foundational to safe payment retries."
+    },
+    {
+      "from": "alerting",
+      "to": "incident-response",
+      "type": "pairs-with",
+      "weight": 0.85,
+      "reasoning": "Alerts trigger incident response; incident response feeds back into alert tuning."
+    },
+    {
+      "from": "distributed-tracing",
+      "to": "latency-optimization",
+      "type": "pairs-with",
+      "weight": 0.8,
+      "reasoning": "Traces are the primary tool for identifying latency hotspots."
+    },
+    {
+      "from": "feature-flags",
+      "to": "ab-testing",
+      "type": "prerequisite",
+      "weight": 0.85,
+      "reasoning": "A/B testing relies on feature-flag-style targeting infrastructure."
+    },
+    {
+      "from": "schema-migrations",
+      "to": "rollbacks",
+      "type": "pairs-with",
+      "weight": 0.7,
+      "reasoning": "Migration reversibility is a precondition for safe rollbacks."
+    },
+    {
+      "from": "message-queues",
+      "to": "dead-letter-queues",
+      "type": "prerequisite",
+      "weight": 0.95,
+      "reasoning": "DLQs are a feature of the queue infrastructure they protect."
+    },
+    {
+      "from": "caching",
+      "to": "scalability",
+      "type": "pairs-with",
+      "weight": 0.7,
+      "reasoning": "Caching is one of the most leveraged techniques for scaling read paths."
+    }
+  ]
+}

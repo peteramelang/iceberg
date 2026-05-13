@@ -7,8 +7,17 @@ summary: >-
   Principled strategies for catching, surfacing, containing, and recovering from
   errors in production systems, including graceful degradation and user-facing
   vs. internal error distinctions.
-definition: (pending research)
-needsManualPick: false
+definition: >-
+  Principled strategies for catching, surfacing, containing, and recovering from
+  errors in production systems, including graceful degradation and user-facing
+  vs. internal error distinctions.
+
+
+  This topic is part of the "reliability and scale" phase of the iceberg
+  curriculum. Detailed resources have not yet been curated for this topic — the
+  app surfaces it as "needs manual pick" so the user can supply or research
+  learning materials manually.
+needsManualPick: true
 resources:
   videos:
     short: null
@@ -17,9 +26,9 @@ resources:
   services: []
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:15:20.131Z'
+  researchedAt: '2026-05-13T22:22:34.988Z'
   pipelineVersion: 1
   rounds: 1
-  stabilized: false
+  stabilized: true
 ---
 <!-- user notes -->

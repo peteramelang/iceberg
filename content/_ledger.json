@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-05-13T22:15:20.116Z",
-  "updatedAt": "2026-05-13T22:15:20.141Z",
+  "updatedAt": "2026-05-13T22:22:35.085Z",
   "currentRound": 1,
   "mode": "full",
   "stages": {
@@ -10,6 +10,11 @@
       "userApprovedAt": "2026-05-13T22:15:20.118Z",
       "artifactPath": "content/_taxonomy.json",
       "completedAt": "2026-05-13T22:15:20.118Z"
+    },
+    "stage_5_connections": {
+      "status": "completed",
+      "artifactPath": "content/_connections.json",
+      "completedAt": "2026-05-13T22:22:35.084Z"
     }
   },
   "topics": {
@@ -17,18 +22,29 @@
       "phase": "security-and-identity",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [
+            "agent-a-auth"
+          ],
+          "completedAt": "2026-05-13T22:22:34.999Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.000Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.001Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.001Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -37,18 +53,29 @@
       "phase": "security-and-identity",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [
+            "agent-access-control"
+          ],
+          "completedAt": "2026-05-13T22:22:35.003Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.003Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.003Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.004Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -57,18 +84,29 @@
       "phase": "security-and-identity",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [
+            "agent-secrets-management"
+          ],
+          "completedAt": "2026-05-13T22:22:35.006Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.006Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.006Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.007Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -77,18 +115,29 @@
       "phase": "security-and-identity",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [
+            "agent-rate-limiting"
+          ],
+          "completedAt": "2026-05-13T22:22:35.008Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.008Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.008Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.008Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -97,18 +146,29 @@
       "phase": "security-and-identity",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [
+            "agent-cookies"
+          ],
+          "completedAt": "2026-05-13T22:22:35.010Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.010Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.010Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.011Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -117,18 +177,29 @@
       "phase": "security-and-identity",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [
+            "agent-gdpr-ccpa"
+          ],
+          "completedAt": "2026-05-13T22:22:35.012Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.012Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.012Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.012Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -137,18 +208,27 @@
       "phase": "money-and-data",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.013Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.013Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.013Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.014Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -157,18 +237,27 @@
       "phase": "money-and-data",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.014Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.015Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.015Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.015Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -177,18 +266,27 @@
       "phase": "money-and-data",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.016Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.017Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.017Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.017Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -197,18 +295,27 @@
       "phase": "money-and-data",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.018Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.018Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.019Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.019Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -217,18 +324,27 @@
       "phase": "money-and-data",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.019Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.020Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.020Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.020Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -237,18 +353,27 @@
       "phase": "money-and-data",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.021Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.021Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.022Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.022Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -257,18 +382,27 @@
       "phase": "money-and-data",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.023Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.024Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.024Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.024Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -277,18 +411,29 @@
       "phase": "observability",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [
+            "agent-a-logging"
+          ],
+          "completedAt": "2026-05-13T22:22:35.026Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.026Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.026Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.027Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -297,18 +442,27 @@
       "phase": "observability",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.028Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.028Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.028Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.028Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -317,18 +471,27 @@
       "phase": "observability",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.029Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.029Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.029Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.030Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -337,18 +500,27 @@
       "phase": "observability",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.030Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.031Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.031Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.031Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -357,18 +529,27 @@
       "phase": "observability",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.032Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.032Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.032Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.033Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -377,18 +558,27 @@
       "phase": "observability",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.033Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.034Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.034Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.035Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -397,18 +587,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.036Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.036Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.036Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.036Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -417,18 +616,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.037Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.037Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.038Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.038Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -437,18 +645,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.039Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.039Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.039Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.040Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -457,18 +674,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.041Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.041Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.041Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.041Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -477,18 +703,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.042Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.042Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.043Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.043Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -497,18 +732,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.044Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.044Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.044Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.045Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -517,18 +761,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.045Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.046Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.046Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.047Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -537,18 +790,27 @@
       "phase": "reliability-and-scale",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.048Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.048Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.049Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.049Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -557,18 +819,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.050Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.051Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.051Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.052Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -577,18 +848,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.053Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.053Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.053Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.054Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -597,18 +877,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.054Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.054Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.055Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.055Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -617,18 +906,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.056Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.056Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.056Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.057Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -637,18 +935,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.057Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.058Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.058Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.058Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -657,18 +964,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.059Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.059Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.060Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.060Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -677,18 +993,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.061Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.061Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.061Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.062Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -697,18 +1022,27 @@
       "phase": "delivery-and-operations",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.062Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.063Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.063Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.063Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -717,18 +1051,27 @@
       "phase": "incident-management",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.064Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.064Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.065Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.065Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -737,18 +1080,27 @@
       "phase": "incident-management",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.066Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.066Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.066Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.066Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -757,18 +1109,27 @@
       "phase": "incident-management",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.067Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.067Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.068Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.068Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -777,18 +1138,27 @@
       "phase": "incident-management",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.069Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.069Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.069Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.070Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -797,18 +1167,27 @@
       "phase": "incident-management",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.070Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.071Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.071Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.071Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -817,18 +1196,27 @@
       "phase": "growth-and-governance",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.072Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.073Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.073Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.073Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -837,18 +1225,27 @@
       "phase": "growth-and-governance",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.074Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.074Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.075Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.075Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -857,18 +1254,27 @@
       "phase": "growth-and-governance",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.076Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.076Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.077Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.077Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -877,18 +1283,27 @@
       "phase": "growth-and-governance",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.078Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.078Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.078Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.079Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -897,18 +1312,27 @@
       "phase": "growth-and-governance",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.079Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.080Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.080Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.080Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
@@ -917,25 +1341,34 @@
       "phase": "growth-and-governance",
       "stages": {
         "research": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "agentRunIds": [],
+          "completedAt": "2026-05-13T22:22:35.081Z"
         },
         "consistency": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.081Z"
         },
         "adversarial": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.082Z"
         },
         "liveness": {
-          "status": "pending"
+          "status": "completed",
+          "round": 1,
+          "completedAt": "2026-05-13T22:22:35.082Z"
         },
-        "stabilized": false
+        "stabilized": true
       },
       "lastSwapAt": null,
       "retryCounts": {}
     }
   },
   "connections": {
-    "status": "pending",
+    "status": "completed",
     "artifactPath": "content/_connections.json"
   }
 }
