@@ -215,12 +215,38 @@ narrative: >-
   underlying observability infrastructure before you can meaningfully reason
   about SLO compliance.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: 'Measuring what''s easy, not what users experience'
+    explanation: >-
+      Teams reach for CPU utilization or uptime pings because they are already
+      instrumented, but those metrics don't capture whether a user's checkout
+      succeeded in under 300ms. SLIs must track user-facing success rate and
+      latency on critical journeys or the SLO is measuring the wrong thing
+      entirely.
+  - title: Setting SLO targets disconnected from actual baseline
+    explanation: >-
+      An SLO of 99.99% when you are currently achieving 99.5% means your error
+      budget is perpetually exhausted from day one, the number is ignored, and
+      no useful decisions flow from it. Start your target slightly above recent
+      measured performance and tighten it as reliability improves.
+  - title: Error budget exists on a dashboard nobody opens
+    explanation: >-
+      Publishing an SLO without a policy that actually changes team behavior —
+      slowing feature velocity when the budget burns down — produces theater,
+      not reliability improvement. The error budget only works as a
+      decision-forcing function if leadership enforces it.
+  - title: SLO windows that hide chronic low-level failures
+    explanation: >-
+      A 30-day rolling SLO can absorb a steady drip of 0.05% daily failures
+      without ever triggering an alert, even though that drip represents
+      thousands of failed user requests. Complement long-window compliance with
+      burn-rate alerts that fire when recent consumption will exhaust the budget
+      early.
+  - title: Including planned maintenance in error budget consumption
+    explanation: >-
+      Counting a scheduled deployment window as downtime against your SLO
+      discourages maintenance and distorts the signal. Maintenance windows
+      should be excluded from SLI measurement or accounted for separately so the
+      budget reflects unplanned reliability, not intentional operational events.
 codeExamples:
   - language: typescript
     title: (pending)

@@ -165,12 +165,49 @@ narrative: >-
   engineering decides when the cleanup happens and maintains the flag inventory.
   That shared ownership is what keeps the flag count manageable over time.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Release Flags That Never Get Cleaned Up
+    explanation: >-
+      Once a feature is fully rolled out, the flag stops feeling urgent and
+      cleanup gets deferred indefinitely. A codebase with 150 abandoned flags
+      contains code paths nobody can reason about, silent behavior changes when
+      an evaluation service hiccups, and conditional branches that have been
+      dead for two years. Treat flag cleanup as a first-class engineering task:
+      assign an owner at flag creation time and set an expiration date so
+      cleanup is scheduled, not aspirational.
+  - title: Flag Evaluation Logic Scattered Throughout the Codebase
+    explanation: >-
+      When flag checks are sprinkled across controllers, services, and database
+      queries rather than evaluated at a single decision boundary, a single flag
+      controls multiple divergent code paths in ways that become impossible to
+      audit. Centralize flag evaluation at the boundary of each feature — one
+      flag check, one branch — so the surface area of a flag's effect is visible
+      and removing the flag is a single, safe operation.
+  - title: Wrapping Every Small Change in a Feature Flag
+    explanation: >-
+      Flags used indiscriminately as a habit rather than a risk management tool
+      create deeply nested conditionals that are harder to reason about than a
+      straightforward deploy. Not every change warrants a flag — a flag should
+      reflect genuine deployment risk or deliberate rollout control. Reserve
+      flags for changes with meaningful blast radius: new user-facing
+      functionality, risky database migrations, or ops controls for high-traffic
+      paths.
+  - title: No Progressive Rollout — Shipping to 100% Immediately
+    explanation: >-
+      The primary value of a release flag is the ability to ramp gradually,
+      watching error rates and latency at 1%, 10%, and 50% before full exposure.
+      Shipping to 100% on day one provides no advantage over a deploy without a
+      flag, and misses the opportunity to catch regressions before they affect
+      all users. Build progressive rollout into the standard release process and
+      automate rollback triggers when error rates exceed a threshold.
+  - title: Flag Evaluation Service as an Unmonitored Single Point of Failure
+    explanation: >-
+      Application code that blocks on a remote flag evaluation call with no
+      timeout or fallback will hang when the evaluation service is slow or
+      unavailable, potentially taking down features that have nothing to do with
+      any in-flight flag change. Flags must have default values that are safe to
+      serve if the evaluation service is unreachable, and flag SDK calls must
+      have timeouts. Treat the flag service as a dependency that can fail and
+      design accordingly.
 codeExamples:
   - language: typescript
     title: (pending)

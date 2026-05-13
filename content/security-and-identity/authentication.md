@@ -188,12 +188,48 @@ narrative: >-
   construction. Passkeys are increasingly supported and worth implementing as a
   second factor or primary credential for new applications.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Rolling your own authentication from scratch
+    explanation: >-
+      Building login, session management, and token handling in-house introduces
+      a large attack surface — password hashing work factors, timing-safe
+      comparison, account enumeration, and session fixation are all known
+      pitfalls that are easy to get subtly wrong. Established identity providers
+      have solved these problems already; the cost of adopting one is nearly
+      always less than the cost of a breach.
+  - title: Issuing long-lived JWTs with no revocation mechanism
+    explanation: >-
+      A JWT with a 24-hour expiry cannot be invalidated before it expires
+      without maintaining a blocklist, so a compromised token remains valid for
+      the full expiry window. Short expiry times paired with refresh tokens, or
+      server-side session state, are the standard mitigations for credentials
+      that need to be revocable.
+  - title: Storing passwords with weak or no hashing
+    explanation: >-
+      MD5, SHA-1, and even SHA-256 without a salt are all insufficient for
+      password storage because they are fast to compute, making brute-force and
+      rainbow-table attacks practical at scale. Passwords must be hashed with an
+      adaptive, slow algorithm like bcrypt or Argon2 at a work factor tuned to
+      take at least 100ms.
+  - title: No rate limiting on login and credential endpoints
+    explanation: >-
+      Without rate limiting, a login endpoint is fully open to credential
+      stuffing attacks — automated tools testing millions of username/password
+      combinations from breached credential lists. Rate limiting by IP and by
+      account, with progressive backoff and CAPTCHA escalation, is the baseline
+      defense.
+  - title: Leaking user existence through inconsistent error messages
+    explanation: >-
+      Returning 'user not found' for unknown usernames and 'incorrect password'
+      for known ones lets an attacker enumerate valid accounts in your system.
+      Login and password-reset endpoints should return the same generic error
+      message regardless of whether the account exists.
+  - title: Skipping token rotation on privilege escalation
+    explanation: >-
+      Reusing the same session token before and after a user elevates to admin
+      or confirms an action (like changing their email) allows session fixation
+      attacks where an attacker who planted a session ID inherits the elevated
+      privileges. Always issue a fresh token or session ID when privilege level
+      changes.
 codeExamples:
   - language: typescript
     title: (pending)

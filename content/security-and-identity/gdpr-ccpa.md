@@ -166,12 +166,58 @@ narrative: >-
   Engineers who understand why these mechanisms exist, rather than just that
   they're required, tend to build them more robustly.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: No Data Map Makes Deletion Requests Impossible to Fulfill
+    explanation: >-
+      Before you can delete a user's data, you must know where it lives — not
+      just the primary application database, but analytics event streams, error
+      tracking services, log aggregators, data warehouse snapshots, email
+      service provider lists, and cold storage backups. Most systems accumulate
+      personal data in places engineers stopped thinking about. Build the data
+      map before building the deletion pipeline; attempting deletion without it
+      produces incomplete erasure, which is not compliant.
+  - title: Consent Banner That Does Not Actually Control Data Collection
+    explanation: >-
+      A cookie consent banner that is implemented purely as a UI element while
+      the backend continues collecting and processing data regardless of consent
+      state is legal theater, not compliance. The consent signal must flow from
+      the UI through to every data collection and processing system it governs.
+      Verify that declining analytics consent actually prevents analytics events
+      from being sent, not just that the banner appears and closes.
+  - title: Incomplete Deletion That Misses Secondary Data Stores
+    explanation: >-
+      A DSR pipeline that removes a user from the production database but leaves
+      their data in the search index, analytics tables, and backup snapshots has
+      not fulfilled a deletion request. Incomplete deletion is a compliance
+      failure even when the primary delete succeeds. Map every secondary store
+      at implementation time, test the full pipeline against a realistic data
+      footprint, and log exactly which systems were queried and what was removed
+      for every request.
+  - title: Manual DSR Processes That Cannot Scale
+    explanation: >-
+      Responding to data subject requests by hand — an engineer queries the
+      database and exports a CSV — breaks under volume and introduces
+      response-time risk. GDPR requires a response within 30 days; CCPA within
+      45. A single viral news story can generate hundreds of requests in a week.
+      Build an automated DSR pipeline that can receive a request, query every
+      relevant system, and return or delete data without manual intervention.
+  - title: Missing Audit Trails for Consent and Deletions
+    explanation: >-
+      GDPR requires that you can demonstrate compliance, not just claim it. If
+      you cannot show when consent was given, on what version of a privacy
+      notice, when a deletion request arrived, and what data was deleted, you
+      cannot pass an audit or respond to a regulatory inquiry. Log consent
+      events with timestamps and version references, and log every step of every
+      DSR execution as immutable records separate from the data being deleted.
+  - title: PII Captured Accidentally in Logs and Error Tracking
+    explanation: >-
+      Request bodies, query parameters, and error context passed to logging and
+      error tracking systems frequently contain personal data — names, email
+      addresses, IP addresses, authentication tokens — without any deliberate
+      decision to collect it. This data is subject to the same retention and
+      deletion obligations as intentionally collected PII, but is rarely
+      included in data maps or DSR pipelines. Audit what your logging and error
+      tracking systems capture and apply scrubbing or masking at the
+      instrumentation layer.
 codeExamples:
   - language: typescript
     title: (pending)

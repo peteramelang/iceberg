@@ -190,12 +190,55 @@ narrative: >-
   treating LLM latency as its own domain rather than assuming your existing
   intuitions transfer directly.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Optimizing application code while the database is the bottleneck
+    explanation: >-
+      Engineers reach for application-layer fixes — caching, connection pooling,
+      async processing — without first profiling to find where the time is
+      actually going. In most web services, the dominant source of latency is a
+      slow database query or a missing index, and no amount of application code
+      change will fix that. Measure with distributed tracing first, find the
+      critical path, then optimize exactly that component.
+  - title: N+1 query pattern scaling latency with data size
+    explanation: >-
+      Loading a list of N objects and then issuing a separate query for each one
+      is the single most common query anti-pattern, and it is invisible when
+      data sets are small during development. In production with hundreds of
+      rows, what was a 10ms page load becomes a 2-second one. Use eager loading,
+      batch queries, or a single JOIN, and add slow-query monitoring so new N+1
+      patterns are caught before they reach production.
+  - title: Alerting on average latency instead of tail
+    explanation: >-
+      P50 latency hides the experience of users during spikes. P99 can be an
+      order of magnitude worse than the mean and still not trigger an alert set
+      on average response time. Most users who experience your system as slow
+      are experiencing your tail, not your average. Set SLOs on P95 and P99,
+      alert on those, and keep tail latency visible on your primary dashboards.
+  - title: Moving synchronous work async without signaling users
+    explanation: >-
+      Offloading a slow operation to a background queue is a valid latency
+      optimization, but if the user expected a synchronous confirmation and
+      instead receives a 'your request is processing' response, the experience
+      degrades. Async decoupling requires a corresponding UX change — progress
+      indicators, webhook callbacks, or polling endpoints — or you have
+      introduced latency of a different kind: the latency of user confusion.
+  - title: Adding caches before understanding the access pattern
+    explanation: >-
+      Caching is often the first optimization teams reach for and frequently the
+      wrong one. A cache only helps if the same data is requested repeatedly and
+      the cache hit rate is high; for low-hit-rate or high-cardinality access
+      patterns, caching adds a network hop and complexity without reducing
+      database load. Profile to confirm cache hit rate and query frequency
+      before adding a caching layer, and add TTL and invalidation logic that
+      matches the data's actual freshness requirements.
+  - title: Ignoring serialization and deserialization cost at scale
+    explanation: >-
+      JSON serialization of large payloads, repeated reflection-based marshaling
+      in hot paths, and deeply nested object graphs can consume a significant
+      fraction of request time in high-throughput services — and this cost is
+      rarely visible in profiling until load is high. Benchmark serialization in
+      isolation for large or frequently-accessed payloads, and consider binary
+      formats or pre-serialization for objects that are expensive to encode on
+      every request.
 codeExamples:
   - language: typescript
     title: (pending)

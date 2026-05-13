@@ -125,12 +125,50 @@ narrative: >-
   everything is calm, test it occasionally in incident drills, and trust it when
   things go sideways.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Engineers Trying to Handle Sev-1 Incidents Alone
+    explanation: >-
+      An on-call engineer who hesitates to escalate because they do not want to
+      bother anyone is the most dangerous failure mode in an escalation process.
+      Critical incidents get worse the longer a single person manages them solo
+      — they miss things, lose track of time, and make worse decisions under
+      compounding pressure. Build a culture where escalating earlier than feels
+      comfortable is explicitly praised, not questioned, and where the cost of
+      an unnecessary escalation is treated as near zero.
+  - title: Escalation Paths Too Complex to Use Under Pressure
+    explanation: >-
+      A four-page document defining twelve severity tiers with different
+      stakeholder matrices and notification channels will not be read by an
+      engineer who is already debugging a production failure. Escalation
+      procedures need to fit in a single sidebar of a runbook: severity
+      definitions in plain language, the action for each level, and who to
+      contact. Complexity that cannot be recalled under stress might as well not
+      exist.
+  - title: Technical Incident Response and Customer Communication Running as One Role
+    explanation: >-
+      An engineer debugging a database failure cannot simultaneously be the
+      person drafting status page updates and fielding customer support tickets
+      — each task degrades the other. Customer-facing communication and
+      technical remediation require different skills and must run as parallel
+      tracks with a clean handoff defined in the escalation process. Assign a
+      separate incident communications owner as soon as a customer-visible Sev-1
+      is declared.
+  - title: Severity Levels Not Tied to Concrete Business Impact
+    explanation: >-
+      Severity tiers that are defined vaguely — 'high', 'medium', 'low' — lead
+      to disagreement in the moment about which level applies and therefore what
+      response is required. Severity should be defined in terms of observable,
+      concrete impact: how many users are affected, which revenue-generating
+      flows are broken, and whether data integrity is at risk. Concrete criteria
+      remove the judgment call from an already stressful moment.
+  - title: Escalation Process Never Tested Until a Real Incident
+    explanation: >-
+      Pager integrations that are configured but never tested, on-call rotations
+      with incorrect contact information, and stakeholder notification lists
+      that have not been updated in months will all fail simultaneously during
+      your first major incident. Run escalation process drills — not just
+      technical incident drills. Verify that pages reach the right people, that
+      contacts are current, and that the on-call rotation reflects who is
+      actually available.
 codeExamples:
   - language: typescript
     title: (pending)

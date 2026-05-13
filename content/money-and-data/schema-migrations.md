@@ -212,12 +212,50 @@ narrative: >-
   data. Teams that build migration testing into their CI pipeline catch these
   failures before they reach production.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Deploying schema change and code change simultaneously
+    explanation: >-
+      Rolling deployments mean some instances run old code against the new
+      schema and some run new code against the old schema at the same time. A
+      column rename or removal deployed together with code that expects it will
+      produce errors during that overlap window. Schema changes must be
+      backward-compatible with the previous code version, deployed first, and
+      contracted only after all instances are on the new code.
+  - title: Running ALTER TABLE on large tables without CONCURRENTLY
+    explanation: >-
+      A standard ALTER TABLE on a table with tens of millions of rows takes an
+      exclusive lock for the duration of the operation, blocking all reads and
+      writes. In Postgres, CREATE INDEX CONCURRENTLY builds the index without a
+      long lock and should be the default for any non-trivial table. Test
+      migration run time against production-scale data, not an empty staging
+      table.
+  - title: Backfilling a column with a single UPDATE across all rows
+    explanation: >-
+      A single UPDATE that touches every row in a large table holds locks,
+      generates a massive write-ahead log, and can overwhelm the database for
+      minutes or longer. Backfills should be executed in small batches with a
+      pause between each batch during off-peak hours, often as a separate step
+      from the schema change itself.
+  - title: Adding NOT NULL constraints without backfilling existing nulls first
+    explanation: >-
+      Adding a NOT NULL constraint to a column that already contains null values
+      will fail unless the data is cleaned up first or a safe default is
+      provided. Attempting this in a single migration on production data
+      produces an error mid-migration, leaving the schema in a partially applied
+      state that can be difficult to recover from.
+  - title: Testing migrations against an empty database
+    explanation: >-
+      Many migration failures only appear against real data: a constraint that
+      passes on a blank table fails when existing rows violate it, or a backfill
+      runs in seconds on staging but takes 40 minutes on the production row
+      count. CI should run migrations against a recent anonymized production
+      snapshot, not a freshly initialized schema.
+  - title: Skipping the contract phase and leaving dead columns forever
+    explanation: >-
+      Teams that apply the expand phase of expand-contract—adding new columns
+      and migrating data—frequently never complete the contract phase and remove
+      the old structures. Dead columns accumulate, bloat rows, confuse future
+      engineers, and keep old indexes alive. The contract step should be treated
+      as a required deployment, not an optional cleanup.
 codeExamples:
   - language: typescript
     title: (pending)

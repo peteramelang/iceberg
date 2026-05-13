@@ -206,12 +206,48 @@ narrative: >-
   symptom, because they eliminate the guessing that otherwise eats the first
   hour of every incident.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Incomplete Context Propagation Leaves Orphaned Spans
+    explanation: >-
+      HTTP services get instrumented but background job workers, Kafka
+      consumers, and async queues are missed, causing traces to terminate
+      mid-journey. The resulting orphaned spans are more confusing than no
+      tracing at all because they imply a path that cannot be followed. Audit
+      every process boundary — HTTP headers, message queue metadata, gRPC
+      metadata — and verify propagation end-to-end, not just at the entry point.
+  - title: Sampling Too Aggressively and Missing the Slow Outliers
+    explanation: >-
+      A 1% head-based sampling rate cuts infrastructure cost but discards 99 out
+      of 100 requests, almost guaranteeing you miss the rare slow tail-latency
+      events that matter most during incidents. Implement tail-based sampling or
+      rate-limit sampling so that traces with high latency, errors, or specific
+      attributes are always captured regardless of overall volume. The traces
+      you throw away are the ones you will wish you had during the next
+      incident.
+  - title: Treating Tracing as a One-Time Setup
+    explanation: >-
+      Propagation breaks silently when services are updated, new libraries are
+      added, or framework versions change, and there is no automated check to
+      catch it. A tracing setup that is not continuously validated becomes
+      unreliable exactly when reliability matters most. Add span-count smoke
+      tests or trace-completeness checks to your CI or synthetic monitoring so
+      you are notified before an incident reveals the gap.
+  - title: Using Vague Span Names That Produce Unreadable Traces
+    explanation: >-
+      Spans named 'process', 'handler', or 'db-call' tell you nothing useful
+      about what operation took 800ms. Good span names and attributes —
+      including the query type, cache hit or miss, and relevant business
+      identifiers like order ID — are what make a trace readable in 30 seconds
+      rather than 10 minutes. Treat span naming as part of your instrumentation
+      standard and review it during code review.
+  - title: Skipping Manual Instrumentation for Business-Critical Paths
+    explanation: >-
+      Auto-instrumentation covers library calls and framework middleware but has
+      no visibility into the business logic between them — the pricing
+      calculation loop or the eligibility check that actually owns the latency.
+      Manual spans around the operations that matter to your users are what
+      convert tracing from infrastructure plumbing into a genuinely useful
+      debugging tool. Start with the five operations that appear most often in
+      customer-reported slowness.
 codeExamples:
   - language: typescript
     title: (pending)

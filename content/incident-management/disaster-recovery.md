@@ -125,12 +125,55 @@ narrative: >-
   better architecture decisions overall: more isolation between failure domains,
   cleaner data flows, less implicit state. That's not a coincidence.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Never Testing Restores Before a Real Disaster
+    explanation: >-
+      Teams confirm backups run successfully but never verify that a restore
+      actually produces a working database. The first restore attempt then
+      happens under incident pressure, revealing corrupted snapshots, missing
+      credentials, or procedures written for infrastructure that no longer
+      exists. Schedule quarterly restore drills in a staging environment that
+      mirrors production topology, time them, and treat failures as bugs to fix.
+  - title: Setting RTO and RPO Aspirationally Instead of Empirically
+    explanation: >-
+      Recovery targets written in a planning document without ever measuring
+      real recovery time create false confidence. A plan that says 'two hours'
+      is worthless if nobody has timed how long it actually takes to reprovision
+      a database cluster, replay WAL logs, warm caches, and run smoke tests.
+      Baseline your actual recovery time in drills, then set targets from
+      measured reality.
+  - title: Storing Recovery Runbooks in the System That Just Failed
+    explanation: >-
+      A wiki hosted on the database server that is not responding is not a
+      usable runbook. Recovery documentation must live somewhere accessible when
+      production is completely down — a static site, printed binder, or a
+      separate SaaS wiki not connected to your primary infrastructure. Test this
+      assumption explicitly: if your primary systems were all down right now,
+      where would on-call engineers find recovery steps?
+  - title: Undefined or Mismatched RPO and RTO Across Stakeholders
+    explanation: >-
+      Engineering teams often set technical recovery targets without aligning
+      them to business tolerances, or different parts of the org hold different
+      implicit assumptions. A 15-minute replication lag on a database with a
+      5-minute RPO is a compliance failure hiding in plain sight. Run an
+      explicit stakeholder conversation, document the numbers, and surface any
+      gaps between business expectations and technical capability before an
+      incident forces the conversation.
+  - title: Treating DR as a Yearly Checkbox Exercise
+    explanation: >-
+      Disaster recovery programs that surface only during annual audits atrophy:
+      infrastructure changes, credentials rotate, teams turn over, and the
+      runbook quietly becomes wrong. Infrastructure is not static, so neither is
+      your recovery plan. Integrate DR validation into regular engineering work
+      — a quarterly drill minimum, with runbook updates as part of the
+      definition of done for any change that affects recoverable systems.
+  - title: Assuming Cloud Provider Backups Are Sufficient
+    explanation: >-
+      Managed backups such as RDS automated snapshots confirm that data is
+      stored safely, but they do not confirm that your team can execute a
+      restore, in the correct sequence, at the required speed, under incident
+      conditions. Provider backups are the extinguisher; you still need the fire
+      drill. Verify that your team has documented steps for every layer of the
+      recovery process, not just the database snapshot retrieval.
 codeExamples:
   - language: typescript
     title: (pending)

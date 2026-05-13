@@ -189,12 +189,41 @@ narrative: >-
   operations are supposed to maintain — and with data retention, since
   constraints affect what can be deleted and in what order.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Omitting foreign key constraints in the database
+    explanation: >-
+      Enforcing referential integrity only in application code leaves the
+      database unprotected against background jobs, direct SQL operations, and
+      migrations that bypass the application layer. A foreign key constraint
+      costs almost nothing on reads and prevents an entire class of
+      orphaned-record bugs that are expensive to detect and clean up.
+  - title: Accepting ORM isolation level defaults uncritically
+    explanation: >-
+      READ COMMITTED — the default in Postgres and MySQL — allows a second
+      transaction to modify data between a read and a write in the same
+      operation. For read-modify-write patterns (incrementing a counter,
+      reserving inventory, applying a discount), this creates a race condition
+      that produces incorrect results under concurrent load.
+  - title: Relying solely on application validation for invariants
+    explanation: >-
+      Application validation is bypassed by scripts, migrations, bulk imports,
+      and any code path that writes directly to the database. NOT NULL, UNIQUE,
+      and CHECK constraints at the database level enforce invariants regardless
+      of which code path touches the data. Both layers are necessary; neither is
+      a substitute for the other.
+  - title: Wrapping multi-step writes without a transaction
+    explanation: >-
+      A sequence of writes that succeeds partially — because of an exception, a
+      timeout, or a crash between steps — leaves the database in an inconsistent
+      state. Wrapping multi-step writes in a transaction guarantees they all
+      commit or all roll back together, which is the only way to maintain
+      consistency reliably.
+  - title: Skipping CHECK constraints for domain rules
+    explanation: >-
+      Business rules like 'quantity must be positive' or 'status must be one of
+      a fixed set' are often enforced only in application code, where they can
+      be bypassed. CHECK constraints express these rules at the database level
+      and fire regardless of how data enters the system, preventing invalid
+      states from persisting.
 codeExamples:
   - language: typescript
     title: (pending)

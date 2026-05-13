@@ -161,12 +161,48 @@ narrative: >-
   being verified. A line that's covered by a test that can't actually fail has
   zero value.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Unit tests that mock every dependency
+    explanation: >-
+      A test that mocks the database, the HTTP client, and the email adapter is
+      testing that your mocks return what you told them to return — not that the
+      code works. Prefer integration tests that hit a real test database and
+      exercise the actual code path; reserve mocks for genuinely expensive or
+      non-deterministic external services.
+  - title: Flaky tests trained engineers to ignore failures
+    explanation: >-
+      Once the team learns to re-run the suite until it goes green, every real
+      failure is assumed to be flakiness and gets dismissed. Flaky tests are
+      more dangerous than no tests on that path because they actively suppress
+      the signal you built the suite to produce. Quarantine and fix flaky tests
+      immediately rather than tolerating them.
+  - title: Test suite that takes too long to run
+    explanation: >-
+      A 20-minute CI run means developers stop running tests locally and stop
+      investigating failures in review, so the suite stops catching bugs before
+      merge. Keep the full suite under five minutes through parallelization and
+      ruthless pruning of slow tests; a fast suite that developers actually run
+      beats a thorough suite they skip.
+  - title: Tests coupled to implementation rather than behavior
+    explanation: >-
+      Tests that assert on internal method names, private state, or specific
+      call sequences break on every refactor, making the test suite an obstacle
+      to improvement rather than a safety net. Test what the code does from the
+      outside — inputs and observable outputs — so that valid refactors don't
+      break valid tests.
+  - title: Chasing coverage percentage on low-risk glue code
+    explanation: >-
+      A 90% line coverage number looks good but reveals nothing about whether
+      the checkout flow, the billing webhook handler, or the account recovery
+      path actually works. Prioritize test investment on code whose failure
+      costs real money or customer trust, not on configuration wrappers and thin
+      adapters.
+  - title: No tests for the paths that fail most expensively
+    explanation: >-
+      Teams typically test the happy path and skip error handling: what happens
+      when a payment webhook arrives twice, when a third-party API returns a
+      429, or when a file upload times out halfway through. These are exactly
+      the paths that cause production incidents, and they are almost always
+      undertested because they require deliberate effort to simulate.
 codeExamples:
   - language: typescript
     title: (pending)

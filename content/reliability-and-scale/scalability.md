@@ -225,12 +225,49 @@ narrative: >-
   Locust let you replay realistic traffic patterns at multiples of your expected
   peak, which surfaces bottlenecks before your users do.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Scaling application servers before addressing the database
+    explanation: >-
+      Stateless app servers behind a load balancer scale horizontally with
+      little friction. The database does not. Adding more app server replicas to
+      a system constrained by slow queries or connection exhaustion just sends
+      more concurrent load at the same bottleneck. Fix the database first:
+      indexes, query optimization, connection pooling, then read replicas.
+  - title: Stateful app servers that break under horizontal scaling
+    explanation: >-
+      In-process sessions, local file storage, and in-memory job schedulers all
+      create state that is not shared across instances. Adding a second server
+      routes some users to an instance that does not have their session, or runs
+      background jobs twice. Sessions belong in Redis, files in object storage,
+      and jobs in a shared queue before you scale out.
+  - title: Doing too much synchronous work per request
+    explanation: >-
+      Sending email, resizing images, updating aggregate counters, and
+      triggering webhooks inline with the user-facing response directly inflates
+      latency and makes the system fragile under bursts. Work that does not need
+      to complete before the response should be moved to a queue so the
+      application returns quickly and background workers process at their own
+      pace.
+  - title: Cache invalidation that is either absent or too aggressive
+    explanation: >-
+      Caching without a defined invalidation strategy either serves stale data
+      indefinitely or invalidates so broadly that every write empties the cache
+      and sends a thundering herd to the database. Define the acceptable
+      staleness for each cached resource and choose TTL-based or event-driven
+      invalidation accordingly.
+  - title: Reaching for sharding before exhausting simpler database options
+    explanation: >-
+      Database sharding is operationally expensive and creates new failure modes
+      around cross-shard queries and shard rebalancing. Most teams that reach
+      for sharding still have significant gains available from connection
+      pooling with PgBouncer, read replicas for read-heavy paths, and Redis
+      caching for hot data. Exhaust those first.
+  - title: Autoscaling on CPU while bottleneck is I/O or database
+    explanation: >-
+      CPU-based autoscaling does not detect database saturation, connection pool
+      exhaustion, or queue depth—conditions where adding more app servers makes
+      the problem worse by increasing concurrent load on the already-saturated
+      resource. Scale on the metric that represents the actual bottleneck, not a
+      proxy that looks correlated in normal operation.
 codeExamples:
   - language: typescript
     title: (pending)

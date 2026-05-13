@@ -192,12 +192,46 @@ narrative: >-
   always the same teams that have strong observability and treat infrastructure
   changes as software changes.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Running non-production environments around the clock
+    explanation: >-
+      Staging and development environments that run 24/7 but are only used
+      during business hours waste 60–70% of their budget on idle time. Scheduled
+      shutdowns are low-effort to implement and typically the single highest-ROI
+      action a team can take to reduce cloud spend.
+  - title: Provisioning by estimate rather than by measurement
+    explanation: >-
+      The instance type chosen when a service is first launched is almost never
+      the right one six months later, once real traffic patterns are known.
+      Sticking with the original choice because it's 'working fine' leaves money
+      on the table — right-sizing requires looking at actual utilization
+      metrics, not gut feel.
+  - title: Ignoring data transfer and NAT gateway costs
+    explanation: >-
+      Compute costs are visible and intuitive; data transfer costs are not.
+      Inter-AZ traffic, NAT gateway processing fees, and egress charges
+      accumulate silently and can dwarf instance costs in architectures that
+      move a lot of data. Teams discover this only when investigating a bill
+      that doesn't match their mental model.
+  - title: No resource tagging strategy from day one
+    explanation: >-
+      Without consistent tags identifying team, environment, and service, cost
+      attribution is impossible. Untagged resources blur into an
+      undifferentiated bill that nobody owns, making it impossible to hold teams
+      accountable or identify which service triggered a spike. Retrofitting a
+      tagging strategy after years of growth is painful and often incomplete.
+  - title: Buying reserved capacity before understanding usage
+    explanation: >-
+      Reserved instances and savings plans are commitment tools — they make
+      sense after baseline usage patterns are understood, not before. Committing
+      to reserved capacity for a workload that will be re-architected or scaled
+      down within months locks in spending that the workload no longer requires.
+  - title: Accepting cost growth proportional to revenue
+    explanation: >-
+      When cloud costs grow at roughly the same rate as revenue, nobody
+      investigates because the ratio looks acceptable. This masks slow
+      infrastructure bloat — services that are never cleaned up, resources left
+      from past experiments, overprovisioning that compounds over time — until
+      the absolute numbers become too large to ignore.
 codeExamples:
   - language: typescript
     title: (pending)

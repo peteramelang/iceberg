@@ -244,12 +244,56 @@ narrative: >-
   decisions about when they're the right tool and when simpler synchronous
   approaches are good enough.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Consumers that are not idempotent produce duplicates
+    explanation: >-
+      Every production queue delivers messages at-least-once, meaning the same
+      message can arrive twice during a worker crash, a slow ack, or a network
+      partition. Consumer logic that is not idempotent will send duplicate
+      emails, double-write records, or charge users twice under these normal
+      operating conditions. Design every consumer to be safe to run multiple
+      times on the same message before writing any processing logic.
+  - title: No dead-letter queue means poison messages block the queue
+    explanation: >-
+      A malformed message, a missing dependency, or a bug in consumer logic can
+      cause a message to fail every processing attempt indefinitely. Without a
+      dead-letter queue, you must choose between dropping the message (losing
+      work) or retrying forever (burning compute and potentially starving
+      healthy messages). Configure a DLQ from the start so poison messages are
+      quarantined after N attempts, alerting on anything that lands there.
+  - title: Unbounded retry loops amplify downstream failures
+    explanation: >-
+      When a downstream service goes down, a consumer that retries failed
+      messages immediately and indefinitely turns a temporary dependency outage
+      into a thundering-herd attack on recovery: the queue drains its backlog of
+      failed messages at full speed the moment the service comes back up. Use
+      exponential backoff with jitter on retries so consumers back off under
+      failure conditions and give the downstream service time to recover.
+  - title: Using Kafka where a simple job queue is sufficient
+    explanation: >-
+      Kafka is operationally complex — partition tuning, offset management,
+      consumer group coordination, and schema management all require expertise
+      to run well. Teams that adopt it for basic background job processing
+      inherit that complexity without gaining the distributed-log capabilities
+      (replay, fan-out, ordered event streams) that justify it. For tasks like
+      sending emails or processing uploads, a Redis-backed job queue or SQS is
+      simpler to operate and reason about.
+  - title: 'Queue depth not monitored, so backlogs go undetected'
+    explanation: >-
+      A queue that is accumulating messages faster than consumers drain it will
+      eventually reach a depth where processing lag is hours or days behind
+      real-time. Without monitoring queue depth and consumer throughput, this
+      backlog builds silently until a user complains that their background job
+      has not completed. Alert when queue depth exceeds a threshold or when the
+      processing rate falls below the ingestion rate.
+  - title: Large message payloads embedded directly in the queue
+    explanation: >-
+      Message queues impose size limits — SQS caps at 256KB per message, for
+      instance — and embedding large payloads directly in messages hits those
+      limits, causes serialization overhead, and makes queue inspection
+      difficult. Store large payloads (images, documents, large JSON blobs) in
+      object storage and put only the reference key in the message. This keeps
+      messages small, decouples payload lifecycle from queue lifecycle, and
+      sidesteps size limits entirely.
 codeExamples:
   - language: typescript
     title: (pending)

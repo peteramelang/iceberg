@@ -181,12 +181,49 @@ narrative: >-
   readiness probes matter more in multi-region than anywhere else. Get those
   right first, and the geographic distribution becomes almost mechanical.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Treating multi-region as a deployment problem
+    explanation: >-
+      Teams spin up app servers in a second region in an afternoon and declare
+      victory, then discover that sessions are pinned to one region, writes
+      conflict across regions, and background jobs run twice. Multi-region is
+      primarily a data problem: make your application fully stateless before
+      adding a second region, or the deployment work just exposes how stateful
+      your app already was.
+  - title: Skipping read replicas and jumping to distributed databases
+    explanation: >-
+      Most applications are 90% reads, meaning a primary in one region plus read
+      replicas in others solves the majority of latency pain with a fraction of
+      the complexity. Teams that skip this step and adopt distributed
+      transactional databases like CockroachDB pay the operational cost and
+      write-latency penalty before they need the capability.
+  - title: Letting background jobs run in every region without coordination
+    explanation: >-
+      A background job that fires in every region will process the same work
+      multiple times: double-sending emails, double-charging, double-consuming
+      queue messages. Jobs need either a single canonical region to run in, or
+      distributed locking, or idempotent processing that is safe to run more
+      than once.
+  - title: Forgetting per-region observability
+    explanation: >-
+      Aggregate dashboards hide regional failures. A region that is degraded or
+      unreachable looks fine in global averages if the other regions are
+      healthy. Each region needs its own error rate, latency, and availability
+      metrics so you can detect and isolate the problem before it affects
+      traffic routing decisions.
+  - title: Neglecting health checks and readiness probes
+    explanation: >-
+      Global load balancers like AWS Global Accelerator can only route traffic
+      correctly if origin health signals are accurate. An instance that is
+      technically alive but unable to reach its database will be served traffic
+      anyway if health checks are too shallow. Probes should verify connectivity
+      to dependencies, not just that the process is running.
+  - title: Accepting write-anywhere without planning conflict resolution
+    explanation: >-
+      Multi-master or active-active write configurations that span regions
+      create the possibility of concurrent conflicting writes to the same
+      record. Without a defined resolution strategy—last-write-wins, causal
+      ordering, application-level merges—conflicts produce silent data
+      corruption that is discovered long after the fact.
 codeExamples:
   - language: typescript
     title: (pending)

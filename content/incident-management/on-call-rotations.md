@@ -91,12 +91,46 @@ narrative: >-
   work—which is why improving on-call almost always leads you back to improving
   the system itself.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Alert fatigue from unactionable or noisy alerts
+    explanation: >-
+      When most pages require no real action—or require staring at dashboards
+      trying to decide if something is wrong—engineers stop treating alerts as
+      urgent signals. The fix is to audit alerts regularly: if an alert fired
+      and the on-call person did nothing, the alert should be deleted or
+      downgraded. Every alert that fires should require a specific human action.
+  - title: 'No escalation path, or one that feels like failure'
+    explanation: >-
+      Engineers left alone at 2 AM without a clear escalation path will either
+      heroically debug for hours or make risky changes under pressure.
+      Escalation should be normalized and fast—the engineer who escalates a P1
+      after 10 minutes is making the right call, and team norms need to say so
+      explicitly.
+  - title: Putting engineers on-call before they are trained
+    explanation: >-
+      An on-call rotation that includes engineers who have never seen the system
+      under failure conditions is a liability. Shadow rotations—pairing a new
+      engineer with an experienced one for one or two full rotations before solo
+      shifts—are skipped constantly and regretted just as constantly.
+  - title: Treating toil as overhead rather than a bug
+    explanation: >-
+      Every manual remediation step performed during an incident is a bug in
+      your automation. Teams that never allocate sprint capacity to reducing
+      on-call burden—scripting runbooks, adding self-healing, pruning
+      alerts—accumulate a growing tax on every on-call engineer until people
+      start leaving or avoiding the rotation.
+  - title: No structured handoff between shifts
+    explanation: >-
+      When the outgoing on-call engineer leaves no record of what happened
+      during their shift, the incoming engineer starts blind. A brief written
+      handoff noting open issues, recent changes, and anything to watch means
+      the next person is not starting from zero at the worst possible moment.
+  - title: Blameful post-incident reviews that fix nothing structurally
+    explanation: >-
+      Post-mortems that focus on who made the mistake produce defensive behavior
+      and hide the real failure modes in the system. Blameless reviews that
+      focus on what conditions made the failure possible—and produce concrete
+      action items to change those conditions—are the feedback loop that
+      actually prevents recurrence.
 codeExamples:
   - language: typescript
     title: (pending)

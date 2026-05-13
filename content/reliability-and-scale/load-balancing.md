@@ -209,12 +209,49 @@ narrative: >-
   availability and behavior, and it needs to be configured and monitored with
   that responsibility in mind.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Health checks that do not verify dependencies
+    explanation: >-
+      A health check that returns 200 because the process is running — without
+      checking whether the database connection, cache, or downstream service is
+      reachable — will route live traffic to instances that cannot actually
+      fulfill requests. Write health checks that exercise the critical
+      dependencies your service needs to function, and make them fast enough
+      that the load balancer can poll them frequently.
+  - title: Skipping connection draining during deployments
+    explanation: >-
+      Removing an instance from rotation without draining in-flight requests
+      causes users to see connection errors during every rolling deployment or
+      scale-in event. Configure your load balancer to stop sending new
+      connections to an instance being removed and wait for existing connections
+      to close gracefully before terminating. This turns deployments from
+      user-visible events into invisible operations.
+  - title: In-memory session state breaks round-robin routing
+    explanation: >-
+      Applications that store authenticated sessions or shopping cart state in
+      process memory require sticky sessions so subsequent requests from the
+      same user land on the same instance. But stickiness defeats load
+      distribution and creates a soft single point of failure: if that instance
+      dies, the user loses all their state. Move session data to a shared store
+      like Redis to make instances truly interchangeable, removing the need for
+      stickiness entirely.
+  - title: Using Layer 4 when Layer 7 routing is needed
+    explanation: >-
+      Layer 4 load balancers route at the TCP level and cannot inspect HTTP
+      headers, paths, or cookies. Teams that start with Layer 4 and then need to
+      do canary deployments, path-based routing, or header-based feature
+      flagging must replace their load balancer architecture entirely, often
+      under time pressure. Choose Layer 7 from the start if your routing
+      requirements are at all content-aware, or plan the migration before you
+      need it.
+  - title: Not monitoring instance-level traffic distribution
+    explanation: >-
+      Round-robin and least-connections algorithms can produce unexpectedly
+      uneven distributions due to long-lived connections, slow instances that
+      accumulate in-flight requests, or sticky session skew. An instance getting
+      80% of traffic while others are idle is invisible unless you are actively
+      monitoring per-instance request rates. Alert on significant distribution
+      imbalance so you can identify hot instances before they become the
+      bottleneck.
 codeExamples:
   - language: typescript
     title: (pending)

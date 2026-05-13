@@ -162,12 +162,56 @@ narrative: >-
   of known failure modes and tested mitigations. That compounding effect is the
   real value of the process.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Investigating root cause before mitigating impact
+    explanation: >-
+      Engineers instinctively want to understand why something broke before
+      fixing it, but during an active incident this instinct is expensive.
+      Spending the first hour debugging the cause while users are experiencing
+      errors is the most common way incidents run long. Establish the rule up
+      front: first ask 'what can we do right now to reduce user impact' —
+      rollback, reroute, disable the feature flag — then investigate once the
+      bleeding has stopped.
+  - title: No declared roles means everyone watches dashboards
+    explanation: >-
+      When nobody is explicitly the Incident Commander, every senior engineer
+      joins the war room, watches the same graphs, and offers competing
+      suggestions. This creates noise rather than coordination. Assign roles
+      explicitly at incident declaration — one person owns decisions and
+      timeline, one owns external communication — so the technical team can
+      focus without being interrupted by status questions.
+  - title: Alert fatigue delays incident declaration
+    explanation: >-
+      An alert that has fired dozens of times without consequence trains
+      engineers to ignore it. When it fires during a real incident, the team is
+      slow to take it seriously, and the delay compounds. Regularly prune alerts
+      that are not actionable, tune thresholds so signals are genuine, and
+      define explicit severity criteria so anyone can declare an incident
+      without waiting for consensus.
+  - title: Multiple engineers applying conflicting changes simultaneously
+    explanation: >-
+      Without coordination, two engineers can simultaneously roll back different
+      services, modify the same config, or apply contradictory mitigations. Each
+      individual action is reasonable; together they create a compound failure
+      that is harder to debug than the original. The Incident Commander's job is
+      to serialize changes — one action at a time, wait for the result, then
+      decide the next step.
+  - title: Postmortems produce vague action items that never ship
+    explanation: >-
+      A postmortem that concludes with 'improve our monitoring' or 'better
+      communication' generates no real change. Vague actions have no owner, no
+      deadline, and no definition of done, so they age in a backlog and the next
+      incident finds the same gap. Every action item must name a specific
+      change, an owner, and a target date — and must be tracked alongside other
+      engineering work, not in a separate postmortem doc.
+  - title: Status page and customer communication left unowned
+    explanation: >-
+      During an incident, updating the status page, writing internal
+      communication, and handling executive questions collectively consume a
+      full engineer's bandwidth. When nobody is explicitly assigned to this,
+      those questions pull the technical responders out of focus repeatedly
+      throughout the incident. Assign one non-technical lead or a dedicated
+      communications role at declaration, and protect the technical team from
+      interrupt-driven status requests.
 codeExamples:
   - language: typescript
     title: (pending)

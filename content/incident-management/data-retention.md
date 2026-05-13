@@ -79,12 +79,47 @@ narrative: >-
   database. A mature retention system is one where the policy, the
   implementation, and the monitoring are all in sync.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Writing a retention policy without implementing deletion jobs
+    explanation: >-
+      A retention policy document filed with legal does not delete any data. The
+      data keeps accumulating until automated jobs are built, deployed, and
+      monitored. The gap between policy and implementation is where regulatory
+      exposure lives — and many teams discover it only during an audit.
+  - title: Treating soft-deleted records as deleted
+    explanation: >-
+      A record with a deleted_at timestamp is flagged, not gone. GDPR's right to
+      erasure and most retention policies require actual removal after the
+      retention window. Without a second-pass purge job that permanently removes
+      soft-deleted records on schedule, storage grows unbounded and compliance
+      obligations accumulate.
+  - title: Applying one retention schedule to all data classes
+    explanation: >-
+      Application logs, financial transaction records, audit events, and
+      personal data each have distinct retention requirements — from 30-day
+      debug logs to seven-year financial records to personal data that must be
+      deleted on user request. A single policy for all data either keeps things
+      too long (legal risk) or deletes things too soon (compliance violation).
+  - title: Never testing that deletion jobs actually run
+    explanation: >-
+      Retention jobs fail silently: a misconfigured cron, a permissions error, a
+      query that matches zero rows because of a schema change. Without
+      monitoring and periodic verification that records are actually being
+      removed on schedule, the job appears healthy while data accumulates
+      indefinitely.
+  - title: Forgetting personal data scattered across secondary systems
+    explanation: >-
+      GDPR's right to erasure applies to personal data wherever it lives — not
+      just the primary users table. Analytics warehouses, email logs, S3-backed
+      audit trails, and search indexes often contain personal data that was
+      never included in the deletion job. Incomplete erasure is still a
+      compliance violation.
+  - title: Deleting data needed for active incident investigation
+    explanation: >-
+      Overly aggressive log rotation removes the forensic evidence needed to
+      investigate security incidents and production failures. Discovering that
+      the logs needed to reconstruct an attack were rotated out two weeks ago is
+      a painful and preventable situation — retention periods should be long
+      enough to cover realistic incident detection lag.
 codeExamples:
   - language: typescript
     title: (pending)

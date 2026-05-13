@@ -85,12 +85,40 @@ narrative: >-
   meaningful factor in how quickly you can grow your support team and maintain
   quality as the customer base scales.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Granting support staff direct production database access
+    explanation: >-
+      Ad-hoc SQL queries run against production by support agents leave no audit
+      trail, risk accidental data modification, and expose schema details that
+      should be internal. Build admin tooling that calls reviewed code paths
+      instead, so every action is auditable and safe by construction.
+  - title: Building support tooling reactively after complaints
+    explanation: >-
+      Waiting for the third support ticket about a common issue before building
+      a tool means engineers are repeatedly interrupted and support agents lack
+      confidence in their workflows. Identify the ten most frequent support
+      actions at launch and build tooling for them proactively, before volume
+      makes the pain undeniable.
+  - title: No audit log on admin actions
+    explanation: >-
+      If a support agent resets a user's password or applies a credit and there
+      is no record of it, the next agent handling the same account starts from a
+      false picture of what happened. Every write action in your admin tooling
+      must record who did what and when, both for accountability and for
+      debugging.
+  - title: Runbooks that live only in someone's head
+    explanation: >-
+      The engineer who knows how to process a manual refund or unblock a stuck
+      import leaves, and the next incident takes three times as long to resolve.
+      Write the runbook the first time you handle each class of issue — not
+      after the third repetition — and keep it alongside the tooling it
+      describes.
+  - title: Admin tooling that queries the primary database under load
+    explanation: >-
+      Support dashboards running expensive account-lookup queries against the
+      production primary database add unpredictable load and can degrade the
+      application for all users during incidents — exactly when support activity
+      peaks. Point admin tooling at a read replica with appropriate connection
+      limits.
 codeExamples:
   - language: typescript
     title: (pending)

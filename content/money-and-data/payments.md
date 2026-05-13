@@ -190,12 +190,47 @@ narrative: >-
   translates payment state into capabilities, updated by webhooks, tends to age
   much better.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Skipping idempotency keys on payment API calls
+    explanation: >-
+      A network timeout between your server and the payment processor leaves you
+      with no way to know if the charge succeeded. Without idempotency keys,
+      retrying the call risks a double charge; not retrying risks a silently
+      dropped payment. Every payment API call must carry a stable, unique
+      idempotency key so retries are safe.
+  - title: Processing webhooks synchronously and creating duplicates
+    explanation: >-
+      Payment processors retry webhook delivery if your endpoint does not
+      respond with a 200 quickly. Processing the event synchronously in the same
+      request risks timeouts, which triggers retries, which can process the same
+      event twice. The correct pattern is to persist the raw event immediately,
+      return 200, and process asynchronously.
+  - title: Not verifying webhook signatures
+    explanation: >-
+      An unverified webhook endpoint will accept any HTTP POST that looks like a
+      payment event, including fabricated ones telling your system a payment
+      succeeded when it did not. Always verify the processor's signature on
+      every incoming webhook before acting on its contents.
+  - title: Embedding billing logic directly in product code
+    explanation: >-
+      Hardcoded tier names, feature gates that query the payment processor
+      directly, and subscription state scattered across the application make
+      billing fragile and slow. A thin internal entitlements layer that
+      translates payment state into capabilities—updated by webhooks—keeps
+      billing changes localized and the product code decoupled.
+  - title: Designing subscription state without a state machine
+    explanation: >-
+      Subscriptions have real states—trialing, active, past_due, canceled,
+      paused—and transitions between them have business logic attached. Teams
+      that treat a subscription as a boolean 'is active' flag end up
+      retrofitting dunning logic, proration, and access control onto code that
+      was never designed to hold it, producing subtle correctness bugs.
+  - title: Proxying raw card data through your backend
+    explanation: >-
+      Routing card numbers through your own servers moves you from PCI SAQ A
+      (minimal self-assessment) to a much heavier compliance scope requiring
+      audits and controls most teams cannot sustain. Use client-side
+      tokenization like Stripe.js or Stripe Elements so card data never touches
+      your servers.
 codeExamples:
   - language: typescript
     title: (pending)

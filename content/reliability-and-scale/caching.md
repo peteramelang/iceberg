@@ -190,12 +190,48 @@ narrative: >-
   the life of your current infrastructure significantly before you need to think
   about horizontal scaling.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Thundering herd on cache expiry under load
+    explanation: >-
+      When a popular cache entry expires simultaneously, dozens or hundreds of
+      requests miss the cache at once and all hit the database, potentially
+      overwhelming it before the cache can be repopulated. Mitigations include
+      probabilistic early expiration, request coalescing with a lock, or
+      background refresh before entries expire.
+  - title: Caching data that must reflect writes immediately
+    explanation: >-
+      Applying a 60-second TTL to user permissions, billing state, or account
+      settings means a user who was just downgraded or suspended continues to
+      see stale data for up to a minute. Time-based expiration alone is not
+      sufficient for data whose staleness has security or correctness
+      consequences; event-driven invalidation is required.
+  - title: Missing or incorrect HTTP cache headers for CDN caching
+    explanation: >-
+      Failing to set Cache-Control, Vary, and ETag headers correctly means your
+      CDN either caches nothing (wasting the edge layer entirely) or serves the
+      same response to users who should get different content — for example,
+      serving one user's personalized page to another. Every public endpoint
+      needs deliberate cache header configuration.
+  - title: No cache warming strategy on cold start
+    explanation: >-
+      Deploying a new service instance or clearing the cache under live traffic
+      sends a sudden wave of cache misses to the database, which may not handle
+      the spike gracefully before the cache warms up. Pre-warming critical cache
+      entries before traffic is routed to a new instance protects the database
+      during the vulnerable window.
+  - title: Caching without a cache-aside fallback on miss
+    explanation: >-
+      Code that reads from the cache but has no tested path for handling a cache
+      miss — because the cache is assumed to always be populated — fails
+      silently or errors when the cache is cleared, restarted, or evicts entries
+      under memory pressure. The cache miss path must be explicitly coded and
+      exercised in tests.
+  - title: Using the same cache namespace across environments or tenants
+    explanation: >-
+      Sharing a Redis instance across staging and production, or failing to
+      namespace cache keys per tenant in a multi-tenant system, causes
+      cross-environment data bleed or one tenant's cache entries overwriting
+      another's. Cache keys must be namespaced by environment and, where
+      relevant, by tenant or user scope.
 codeExamples:
   - language: typescript
     title: (pending)

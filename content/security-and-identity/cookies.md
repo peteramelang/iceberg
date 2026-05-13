@@ -150,12 +150,41 @@ narrative: >-
   optional — skipping either one creates either a security vulnerability or a
   legal exposure.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Omitting HttpOnly on session cookies
+    explanation: >-
+      A session cookie without HttpOnly is readable by any JavaScript executing
+      on your page. A single XSS vulnerability anywhere in the application —
+      including third-party scripts — can harvest every active session token.
+      The fix is a one-word attribute; the cost of omitting it is account
+      takeover at scale.
+  - title: Confusing a consent banner with a consent mechanism
+    explanation: >-
+      A banner that says 'we use cookies' while analytics and tracking scripts
+      load in the background before the user responds is not compliant — it is a
+      liability. Real consent means non-essential scripts are blocked until
+      explicit, informed consent is granted, and that choice is respected on
+      every subsequent visit.
+  - title: Shipping cookies without the Secure flag on HTTPS sites
+    explanation: >-
+      Without the Secure flag, a cookie is transmitted in plaintext on any
+      unencrypted connection a user might encounter. This is especially
+      dangerous on public Wi-Fi and exposes session tokens to passive network
+      interception, even if your own servers only accept HTTPS.
+  - title: Setting SameSite=None without understanding the implications
+    explanation: >-
+      SameSite=None allows the cookie to be sent on all cross-origin requests,
+      which is intentional for embedded iframes and third-party use cases but
+      re-opens CSRF attack surfaces that SameSite was introduced to close. It
+      also requires the Secure flag; omitting either attribute causes modern
+      browsers to reject or alter the cookie behavior in ways that are hard to
+      debug.
+  - title: Loading third-party tracking scripts unconditionally
+    explanation: >-
+      Analytics tags, session replay tools, and advertising pixels loaded
+      unconditionally on page load fire before any consent is given and send
+      data to third-party systems without a lawful basis under GDPR. Regulators
+      have issued substantial fines specifically for this pattern, which is
+      common because it's the default integration path for most marketing tools.
 codeExamples:
   - language: typescript
     title: (pending)

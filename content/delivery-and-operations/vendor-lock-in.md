@@ -86,12 +86,41 @@ narrative: >-
   with the goal of eliminating it, but with explicit awareness of what they owe
   and to whom, and a plan for managing the most expensive obligations.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Data trapped in a proprietary format with no export
+    explanation: >-
+      When your data can only be read by one vendor's tooling, you have no
+      leverage at contract renewal and no exit path without a costly migration.
+      Before adopting any data store or SaaS platform, verify that you can
+      export your data in a standard format another system can ingest.
+  - title: Accepting deep platform coupling without explicit decision
+    explanation: >-
+      Lambda event-source mappings, platform-specific queue integrations, and
+      managed service features accumulate organically across a codebase until
+      migration is a multi-month project nobody budgeted. Make lock-in decisions
+      explicitly, document the switching cost estimate, and revisit them when
+      scale or pricing changes.
+  - title: Over-abstracting services that genuinely won't be swapped
+    explanation: >-
+      Building a database abstraction layer that supports both Postgres and
+      MySQL when you have never run anything but Postgres spends engineering
+      time on optionality with near-zero probability of use. Calibrate
+      abstraction investment to honest estimates of switch likelihood — cheap
+      commodity swap versus proprietary deep-integration are very different
+      bets.
+  - title: Single vendor for a critical function with no fallback
+    explanation: >-
+      When your transactional email, payment processor, or authentication
+      provider goes down with no fallback and no abstraction, your product goes
+      down with it. For critical path dependencies, either maintain a thin
+      interface that makes provider substitution tractable or validate that the
+      vendor's SLA and reliability history are acceptable.
+  - title: Negotiating renewals with zero exit leverage
+    explanation: >-
+      A vendor's pricing power at renewal is proportional to your switching
+      cost: if leaving requires six months of engineering work, they know it and
+      price accordingly. Invest in portability before the renewal conversation,
+      not after the price increase, so you can credibly threaten or execute a
+      migration.
 codeExamples:
   - language: typescript
     title: (pending)

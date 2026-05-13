@@ -184,12 +184,57 @@ narrative: >-
   treating it as free leads to systems where the important signal is buried in
   noise.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Unstructured log strings that cannot be queried
+    explanation: >-
+      Logs written as free-text strings require regex or full-text search to
+      extract any structured field at query time. Across millions of events
+      during an incident, that is the difference between a query that returns in
+      half a second and one that times out. Emit JSON from every service with
+      named fields for event type, user ID, request ID, and error details so
+      your logging platform can index and query them efficiently.
+  - title: 'No correlation ID, so requests cannot be traced through logs'
+    explanation: >-
+      Without a unique request ID propagated through every service call and
+      included on every log line, reconstructing the sequence of events for a
+      single failing request requires manually correlating timestamps across
+      multiple log streams — slow and unreliable under incident pressure.
+      Generate a trace ID at the entry point of every request and pass it
+      through every downstream call and log statement.
+  - title: Logging everything at INFO produces noise that buries real signals
+    explanation: >-
+      Teams that emit INFO for every internal operation produce log volumes that
+      are expensive to store, slow to query, and filled with noise that obscures
+      the events that actually matter. WARN and ERROR should be rare enough that
+      seeing one is meaningful. Reserve INFO for events you would genuinely want
+      in a production audit trail, and use DEBUG for verbose internal state that
+      is off by default.
+  - title: Logging sensitive data in plaintext
+    explanation: >-
+      Passwords, session tokens, payment card numbers, and personally
+      identifiable information have a way of leaking into log lines through
+      debug statements, error stack traces, or request body logging. Once in a
+      log aggregation platform, that data is typically retained for weeks or
+      months, searchable by anyone with log access, and potentially shipped to
+      third-party services. Audit what ends up in your logs and enforce
+      redaction in your logging library before data reaches storage.
+  - title: Missing logs on the most critical business operations
+    explanation: >-
+      Teams instrument framework internals and HTTP access logs but neglect to
+      log the operations that actually matter: payment processing started,
+      subscription created, file uploaded, job completed. When a user reports a
+      problem, the logs show that requests arrived and responses were sent, but
+      give no visibility into what the application actually did in between. Log
+      state transitions and business events explicitly, not just
+      infrastructure-level activity.
+  - title: Treating logging as free and ignoring storage costs
+    explanation: >-
+      High-volume logging — SQL statements on every query, full request and
+      response bodies, health-check probes — can generate gigabytes of data per
+      hour that costs real money to ingest, store, and index. Teams discover
+      this at the first billing cycle or when the logging platform starts
+      dropping events under load. Establish log budgets per service, use
+      sampling for high-volume low-value events, and actively prune log
+      statements that serve no investigation purpose.
 codeExamples:
   - language: typescript
     title: (pending)

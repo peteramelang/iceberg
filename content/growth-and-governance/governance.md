@@ -240,12 +240,53 @@ narrative: >-
   teams move fast in a shared environment without stepping on each other or
   quietly burning down the house.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Permissions creep silently over time
+    explanation: >-
+      Teams grant broad permissions during incidents or onboarding and never
+      revoke them. Over months, every service and person accumulates more access
+      than they need, turning your IAM into a latent blast radius waiting for a
+      single compromised credential. Audit access regularly and enforce
+      least-privilege as a policy-as-code check that blocks overly permissive
+      grants in PRs.
+  - title: Policy documents nobody can enforce
+    explanation: >-
+      A 40-page security policy document that lives in Confluence is not
+      governance — it's aspirational fiction. When policy exists only as prose,
+      enforcement depends on individuals remembering to check, which they won't
+      under pressure. Codify every enforceable rule in OPA, Checkov, or a CI
+      gate so violations are caught automatically rather than discovered months
+      later in an audit.
+  - title: No audit trail for configuration changes
+    explanation: >-
+      When an incident reveals a changed firewall rule or a modified environment
+      variable, the question 'who changed this and when' should have an
+      immediate, immutable answer. Without a proper audit trail — CloudTrail,
+      Git history for infrastructure-as-code, or a change management log — you
+      cannot distinguish a security event from an innocent misconfiguration, and
+      regulators will notice.
+  - title: Drift between declared and actual infrastructure
+    explanation: >-
+      Terraform says one thing; your cloud account holds another. This happens
+      when engineers apply hotfixes directly through the console during
+      incidents and never reconcile the change back into code. Undetected drift
+      compounds: the next Terraform apply might revert a critical fix or
+      introduce a conflict nobody anticipated. Run continuous drift detection
+      and treat any delta as a high-priority alert.
+  - title: 'Governance as a manual gate, not an automated guardrail'
+    explanation: >-
+      Approval workflows that require a human reviewer for every deployment slow
+      teams down without actually improving safety — reviewers rubber-stamp
+      under pressure. Shift compliance left by integrating policy checks into
+      the CI pipeline so engineers get instant, specific feedback on violations,
+      not a queue of approvals that block work for days.
+  - title: Exceptions accumulate and never expire
+    explanation: >-
+      Every 'temporary' exception to a policy is a policy hole. Teams grant a
+      service extra permissions 'just for now,' skip a required scan 'this one
+      time,' or waive a control for a launch deadline — and none of those
+      exceptions ever get revisited. Each one is individually defensible; the
+      aggregate is a governance system with no teeth. Track exceptions with
+      explicit expiry dates and automate their cleanup.
 codeExamples:
   - language: typescript
     title: (pending)

@@ -188,12 +188,53 @@ narrative: >-
   That framing turns environment failures into process improvements rather than
   just incidents to resolve.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Staging and Production Using Different Deployment Processes
+    explanation: >-
+      Deploying to production via a Helm chart and to staging via kubectl apply
+      from a developer's laptop means you are not actually testing your
+      deployment process in staging — you are testing a different process that
+      produces a similar result most of the time. The gap reveals itself on the
+      deploy that matters. Staging must run the exact same CI/CD pipeline, the
+      same infrastructure provisioning steps, and the same secrets management as
+      production.
+  - title: Staging Environment Drifts From Production Over Time
+    explanation: >-
+      Environments that start identical diverge when hotfixes are applied
+      directly to production, infrastructure is configured manually, or teams
+      forget to replicate changes across environments. Drift is invisible until
+      it hides a bug that staging would have caught. Manage all environment
+      differences as code, apply changes via the same pipeline, and regularly
+      diff environment configurations to detect drift before it causes a
+      production-only failure.
+  - title: Staging Writing to Production Data Stores or External APIs
+    explanation: >-
+      Staging that shares a database with production or uses live third-party
+      API credentials can corrupt production data or trigger real-world side
+      effects — sending customer emails, charging payment methods, or modifying
+      live inventory. Isolate every external integration in staging: use
+      test-mode credentials for payment processors, point to a separate
+      analytics dataset, and never allow staging configuration to reference
+      production connection strings.
+  - title: >-
+      False Confidence From a Staging Environment That Does Not Match Production
+      Load
+    explanation: >-
+      A staging environment sized at 10% of production will not surface memory
+      leaks, connection pool exhaustion, or contention that only appear under
+      real traffic. A bug that requires production load to manifest will pass
+      staging and fail in production on every deploy. Either run load tests
+      against staging at production-equivalent scale or run canary deploys in
+      production with limited blast radius — but do not conflate 'passed
+      staging' with 'safe to deploy'.
+  - title: Hardcoding Environment-Specific Values in Application Code
+    explanation: >-
+      Connection strings, API endpoints, and credentials baked into code
+      branches or hardcoded constants mean the same build cannot run unchanged
+      across environments, forcing environment-specific builds and hiding
+      configuration mistakes until runtime. Store all environment-specific
+      configuration in environment variables, injected at runtime. The same
+      container image should run in development, staging, and production with
+      behavior controlled entirely by its environment.
 codeExamples:
   - language: typescript
     title: (pending)

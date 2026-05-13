@@ -216,12 +216,39 @@ narrative: >-
   a mystery; one with a full stack trace and correlation ID is a solvable
   problem.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Setting up a DLQ that nobody monitors
+    explanation: >-
+      A dead-letter queue with no consumer, no alarm, and no runbook is
+      operationally equivalent to dropping failed messages — it just adds
+      indirection. Messages pile up in the DLQ invisibly while operators assume
+      the system is healthy. An alert that fires when DLQ depth exceeds zero is
+      the minimum viable posture.
+  - title: Retrying permanently failing messages indefinitely
+    explanation: >-
+      A malformed message or one that triggers a bug in the consumer will fail
+      on every retry, consuming processing resources and blocking other messages
+      in the queue. Without a max-receive-count and a DLQ to route persistent
+      failures to, a single poison message can paralyze the entire queue.
+  - title: Replaying DLQ messages without fixing the root cause
+    explanation: >-
+      Replaying failed messages back to the source queue before the underlying
+      bug is fixed just re-enqueues the same failures. This clears the DLQ depth
+      metric while guaranteeing the messages will dead-letter again — obscuring
+      the real problem and wasting the diagnostic signal the DLQ provides.
+  - title: Assuming consumers are idempotent without verifying it
+    explanation: >-
+      DLQ replay only works safely if processing a message twice produces the
+      same result as processing it once. A consumer that double-charges a
+      payment card or creates duplicate records on replay turns recovery into a
+      bigger incident than the original failure. Idempotency must be designed
+      in, not assumed.
+  - title: Logging no context before dead-lettering a message
+    explanation: >-
+      A DLQ message with no associated error log, stack trace, or correlation ID
+      is nearly impossible to diagnose. Consumers should log structured error
+      details — including why the message failed — before abandoning it to the
+      DLQ. Without this, each dead-lettered message requires a separate
+      debugging session to understand.
 codeExamples:
   - language: typescript
     title: (pending)

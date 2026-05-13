@@ -119,12 +119,48 @@ narrative: >-
   significant behavioral changes, and testing that upgrade rigorously before
   deploying it is not optional.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Not committing lock files to the repository
+    explanation: >-
+      Without a committed lock file, two installs of the same project on
+      different days can produce different dependency trees if any upstream
+      package released a new version. This explains a category of CI failures
+      and environment-specific bugs that appear unrelated to any code change.
+  - title: Ignoring transitive dependencies in security audits
+    explanation: >-
+      Log4Shell was a transitive dependency vulnerability — many affected teams
+      didn't know they had log4j at all. Scanning only direct dependencies
+      misses the majority of the dependency surface area. Vulnerability scanning
+      tools that analyze the full dependency tree are not optional for
+      production software.
+  - title: Letting vulnerability alerts accumulate without a patch SLA
+    explanation: >-
+      Automated scanners generate alerts, but alerts only reduce risk if they
+      trigger action within a timeframe shorter than active exploitation. Teams
+      without a defined patching cadence treat the alert backlog as noise, and
+      high-severity CVEs sit unpatched for months while the tool faithfully
+      reports them every day.
+  - title: Adding packages without reviewing postinstall scripts
+    explanation: >-
+      npm and other package managers allow packages to run arbitrary code during
+      installation via postinstall scripts. This is a common vector for supply
+      chain attacks — a compromised or malicious package can exfiltrate
+      credentials or modify files during a routine install. New packages should
+      be reviewed before being added to a production dependency graph.
+  - title: Skipping license audits on distributed software
+    explanation: >-
+      GPL and AGPL dependencies in a proprietary product create license
+      conflicts that surface during acquisitions, legal reviews, or when a
+      competitor complains. Most engineering teams skip license auditing
+      entirely until it becomes a legal problem — and retrofitting a license
+      audit across years of accumulated dependencies is not a quick process.
+  - title: Upgrading major dependency versions without regression testing
+    explanation: >-
+      A major version bump to an ORM, database driver, or HTTP client often
+      changes behavior in ways that don't cause immediate errors but produce
+      subtly wrong results — different query plans, altered serialization,
+      changed timeout semantics. Merging major upgrades through the same
+      pipeline as routine patches, without specific regression coverage, is how
+      silent behavioral regressions reach production.
 codeExamples:
   - language: typescript
     title: (pending)

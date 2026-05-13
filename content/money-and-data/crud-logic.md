@@ -174,12 +174,41 @@ narrative: >-
   following rather than reinventing). It is foundational enough that almost
   every other data-layer topic assumes it is handled correctly.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Skipping optimistic locking on shared records
+    explanation: >-
+      Without optimistic locking, two concurrent writes to the same record
+      result in the second silently overwriting the first. Users don't get an
+      error — they get unexplained data loss. The fix (a version field or
+      updated_at check in the update query) is cheap; discovering the problem in
+      production from a support ticket is not.
+  - title: Using hard deletes for business records
+    explanation: >-
+      Permanent deletes are irreversible, and production systems inevitably
+      accumulate reasons they needed to see deleted data: regulatory audits,
+      customer disputes, debugging, account recovery. Adding a deleted_at column
+      costs almost nothing upfront; restoring deleted data from backups costs
+      significant time and money — and sometimes it's impossible.
+  - title: Writing non-idempotent bulk operations
+    explanation: >-
+      A batch job that fails midway and restarts from the beginning will
+      double-apply every operation it already completed. Making bulk writes
+      idempotent — using a natural key or idempotency token to detect
+      already-processed records — means failures are safe to retry. Without it,
+      every failure requires manual cleanup of partially-applied changes.
+  - title: Enforcing uniqueness only in application code
+    explanation: >-
+      Application-level uniqueness checks have a race condition: two concurrent
+      requests can both read 'no duplicate found' before either writes. Without
+      a UNIQUE constraint at the database level, duplicates will appear in
+      production under load. The database constraint is the only reliable
+      enforcement point.
+  - title: No audit trail for who changed what and when
+    explanation: >-
+      Without structured audit logging, debugging a data discrepancy requires
+      reconstructing history from logs and memory. Compliance requirements
+      (HIPAA, SOC 2, GDPR) often mandate demonstrating who modified sensitive
+      records, and the absence of an audit log turns a routine question into a
+      multi-day forensics project.
 codeExamples:
   - language: typescript
     title: (pending)

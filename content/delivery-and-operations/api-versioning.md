@@ -179,12 +179,40 @@ narrative: >-
   API as a product with a backwards-compatibility promise, not as an internal
   implementation detail.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Treating all server-side changes as non-breaking
+    explanation: >-
+      Removing a field, renaming a key, or changing a type are breaking changes
+      even if the server compiles and deploys cleanly — because existing clients
+      depend on the old contract. Without an explicit written policy
+      distinguishing breaking from non-breaking changes, teams make breaking
+      changes without realizing it until clients start failing in production.
+  - title: Announcing deprecation without enforcing sunset
+    explanation: >-
+      Telling clients a version is deprecated but never actually turning it off
+      means you support old versions forever, accumulating maintenance burden
+      indefinitely. Deprecation only works if there is a real, enforced sunset
+      date — confirmed by instrumentation showing which clients are still using
+      the old version.
+  - title: Adding versioning strategy after breaking changes occur
+    explanation: >-
+      Reaching for a versioning scheme only after you have already broken a
+      client means you are now retrofitting API hygiene onto a product that has
+      proven it needs it, which is harder and more expensive than designing for
+      it from the start. Even a simple URL prefix convention established early
+      prevents years of freeze on API shape.
+  - title: Ignoring version usage instrumentation
+    explanation: >-
+      Without tracking which API versions are actively in use and by whom, you
+      cannot safely deprecate anything — you have no idea if shutting down v1
+      breaks a high-traffic production client. Log the API version on every
+      request and aggregate usage before making any end-of-life decisions.
+  - title: Versioning the entire API surface instead of changed resources
+    explanation: >-
+      Bumping to /v2 for every minor addition forces clients to migrate their
+      entire integration when only one endpoint changed, creating unnecessary
+      friction and migration cost. Consider resource-level or endpoint-level
+      versioning, or additive-only changes, to minimize the blast radius of each
+      version increment.
 codeExamples:
   - language: typescript
     title: (pending)

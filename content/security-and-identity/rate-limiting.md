@@ -175,12 +175,40 @@ narrative: >-
   events, well-implemented rate limiting at the gateway layer is more than
   enough.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Rate limiting by IP address for authenticated traffic
+    explanation: >-
+      Many legitimate users share a single outbound IP—corporate offices,
+      university networks, mobile carrier NAT. Rate limiting by IP on signed-in
+      endpoints means one misbehaving user in an office throttles everyone else
+      on that network. Key limits by authenticated user ID for any endpoint
+      where you have an identity.
+  - title: Enforcing limits in application memory instead of a shared store
+    explanation: >-
+      In-memory rate limit counters reset on restart and are not shared across
+      instances, so a client running against a load-balanced fleet can exceed
+      your intended limit by N times (one limit per replica). A centralized
+      Redis store ensures every instance enforces the same counter for the same
+      client.
+  - title: Protecting public API endpoints but leaving others unguarded
+    explanation: >-
+      Abuse that cannot get through the public API will probe webhook endpoints,
+      file upload endpoints, and internal service-to-service paths. Rate
+      limiting applied only to the primary API surface leaves these exposed.
+      Every externally reachable endpoint needs limits, not just the ones you
+      expect to be popular.
+  - title: Omitting rate limit headers from 429 responses
+    explanation: >-
+      Clients that receive a 429 with no retry guidance will hammer the endpoint
+      repeatedly, compounding the load. Standard headers—X-RateLimit-Limit,
+      X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After—let well-behaved
+      clients and published SDKs back off gracefully. Omitting them generates
+      support tickets and wasteful retry traffic.
+  - title: Using fixed windows that can be gamed at window boundaries
+    explanation: >-
+      A fixed 60-second window resets at the top of each minute, so a client can
+      fire the full allowance at 00:59 and again at 01:00, effectively doubling
+      the intended rate in a two-second span. Sliding window or token bucket
+      algorithms eliminate this boundary exploit for endpoints where it matters.
 codeExamples:
   - language: typescript
     title: (pending)

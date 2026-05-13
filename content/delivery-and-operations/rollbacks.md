@@ -208,12 +208,39 @@ narrative: >-
   become boring and mechanical. That's exactly what you want—the ability to undo
   a mistake should be routine, not heroic.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Rolling back code after a destructive schema migration
+    explanation: >-
+      If the new code ran a migration that dropped a column or changed a data
+      format, rolling back the code points old application instances at a schema
+      they cannot read. The result is a second failure layered on top of the
+      original. Schema changes must be backward-compatible so old code can
+      safely run against the new schema during a rollback window.
+  - title: No immutable artifact tagging in the deploy pipeline
+    explanation: >-
+      Without tagging Docker images by git SHA and deploying by tag, 'rolling
+      back' requires rebuilding or retagging, which is error-prone under
+      pressure. An immutable registry of every artifact ever deployed reduces
+      rollback to a single command pointing at a previous tag.
+  - title: Skipping pre-deployment metric baselines
+    explanation: >-
+      Automated rollback tools that compare post-deploy metrics to a baseline
+      cannot work if you have not captured that baseline before deploying. If
+      you are trying to determine your normal error rate during an active
+      incident, the automation that should be protecting you has already failed.
+      Capture and store the baseline before the release starts.
+  - title: New code writing data in formats old code cannot read
+    explanation: >-
+      A release that starts persisting records in a new schema or serialization
+      format prevents rollback to the version that produced them. Design new
+      code to write data that old code can either read or safely ignore until
+      all instances are confirmed healthy on the new version—the same discipline
+      as API versioning, applied internally.
+  - title: Rollback plan exists on paper but has never been tested
+    explanation: >-
+      Rollback procedures that are not exercised in practice become unreliable
+      under the stress of a real incident. Periodic drills—actually executing a
+      rollback in staging or production during a low-risk window—reveal gaps in
+      documentation, permissions, and tooling before they matter.
 codeExamples:
   - language: typescript
     title: (pending)

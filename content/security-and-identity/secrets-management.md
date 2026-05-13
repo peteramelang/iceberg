@@ -173,12 +173,42 @@ narrative: >-
   across a hundred places that all need to be found, rotated, and migrated
   simultaneously.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Hardcoding credentials in source code
+    explanation: >-
+      Secrets committed to a repository — even briefly, even in a private repo —
+      persist in git history long after they are deleted from the file. Rotate
+      every credential that has ever touched version control and migrate to a
+      vault before treating the exposure as resolved.
+  - title: Long-lived static credentials with no rotation
+    explanation: >-
+      A secret that never expires has infinite attack surface: every person who
+      ever had access, every machine that ever cached it, and every log that
+      ever printed it is a potential leak vector. Enforce a rotation schedule
+      and prefer short-lived dynamic credentials issued by your vault on demand.
+  - title: Applications that can't reload secrets without restart
+    explanation: >-
+      If your service reads the database password once at startup and holds it
+      in memory, rotating the credential brings down production — so rotation
+      never happens. Design services to fetch credentials on each connection or
+      at a short TTL so rotation is operationally safe.
+  - title: CI/CD pipelines treated as a lower-security environment
+    explanation: >-
+      Build pipelines frequently hold broad secrets under a single environment
+      variable that every workflow job can read, undermining a tightly
+      locked-down production vault. Scope CI secrets to the minimum required per
+      job and audit who can trigger workflows that consume them.
+  - title: Broad secret access with no least-privilege policy
+    explanation: >-
+      Sharing a single API key across five services because it is easier means a
+      compromise of any one of them exposes all of them. Issue per-service
+      credentials scoped to only the permissions each service actually needs,
+      and revoke immediately when a service is decommissioned.
+  - title: No audit log on secret access
+    explanation: >-
+      Without a record of which workload accessed which secret and when, a
+      breach investigation starts from zero. Ensure every secret read is logged
+      through your vault's audit backend, and alert on access patterns that
+      deviate from the established baseline.
 codeExamples:
   - language: typescript
     title: (pending)

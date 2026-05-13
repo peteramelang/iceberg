@@ -144,12 +144,40 @@ narrative: >-
   reliability of the system you build are the largest determinants of whether
   users return.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Measuring average retention instead of cohort curves
+    explanation: >-
+      An aggregate retention rate hides whether you are improving. Cohort
+      analysis—how many users from January came back in week 2, week 4, week
+      12—reveals whether product changes are actually moving the curve over
+      time. Without cohorts, you are measuring noise and calling it progress.
+  - title: Reaching for lifecycle emails before fixing core product value
+    explanation: >-
+      Email campaigns and push notifications can nudge users who are on the
+      fence, but they cannot manufacture value that was not there in the first
+      session. If retained users consistently do something in their first
+      session that churned users do not, that behavior is where to invest
+      first—not in more drip sequences.
+  - title: Tracking low-level events instead of meaningful user actions
+    explanation: >-
+      Schemas full of button clicks and page loads accumulate volume without
+      producing insight. Events that represent user intent—created a project,
+      shared a document, completed a workflow—are stable across UI changes and
+      produce retention signals that are actually analyzable. High-level events
+      age better and cost less to maintain.
+  - title: 'Building engagement loops around scheduled nudges, not real value'
+    explanation: >-
+      The weakest engagement loops trigger users on a schedule ('You haven't
+      logged in in 3 days'). The strongest are triggered by something real
+      happening in the product—a collaborator's action, a result ready to view,
+      a threshold crossed. Scheduling nudges for their own sake trains users to
+      ignore them.
+  - title: Ignoring performance as a retention driver
+    explanation: >-
+      Slow page loads and unreliable behavior are invisible in most retention
+      dashboards but are primary drivers of churn, particularly in early
+      cohorts. Users who experience a product that feels broken do not wait
+      around for the team to fix it. Performance regression monitoring belongs
+      in the same workflow as retention analysis.
 codeExamples:
   - language: typescript
     title: (pending)

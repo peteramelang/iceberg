@@ -176,12 +176,49 @@ narrative: >-
   trust your revenue metrics without a reconciliation process that catches
   discrepancies between your database and your payment processor.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Storing monetary amounts as floating-point numbers
+    explanation: >-
+      Floating-point arithmetic cannot represent many decimal values exactly,
+      causing rounding errors that compound across proration calculations,
+      refunds, and aggregations — producing invoices that are off by a cent in
+      ways that are hard to trace. Store amounts as integers in the smallest
+      currency unit (cents for USD) or use a fixed-precision decimal type.
+  - title: Dual-writing billing state without idempotency guarantees
+    explanation: >-
+      Writing subscription records to your database from both API responses
+      during checkout and webhook events simultaneously, without idempotency
+      keys and ordered conflict resolution, creates duplicate records, phantom
+      subscriptions, and billing state that diverges from the payment processor.
+      Choose a single authoritative source and design all writes to be
+      idempotent.
+  - title: Reimplementing proration logic that the processor already handles
+    explanation: >-
+      Hand-rolling proration for mid-cycle upgrades, downgrades, and seat
+      changes introduces edge cases — leap days, timezone transitions, billing
+      period boundaries — that payment processors have already battle-tested.
+      Let the processor calculate proration amounts and own only the
+      business-layer decisions around when changes take effect.
+  - title: Ignoring dunning as an afterthought
+    explanation: >-
+      Treating failed payment retries as a minor operational detail means losing
+      a significant fraction of revenue to involuntary churn from expired cards
+      and soft declines that would succeed on a second or third attempt. Smart
+      dunning with retry timing informed by decline reason, paired with direct
+      customer outreach, materially recovers that revenue.
+  - title: No reconciliation process between database and payment processor
+    explanation: >-
+      Without a periodic reconciliation job that compares your database's view
+      of active subscriptions against the processor's, small discrepancies
+      accumulate silently — customers charged for cancelled plans, or active
+      customers not being charged at all. A regular diff between the two sources
+      of truth is the only way to catch drift before it compounds.
+  - title: Skipping tax calculation and assuming a flat rate applies everywhere
+    explanation: >-
+      VAT in the EU, sales tax by US state, and GST in other jurisdictions each
+      have distinct rules and rates that change over time, and charging the
+      wrong amount creates both liability and customer disputes. Tax calculation
+      for SaaS is complex enough that a dedicated service is almost always
+      cheaper than getting it wrong.
 codeExamples:
   - language: typescript
     title: (pending)

@@ -164,12 +164,40 @@ narrative: >-
   authenticated identity) and with audit logging (you need a record of who did
   what for compliance and incident response).
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Enforcing authorization only in the UI layer
+    explanation: >-
+      Showing or hiding buttons based on role gives the illusion of access
+      control, but any user with dev tools can call the underlying API directly.
+      Every state-mutating endpoint must perform its own authorization check
+      server-side, independent of what the client renders.
+  - title: Conflating authentication with authorization
+    explanation: >-
+      Checking 'is the user logged in?' and then allowing any logged-in user to
+      perform any action is the default failure mode for single-tenant apps that
+      grow into multi-tenant ones. Authentication confirms identity;
+      authorization must separately and explicitly confirm permission for each
+      action.
+  - title: Relying on UUID obscurity to prevent IDOR
+    explanation: >-
+      Using non-sequential IDs makes object references harder to guess but
+      provides zero security if ownership is never verified. An attacker with a
+      valid session and any valid resource ID can access data that isn't theirs;
+      every resource lookup must check that the requesting subject owns or has
+      rights to that object.
+  - title: Retrofitting access control onto an app built without it
+    explanation: >-
+      Adding fine-grained authorization to a codebase that assumed all users
+      were equal is one of the most painful refactors in backend engineering —
+      permission checks get scattered inconsistently across dozens of endpoints.
+      Designing for at least a basic authorization model from the first
+      multi-user feature is far cheaper than doing it later.
+  - title: Granting overly broad roles to avoid friction
+    explanation: >-
+      Making everyone an admin or giving service accounts production-level
+      permissions because it is easier than scoping access correctly violates
+      least-privilege and widens the blast radius of any compromise. Roles and
+      service account permissions should be the minimum necessary to accomplish
+      the task, reviewed periodically.
 codeExamples:
   - language: typescript
     title: (pending)

@@ -130,12 +130,45 @@ narrative: >-
   they know they'll need to define success before they ship. That discipline
   alone makes experimentation worth investing in.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Peeking and stopping experiments early
+    explanation: >-
+      Checking results before the planned sample size is reached and stopping
+      when numbers look promising dramatically inflates false positive rates —
+      you're likely acting on noise, not signal. The fix is to pre-commit to a
+      minimum runtime and sample size before launching the experiment.
+  - title: Unstable randomization pollutes variant assignment
+    explanation: >-
+      If the bucketing function doesn't produce a stable mapping — the same user
+      lands in different variants across sessions or devices — your treatment
+      and control groups overlap and your results are meaningless. Always derive
+      bucket assignment from a consistent user identifier using a deterministic
+      hash.
+  - title: Running too many overlapping experiments simultaneously
+    explanation: >-
+      When multiple experiments share the same user population without proper
+      segmentation, the effects of each experiment contaminate the others,
+      making it impossible to attribute causality to any single change. Use
+      mutual exclusion layers or holdout groups to isolate concurrent tests.
+  - title: Mistaking novelty effect for real lift
+    explanation: >-
+      Users reliably engage more with anything that looks new, so a
+      short-running UI experiment will almost always show a positive result that
+      decays once the novelty wears off. Running experiments long enough — at
+      minimum two full weeks to capture weekly seasonality — is the only
+      protection.
+  - title: Cargo-culting p-value significance without effect size
+    explanation: >-
+      A p-value below 0.05 on a small sample tells you the result is unlikely to
+      be chance, but it says nothing about whether the effect is large enough to
+      matter in practice. Reporting p-value alone without effect size and
+      confidence intervals leads teams to ship changes that produce real but
+      negligible improvements.
+  - title: Tracking too many metrics with no primary metric
+    explanation: >-
+      Defining no primary metric before launch and then scanning all metrics
+      post-hoc for winners is essentially data dredging — the more metrics you
+      check, the more likely you are to find a spurious significant result.
+      Every experiment must have one primary metric declared before it starts.
 codeExamples:
   - language: typescript
     title: (pending)

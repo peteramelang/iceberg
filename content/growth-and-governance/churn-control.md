@@ -80,12 +80,41 @@ narrative: >-
   it as a system — instrumented, automated where possible, and continuously
   improved based on what's actually working.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Ignoring involuntary churn from failed payments
+    explanation: >-
+      Most teams focus entirely on voluntary cancellations and miss that a
+      significant portion of churn comes from expired cards and soft declines
+      that would succeed on a retry — revenue that is simply left on the floor.
+      Intelligent dunning with decline-reason-aware retry timing and direct
+      customer outreach recovers a material fraction of that involuntary churn.
+  - title: Waiting until the cancel button is clicked to intervene
+    explanation: >-
+      By the time a customer reaches the cancellation flow, the decision is
+      largely made; the highest-leverage intervention is identifying
+      disengagement signals — dropped login frequency, unused features, support
+      tickets — weeks before cancellation. Acting on those signals proactively
+      is far more effective than optimizing the cancel-flow copy.
+  - title: No cancellation flow — just immediate termination
+    explanation: >-
+      Immediately cancelling a subscription with no alternatives presented
+      misses customers who would accept a pause, a downgrade, or a short
+      discount to stay — all of which are cheaper than re-acquiring a churned
+      user later. A simple cancellation flow that offers a pause or a cheaper
+      tier retains a measurable share of otherwise-lost customers.
+  - title: Using dark patterns in cancellation flows
+    explanation: >-
+      Hiding the cancel button, adding guilt-tripping language, or requiring a
+      phone call to cancel creates short-term churn reduction that erodes trust,
+      drives negative reviews, and in some jurisdictions exposes you to
+      regulatory risk. The goal of a cancellation flow is to understand why the
+      customer is leaving and offer a genuine alternative, not to obstruct them.
+  - title: No exit survey data to feed back into the product
+    explanation: >-
+      Without systematically collecting why customers cancel, churn reasons
+      remain invisible — teams guess at the cause and invest in the wrong
+      interventions. A one-question exit survey at cancellation is a
+      low-friction way to build a dataset that directly informs both product
+      priorities and at-risk user interventions.
 codeExamples:
   - language: typescript
     title: (pending)

@@ -193,12 +193,48 @@ narrative: >-
   recovery flows, customer communications, support tooling — builds on top of
   it.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Feature access checked directly against payment provider
+    explanation: >-
+      Calling Stripe's API at every feature gate to determine if a user is
+      active adds latency, introduces a hard dependency on a third-party, and
+      scatters access logic across the codebase. Your internal subscription
+      state, kept in sync via webhooks, must be the single source of truth for
+      feature access.
+  - title: Skipping the non-renewing intermediate state
+    explanation: >-
+      When a user cancels, they have often paid through the end of a billing
+      period and are entitled to continued access until then. Jumping directly
+      to 'canceled' and revoking access immediately generates support tickets
+      and potential chargebacks; model 'non_renewing' explicitly and gate access
+      on the period-end date.
+  - title: Webhook race conditions producing inconsistent state
+    explanation: >-
+      Stripe's dunning process fires multiple webhooks as it retries failed
+      charges, and network delays can deliver them out of order. A
+      payment_succeeded event processed after the subscription.deleted event
+      will incorrectly reactivate a canceled subscription unless your handler
+      enforces idempotency and ignores stale transitions.
+  - title: Feature gate logic scattered across the codebase
+    explanation: >-
+      Adding access checks inline wherever a feature is used — rather than in a
+      single entitlement service that consults subscription state — guarantees
+      drift: the same user will be allowed an action in one endpoint and blocked
+      in another. Centralize all state-to-permission mapping behind one
+      interface.
+  - title: Trial expiry enforced only by a delayed cron job
+    explanation: >-
+      A cron that transitions expired trials to paused at 2am creates a window
+      where users who should hit a paywall still have full access, and it
+      silently fails if the job misses a run. Enforce trial expiry eagerly on
+      each request using the stored expiry timestamp, not by waiting for a batch
+      job.
+  - title: No defined access policy for past-due subscriptions
+    explanation: >-
+      Leaving 'past_due' access behavior unspecified means engineers make ad-hoc
+      decisions per feature — some restrict access, some don't — which confuses
+      customers and creates inconsistent dunning pressure. Decide explicitly
+      what past-due users can do, document it, and enforce it uniformly through
+      the entitlement layer.
 codeExamples:
   - language: typescript
     title: (pending)

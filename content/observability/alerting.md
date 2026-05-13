@@ -207,12 +207,40 @@ narrative: >-
   management practices (the alert is just the beginning of the response
   workflow).
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Alerting on causes instead of symptoms
+    explanation: >-
+      Paging on high CPU, high memory, or elevated queue depth produces noise —
+      those metrics may spike without users noticing anything wrong. Alerts
+      should fire on user-facing symptoms like elevated error rates or latency
+      SLO burn, which directly reflect whether your service is failing its
+      users.
+  - title: Alert fatigue from too many low-signal pages
+    explanation: >-
+      When on-call engineers receive too many alerts that either self-resolve or
+      turn out to be non-issues, they start ignoring or silencing pages — which
+      is when a real incident gets missed. Every alert that fires should be
+      actionable, and alerts that consistently resolve without intervention
+      should be deleted or demoted.
+  - title: Static thresholds that break as traffic scales
+    explanation: >-
+      An error count threshold that is appropriate at current traffic becomes
+      either over-sensitive or blind as the product grows or traffic shifts
+      seasonally. Prefer rate-based or SLO burn-rate thresholds over absolute
+      counts so alert sensitivity scales automatically with load.
+  - title: Alert storms from cascading dependency failures
+    explanation: >-
+      When a shared dependency like a database goes down, every service that
+      depends on it fires its own alert simultaneously, burying the root cause
+      in noise. Alertmanager inhibition rules or dependency-aware alert grouping
+      should suppress downstream alerts when a known upstream cause is already
+      firing.
+  - title: Alerts without runbooks or actionable context
+    explanation: >-
+      A page that says 'error rate elevated' with no link to a runbook forces
+      the on-call engineer to spend the first 15 minutes of an incident just
+      figuring out where to look. Every high-severity alert should include a
+      direct link to the relevant runbook and enough context in the alert body
+      to start debugging immediately.
 codeExamples:
   - language: typescript
     title: (pending)

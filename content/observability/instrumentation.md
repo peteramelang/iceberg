@@ -199,12 +199,45 @@ narrative: >-
   Uninstrumented systems force you to reason about behavior from first
   principles every single time. Well-instrumented systems let you look it up.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Cardinality explosion crashes the metrics system
+    explanation: >-
+      Adding a label for user_id, session token, or raw URL to a Prometheus
+      metric creates a new time series for every unique value, which can number
+      in the tens of millions and bring your metrics infrastructure down within
+      hours of a production deploy. Labels must represent categorical dimensions
+      with bounded values — endpoint name, HTTP status code bucket, region —
+      never user-identifying or request-specific data.
+  - title: Measuring averages instead of tail latency
+    explanation: >-
+      P50 latency can look healthy while P99 is ten times worse, and it is the
+      tail that users experience during traffic spikes or under load. Dashboards
+      that only show average response time mask the latency that actually
+      degrades user experience. Emit histograms and alert on P95 and P99; the
+      mean will lie to you.
+  - title: No instrumentation on business-critical operations
+    explanation: >-
+      Infrastructure metrics — CPU, memory, request rate — tell you that
+      something is wrong with the system, but they often lag behind the first
+      real signal: a drop in business events. 'Payments submitted per minute' or
+      'checkouts completed' often drops before any infrastructure metric alerts.
+      Instrument the operations that matter to users first, not just the ones
+      that are easy to collect from your runtime.
+  - title: Missing correlation IDs across service boundaries
+    explanation: >-
+      Without a trace ID propagated through every downstream call, debugging a
+      slow or failing request across multiple services means manually
+      correlating timestamps across separate log streams — slow, error-prone,
+      and often impossible under incident pressure. Emit a correlation ID on
+      every inbound request and pass it through every outbound call so any log
+      line can be linked back to the originating request.
+  - title: Adding instrumentation only after an incident
+    explanation: >-
+      Teams frequently discover they need a specific metric while investigating
+      an incident — and then add it after the fact. This means the next
+      recurrence of the same problem is still invisible until someone notices it
+      manually. Treat instrumentation as part of the definition of done for
+      every feature: if you cannot observe the operation in production, the
+      feature is not finished.
 codeExamples:
   - language: typescript
     title: (pending)

@@ -132,12 +132,46 @@ narrative: >-
   together. The better strategy is to write the documentation before that person
   leaves, while you can still ask them questions.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: 'Runbooks Written for the Author, Not the Reader'
+    explanation: >-
+      A runbook that reads as a memory aid for its author — skipping steps that
+      seem obvious, referencing context only the original engineer has — fails
+      the person who needs it most: someone unfamiliar with the service, under
+      pressure at 3am. Every runbook should be validated by having an engineer
+      who did not write it attempt to follow it cold. If they get stuck, that is
+      a bug in the runbook.
+  - title: Documentation That Is Not Updated as Part of the Change
+    explanation: >-
+      Runbooks and architectural docs rot the moment the system changes without
+      an accompanying doc update. A runbook for the old Kubernetes deployment
+      process actively misleads an engineer attempting to use it against the new
+      Helm chart setup. Treat doc updates as part of the definition of done: if
+      a PR modifies how a service is restarted, deployed, or configured, the
+      runbook must change in the same PR.
+  - title: Knowledge Scattered Across Multiple Systems With No Canonical Source
+    explanation: >-
+      Docs spread across an old Confluence instance, a GitHub repo, a Notion
+      workspace, and a shared Google Drive folder create a scavenger hunt during
+      an incident. A slightly imperfect single source of truth is more useful
+      than comprehensive but fragmented documentation. Consolidate, redirect old
+      locations, and enforce a single home for each type of document so
+      engineers know where to look without thinking.
+  - title: No Architecture Decision Records for Why the System Is Built This Way
+    explanation: >-
+      Without written rationale for architectural choices, decisions made for
+      good reasons become tribal knowledge. Three years later the team either
+      reverses sound decisions or perpetuates bad patterns out of fear of
+      changing something they do not understand. Write an ADR at decision time,
+      even a brief one: the decision, the context, and the alternatives
+      considered. The investment is low; the compounding value is high.
+  - title: Waiting Until After the Work Is Done to Write Documentation
+    explanation: >-
+      Documentation written as a post-ship afterthought is written by an
+      engineer who has already moved on, is under-resourced by definition, and
+      reflects memory rather than the live system. Write runbooks alongside
+      implementation, not after. The engineer who just built the feature is the
+      most qualified person to document it and will never be more available to
+      do so than right now.
 codeExamples:
   - language: typescript
     title: (pending)

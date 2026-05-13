@@ -183,12 +183,48 @@ narrative: >-
   because they are less careful, but because their automation lets them be
   careful systematically rather than heroically.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Treating a broken build as optional
+    explanation: >-
+      When flaky tests get disabled and red builds get merged anyway, the
+      pipeline becomes a checkbox rather than a gate. Engineers learn to ship in
+      spite of failures, the signal degrades, and trust in the pipeline
+      collapses — making it nearly impossible to distinguish real regressions
+      from noise.
+  - title: Automating deployment but not the steps around it
+    explanation: >-
+      A deployment that requires manual pre-steps (updating a config file,
+      notifying a Slack channel, toggling a feature flag by hand) is not
+      automated — it is a partially-automated process that will fail silently
+      when someone skips a step. Every manual requirement outside the pipeline
+      is a gap where human error lives.
+  - title: Running tests only after merging to main
+    explanation: >-
+      Feedback on broken code should arrive while the developer still remembers
+      what they changed. A pipeline that runs only post-merge means failures
+      surface late, block everyone on the branch, and require context
+      reconstruction that costs far more than catching the same failure
+      pre-merge.
+  - title: Deploying from a local machine
+    explanation: >-
+      Laptops are not reproducible environments. A deploy from a developer's
+      machine includes their local config, their installed tooling versions, and
+      bypasses every pipeline check. One 'works on my machine' deploy that
+      corrupts production data is enough to understand why this practice needs
+      to be eliminated.
+  - title: Skipping staging because it's never in sync
+    explanation: >-
+      A staging environment that diverges from production — different versions,
+      different configs, stale data — stops being useful for catching problems
+      before they reach users. Teams then skip it entirely, and production
+      becomes the first real validation environment, which inverts the entire
+      purpose of the pipeline.
+  - title: Reaching for GitOps before tests are reliable
+    explanation: >-
+      Progressive delivery tooling and multi-stage canary pipelines add
+      complexity that only pays off if the underlying test suite actually
+      catches regressions. Building sophisticated deployment infrastructure on
+      top of an unreliable test suite means faster delivery of undetected bugs,
+      not safer deployments.
 codeExamples:
   - language: typescript
     title: (pending)
