@@ -14,15 +14,7 @@ resources:
   videos:
     short: null
     long: null
-  articles:
-    - url: 'https://amplitude.com/blog/cohort-analysis-guide'
-      title: Cohort Analysis Guide
-      kind: tutorial
-      reasoning: >-
-        Deep dive into cohort analysis methodology, retention curves, and how to
-        segment users by behavior and time for accurate retention measurement.
-      publisher: Amplitude
-      source: ai-researcher
+  articles: []
   services:
     - name: Amplitude
       url: 'https://amplitude.com'
@@ -55,15 +47,6 @@ resources:
         Product analytics platform with automatic event capture, session replay,
         heatmaps, and AI-powered friction detection. Serves 10,000+ companies
         for behavioral analysis.
-      source: ai-researcher
-    - name: Retention & Cohort Analysis
-      url: 'https://mixpanel.com/blog'
-      category: platform
-      reasoning: >-
-        Guide to retention metrics, cohort segmentation, and using product
-        analytics to identify engagement patterns and lifecycle communication
-        opportunities.
-      vendor: Mixpanel
       source: ai-researcher
     - name: Andrew Chen on Growth & Retention
       url: 'https://andrewchen.com'

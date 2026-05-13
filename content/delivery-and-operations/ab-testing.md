@@ -71,12 +71,6 @@ resources:
       reasoning: (no reasoning captured)
       vendor: Booking
       source: ai-researcher
-    - name: 'Lyft: A/B Testing at Scale'
-      url: 'https://lyft.com/careers'
-      category: platform
-      reasoning: (no reasoning captured)
-      vendor: Lyft
-      source: ai-researcher
   courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

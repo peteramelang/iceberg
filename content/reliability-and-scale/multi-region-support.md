@@ -43,15 +43,6 @@ resources:
         stable across zone failures, a prerequisite for multi-region thinking
       publisher: Amazon Web Services
       source: ai-researcher
-    - url: 'https://aws.amazon.com/architecture/multi-region/'
-      title: Multi-Region Architecture
-      kind: tutorial
-      reasoning: >-
-        Comprehensive AWS reference architecture documenting patterns,
-        trade-offs, and best practices for deploying applications across
-        multiple regions
-      publisher: Amazon Web Services
-      source: ai-researcher
     - url: 'https://www.cockroachlabs.com/docs/stable/multiregion-overview.html'
       title: CockroachDB Multi-Region Overview
       kind: canonical-doc

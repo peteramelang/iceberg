@@ -144,15 +144,7 @@ resources:
         Synthetic monitoring service useful for establishing SLIs around
         availability and performance.
       source: ai-researcher
-  courses:
-    - url: 'https://www.coursera.org/learn/measuring-managing-reliability'
-      title: Measuring and Managing Reliability Specialization
-      provider: Coursera (Google Cloud)
-      paid: true
-      reasoning: >-
-        Comprehensive specialization covering SLIs, SLOs, error budgets, and
-        reliability practices from Google.
-      source: ai-researcher
+  courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

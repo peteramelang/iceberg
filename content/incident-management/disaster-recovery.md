@@ -54,12 +54,6 @@ resources:
       reasoning: (no reasoning captured)
       vendor: Veeam
       source: ai-researcher
-    - name: 'Google SRE Book: Managing Load'
-      url: 'https://sre.google/sre-book/managing-load/'
-      category: deep-dive
-      reasoning: (no reasoning captured)
-      vendor: Google SRE
-      source: ai-researcher
   courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

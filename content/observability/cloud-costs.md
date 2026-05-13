@@ -21,17 +21,7 @@ definition: >-
 needsManualPick: false
 resources:
   videos:
-    short:
-      url: 'https://www.youtube.com/watch?v=76A8BshRAHs'
-      title: Use AWS COST EXPLORER to Answer Your COST & USAGE Queries | DEMO
-      author: AWS
-      durationMinutes: 12
-      addedAt: '2026-05-14T00:00:00Z'
-      reasoning: >-
-        Practical demonstration of AWS Cost Explorer for real-world cost query
-        scenarios, covering filter options and dimensions essential for cost
-        visibility.
-      source: ai-researcher
+    short: null
     long: null
   articles:
     - url: >-

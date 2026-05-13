@@ -129,32 +129,7 @@ resources:
         PaaS with instant code and database rollback capabilities, simplifying
         safe deployments without infrastructure management.
       source: ai-researcher
-  courses:
-    - url: 'https://www.linux-foundation.org/training/kubernetes-basics/'
-      title: Kubernetes Basics
-      provider: Linux Foundation
-      paid: false
-      reasoning: >-
-        Foundational course on Kubernetes deployments including rolling updates
-        and rollback mechanisms.
-      source: ai-researcher
-    - url: 'https://www.pluralsight.com/courses/kubernetes-deployments'
-      title: Kubernetes Deployments
-      provider: Pluralsight
-      paid: true
-      reasoning: >-
-        Advanced course covering deployment strategies, health checks, and
-        rollback automation in Kubernetes.
-      source: ai-researcher
-    - url: >-
-        https://learn.microsoft.com/en-us/azure/architecture/guide/operator/mission-critical-deployment-strategy
-      title: Mission-Critical Deployment Strategies
-      provider: Microsoft Learn
-      paid: false
-      reasoning: >-
-        Guidance on safe deployment patterns including blue-green and canary
-        strategies with rollback planning.
-      source: ai-researcher
+  courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

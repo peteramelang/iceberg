@@ -103,15 +103,6 @@ resources:
         providers.
       vendor: Open Policy Agent (CNCF)
       source: ai-researcher
-    - name: HashiCorp Sentinel
-      url: 'https://www.hashicorp.com/products/sentinel'
-      category: policy-engine
-      reasoning: >-
-        Policy-as-code engine for HashiCorp products (Terraform, Vault, Consul).
-        Enables approval workflows, cost controls, and compliance guardrails in
-        infrastructure provisioning.
-      vendor: HashiCorp
-      source: ai-researcher
     - name: AWS Config
       url: 'https://aws.amazon.com/config/'
       category: compliance-and-audit
@@ -165,15 +156,6 @@ resources:
         integrated into CI/CD workflows.
       source: ai-researcher
   courses:
-    - url: 'https://www.pluralsight.com/courses/opa-open-policy-agent'
-      title: 'Open Policy Agent: Policy as Code'
-      provider: Pluralsight
-      paid: true
-      reasoning: >-
-        Hands-on course covering OPA architecture, Rego language syntax, and
-        real-world policy implementations across infrastructure and
-        applications.
-      source: ai-researcher
     - url: 'https://www.udemy.com/course/infrastructure-as-code-governance/'
       title: Infrastructure-as-Code Governance with Terraform
       provider: Udemy
@@ -191,16 +173,6 @@ resources:
       reasoning: >-
         Foundational Microsoft training module on designing governance
         hierarchies, policy assignments, and compliance monitoring in Azure.
-      source: ai-researcher
-    - url: >-
-        https://www.linux-foundation.org/training/governance-in-cloud-infrastructure/
-      title: Governance in Cloud Infrastructure
-      provider: Linux Foundation
-      paid: true
-      reasoning: >-
-        Industry-standard training covering governance frameworks (NIST, CSA),
-        policy engines (OPA, Sentinel), and audit trail requirements across
-        cloud platforms.
       source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

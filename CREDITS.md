@@ -2,7 +2,7 @@
 
 Iceberg curates learning resources created by the people and organizations below. This list is auto-generated from `content/**/*.md` by `pipeline/scripts/generate-credits.ts`. **The original creators retain all rights to their content; iceberg links to their work but does not redistribute it.**
 
-Total contributors: **220** across **46** topics.
+Total contributors: **211** across **46** topics.
 
 If you are listed here and would like attribution changed, removed, or a link replaced, please open an issue.
 
@@ -16,8 +16,8 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Adyen** — 1 resource across 1 topic
 - **Aip** — 1 resource across 1 topic
 - **AlgoMaster** — 1 resource across 1 topic
-- **Amazon Web Services** — 28 resources across 16 topics
-- **Amplitude** — 2 resources across 1 topic
+- **Amazon Web Services** — 25 resources across 16 topics
+- **Amplitude** — 1 resource across 1 topic
 - **Andrew Chen** — 1 resource across 1 topic
 - **Apache Kafka** — 2 resources across 2 topics
 - **Aphyr / Kyle Kingsbury** — 2 resources across 1 topic
@@ -27,11 +27,9 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Atlassian** — 5 resources across 2 topics
 - **Atlassian (Opsgenie)** — 1 resource across 1 topic
 - **Auth0** — 2 resources across 2 topics
-- **AWS** — 1 resource across 1 topic
 - **Axiom** — 1 resource across 1 topic
 - **Baeldung** — 1 resource across 1 topic
 - **Better Stack** — 3 resources across 3 topics
-- **Biteinteractive** — 1 resource across 1 topic
 - **Booking** — 1 resource across 1 topic
 - **Brandur Leach** — 2 resources across 2 topics
 - **Brendan Gregg** — 3 resources across 1 topic
@@ -54,8 +52,7 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Confluent** — 5 resources across 2 topics
 - **Convention Center Tech** — 1 resource across 1 topic
 - **Cookiebot (Usercentrics)** — 1 resource across 1 topic
-- **Coursera** — 6 resources across 6 topics
-- **Coursera (Google Cloud)** — 1 resource across 1 topic
+- **Coursera** — 3 resources across 3 topics
 - **Coursera (IBM)** — 1 resource across 1 topic
 - **Cypress** — 1 resource across 1 topic
 - **Datadog** — 8 resources across 6 topics
@@ -70,7 +67,6 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Drizzle ORM** — 1 resource across 1 topic
 - **Dynatrace** — 1 resource across 1 topic
 - **Educative** — 1 resource across 1 topic
-- **edX** — 1 resource across 1 topic
 - **Enterpriseintegrationpatterns** — 1 resource across 1 topic
 - **Envoy** — 3 resources across 2 topics
 - **Fastly** — 2 resources across 2 topics
@@ -90,22 +86,21 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Google (web.dev)** — 1 resource across 1 topic
 - **Google Cloud** — 5 resources across 4 topics
 - **Google Research** — 1 resource across 1 topic
-- **Google SRE** — 11 resources across 6 topics
+- **Google SRE** — 10 resources across 5 topics
 - **Grafana Labs** — 7 resources across 5 topics
 - **GrowthBook** — 2 resources across 2 topics
 - **HAProxy** — 1 resource across 1 topic
-- **HashiCorp** — 1 resource across 1 topic
 - **HashiCorp (Vault)** — 1 resource across 1 topic
 - **Hasura** — 2 resources across 1 topic
 - **Heap** — 1 resource across 1 topic
 - **Heroku** — 1 resource across 1 topic
 - **High Scalability** — 1 resource across 1 topic
 - **Honeybadger** — 1 resource across 1 topic
-- **Honeycomb** — 8 resources across 5 topics
+- **Honeycomb** — 7 resources across 5 topics
 - **Hussein Nasser** — 1 resource across 1 topic
 - **IAPP** — 1 resource across 1 topic
 - **IETF** — 2 resources across 2 topics
-- **incident.io** — 3 resources across 2 topics
+- **incident.io** — 2 resources across 2 topics
 - **Increment Magazine (Stripe)** — 1 resource across 1 topic
 - **Infisical** — 2 resources across 1 topic
 - **Infracost** — 1 resource across 1 topic
@@ -122,20 +117,18 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Konghq** — 1 resource across 1 topic
 - **Kubernetes (CNCF)** — 4 resources across 3 topics
 - **LaunchDarkly** — 2 resources across 1 topic
-- **LinkedIn Learning** — 1 resource across 1 topic
 - **Linux Academy** — 2 resources across 2 topics
-- **Linux Foundation** — 6 resources across 5 topics
+- **Linux Foundation** — 2 resources across 2 topics
 - **Liquibase** — 1 resource across 1 topic
-- **Lyft** — 1 resource across 1 topic
-- **Martin Fowler** — 13 resources across 8 topics
+- **Martin Fowler** — 10 resources across 6 topics
 - **Martin Kleppmann / University of Cambridge** — 1 resource across 1 topic
 - **MDN / Mozilla** — 2 resources across 2 topics
 - **Memcached** — 1 resource across 1 topic
 - **Mend (Renovate)** — 1 resource across 1 topic
 - **Microsoft** — 2 resources across 2 topics
 - **Microsoft (Playwright)** — 1 resource across 1 topic
-- **Microsoft Learn** — 7 resources across 4 topics
-- **Mixpanel** — 2 resources across 1 topic
+- **Microsoft Learn** — 6 resources across 3 topics
+- **Mixpanel** — 1 resource across 1 topic
 - **MkDocs** — 1 resource across 1 topic
 - **Mongodb** — 1 resource across 1 topic
 - **Mysql** — 1 resource across 1 topic
@@ -162,7 +155,6 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Percona** — 1 resource across 1 topic
 - **Pingdom** — 1 resource across 1 topic
 - **PlanetScale** — 4 resources across 3 topics
-- **Pluralsight** — 4 resources across 4 topics
 - **PostgreSQL** — 4 resources across 2 topics
 - **PostgREST** — 1 resource across 1 topic
 - **PostHog** — 3 resources across 3 topics
@@ -200,7 +192,7 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Statsig** — 2 resources across 2 topics
 - **Steve McGhee** — 1 resource across 1 topic
 - **Stigg** — 1 resource across 1 topic
-- **Stripe** — 17 resources across 6 topics
+- **Stripe** — 16 resources across 6 topics
 - **Supabase** — 1 resource across 1 topic
 - **Sysdig** — 1 resource across 1 topic
 - **System Design Basics** — 1 resource across 1 topic
@@ -215,7 +207,7 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Traefik** — 2 resources across 1 topic
 - **Transcend** — 1 resource across 1 topic
 - **TrustArc** — 1 resource across 1 topic
-- **Udemy** — 8 resources across 8 topics
+- **Udemy** — 7 resources across 7 topics
 - **Unknown** — 3 resources across 2 topics
 - **Unleash** — 1 resource across 1 topic
 - **Vantage** — 2 resources across 1 topic
@@ -225,7 +217,6 @@ If you are listed here and would like attribution changed, removed, or a link re
 - **Vitest** — 1 resource across 1 topic
 - **VWO** — 1 resource across 1 topic
 - **Web Dev Simplified** — 2 resources across 1 topic
-- **Wikipedia** — 1 resource across 1 topic
 - **Zipkin** — 1 resource across 1 topic
 - **Zuora** — 1 resource across 1 topic
 

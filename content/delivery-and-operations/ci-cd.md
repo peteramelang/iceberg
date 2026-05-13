@@ -121,22 +121,6 @@ resources:
         on-premise deployment flexibility
       source: ai-researcher
   courses:
-    - url: 'https://www.coursera.org/learn/devops-continuous-integration'
-      title: Continuous Integration with Jenkins
-      provider: Coursera
-      paid: false
-      reasoning: >-
-        Foundational course on CI practices using Jenkins, available on audit
-        basis
-      source: ai-researcher
-    - url: 'https://www.pluralsight.com/courses/continuous-delivery-pipeline'
-      title: 'Continuous Delivery: Pipeline Automation'
-      provider: Pluralsight
-      paid: true
-      reasoning: >-
-        Advanced course covering deployment pipelines, testing strategies, and
-        production-ready practices
-      source: ai-researcher
     - url: 'https://www.linux-foundation.org/training/cd-and-devops/'
       title: CD and DevOps Training
       provider: Linux Foundation

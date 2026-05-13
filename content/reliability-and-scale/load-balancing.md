@@ -128,14 +128,6 @@ resources:
         protection at geographic scale
       source: ai-researcher
   courses:
-    - url: 'https://www.edx.org/course/cloud-infrastructure-technologies'
-      title: Cloud Infrastructure Technologies
-      provider: edX
-      paid: false
-      reasoning: >-
-        Foundational cloud concepts including load balancing patterns,
-        auto-scaling, and fault tolerance
-      source: ai-researcher
     - url: 'https://www.coursera.org/learn/cloud-computing-basics'
       title: Cloud Computing Basics
       provider: Coursera
@@ -143,14 +135,6 @@ resources:
       reasoning: >-
         Comprehensive introduction to cloud architecture covering load
         balancing, redundancy, and scalability patterns
-      source: ai-researcher
-    - url: 'https://www.linux.com/training/'
-      title: Linux Foundation Training Paths
-      provider: Linux Foundation
-      paid: true
-      reasoning: >-
-        Professional certification paths including Kubernetes and container
-        orchestration with service load balancing
       source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

@@ -127,16 +127,7 @@ resources:
         Commercial AI-ready observability platform with unified tracing, logs,
         and metrics
       source: ai-researcher
-  courses:
-    - url: >-
-        https://www.linkedin.com/learning/devops-foundations-distributed-tracing/
-      title: 'DevOps Foundations: Distributed Tracing'
-      provider: LinkedIn Learning
-      paid: true
-      reasoning: >-
-        Comprehensive course covering distributed tracing fundamentals and
-        implementation strategies
-      source: ai-researcher
+  courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

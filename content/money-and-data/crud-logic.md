@@ -48,14 +48,6 @@ resources:
         handling concurrent modifications with real-world examples.
       source: ai-researcher
   articles:
-    - url: 'https://martinfowler.com/articles/optimistic-offline-lock.html'
-      title: Optimistic Offline Lock
-      kind: canonical-doc
-      reasoning: >-
-        Martin Fowler's canonical treatment of optimistic locking—a core pattern
-        for handling concurrent updates safely without pessimistic locks.
-      publisher: Martin Fowler
-      source: ai-researcher
     - url: 'https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.2'
       title: 'RFC 7231: HTTP/1.1 Semantics and Content (Idempotent Methods)'
       kind: canonical-doc
@@ -79,14 +71,6 @@ resources:
         PostgreSQL's built-in row versioning system used internally for MVCC;
         foundational for understanding update/delete safety.
       publisher: PostgreSQL
-      source: ai-researcher
-    - url: 'https://en.wikipedia.org/wiki/Soft_delete'
-      title: Soft Delete Pattern
-      kind: canonical-doc
-      reasoning: >-
-        Overview of soft (logical) deletes vs hard deletes, trade-offs in query
-        performance, data recovery, and compliance.
-      publisher: Wikipedia
       source: ai-researcher
   services:
     - name: Prisma
@@ -124,23 +108,7 @@ resources:
         Postgres-based platform providing CRUD APIs with Row Level Security
         (RLS) for fine-grained authorization on data mutations.
       source: ai-researcher
-  courses:
-    - url: 'https://www.pluralsight.com/courses/designing-database-transactions'
-      title: Designing Database Transactions
-      provider: Pluralsight
-      paid: true
-      reasoning: >-
-        Comprehensive course covering transaction isolation levels, lock
-        strategies, and handling concurrent CRUD operations safely.
-      source: ai-researcher
-    - url: 'https://www.coursera.org/learn/database-design-app'
-      title: Database Design and Basic SQL in PostgreSQL
-      provider: Coursera
-      paid: false
-      reasoning: >-
-        Free foundational course with PostgreSQL focus, covering data integrity,
-        constraints, and safe update/delete patterns.
-      source: ai-researcher
+  courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

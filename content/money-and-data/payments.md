@@ -105,14 +105,6 @@ resources:
         payments—useful for understanding unified payment architecture.
       source: ai-researcher
   courses:
-    - url: 'https://stripe.com/en-gb/developers'
-      title: Stripe Developer Guides
-      provider: Stripe
-      paid: false
-      reasoning: >-
-        Free interactive guides, API reference, and real-world examples covering
-        integration patterns, testing, and production readiness.
-      source: ai-researcher
     - url: 'https://www.udemy.com/course/stripe-js-react-node/'
       title: 'Stripe JS + React + Node.js: Build a SaaS'
       provider: Udemy

@@ -71,15 +71,6 @@ resources:
         lifecycle management in Stripe's billing system.
       publisher: Stripe
       source: ai-researcher
-    - url: 'https://www.biteinteractive.com/the-complete-guide-to-saas-billing/'
-      title: The Complete Guide to SaaS Billing
-      kind: engineering-blog
-      reasoning: >-
-        Comprehensive overview of SaaS billing patterns including subscriptions,
-        dunning, refunds, and reconciliation best practices from industry
-        experience.
-      publisher: Biteinteractive
-      source: ai-researcher
   services:
     - name: Stripe Billing
       url: 'https://stripe.com/billing'

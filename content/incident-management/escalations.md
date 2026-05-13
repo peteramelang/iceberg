@@ -29,12 +29,6 @@ resources:
       reasoning: (no reasoning captured)
       vendor: PagerDuty
       source: ai-researcher
-    - name: incident.io Blog - Escalation Patterns
-      url: 'https://incident.io/blog'
-      category: platform
-      reasoning: (no reasoning captured)
-      vendor: incident.io
-      source: ai-researcher
     - name: PagerDuty Platform
       url: 'https://www.pagerduty.com'
       category: platform

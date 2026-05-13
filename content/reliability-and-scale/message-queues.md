@@ -39,14 +39,6 @@ resources:
         design patterns, trade-offs, and production considerations
       source: ai-researcher
   articles:
-    - url: 'https://aws.amazon.com/builders-library/avoiding-overload/'
-      title: Avoiding Overload
-      kind: canonical-doc
-      reasoning: >-
-        AWS best practice guide on using message queues to prevent system
-        overload and handle traffic spikes through asynchronous processing
-      publisher: Amazon Web Services
-      source: ai-researcher
     - url: 'https://brandur.org/articles'
       title: 'River: a Fast, Robust Job Queue for Go + Postgres'
       kind: canonical-doc

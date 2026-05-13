@@ -87,15 +87,6 @@ resources:
         and patterns to prevent cascading failures under high load
       publisher: Google SRE
       source: ai-researcher
-    - url: >-
-        https://aws.amazon.com/blogs/database/sharding-pattern-in-amazon-dynamodb/
-      title: Sharding Pattern in Amazon DynamoDB
-      kind: canonical-doc
-      reasoning: >-
-        Practical guide to horizontal database scaling through sharding patterns
-        for handling partition growth
-      publisher: Amazon Web Services
-      source: ai-researcher
   services:
     - name: AWS Well-Architected Framework
       url: 'https://aws.amazon.com/architecture/well-architected/'

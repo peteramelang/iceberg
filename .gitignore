@@ -22,3 +22,4 @@ content/_ledger.smoke.json
 
 # brainstorming visual companion artifacts
 .superpowers/
+.gstack/

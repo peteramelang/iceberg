@@ -131,31 +131,7 @@ resources:
         Event-based observability focused on high-cardinality dimensions and
         exploratory analysis; strong on distributed tracing.
       source: ai-researcher
-  courses:
-    - url: 'https://www.linux.com/training/observability-with-opentelemetry/'
-      title: Observability with OpenTelemetry
-      provider: Linux Foundation
-      paid: false
-      reasoning: >-
-        Free introductory course covering OTel concepts, architecture, and
-        hands-on labs with metrics and traces.
-      source: ai-researcher
-    - url: 'https://www.udemy.com/course/prometheus-masterclass/'
-      title: Prometheus Masterclass
-      provider: Udemy
-      paid: true
-      reasoning: >-
-        Comprehensive paid course on Prometheus, metric design, alerting, and
-        Grafana integration; includes real-world examples.
-      source: ai-researcher
-    - url: 'https://learn.honeycomb.io/'
-      title: Honeycomb University
-      provider: Honeycomb
-      paid: false
-      reasoning: >-
-        Free self-paced courses on modern observability, cardinality, and
-        distributed tracing fundamentals.
-      source: ai-researcher
+  courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

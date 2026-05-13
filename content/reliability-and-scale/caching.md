@@ -59,20 +59,6 @@ resources:
         offerings.
       publisher: Amazon Web Services
       source: ai-researcher
-    - url: 'https://martinfowler.com/bliki/CacheAsidePattern.html'
-      title: Cache-Aside Pattern
-      kind: canonical-doc
-      reasoning: >-
-        Martin Fowler's canonical explanation of the cache-aside (lazy loading)
-        pattern.
-      publisher: Martin Fowler
-      source: ai-researcher
-    - url: 'https://martinfowler.com/bliki/WriteThrough.html'
-      title: Write-Through Cache Pattern
-      kind: canonical-doc
-      reasoning: Martin Fowler's explanation of write-through caching strategy.
-      publisher: Martin Fowler
-      source: ai-researcher
     - url: 'https://web.dev/articles/http-cache'
       title: HTTP Caching
       kind: tutorial
@@ -133,14 +119,6 @@ resources:
       reasoning: >-
         Official Redis training courses covering caching patterns, data
         structures, and real-world applications.
-      source: ai-researcher
-    - url: 'https://www.coursera.org/learn/database-design-web-apps'
-      title: Database Design and Web Apps
-      provider: Coursera
-      paid: true
-      reasoning: >-
-        Comprehensive course covering database optimization including caching
-        strategies at multiple layers.
       source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
