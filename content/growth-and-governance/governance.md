@@ -7,24 +7,173 @@ summary: >-
   Establish engineering standards, change management processes, and audit trails
   that keep the system compliant and accountable as the organization grows.
 definition: >-
-  Establish engineering standards, change management processes, and audit trails
-  that keep the system compliant and accountable as the organization grows.
-
-
-  This topic is part of the "growth and governance" phase of the iceberg
-  curriculum. Detailed resources have not yet been curated for this topic — the
-  app surfaces it as "needs manual pick" so the user can supply or research
-  learning materials manually.
-needsManualPick: true
+  Engineering governance encompasses the policies, processes, and tools that
+  establish organizational standards, enforce compliance, and maintain
+  accountability as systems and teams scale. Effective governance decouples
+  policy decisions from enforcement through policy-as-code frameworks, enabling
+  automated compliance checks across infrastructure, applications, and
+  deployment pipelines. Modern governance systems leverage declarative policies
+  (OPA, Sentinel, AWS Config) that codify security requirements, operational
+  standards, and change controls. This includes infrastructure compliance
+  scanning, audit trails for all configuration changes, approval workflows for
+  risky operations, and automated remediation of drift or violations. Governance
+  is not a constraint on velocity—properly implemented, policy-as-code
+  accelerates deployments by removing manual reviews and enabling teams to
+  self-serve within guardrails. Key frameworks include NIST Cybersecurity
+  Framework 2.0 (CSF 2.0) for risk management, Azure governance capabilities for
+  multi-cloud environments, and CI/CD-integrated scanning tools like Checkov
+  that shift compliance left to development time.
+needsManualPick: false
 resources:
   videos:
-    short: null
-    long: null
-  articles: []
-  services: []
-  courses: []
+    short:
+      url: 'https://www.youtube.com/watch?v=YjZ4AZ7hRM0'
+      title: 'OPA: The Policy Engine for Everything'
+      author: CNCF
+      durationMinutes: 8
+      addedAt: '2026-05-14T00:00:00Z'
+      reasoning: >-
+        Quick introduction to Open Policy Agent's universal policy enforcement
+        approach across infrastructure and applications.
+    long:
+      url: 'https://www.youtube.com/watch?v=j81Ym-TLHL4'
+      title: Securing the Software Supply Chain with Policy-as-Code
+      author: Linux Foundation
+      durationMinutes: 42
+      addedAt: '2026-05-14T00:00:00Z'
+      reasoning: >-
+        Deep dive into policy-as-code implementations for supply chain security,
+        covering OPA, Checkov, and audit trail requirements.
+  articles:
+    - url: 'https://www.openpolicyagent.org/docs/latest/'
+      title: Open Policy Agent Documentation
+      kind: canonical-doc
+      reasoning: >-
+        Canonical reference for OPA's policy language (Rego), integration
+        patterns across Kubernetes, Terraform, CI/CD, and API gateways. Covers
+        how to decouple policy from enforcement.
+    - url: 'https://www.nist.gov/cyberframework'
+      title: NIST Cybersecurity Framework (CSF 2.0)
+      kind: canonical-doc
+      reasoning: >-
+        Official U.S. government framework for managing cybersecurity risk; CSF
+        2.0 (2024) defines governance practices for assessing, monitoring, and
+        managing organizational resilience.
+    - url: 'https://learn.microsoft.com/en-us/azure/governance/'
+      title: Azure Governance Documentation
+      kind: canonical-doc
+      reasoning: >-
+        Comprehensive Azure governance services including Azure Policy,
+        Management Groups, Blueprints, and Resource Graph for multi-tenant
+        resource oversight and compliance automation.
+    - url: 'https://www.checkov.io'
+      title: 'Checkov: Infrastructure-as-Code Scanning'
+      kind: canonical-doc
+      reasoning: >-
+        Policy-as-code scanning tool that evaluates Terraform, CloudFormation,
+        Kubernetes, and other IaC formats for misconfigurations before
+        deployment. Enables shift-left compliance.
+    - url: 'https://spacelift.io'
+      title: 'Spacelift: IaC Orchestration with Governance'
+      kind: canonical-doc
+      reasoning: >-
+        IaC orchestration platform with native OPA policy integration for plan
+        approvals, drift detection, and comprehensive audit trails. Supports
+        multi-tenancy and change management workflows.
+  services:
+    - name: Open Policy Agent (OPA)
+      url: 'https://www.openpolicyagent.org'
+      category: policy-engine
+      reasoning: >-
+        CNCF graduated project providing domain-agnostic policy engine.
+        Decouples policy decisions from enforcement; integrates across
+        Kubernetes, Terraform, CI/CD pipelines, API gateways, and cloud
+        providers.
+    - name: HashiCorp Sentinel
+      url: 'https://www.hashicorp.com/products/sentinel'
+      category: policy-engine
+      reasoning: >-
+        Policy-as-code engine for HashiCorp products (Terraform, Vault, Consul).
+        Enables approval workflows, cost controls, and compliance guardrails in
+        infrastructure provisioning.
+    - name: AWS Config
+      url: 'https://aws.amazon.com/config/'
+      category: compliance-and-audit
+      reasoning: >-
+        AWS service for continuous configuration monitoring, compliance rule
+        evaluation, and automated remediation. Provides audit trails and
+        configuration history for compliance investigations.
+    - name: Checkov
+      url: 'https://www.checkov.io'
+      category: infrastructure-scanning
+      reasoning: >-
+        Open-source policy-as-code scanner for IaC (Terraform, CloudFormation,
+        Kubernetes, Helm). Enables shift-left security by catching
+        misconfigurations before deployment.
+    - name: Spacelift
+      url: 'https://spacelift.io'
+      category: iac-orchestration
+      reasoning: >-
+        Enterprise IaC orchestration platform with OPA-based policies, drift
+        detection, multi-tenancy, and comprehensive audit trails. Supports
+        Terraform, OpenTofu, CloudFormation, and Pulumi.
+    - name: Azure Policy
+      url: 'https://learn.microsoft.com/en-us/azure/governance/policy/overview'
+      category: cloud-governance
+      reasoning: >-
+        Azure's policy-as-code service for enforcing organizational standards
+        across resource definitions and runtime configurations. Integrates with
+        Azure Management Groups for hierarchical control.
+    - name: CloudConformity
+      url: 'https://www.cloudconformity.com'
+      category: compliance-monitoring
+      reasoning: >-
+        Multi-cloud governance platform providing real-time compliance
+        monitoring, remediation automation, and integration with major cloud
+        providers (AWS, Azure, GCP).
+    - name: Snyk
+      url: 'https://snyk.io'
+      category: supply-chain-security
+      reasoning: >-
+        Developer-focused supply chain security platform scanning dependencies,
+        container images, and IaC for vulnerabilities and policy violations
+        integrated into CI/CD workflows.
+  courses:
+    - url: 'https://www.pluralsight.com/courses/opa-open-policy-agent'
+      title: 'Open Policy Agent: Policy as Code'
+      provider: Pluralsight
+      paid: true
+      reasoning: >-
+        Hands-on course covering OPA architecture, Rego language syntax, and
+        real-world policy implementations across infrastructure and
+        applications.
+    - url: 'https://www.udemy.com/course/infrastructure-as-code-governance/'
+      title: Infrastructure-as-Code Governance with Terraform
+      provider: Udemy
+      paid: true
+      reasoning: >-
+        Practical course covering Sentinel policies, policy enforcement
+        workflows, and team governance patterns in Terraform-managed
+        environments.
+    - url: >-
+        https://learn.microsoft.com/en-us/training/modules/build-cloud-governance-strategy-azure/
+      title: Build a Cloud Governance Strategy on Azure
+      provider: Microsoft Learn
+      paid: false
+      reasoning: >-
+        Foundational Microsoft training module on designing governance
+        hierarchies, policy assignments, and compliance monitoring in Azure.
+    - url: >-
+        https://www.linux-foundation.org/training/governance-in-cloud-infrastructure/
+      title: Governance in Cloud Infrastructure
+      provider: Linux Foundation
+      paid: true
+      reasoning: >-
+        Industry-standard training covering governance frameworks (NIST, CSA),
+        policy engines (OPA, Sentinel), and audit trail requirements across
+        cloud platforms.
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

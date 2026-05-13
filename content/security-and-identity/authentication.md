@@ -110,7 +110,7 @@ resources:
         demystifying OAuth 2.0 and OpenID Connect with clear examples and
         real-world applications.
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

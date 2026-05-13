@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-05-13T22:15:20.116Z",
-  "updatedAt": "2026-05-13T22:22:35.085Z",
+  "updatedAt": "2026-05-13T22:45:46.904Z",
   "currentRound": 1,
   "mode": "full",
   "stages": {
@@ -210,7 +210,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-payments"
+          ],
           "completedAt": "2026-05-13T22:22:35.013Z"
         },
         "consistency": {
@@ -239,7 +241,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-billing-logic"
+          ],
           "completedAt": "2026-05-13T22:22:35.014Z"
         },
         "consistency": {
@@ -268,7 +272,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-subscription-states"
+          ],
           "completedAt": "2026-05-13T22:22:35.016Z"
         },
         "consistency": {
@@ -297,7 +303,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-idempotency"
+          ],
           "completedAt": "2026-05-13T22:22:35.018Z"
         },
         "consistency": {
@@ -326,7 +334,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-data-integrity"
+          ],
           "completedAt": "2026-05-13T22:22:35.019Z"
         },
         "consistency": {
@@ -355,7 +365,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-schema-migrations"
+          ],
           "completedAt": "2026-05-13T22:22:35.021Z"
         },
         "consistency": {
@@ -384,7 +396,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-crud-logic"
+          ],
           "completedAt": "2026-05-13T22:22:35.023Z"
         },
         "consistency": {
@@ -444,7 +458,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-alerting"
+          ],
           "completedAt": "2026-05-13T22:22:35.028Z"
         },
         "consistency": {
@@ -473,7 +489,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-instrumentation"
+          ],
           "completedAt": "2026-05-13T22:22:35.029Z"
         },
         "consistency": {
@@ -502,7 +520,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-distributed-tracing"
+          ],
           "completedAt": "2026-05-13T22:22:35.030Z"
         },
         "consistency": {
@@ -531,7 +551,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-slos-and-slis"
+          ],
           "completedAt": "2026-05-13T22:22:35.032Z"
         },
         "consistency": {
@@ -560,7 +582,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-cloud-costs"
+          ],
           "completedAt": "2026-05-13T22:22:35.033Z"
         },
         "consistency": {
@@ -589,7 +613,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-scalability"
+          ],
           "completedAt": "2026-05-13T22:22:35.036Z"
         },
         "consistency": {
@@ -618,7 +644,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-latency-optimization"
+          ],
           "completedAt": "2026-05-13T22:22:35.037Z"
         },
         "consistency": {
@@ -647,7 +675,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-caching"
+          ],
           "completedAt": "2026-05-13T22:22:35.039Z"
         },
         "consistency": {
@@ -676,7 +706,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-load-balancing"
+          ],
           "completedAt": "2026-05-13T22:22:35.041Z"
         },
         "consistency": {
@@ -705,7 +737,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-message-queues"
+          ],
           "completedAt": "2026-05-13T22:22:35.042Z"
         },
         "consistency": {
@@ -734,7 +768,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-dead-letter-queues"
+          ],
           "completedAt": "2026-05-13T22:22:35.044Z"
         },
         "consistency": {
@@ -763,7 +799,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-multi-region-support"
+          ],
           "completedAt": "2026-05-13T22:22:35.045Z"
         },
         "consistency": {
@@ -792,7 +830,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-error-handling"
+          ],
           "completedAt": "2026-05-13T22:22:35.048Z"
         },
         "consistency": {
@@ -821,7 +861,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-ci-cd"
+          ],
           "completedAt": "2026-05-13T22:22:35.050Z"
         },
         "consistency": {
@@ -850,7 +892,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-environments"
+          ],
           "completedAt": "2026-05-13T22:22:35.053Z"
         },
         "consistency": {
@@ -879,7 +923,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-rollbacks"
+          ],
           "completedAt": "2026-05-13T22:22:35.054Z"
         },
         "consistency": {
@@ -908,7 +954,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "per-topic-researcher"
+          ],
           "completedAt": "2026-05-13T22:22:35.056Z"
         },
         "consistency": {
@@ -937,7 +985,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "research-test-coverage"
+          ],
           "completedAt": "2026-05-13T22:22:35.057Z"
         },
         "consistency": {
@@ -966,7 +1016,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-ab-testing"
+          ],
           "completedAt": "2026-05-13T22:22:35.059Z"
         },
         "consistency": {
@@ -995,7 +1047,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-vendor-lock-in"
+          ],
           "completedAt": "2026-05-13T22:22:35.061Z"
         },
         "consistency": {
@@ -1024,7 +1078,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-api-versioning"
+          ],
           "completedAt": "2026-05-13T22:22:35.062Z"
         },
         "consistency": {
@@ -1053,7 +1109,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "research-incident-response"
+          ],
           "completedAt": "2026-05-13T22:22:35.064Z"
         },
         "consistency": {
@@ -1082,7 +1140,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-on-call-rotations"
+          ],
           "completedAt": "2026-05-13T22:22:35.066Z"
         },
         "consistency": {
@@ -1111,7 +1171,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-disaster-recovery"
+          ],
           "completedAt": "2026-05-13T22:22:35.067Z"
         },
         "consistency": {
@@ -1140,7 +1202,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-data-retention"
+          ],
           "completedAt": "2026-05-13T22:22:35.069Z"
         },
         "consistency": {
@@ -1169,7 +1233,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-escalations"
+          ],
           "completedAt": "2026-05-13T22:22:35.070Z"
         },
         "consistency": {
@@ -1198,7 +1264,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-retention"
+          ],
           "completedAt": "2026-05-13T22:22:35.072Z"
         },
         "consistency": {
@@ -1227,7 +1295,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-churn-control"
+          ],
           "completedAt": "2026-05-13T22:22:35.074Z"
         },
         "consistency": {
@@ -1256,7 +1326,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-support-ops"
+          ],
           "completedAt": "2026-05-13T22:22:35.076Z"
         },
         "consistency": {
@@ -1285,7 +1357,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-governance"
+          ],
           "completedAt": "2026-05-13T22:22:35.078Z"
         },
         "consistency": {
@@ -1314,7 +1388,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-documentation"
+          ],
           "completedAt": "2026-05-13T22:22:35.079Z"
         },
         "consistency": {
@@ -1343,7 +1419,9 @@
         "research": {
           "status": "completed",
           "round": 1,
-          "agentRunIds": [],
+          "agentRunIds": [
+            "agent-dependency-management"
+          ],
           "completedAt": "2026-05-13T22:22:35.081Z"
         },
         "consistency": {

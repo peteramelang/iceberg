@@ -9,22 +9,71 @@ summary: >-
 definition: >-
   Measure and improve how many users return to your product over time using
   cohort analysis, engagement loops, and lifecycle communications.
-
-
-  This topic is part of the "growth and governance" phase of the iceberg
-  curriculum. Detailed resources have not yet been curated for this topic — the
-  app surfaces it as "needs manual pick" so the user can supply or research
-  learning materials manually.
-needsManualPick: true
+needsManualPick: false
 resources:
   videos:
     short: null
     long: null
-  articles: []
-  services: []
-  courses: []
+  articles:
+    - url: 'https://amplitude.com/blog/cohort-analysis-guide'
+      title: Cohort Analysis Guide
+      kind: tutorial
+      reasoning: >-
+        Deep dive into cohort analysis methodology, retention curves, and how to
+        segment users by behavior and time for accurate retention measurement.
+  services:
+    - name: Amplitude
+      url: 'https://amplitude.com'
+      category: platform
+      reasoning: >-
+        Digital analytics platform with cohort analysis, retention tracking, and
+        AI agents for autonomous data analysis. Supports product, web, and
+        behavioral analytics with 11,000+ users.
+    - name: Mixpanel
+      url: 'https://mixpanel.com'
+      category: platform
+      reasoning: >-
+        Product analytics platform with retention funnels, cohort analysis,
+        metric trees, and AI-powered insights. Enables rapid experimentation and
+        user segmentation.
+    - name: PostHog
+      url: 'https://posthog.com'
+      category: platform
+      reasoning: >-
+        Open-source product analytics with built-in retention analysis, session
+        replay, and engagement tracking. Includes cohort-based retention curves
+        and lifecycle insights.
+    - name: Heap
+      url: 'https://www.heap.io'
+      category: platform
+      reasoning: >-
+        Product analytics platform with automatic event capture, session replay,
+        heatmaps, and AI-powered friction detection. Serves 10,000+ companies
+        for behavioral analysis.
+    - name: Retention & Cohort Analysis
+      url: 'https://mixpanel.com/blog'
+      category: platform
+      reasoning: >-
+        Guide to retention metrics, cohort segmentation, and using product
+        analytics to identify engagement patterns and lifecycle communication
+        opportunities.
+    - name: Andrew Chen on Growth & Retention
+      url: 'https://andrewchen.com'
+      category: platform
+      reasoning: >-
+        Essays on consumer product metrics, retention challenges, network
+        effects, and retention fundamentals from a16z GP and growth strategy
+        expert.
+  courses:
+    - url: 'https://www.reforge.com'
+      title: Reforge Growth & Retention
+      provider: (unspecified)
+      paid: false
+      reasoning: >-
+        Comprehensive course on measuring and improving retention through cohort
+        analysis, engagement loops, and lifecycle communications strategies.
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

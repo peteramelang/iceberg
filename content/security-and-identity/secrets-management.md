@@ -92,7 +92,7 @@ resources:
       paid: true
       reasoning: Structured course on Vault foundations with hands-on labs.
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

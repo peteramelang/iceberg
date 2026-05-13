@@ -9,22 +9,46 @@ summary: >-
 definition: >-
   Define and regularly test RPO/RTO targets, backup procedures, and recovery
   playbooks to restore service after catastrophic failures.
-
-
-  This topic is part of the "incident management" phase of the iceberg
-  curriculum. Detailed resources have not yet been curated for this topic — the
-  app surfaces it as "needs manual pick" so the user can supply or research
-  learning materials manually.
-needsManualPick: true
+needsManualPick: false
 resources:
   videos:
     short: null
     long: null
-  articles: []
-  services: []
+  articles:
+    - url: 'https://learn.microsoft.com/en-us/azure/site-recovery/'
+      title: Azure Site Recovery
+      kind: tutorial
+      reasoning: (no reasoning captured)
+    - url: >-
+        https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/
+      title: 'AWS Whitepaper: Disaster Recovery of Workloads on AWS'
+      kind: tutorial
+      reasoning: (no reasoning captured)
+    - url: >-
+        https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/
+      title: 'Azure Architecture: Resiliency'
+      kind: tutorial
+      reasoning: (no reasoning captured)
+  services:
+    - name: AWS Disaster Recovery
+      url: 'https://aws.amazon.com/disaster-recovery/'
+      category: core
+      reasoning: (no reasoning captured)
+    - name: Google Cloud DR Scenarios Planning Guide
+      url: 'https://cloud.google.com/architecture/dr-scenarios-planning-guide'
+      category: core
+      reasoning: (no reasoning captured)
+    - name: Veeam Disaster Recovery Solutions
+      url: 'https://www.veeam.com'
+      category: core
+      reasoning: (no reasoning captured)
+    - name: 'Google SRE Book: Managing Load'
+      url: 'https://sre.google/sre-book/managing-load/'
+      category: deep-dive
+      reasoning: (no reasoning captured)
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

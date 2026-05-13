@@ -81,7 +81,7 @@ resources:
         Comprehensive system design course covering rate-limiting algorithms and
         tradeoffs.
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

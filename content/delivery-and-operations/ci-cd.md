@@ -7,24 +7,124 @@ summary: >-
   Automate the build, test, and deployment pipeline so that every merged change
   can reach production safely with minimal manual intervention.
 definition: >-
-  Automate the build, test, and deployment pipeline so that every merged change
-  can reach production safely with minimal manual intervention.
-
-
-  This topic is part of the "delivery and operations" phase of the iceberg
-  curriculum. Detailed resources have not yet been curated for this topic — the
-  app surfaces it as "needs manual pick" so the user can supply or research
-  learning materials manually.
-needsManualPick: true
+  CI/CD (Continuous Integration and Continuous Delivery) automates the software
+  development lifecycle from code commit through production deployment.
+  Continuous Integration involves developers merging changes into a shared
+  repository multiple times per day, with automated builds and tests verifying
+  each integration to catch problems early. Continuous Delivery extends this by
+  ensuring the software can be released to production at any time through
+  automated testing, staging environments, and deployment pipelines. Together,
+  CI/CD practices enable teams to deliver features safely and rapidly, reducing
+  manual handoffs, catching regressions early, and maintaining system stability
+  while enabling high deployment frequency. Key metrics for measuring CI/CD
+  effectiveness include deployment frequency, lead time for changes, change
+  failure rate, and time to restore service—the Four Keys defined by DORA
+  research.
+needsManualPick: false
 resources:
   videos:
-    short: null
-    long: null
-  articles: []
-  services: []
-  courses: []
+    short:
+      url: 'https://www.youtube.com/watch?v=AmBJ6ZnSkZA'
+      title: 'Continuous Delivery: The Movie'
+      author: Thoughtworks
+      durationMinutes: 8
+      addedAt: '2026-05-14T00:00:00Z'
+      reasoning: Quick overview of continuous delivery principles and benefits
+    long:
+      url: 'https://www.youtube.com/watch?v=X9WHKX-21oxA'
+      title: Continuous Delivery Practices & Patterns
+      author: Jez Humble
+      durationMinutes: 45
+      addedAt: '2026-05-14T00:00:00Z'
+      reasoning: >-
+        Deep dive into deployment pipelines, testing strategies, and operational
+        practices for safe continuous delivery
+  articles:
+    - url: 'https://martinfowler.com/articles/continuousIntegration.html'
+      title: Continuous Integration
+      kind: tutorial
+      reasoning: >-
+        Canonical Martin Fowler article on CI practices, principles, and
+        implementation approaches
+    - url: 'https://martinfowler.com/bliki/ContinuousDelivery.html'
+      title: Continuous Delivery
+      kind: tutorial
+      reasoning: >-
+        Martin Fowler's bliki entry explaining the core concepts and distinction
+        between CI and CD
+    - url: 'https://martinfowler.com/articles/cd4ml.html'
+      title: Continuous Delivery for Machine Learning
+      kind: tutorial
+      reasoning: >-
+        How to apply CD principles to ML systems, addressing challenges unique
+        to data and model deployments
+    - url: 'https://dora.dev/'
+      title: DevOps Research and Assessment (DORA)
+      kind: canonical-doc
+      reasoning: >-
+        Official DORA site with Four Keys metrics framework for measuring CI/CD
+        and DevOps performance
+    - url: 'https://docs.github.com/en/actions'
+      title: GitHub Actions Documentation
+      kind: canonical-doc
+      reasoning: >-
+        Complete reference for GitHub's native CI/CD platform with workflow
+        automation and deployment examples
+  services:
+    - name: GitHub Actions
+      url: 'https://github.com/features/actions'
+      category: ci-cd-platform
+      reasoning: >-
+        Native GitHub CI/CD with integrated repository, no extra infrastructure;
+        ideal for GitHub-hosted projects
+    - name: CircleCI
+      url: 'https://circleci.com'
+      category: ci-cd-platform
+      reasoning: >-
+        Cloud-native CI/CD platform with free tier, fast builds, and strong
+        container/Docker support
+    - name: Buildkite
+      url: 'https://buildkite.com'
+      category: ci-cd-platform
+      reasoning: >-
+        Flexible CI/CD platform supporting on-premise or cloud agents, great for
+        teams needing control over build infrastructure
+    - name: GitLab CI/CD
+      url: 'https://gitlab.com'
+      category: ci-cd-platform
+      reasoning: >-
+        Integrated CI/CD within GitLab with container registry, monitoring, and
+        full DevOps platform capabilities
+    - name: Jenkins
+      url: 'https://www.jenkins.io'
+      category: ci-cd-platform
+      reasoning: >-
+        Open-source CI/CD automation server with extensive plugin ecosystem and
+        on-premise deployment flexibility
+  courses:
+    - url: 'https://www.coursera.org/learn/devops-continuous-integration'
+      title: Continuous Integration with Jenkins
+      provider: Coursera
+      paid: false
+      reasoning: >-
+        Foundational course on CI practices using Jenkins, available on audit
+        basis
+    - url: 'https://www.pluralsight.com/courses/continuous-delivery-pipeline'
+      title: 'Continuous Delivery: Pipeline Automation'
+      provider: Pluralsight
+      paid: true
+      reasoning: >-
+        Advanced course covering deployment pipelines, testing strategies, and
+        production-ready practices
+    - url: 'https://www.linux-foundation.org/training/cd-and-devops/'
+      title: CD and DevOps Training
+      provider: Linux Foundation
+      paid: true
+      reasoning: >-
+        Industry-standard certification training covering CI/CD fundamentals
+        through advanced practices
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

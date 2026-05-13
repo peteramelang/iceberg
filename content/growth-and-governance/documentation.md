@@ -9,22 +9,48 @@ summary: >-
 definition: >-
   Maintain up-to-date runbooks, API references, architectural decision records,
   and onboarding guides so institutional knowledge survives team changes.
-
-
-  This topic is part of the "growth and governance" phase of the iceberg
-  curriculum. Detailed resources have not yet been curated for this topic — the
-  app surfaces it as "needs manual pick" so the user can supply or research
-  learning materials manually.
-needsManualPick: true
+needsManualPick: false
 resources:
   videos:
     short: null
     long: null
   articles: []
-  services: []
+  services:
+    - name: Docusaurus
+      url: 'https://docusaurus.io'
+      category: service
+      reasoning: (no reasoning captured)
+    - name: GitBook
+      url: 'https://www.gitbook.com'
+      category: service
+      reasoning: (no reasoning captured)
+    - name: ReadMe
+      url: 'https://readme.com'
+      category: service
+      reasoning: (no reasoning captured)
+    - name: MkDocs
+      url: 'https://www.mkdocs.org'
+      category: service
+      reasoning: (no reasoning captured)
+    - name: Notion
+      url: 'https://www.notion.so'
+      category: service
+      reasoning: (no reasoning captured)
+    - name: Diátaxis Framework
+      url: 'https://diataxis.fr'
+      category: article
+      reasoning: (no reasoning captured)
+    - name: Architecture Decision Records
+      url: 'https://adr.github.io'
+      category: article
+      reasoning: (no reasoning captured)
+    - name: Documentation Guide
+      url: 'https://documentation.divio.com/'
+      category: article
+      reasoning: (no reasoning captured)
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

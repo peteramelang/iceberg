@@ -77,7 +77,7 @@ resources:
         Course covering GDPR cookie exemptions, policy templates, and CMP tool
         selection.
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

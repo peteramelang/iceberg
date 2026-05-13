@@ -7,24 +7,75 @@ summary: >-
   Build a layered test suite of unit, integration, and end-to-end tests that
   catches regressions before they reach production.
 definition: >-
-  Build a layered test suite of unit, integration, and end-to-end tests that
-  catches regressions before they reach production.
+  Test coverage is a layered quality assurance strategy that organizes automated
+  testing into complementary levels to catch regressions early and with
+  confidence. The test pyramid principle (most unit tests, fewer integration
+  tests, minimal end-to-end tests) balances execution speed with realistic
+  confidence. Modern testing emphasizes writing tests that resemble actual user
+  interactions and business flows rather than testing implementation details—the
+  philosophy being that tests should verify observable behavior and outcomes.
 
 
-  This topic is part of the "delivery and operations" phase of the iceberg
-  curriculum. Detailed resources have not yet been curated for this topic — the
-  app surfaces it as "needs manual pick" so the user can supply or research
-  learning materials manually.
-needsManualPick: true
+  Building effective test coverage requires strategic test selection across
+  three layers: unit tests for isolated components and logic, integration tests
+  that verify collaboration between components without mocking critical
+  dependencies, and targeted end-to-end tests for critical user journeys. Tools
+  like Jest, Vitest, Playwright, and Cypress provide the infrastructure; Testing
+  Library enforces user-centric testing practices. The goal is not 100% coverage
+  but meaningful coverage (typically 70%+) that gives developers confidence to
+  refactor, deploy, and maintain code without fear of introducing regressions.
+
+
+  Implementing this strategy involves understanding when to write each test
+  type, using appropriate tools and patterns for your tech stack, and treating
+  test code with the same quality standards as production code. Avoid test
+  duplication by pushing assertions as far down the pyramid as feasible,
+  maintain fast feedback loops by organizing test pipelines for speed, and
+  embrace contract testing for service boundaries. This layered approach creates
+  a sustainable testing culture that catches bugs before users see them while
+  keeping maintenance costs reasonable.
+needsManualPick: false
 resources:
   videos:
     short: null
     long: null
-  articles: []
-  services: []
+  articles:
+    - title: The Test Pyramid
+      url: 'https://martinfowler.com/bliki/TestPyramid.html'
+      kind: canonical-doc
+      reasoning: ''
+    - title: Practical Test Pyramid
+      url: 'https://martinfowler.com/articles/practical-test-pyramid.html'
+      kind: canonical-doc
+      reasoning: ''
+    - title: Write Tests. Not Too Many. Mostly Integration.
+      url: 'https://kentcdodds.com/blog/write-tests'
+      kind: engineering-blog
+      reasoning: ''
+  services:
+    - url: 'https://jestjs.io'
+      name: 'https://jestjs.io'
+      category: platform
+      reasoning: ''
+    - url: 'https://vitest.dev'
+      name: 'https://vitest.dev'
+      category: platform
+      reasoning: ''
+    - url: 'https://testing-library.com'
+      name: 'https://testing-library.com'
+      category: platform
+      reasoning: ''
+    - url: 'https://playwright.dev'
+      name: 'https://playwright.dev'
+      category: platform
+      reasoning: ''
+    - url: 'https://www.cypress.io'
+      name: 'https://www.cypress.io'
+      category: platform
+      reasoning: ''
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:22:34.988Z'
+  researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true
