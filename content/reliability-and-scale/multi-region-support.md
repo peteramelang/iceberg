@@ -115,14 +115,71 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Multi-region is the last major infrastructure problem most teams face, and the
+  first one they wish they had solved earlier. The failure mode of staying
+  single-region isn't usually a total outage—it's a slow erosion of trust. A
+  European user loading your app from us-east-1 experiences 150–200ms of raw
+  network latency before your server processes a single byte. That's before your
+  app does anything. Multiply that across every API call in a page load and you
+  have a product that feels sluggish everywhere except Virginia. When a cloud
+  provider has a regional event—and they do, regularly—you have no fallback.
+  Your status page goes red, your users lose access, and no amount of clever
+  engineering helps because your entire stack is in one place.
+
+
+  The 80/20 of multi-region is this: read traffic is easy, write traffic is
+  hard, and most applications are 90% reads. Start there. Put a CDN in front of
+  static assets and cached API responses, then place read replicas in the
+  regions where your users actually are. Postgres logical replication to a read
+  replica in eu-west-1 is dramatically simpler than a fully distributed
+  database, and it solves most of the latency problem for most users. The
+  remaining 20%—globally consistent writes, cross-region transactions, conflict
+  resolution—is where the real complexity lives, and you should only go there
+  when the business genuinely requires it. CockroachDB and Spanner solve global
+  transactional consistency, but they impose latency on every write (because
+  consensus requires talking to multiple regions), and they add significant
+  operational complexity. Most teams don't need that tradeoff until they're
+  operating at serious scale.
+
+
+  The dominant failure mode for teams new to multi-region is treating it as a
+  deployment problem when it's actually a data problem. You can run your app in
+  five regions in an afternoon using Fly.io or AWS ECS. What you can't do in an
+  afternoon is figure out where your user sessions live, which database your
+  write goes to, how you handle a user in Singapore who just updated their
+  profile while your primary is in Oregon, and how a background job in one
+  region avoids duplicating work done by the same job in another. Teams go
+  multi-region, hit these questions, and often roll back to single-region
+  because they didn't think through state management first. The rule is: make
+  your application stateless before you go multi-region. Sessions go in Redis
+  with a globally accessible cluster. Uploads go to S3. Background jobs use a
+  queue that all regions read from with proper locking. Only then does spinning
+  up a second region become mechanical rather than terrifying.
+
+
+  The mental model that helps most is thinking in terms of read paths and write
+  paths separately. Your read path can be fully distributed—CDN, edge workers,
+  read replicas, regional caches—and you can optimize it aggressively with
+  little risk. Your write path is where correctness lives, and you need to be
+  intentional about where writes land and how they propagate. For most apps,
+  this means a primary region for writes and async replication everywhere else,
+  with a small replication lag you accept as a design constraint. For apps that
+  genuinely cannot tolerate that lag—financial transactions, inventory
+  systems—you need distributed transactions or you need to partition your data
+  such that each user's writes are owned by a single region. Neither is simple,
+  but understanding the choice is the foundation of good multi-region design.
+
+
+  In the broader ecosystem, multi-region sits downstream of a lot of other
+  production work. You can't do it well without solid observability (you need
+  per-region metrics), without good deployment automation (you're now deploying
+  to N regions every time), and without having already solved reliability at the
+  single-region level. It pairs naturally with CDN configuration, DNS failover,
+  and circuit breaking. Global load balancers like AWS Global Accelerator and
+  Cloudflare do the traffic routing, but they can only route traffic correctly
+  if your origin servers are actually healthy—which is why health checks and
+  readiness probes matter more in multi-region than anywhere else. Get those
+  right first, and the geographic distribution becomes almost mechanical.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

@@ -139,14 +139,58 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Cloud billing surprises are a rite of passage, but they do not have to be. The
+  pattern is consistent: a team migrates to the cloud, ships quickly, and six
+  months later receives a bill that nobody can explain. An EC2 instance that was
+  left running for a proof of concept. A NAT gateway processing gigabytes of
+  inter-AZ traffic that developers did not know was metered. An RDS instance
+  provisioned at production size for a staging environment that runs twelve
+  hours a day. Each decision made sense in isolation; together they compound
+  into something that embarrasses finance and confuses engineering.
+
+
+  The underlying problem is that cloud infrastructure decisions have delayed
+  financial consequences. A developer who provisions an oversized instance does
+  not see the cost until the bill arrives. Without visibility — without the
+  practice of attributing every dollar of spend to a team, service, or feature —
+  nobody feels accountable for any particular line item. FinOps, at its core, is
+  the organizational answer to this: making cost a first-class engineering
+  concern rather than a finance department problem. That means tagging resources
+  consistently, surfacing cost data where engineers can see it, and establishing
+  ownership before costs become contentious.
+
+
+  The 80/20 in cloud cost management is about idle and oversized resources. The
+  two biggest levers most teams have are: right-sizing compute (the default
+  instance type is almost never the right one for a workload that has been
+  running for six months) and eliminating waste in non-production environments.
+  Staging and development environments that run 24/7 but are used eight hours a
+  day are pure waste. Scheduled shutdowns alone can cut those costs by 60 to 70
+  percent with almost no engineering effort. Reserved instances and savings
+  plans matter too, but they are a commitment tool — they make sense after you
+  understand your baseline usage, not before.
+
+
+  The failure mode that is hardest to recover from is not a runaway cost spike —
+  those are visible and fixable. It is the slow drift where costs grow at
+  roughly the same rate as revenue, nobody investigates because the ratio looks
+  acceptable, and a year later the infrastructure is three times larger than the
+  workload requires. Right-sizing is uncomfortable because it requires measuring
+  actual usage rather than relying on what someone estimated when they
+  provisioned the resource. Most teams skip it because the instance is working
+  fine and there is always something more urgent. The cost of skipping it
+  compounds.
+
+
+  Cloud cost management pairs tightly with observability. You cannot right-size
+  what you cannot measure. Resource utilization metrics from CloudWatch,
+  Datadog, or Prometheus are not just operational data — they are the raw
+  material for cost decisions. It also connects directly to
+  infrastructure-as-code: resources that are defined in Terraform or Pulumi are
+  easier to audit, tag, and resize than resources that were clicked into
+  existence in a console. The teams that manage cloud costs well are almost
+  always the same teams that have strong observability and treat infrastructure
+  changes as software changes.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

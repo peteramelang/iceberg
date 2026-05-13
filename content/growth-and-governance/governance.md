@@ -180,14 +180,65 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Most teams discover governance the hard way: a developer with broad AWS
+  permissions accidentally deletes a production database, or a compliance audit
+  reveals that nobody can tell the auditor which team member changed the
+  firewall rule six months ago. Governance isn't bureaucracy for its own sake —
+  it's the system that lets an organization move fast without accumulating
+  silent risk. When you skip it, the failure isn't usually catastrophic on day
+  one. It's the slow rot: permissions creep outward because it's easier to grant
+  than to scope, configurations drift because nobody owns the reconciliation
+  loop, and by the time a regulator or an incident forces the question, nobody
+  can reconstruct what happened or why.
+
+
+  The 80/20 here is surprisingly clean. Most of the value comes from three
+  things: codifying your policies (so they're checkable rather than
+  aspirational), integrating those checks into your deployment pipeline (so
+  violations can't ship), and maintaining an immutable audit trail of who
+  changed what and when. Everything else — the elaborate approval workflows, the
+  multi-stage governance committees, the 47-page security policy documents — is
+  overhead that often obscures rather than enforces real accountability.
+  Policy-as-code tools like OPA or Checkov let you express "no S3 bucket should
+  be publicly readable" as a machine-executable rule that runs on every pull
+  request. That single shift — from a manual review someone might skip to an
+  automated gate nobody can skip — is worth more than most other governance
+  investments combined.
+
+
+  The dominant failure mode isn't malice, it's entropy. Teams start with
+  reasonable intentions and then accumulate exceptions. A service needs extra
+  permissions "just temporarily" and those permissions never get revoked. An
+  infrastructure change skips the review process because there's an urgent
+  outage. Each individual decision looks defensible; the aggregate is a system
+  where nobody really knows what state things are in. The antidote is drift
+  detection — tools like AWS Config or Terraform state comparison that
+  continuously audit your actual infrastructure against your declared policy.
+  When drift shows up, you investigate it; you don't just reconcile silently.
+
+
+  The mental model that makes governance click is treating it as a product with
+  users. Your developers are the users. If the compliance checks are slow,
+  noisy, or block legitimate work without explanation, people will find ways
+  around them — and then you have the worst of both worlds: overhead without
+  safety. Good governance feels like a fast, automated guardrail that tells you
+  "you can't do that because X, and here's how to do it correctly" rather than a
+  slow, human-gated process that blocks work for days waiting for an approval
+  that may never come. When governance is designed for developer experience,
+  teams actually follow it.
+
+
+  In the broader ecosystem, governance connects everything else. It's the layer
+  that ensures your secrets management policies are actually enforced, that your
+  CI/CD pipeline can't be bypassed, that your on-call rotation changes are
+  tracked, and that your infrastructure reflects what your Terraform says it
+  does. For regulated industries — finance, healthcare, anything touching
+  personal data — governance isn't optional; it's table stakes. But even for
+  companies that aren't regulated, mature governance is what lets you onboard
+  new engineers quickly, give them broad autonomy, and still sleep at night. The
+  goal isn't control for its own sake; it's enabling the kind of trust that lets
+  teams move fast in a shared environment without stepping on each other or
+  quietly burning down the house.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

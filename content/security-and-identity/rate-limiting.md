@@ -102,14 +102,78 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Rate limiting is the first line of defense between your API and everyone who
+  wants to abuse it, intentionally or not. Without it, a single badly-behaved
+  client—a misconfigured retry loop, a competitor scraping your catalog, a
+  script kiddie running a tool they downloaded—can saturate your infrastructure
+  and take down service for legitimate users. The failure mode is usually
+  gradual: your database connections spike, your API response times climb, your
+  on-call engineer gets paged, and you spend 30 minutes figuring out which IP is
+  hammering you before you manually block it. With rate limiting in place, the
+  same scenario results in a 429 response to the bad actor while everyone else
+  gets normal service. That's the whole value proposition.
+
+
+  The 80/20 of rate limiting is: implement it at the edge first, make it
+  per-client (not global), and use a simple algorithm you understand rather than
+  a sophisticated one you don't. A token bucket per authenticated user or per IP
+  address, enforced at your API gateway or load balancer, handles the vast
+  majority of real abuse patterns. The token bucket gives you burst tolerance—a
+  user can make 20 rapid requests and then gets throttled—which is important
+  because legitimate clients often have bursty patterns (page load fires 5 API
+  calls at once, then nothing for a minute). Leaky bucket enforces strict
+  steady-state rates, which is sometimes what you want for background jobs but
+  feels punishing for interactive users. Sliding window counters are more
+  accurate but slightly more complex to implement; fixed window counters are
+  simple but can be gamed by a client that fires requests right at the window
+  boundary. For most teams, token bucket with a Redis backing store is the right
+  starting point.
+
+
+  The dominant failure mode in rate limiting is inconsistent enforcement across
+  your stack. Teams implement rate limiting on their public API but forget their
+  webhook delivery endpoint, their file upload endpoint, or their internal
+  service-to-service calls. An attacker or a broken client that can't get
+  through the public API will probe every other surface. Another common failure
+  is rate limiting by IP address when clients are behind NAT or proxies—you end
+  up rate limiting an entire corporate office because they all share one
+  outbound IP. Keying limits by authenticated user ID is almost always better
+  than by IP for signed-in traffic; reserve IP-based limits for unauthenticated
+  endpoints where you have no other identifier.
+
+
+  A nuance that matters in production: rate limit responses need to include
+  useful headers. RFC 6585 standardized the 429 status code, and RFC 7231
+  specifies Retry-After, but the de facto standard now includes
+  X-RateLimit-Limit, X-RateLimit-Remaining, and X-RateLimit-Reset. Well-behaved
+  clients (and SDKs you publish) can use these to back off gracefully rather
+  than hammering you and getting blocked repeatedly. If you're publishing a
+  developer API, these headers are part of your developer experience—skip them
+  and you'll get bug reports from developers who can't figure out why they're
+  getting 429s intermittently.
+
+
+  Rate limiting also has a second life as a monetization lever. Tiered rate
+  limits are one of the cleanest ways to differentiate API plans: free tier gets
+  100 requests per minute, paid tier gets 1000, enterprise gets custom limits.
+  This requires your rate limiting layer to be aware of the user's plan, which
+  means integrating with your billing and entitlements system. The architecture
+  that makes this clean is the same one that makes rate limiting robust
+  generally: a centralized store (Redis is the standard choice) that holds
+  counters and can be queried by any instance, rather than in-memory limits that
+  don't survive restarts and can't be shared across replicas.
+
+
+  In the ecosystem, rate limiting sits alongside authentication and
+  authorization as foundational API security. It belongs in your API gateway
+  layer (Kong, AWS API Gateway, Cloudflare Workers) rather than deep in your
+  application logic, because gateway enforcement is faster and protects your
+  application servers from even having to process abusive traffic. For services
+  that see genuine DDoS-level traffic, rate limiting at the application layer
+  won't save you—you need network-level mitigation from a provider like
+  Cloudflare or AWS Shield. But for the 99% of cases that aren't true DDoS
+  events, well-implemented rate limiting at the gateway layer is more than
+  enough.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

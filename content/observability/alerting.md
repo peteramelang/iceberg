@@ -151,14 +151,61 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Bad alerting doesn't just fail to catch problems — it actively makes your
+  system harder to operate. Teams that set up alerting naively end up with one
+  of two failure modes: they either get paged constantly on things that don't
+  matter (alert fatigue, which leads to engineers ignoring pages and eventually
+  missing real incidents), or they configured nothing and find out about outages
+  from angry users on Twitter. Both are bad. The craft of alerting is threading
+  the needle between those two failure states, and it requires real discipline
+  to get right.
+
+
+  The 80/20 here is deceptively simple: alert on symptoms, not causes. If your
+  API error rate spikes, that's a symptom worth paging someone for. If your CPU
+  usage is high, that might be a cause of something, or it might be harmless
+  load from a batch job. Alerting on causes produces noise; alerting on symptoms
+  produces signal. The canonical framing from Google's SRE book is to alert on
+  SLO burn rate — how fast you're burning through your error budget relative to
+  your monthly target. A 6x burn rate at 2am means you'll exhaust your SLO in
+  hours; that's worth a page. A 0.5x burn rate during business hours is worth a
+  ticket. This framing forces you to think about user impact before you reach
+  for the threshold slider.
+
+
+  Threshold-based alerting on individual metrics is where most teams start, and
+  it's not wrong — it's just limited. Static thresholds break when traffic
+  patterns shift seasonally or as the product grows. A static threshold of "more
+  than 100 errors per minute" might be reasonable at your current scale and
+  wildly over-sensitive after a big growth quarter. Anomaly detection helps
+  here, but it comes with its own pitfalls: anomaly-based alerts tend to fire
+  during legitimate traffic events (a viral moment, a sale, a successful
+  campaign) that you don't want to be woken up for. The best setups combine
+  both: SLO-based alerts as the primary paging criteria, supplemented by
+  specific threshold alerts for known failure modes like queue depth saturation
+  or database connection pool exhaustion.
+
+
+  Alert routing is its own discipline that teams underinvest in. Not every alert
+  should wake up the same person at 3am. Severity tiers — critical, warning,
+  informational — with different routing (PagerDuty vs. Slack vs. email) are
+  table stakes. Grouping and inhibition rules prevent alert storms: when a
+  database goes down, you don't want 200 separate alerts for the 200 services
+  that depend on it, you want one clear root cause alert and inhibition of the
+  downstream noise. Good observability tools (Prometheus with Alertmanager,
+  Datadog, Grafana OnCall) all support this, but the configuration burden is
+  non-trivial.
+
+
+  Alerting belongs in the observability layer but it's ultimately a human system
+  as much as a technical one. The alert needs to be actionable — whoever
+  receives it should be able to start debugging immediately, ideally with a
+  runbook link right in the notification. If every page requires 15 minutes of
+  investigation just to understand what's wrong, you'll burn out your on-call
+  rotation. Alerting pairs directly with metrics and structured logging (you
+  need both to diagnose what the alert is telling you) and with incident
+  management practices (the alert is just the beginning of the response
+  workflow).
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

@@ -116,14 +116,65 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Billing is where bugs cost you money in both directions simultaneously.
+  Overcharge a customer and you get a dispute, a chargeback, and a damaged
+  relationship. Undercharge them and you've left revenue on the floor — often
+  permanently, since retroactive billing is a customer experience disaster even
+  when it's technically justified. The compounding nature of billing errors is
+  what makes this domain particularly unforgiving: a proration calculation
+  that's off by a few cents affects every customer who upgrades mid-cycle, every
+  month, indefinitely, until someone notices and traces it back.
+
+
+  The fundamental architecture decision is where truth lives. Payment processors
+  like Stripe maintain their own view of subscriptions, invoices, and payment
+  state. Your database maintains yours. These two views will drift. The question
+  is how you handle that drift. One approach is to treat the payment processor
+  as the source of truth and reconstruct your local state from webhooks. The
+  other is to maintain authoritative state in your database and treat the
+  processor as an execution layer. Both work; hybrid approaches are where teams
+  get burned. If you're writing subscription records to your database from
+  webhooks and also writing them from API responses during checkout flows, you
+  need idempotency keys and careful ordering guarantees or you'll end up with
+  duplicate records, phantom subscriptions, and billing state that doesn't match
+  what the customer is actually being charged.
+
+
+  Proration is the area that generates the most edge cases. Mid-cycle upgrades,
+  downgrades, seat count changes, and trial conversions all require calculating
+  the unused portion of the current billing period. Get this wrong and it shows
+  up on the customer's invoice as an unexplained line item — and customers
+  notice. The safest approach is to let your payment processor handle proration
+  calculation rather than reimplementing it yourself. Stripe's proration modes
+  are well-documented and battle-tested. What you do need to own is the business
+  logic layer on top: when does a change take effect? Immediately, or at the
+  next billing cycle? Does an upgrade generate an invoice today or just adjust
+  the next one? These are product decisions, not just implementation details,
+  and they need to be explicit.
+
+
+  Dunning — the process of retrying failed payments and notifying customers — is
+  often an afterthought that turns out to matter enormously for revenue
+  recovery. Credit cards expire, banks decline transactions for fraud reasons
+  that have nothing to do with the customer's intent to pay, and a surprising
+  percentage of failed payments succeed on the second or third retry. Smart
+  retry schedules (not uniform retries, but retry logic informed by the decline
+  reason) with good customer communication can recover a significant fraction of
+  that revenue. Involuntary churn from failed payments is a real problem for
+  subscription businesses, and dunning is the primary mitigation.
+
+
+  Billing logic belongs in the money-and-data phase because the compliance and
+  legal dimensions are as important as the technical ones. Tax calculation (VAT
+  in the EU, sales tax in US states, GST in other jurisdictions) requires either
+  a dedicated service like TaxJar or Avalara, or a significant ongoing
+  maintenance burden as tax rules change. Currency handling for international
+  customers requires decimal precision — don't store prices as floats — and
+  exchange rate decisions that affect revenue reporting. Billing pairs closely
+  with subscription management, churn control, and financial reconciliation: you
+  can't do meaningful churn analysis without clean billing data, and you can't
+  trust your revenue metrics without a reconciliation process that catches
+  discrepancies between your database and your payment processor.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

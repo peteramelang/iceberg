@@ -130,14 +130,63 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Authentication is one of those topics where the gap between "works in
+  development" and "correct in production" is enormous. You can build a login
+  form that accepts a password and sets a cookie in an afternoon. Building an
+  authentication system that doesn't leak sessions, doesn't store credentials
+  insecurely, handles token expiry gracefully, and holds up under an adversarial
+  internet is a different project entirely. The teams that underestimate this
+  gap are the ones who end up in breach disclosure posts.
+
+
+  The strong recommendation for most applications is to reach for an existing
+  identity provider — Auth0, Clerk, Supabase Auth, Firebase Auth — rather than
+  building from scratch. Not because it's impossible to build correctly, but
+  because the surface area of what "correctly" means is genuinely large: you
+  need to hash passwords with bcrypt or Argon2 at appropriate work factors,
+  protect against timing attacks on comparison, rotate session tokens on
+  privilege escalation, handle account enumeration through consistent error
+  messages, implement rate limiting on login endpoints, and that's before you
+  get to MFA or OAuth. Each of those is a known pitfall that identity providers
+  have already solved. The cost of a third-party provider is worth it unless you
+  have a compelling reason to own the stack.
+
+
+  If you are building authentication yourself, the single most important
+  decision is session management. Session-based auth (server stores session
+  state, client holds a session cookie) is simpler and easier to invalidate —
+  you can log a user out by deleting the server-side session. JWT-based auth is
+  stateless and scales horizontally without shared storage, but token
+  invalidation before expiry requires a blocklist, which reintroduces
+  statefulness. The "stateless JWT" pattern is frequently misunderstood: if you
+  issue a JWT with a 24-hour expiry and the user gets compromised, you cannot
+  invalidate that token without a revocation list. Short expiry times (15
+  minutes) with refresh tokens are the standard mitigation, but it adds
+  complexity. Neither approach is universally better; the tradeoff depends on
+  your scale and operational requirements.
+
+
+  OAuth 2.0 and OpenID Connect are worth understanding even if you're not
+  building a public API. OIDC is the identity layer on top of OAuth 2.0 — OAuth
+  handles authorization ("this app can access your calendar"), OIDC handles
+  authentication ("this is who the user is"). The Authorization Code flow with
+  PKCE is the correct choice for web and mobile apps. Implicit flow is
+  deprecated. If you're implementing "Login with Google" or "Login with GitHub,"
+  you're using OIDC. Understanding what tokens are exchanged and what they
+  contain helps you debug integration issues and understand what claims you can
+  trust.
+
+
+  Authentication sits at the entry point of the security-and-identity phase, and
+  almost everything else depends on it correctly. Access control can't work
+  without a verified identity. Session fixation attacks, credential stuffing,
+  and phishing are the dominant real-world attack vectors — not cryptographic
+  weaknesses. Defense against credential stuffing means rate limiting and
+  ideally integrating with a breach credential database (Have I Been Pwned's API
+  is free for this purpose). Phishing defense means WebAuthn / passkeys, which
+  bind credentials to the origin domain and make them non-phishable by
+  construction. Passkeys are increasingly supported and worth implementing as a
+  second factor or primary credential for new applications.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

@@ -132,14 +132,62 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Data integrity is the discipline of making invalid states unrepresentable. It
+  is the opposite of trusting that application code will always do the right
+  thing — which it will not, because application code is written by humans,
+  deployed with bugs, upgraded in place, and bypassed by one-off scripts run in
+  production at 2 a.m. The database is the last line of defense, and a database
+  with weak constraints is a database that will accumulate garbage over time,
+  silently and in ways that are expensive to clean up later.
+
+
+  The most important constraint most teams underuse is the foreign key. It seems
+  obvious — if you have an orders table that references a users table, the
+  database should prevent you from creating an order for a user that does not
+  exist, and it should prevent you from deleting a user who has orders, or
+  cascade the deletion if that is intentional. In practice, many applications
+  enforce referential integrity entirely in application code and omit the
+  database constraint. This works fine until it does not: a background job with
+  a bug, a direct database operation during an incident, a migration that runs
+  out of order. Foreign keys do not slow down reads; they prevent corruption.
+  The tradeoff is almost always worth it.
+
+
+  Transactions and isolation levels are the other major piece that teams get
+  wrong by relying on defaults. The default isolation level in most databases
+  (READ COMMITTED in Postgres, MySQL, and SQL Server) prevents dirty reads but
+  does not prevent non-repeatable reads or phantom reads. For operations that
+  read a value, make a decision based on it, and write back a result, READ
+  COMMITTED is insufficient — another transaction can modify the data between
+  the read and the write. REPEATABLE READ or SERIALIZABLE prevents this, at the
+  cost of more lock contention and occasional serialization failures that the
+  application must retry. Understanding which isolation level a given operation
+  needs is not optional for systems that handle financial data, inventory, or
+  anything where double-processing has real consequences.
+
+
+  Application-level validation and database constraints are not substitutes for
+  each other; they serve different purposes. Application validation provides
+  user-facing error messages, enforces business logic that changes over time,
+  and catches errors before they reach the database. Database constraints
+  provide guarantees that hold regardless of which code path or tool touches the
+  data. Both layers are necessary. The failure mode of relying only on
+  application validation is that any path that bypasses the application — direct
+  SQL, migrations, data imports, background workers running older code — can
+  violate invariants that the application assumes are always true.
+
+
+  The 80/20: define NOT NULL on every column that must have a value, define
+  UNIQUE constraints on every column that must be unique (the application should
+  not be responsible for catching duplicates), define foreign keys for every
+  relationship that should be referential, and use CHECK constraints for domain
+  rules that can be expressed as a predicate. Then wrap multi-step write
+  operations in transactions and choose isolation levels deliberately rather
+  than accepting whatever the ORM defaults to. These five habits catch a
+  category of bugs that are very hard to find any other way. Data integrity
+  pairs directly with CRUD logic — constraints enforce the invariants that CRUD
+  operations are supposed to maintain — and with data retention, since
+  constraints affect what can be deleted and in what order.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

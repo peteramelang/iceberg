@@ -134,14 +134,77 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Before distributed tracing, debugging a slow API request in a microservices
+  system meant reading logs across six services, correlating timestamps by hand,
+  and hoping that the thing you found in service C was actually caused by the
+  thing that happened in service A three hops earlier. It was archaeology.
+  Engineers who were good at it developed a kind of institutional sixth sense —
+  an intuition built from hundreds of hours of log-reading that couldn't be
+  transferred to anyone else. Distributed tracing replaces that intuition with
+  an instrument: a causal chain you can actually look at.
+
+
+  The core mechanism is context propagation. When a request enters your system —
+  say, a user clicking "checkout" — a trace ID is generated and attached to that
+  request. Every downstream service call inherits that trace ID and adds its own
+  span: a start time, end time, metadata about what it did, and a reference back
+  to its parent span. When those spans are collected and assembled, you get a
+  Gantt-chart-like view of everything that happened to satisfy that one request:
+  the auth service took 12ms, the inventory service took 200ms (that's the
+  problem), the payment processor call was fine. Without tracing, you'd see a
+  slow checkout request in your metrics and start guessing. With tracing, you
+  see exactly which span owned the latency.
+
+
+  The 80/20 of distributed tracing centers on a few things that matter
+  enormously and many configuration knobs that don't. What matters: getting
+  trace context propagated correctly at every service boundary (HTTP headers,
+  message queue metadata, gRPC metadata — wherever requests cross process
+  boundaries), sampling at a rate that captures enough signal without drowning
+  your backend in data, and instrumenting the operations that actually matter
+  (database queries, external API calls, cache interactions). What doesn't
+  matter much in the early stages: tail-based sampling configurations, custom
+  span processors, advanced baggage propagation, or the fine points of
+  OpenTelemetry's collector pipeline. OpenTelemetry has become the
+  instrumentation standard — use its auto-instrumentation for your language
+  runtime first, then add manual spans for the business-logic operations that
+  matter to you.
+
+
+  The failure modes are predictable. The most common one is incomplete
+  propagation: you instrument your HTTP services but forget your background job
+  workers, your Kafka consumers, or your GraphQL gateway, and traces start but
+  don't finish. You end up with orphaned spans that are more confusing than no
+  tracing at all. The second common failure is sampling that's either too
+  aggressive (you miss the rare slow request that matters) or too permissive
+  (you store every trace and drown your Tempo or Jaeger backend in data and
+  cost). The third failure mode is treating tracing as a fire-and-forget setup —
+  you get it working once and then infrastructure changes (new services, new
+  libraries, framework upgrades) quietly break propagation and you don't notice
+  until the next incident.
+
+
+  The mental model that makes distributed tracing click is to think of each
+  trace as a receipt for a request. It's an immutable record of every meaningful
+  operation that happened, in the right causal order, with timings attached. The
+  trace ID is the receipt number. Spans are the line items. When a customer
+  complains that checkout was slow, you pull up their trace ID — if you're
+  logging it or surfacing it in your UI — and read the receipt. When you're
+  investigating a latency regression after a deploy, you compare receipts from
+  before and after. The power of the tool is proportional to the quality of your
+  instrumentation: vague span names and missing attributes produce unreadable
+  receipts; well-named spans with relevant metadata (user ID, order ID, cache
+  hit/miss) produce receipts you can read in 30 seconds.
+
+
+  Distributed tracing sits in the observability triad alongside metrics and
+  logs, and it's worth being clear about what each tool is for. Metrics tell you
+  something is wrong (p99 latency spiked). Logs tell you what happened inside a
+  single service. Traces tell you where across the system the problem lives. In
+  a monolith, logs are often enough. In a system with more than three or four
+  services, traces become the thing you reach for first when latency is the
+  symptom, because they eliminate the guessing that otherwise eats the first
+  hour of every incident.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

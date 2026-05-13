@@ -136,14 +136,77 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The ability to roll back a bad deployment is the closest thing software
+  engineering has to an undo button, and its absence is responsible for a
+  category of incidents that are uniquely painful: you know exactly what caused
+  the problem (the release you just shipped), but you can't quickly revert it,
+  so the incident drags on while you try to forward-fix or selectively revert
+  changes. Meanwhile users are experiencing an outage or data corruption. Teams
+  that invest in rollback capability tend to have shorter, calmer incidents.
+  Teams that don't tend to have longer, more chaotic ones—and they tend to be
+  more conservative about shipping, which has its own costs.
+
+
+  The 80/20 of rollbacks is: most rollbacks are code-only rollbacks, and those
+  are mechanical if you have immutable artifacts and a clean deployment
+  pipeline. Build your Docker image once, tag it with the git SHA, push it to a
+  registry, deploy by tag. Rolling back means deploying the previous tag.
+  Kubernetes makes this explicit with rollout history and kubectl rollout undo.
+  The complexity multiplies the moment a database migration is involved. Adding
+  a column is easy to roll back (drop the column). Dropping a column is not (the
+  data is gone). Renaming a column is not (every running instance of the old
+  code will try to use the old name). This is why the expand-contract pattern
+  exists and why schema migrations deserve their own careful treatment. If your
+  deployment strategy doesn't address database changes, your rollback plan is
+  incomplete.
+
+
+  Blue-green deployments are the cleanest model for rollback because the old
+  environment stays live until you're confident the new one is good. You flip
+  traffic to green, watch your error rates and latency for five or ten minutes,
+  and if something looks wrong you flip back to blue. Total recovery time:
+  seconds. The cost is running two full production environments simultaneously,
+  which isn't free, but for most teams the cost of a prolonged incident is
+  higher than the infrastructure cost of a second environment. Canary
+  deployments are a lighter-weight alternative: route a small percentage of
+  traffic to the new version, compare metrics between old and new, and only
+  proceed if the canary looks healthy. Argo Rollouts and Flagger automate this
+  comparison using Prometheus metrics, which removes the human judgment call
+  during a high-stress deployment window.
+
+
+  The failure mode that catches teams most often is the rollback that can't be
+  executed because of state. You ship a new version that starts writing data in
+  a new format. You discover a bug. You try to roll back to the old code. The
+  old code doesn't understand the new data format, so now you have a different
+  problem than you started with. The solution is to design backward
+  compatibility into your data model during the deployment—new code should write
+  data in a format that old code can either read or safely ignore, until you're
+  confident enough to remove the old code path. This is the same discipline as
+  API versioning, applied to your internal data layer. It's extra work up front,
+  but it's what makes rollback a real option rather than a theoretical one.
+
+
+  Monitoring is the prerequisite that makes automated rollbacks work. You can't
+  automate a rollback decision without metrics to base it on. Error rate SLOs
+  and latency thresholds give you the signal: if error rate exceeds X% or p99
+  latency exceeds Y ms within Z minutes of a deployment, trigger the rollback.
+  Tools like Flagger integrate directly with Prometheus and Datadog to evaluate
+  these conditions automatically. But you need to have defined what "healthy"
+  means before a deployment starts—if you're trying to figure out your baseline
+  error rate during an active incident, you've already lost the advantage of
+  automation. Health checks, readiness probes, and pre-deployment metric
+  snapshots are the groundwork.
+
+
+  In the delivery and operations ecosystem, rollbacks sit at the intersection of
+  CI/CD, observability, and database management. They're most effective when
+  your deployment pipeline is fast (so there's minimal recovery delay), your
+  observability is good (so you know immediately when something is wrong), and
+  your database migration strategy is disciplined (so code and schema can be
+  versioned independently). Teams that invest in all three find that rollbacks
+  become boring and mechanical. That's exactly what you want—the ability to undo
+  a mistake should be routine, not heroic.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

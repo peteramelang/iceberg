@@ -142,14 +142,72 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Load balancing is so fundamental that it's easy to underestimate. Most
+  engineers encounter it early — spin up two instances, put a load balancer in
+  front, and traffic goes to both. But the depth of the topic only reveals
+  itself under pressure: when one instance gets stuck and keeps receiving
+  traffic, when a deployment leaves some instances running old code and some
+  new, when a database connection pool gets exhausted on one instance but not
+  another, or when a geographic routing misconfiguration sends all traffic from
+  an entire continent to a single region during a partial outage. Load balancing
+  isn't just about distributing work; it's about maintaining the invariants your
+  system depends on across the full range of failure modes you'll encounter in
+  production.
+
+
+  The 80/20 is this: get health checking and connection draining right, and most
+  of the common failure modes go away. Health checks are the mechanism by which
+  a load balancer knows an instance is actually capable of serving traffic — not
+  just that the process is running, but that it can connect to its database,
+  that it isn't in the middle of restarting, and that it's responding to real
+  requests within a reasonable time. A health check that just pings a root
+  endpoint without checking dependencies will keep routing traffic to instances
+  that can accept connections but can't actually do anything useful. Connection
+  draining — giving in-flight requests time to complete before an instance is
+  removed from rotation — is what prevents users from seeing errors during
+  rolling deployments or scale-in events. Both are table stakes, but both are
+  frequently misconfigured or omitted in systems that otherwise look correct.
+
+
+  Layer 4 versus Layer 7 load balancing is a distinction that matters more than
+  it initially seems. Layer 4 operates at the TCP connection level: it routes
+  entire connections to backends without examining the content. This is fast and
+  low-overhead, but it means the balancer has no visibility into individual HTTP
+  requests, can't make routing decisions based on headers or paths, and can't do
+  things like sticky sessions based on cookie values. Layer 7 balancing parses
+  the HTTP protocol and can route on any header, path, method, or query
+  parameter — enabling patterns like routing traffic based on feature flags,
+  sending `/api/` requests to one backend cluster and `/admin/` to another, or
+  implementing canary deployments by routing a fraction of traffic with a
+  specific header to a new version. Most production systems end up needing Layer
+  7 capabilities and should plan for them from the start rather than
+  retrofitting.
+
+
+  A failure mode that's easy to miss is session affinity done wrong. Some
+  applications store per-user state in memory on the application server —
+  shopping carts, authentication sessions, in-progress operations — and require
+  that subsequent requests from the same user land on the same server. Sticky
+  sessions solve this, but they create a soft single point of failure: if your
+  stickiness is based on server identity and that server goes down, all those
+  users lose their state. The better fix is to move that state out of the
+  application server and into a shared store like Redis, which makes your
+  application genuinely stateless and removes the need for stickiness entirely.
+  Load balancing works most cleanly when the instances it's distributing across
+  are interchangeable.
+
+
+  In the ecosystem, load balancing touches almost every other reliability topic.
+  It's how horizontal scaling actually delivers capacity — you can't add more
+  instances if they can't receive traffic. It's how zero-downtime deployments
+  work — rolling out a new version by draining old instances and introducing new
+  ones behind the balancer. It's where rate limiting and DDoS protection often
+  live, especially at the edge. And for multi-region architectures, geographic
+  load balancing (routing users to the nearest healthy region) is the first line
+  of defense against regional failures. The mental model to hold is that a load
+  balancer is not a passive router — it's an active participant in your system's
+  availability and behavior, and it needs to be configured and monitored with
+  that responsibility in mind.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

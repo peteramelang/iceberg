@@ -129,14 +129,69 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Subscription billing looks simple until the first payment fails. Then you
+  discover that "active" isn't a binary — there's active-and-current,
+  active-but-past-due-and-about-to-be-cut-off,
+  active-during-a-trial-that-technically-hasn't-been-charged-yet, and a dozen
+  other situations where the answer to "should this user be able to do X?" is
+  genuinely ambiguous if you haven't thought it through in advance. The
+  consequence of not modeling subscription states explicitly is that your
+  feature gating becomes a patchwork of conditions scattered across the
+  codebase, each one added in response to a specific customer complaint, none of
+  them consistent with each other. A user in `past_due` might be able to export
+  data in one part of the app and blocked from it in another, depending on which
+  engineer added which check when.
+
+
+  The 80/20 is to define your state machine before you write any feature access
+  code, and to make the subscription state the single source of truth for
+  feature access across the entire application. You need at minimum: trialing,
+  active, past_due, paused, and canceled. Every feature gate should derive from
+  state, not from a direct query to Stripe or a raw boolean in the users table.
+  The moment you have two places in the code that independently try to determine
+  "is this user allowed to do this?", you have a consistency problem waiting to
+  become a customer support ticket. Centralize the state, centralize the feature
+  mapping, and make both explicit.
+
+
+  The failure modes here are well-documented by anyone who has run a SaaS
+  product through its first year. Payment fails, webhook from Stripe comes in,
+  your handler marks the subscription `past_due` — but you forgot that Stripe's
+  dunning process will retry the charge over the next week and send additional
+  webhooks as it does, each one potentially arriving out of order if your queue
+  is backed up. Now you have race conditions where a subscription bounces
+  between `past_due` and `active` depending on which webhook was processed last.
+  Or: a user cancels, you set the state to `canceled`, but they've paid through
+  the end of the month and should retain access until then — except your feature
+  gate just cut them off immediately because you didn't model the `non_renewing`
+  intermediate state. Or: a trial expires at midnight, your cron job runs at
+  2am, and for two hours users who should be on a paywall are still getting full
+  access because the state transition is delayed.
+
+
+  The mental model that makes subscription states manageable is treating them
+  exactly like any other finite state machine in your system: a fixed set of
+  states, a defined set of allowed transitions between them, and actions that
+  fire on entry and exit. The state machine is the contract. If the machine says
+  you can go from `active` to `past_due` but not from `canceled` to `active`
+  without a new subscription, then that's enforced at the state machine
+  boundary, not scattered across business logic. Drawing this out explicitly —
+  literally a diagram with states as nodes and webhook events as edges — before
+  writing code will save you weeks of debugging edge cases in production.
+
+
+  Subscription states sit at the center of the billing and access control layers
+  of your stack. They receive events from your payment provider (Stripe, Paddle,
+  or equivalent) via webhooks and must translate those external events into your
+  internal state model. They feed upward into feature flags and entitlement
+  checks, which should query subscription state rather than calling the payment
+  provider directly. They also feed into customer support tooling — a support
+  agent who can see that a customer is in `past_due` because of a card decline
+  in 2024, and can see the full transition history, can resolve the issue in
+  minutes rather than digging through Stripe logs. Getting the state machine
+  right is foundational because everything downstream — access control, billing
+  recovery flows, customer communications, support tooling — builds on top of
+  it.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

@@ -151,14 +151,69 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The question "is our service reliable?" sounds simple, but it's actually
+  unanswerable without first deciding what reliable means and how you're going
+  to measure it. Before SLOs, most engineering teams operated on vibes: if the
+  alerts weren't firing and nobody was complaining loudly, things were probably
+  fine. The problem with vibes is that they don't scale and they don't give you
+  a rational basis for making tradeoffs. If you can't measure your reliability
+  in a way that connects to real user experience, you can't have an honest
+  conversation about whether shipping that new feature is worth the risk, or
+  whether you've been burning engineering cycles on stability that customers
+  don't actually care about. SLOs exist to make that conversation possible.
+
+
+  The 80/20 for SLOs is this: pick one or two SLIs that genuinely reflect
+  whether users are having a good experience, set a realistic target based on
+  your actual recent performance, and build the error budget discipline before
+  you worry about anything else. The SLI choice is where most teams go wrong —
+  they measure what's easy to measure rather than what matters. CPU utilization
+  is easy to measure. Whether a request returned a correct response within 300
+  milliseconds is harder to measure, but it's what your users actually
+  experience. Latency at the 95th or 99th percentile and success rate on
+  critical user journeys (search, checkout, login) are almost always the right
+  starting points. Everything else — multi-window burn rate alerts, tiered SLO
+  policies per customer tier, complex SLI compositions — can come later once
+  you've built the habit of looking at the error budget.
+
+
+  The dominant failure mode is the SLO that nobody looks at. The team ships SLOs
+  because SRE best practices say to, sets up a dashboard, and then proceeds to
+  make deployment decisions exactly the same way they did before. The error
+  budget exists in theory but the team never actually pauses feature work when
+  it's burning down. This defeats the entire purpose. The second failure mode is
+  setting an SLO target that's either too tight or too loose. Too tight — say,
+  99.99% when you're actually achieving 99.5% — and your error budget is always
+  exhausted, the number is demoralizing and ignored, and you've just created
+  noise. Too loose, and you're not learning anything useful about where your
+  reliability problems actually are. Starting with a target slightly above your
+  current measured baseline and tightening it over time as you improve is the
+  pragmatic approach.
+
+
+  The mental model that makes SLOs tractable is thinking of the error budget as
+  a shared resource that the team consciously decides how to spend. You have 43
+  minutes of downtime allowed this month for a 99.9% monthly SLO. Maybe you
+  spend 20 of those minutes on a risky schema migration that has a chance of
+  causing a brief outage. Maybe you bank them and ship more aggressively. The
+  point is the decision is explicit and visible, not implicit and invisible.
+  When an incident burns through two weeks of error budget in a night, the team
+  can look at a number and make a concrete decision: do we keep shipping at the
+  same velocity, or do we slow down and fix the reliability issues that put us
+  here? That's the conversation SLOs are designed to enable.
+
+
+  Within the observability ecosystem, SLOs sit above raw metrics and traces. You
+  need good instrumentation and a time-series store to compute SLIs in the first
+  place — Prometheus, Datadog, or whatever your stack uses to collect and
+  aggregate request success rates and latency distributions. The SLO layer then
+  aggregates those measurements into compliance windows and error budget burn
+  rates. SLOs also connect upward to SLAs: if you have contractual commitments
+  to customers, your internal SLO target should give you a buffer, so a single
+  bad day doesn't immediately put you in breach of contract. The whole system
+  only works if the measurement is trustworthy, which means investing in the
+  underlying observability infrastructure before you can meaningfully reason
+  about SLO compliance.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

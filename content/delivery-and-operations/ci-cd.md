@@ -135,14 +135,53 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The absence of CI/CD doesn't announce itself with a crash. It accumulates
+  quietly: the developer who deploys from their laptop on a Friday, the hotfix
+  that skipped tests because there was no time, the staging environment that
+  nobody has updated in three weeks. When the system finally breaks in
+  production, everyone is surprised, and nobody should be. Manual deployment is
+  not a process — it is an accumulation of optimism.
+
+
+  The core value of continuous integration is not speed. It is feedback latency.
+  When a developer merges a change and a test suite runs in five minutes, they
+  still remember what they changed. When they find out three weeks later in a
+  code review or a production incident, the context is gone and the fix costs
+  ten times as much. The discipline of merging small changes frequently into a
+  shared branch — and having automation validate each one immediately — changes
+  how bugs are discovered. They stop being incidents and start being test
+  failures.
+
+
+  The 80/20 here is stark. Most teams get 80 percent of the value from three
+  things: a pipeline that runs on every pull request, a test suite that actually
+  catches regressions, and a deployment process that is automated enough that
+  any engineer can trigger it without special access or tribal knowledge.
+  Everything else — multi-stage canary deployments, progressive delivery flags,
+  deployment frequency dashboards — matters, but not until those three are
+  solid. Many teams reach for GitOps and Argo CD before they have reliable
+  tests, which is like buying racing tires before you know how to drive.
+
+
+  The dominant failure mode is a pipeline that is technically automated but
+  practically ignored. Tests that flake intermittently get disabled. Deployments
+  that require manual steps before and after the automation get called automated
+  anyway. The pipeline becomes a checkbox rather than a gate. The signal
+  degrades. Teams learn to merge in spite of red builds rather than because of
+  green ones. At that point you have the cost of automation without the benefit.
+  Rebuilding trust in a pipeline is harder than building it from scratch.
+
+
+  In the broader ecosystem, CI/CD sits at the intersection of almost everything
+  else in delivery and operations. It is the mechanism by which dependency
+  updates, security patches, database migrations, and feature flags actually
+  reach users. A good pipeline enforces linting, runs security scans, validates
+  infrastructure-as-code, and gates on test coverage — not because each check is
+  critical in isolation, but because the pipeline is the one moment every change
+  passes through. That centrality is the point. DORA research has consistently
+  shown that high-performing teams deploy frequently and recover quickly not
+  because they are less careful, but because their automation lets them be
+  careful systematically rather than heroically.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

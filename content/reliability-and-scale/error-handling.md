@@ -122,14 +122,76 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Every production system fails. The question isn't whether errors will occur
+  but whether your system is designed to handle them gracefully or to propagate
+  them catastrophically. The difference between a system that degrades
+  gracefully under failure and one that falls over completely usually comes down
+  to a handful of architectural decisions made long before anything broke —
+  decisions about how errors are classified, how they're surfaced, and what the
+  system does next.
+
+
+  The foundational distinction in error handling is between errors you should
+  retry and errors you shouldn't. A database connection timeout during a traffic
+  spike is transient — it will probably succeed if you try again in 100ms with
+  exponential backoff. An invalid API key is not transient — retrying it 10
+  times in a tight loop wastes resources, delays user feedback, and logs ten
+  identical errors instead of one. Getting this classification right in your
+  code is the single most impactful thing you can do for error handling. A
+  service that retries recoverable failures automatically and fails fast on
+  unrecoverable ones will produce dramatically better user experiences and
+  cleaner logs than one that treats all errors the same way.
+
+
+  The 80/20 here is: structured logging with error context, a centralized error
+  tracking service (Sentry, Honeybadger, Rollbar — pick one and use it
+  consistently), and explicit handling of errors at service boundaries.
+  Everything else — custom error hierarchies, sophisticated circuit breaker
+  configurations, retry budget systems — matters at scale, but most of the value
+  is in those three things. Structured logging means your errors are queryable:
+  you can filter by user ID, by request ID, by error type. Centralized error
+  tracking means errors are deduplicated and alerted on rather than buried in a
+  log file nobody reads. Handling errors at service boundaries means that a
+  failure in your payment processor returns a clear error to the calling service
+  rather than an unhandled exception that propagates up through five layers of
+  call stack and surfaces as a 500 on a completely different endpoint.
+
+
+  The dominant failure modes in production error handling are swallowed errors,
+  missing context, and cascading failures. Swallowed errors happen when a catch
+  block logs nothing useful or, worse, does nothing — the error disappears and
+  the system behaves incorrectly with no indication of why. Missing context is
+  when an error surfaces with a message like "something went wrong" and none of
+  the information you'd need to debug it (user ID, input parameters, which
+  downstream call failed). Cascading failures happen when a service that's
+  struggling — slow responses, intermittent timeouts — causes upstream services
+  to exhaust their thread pools or connection pools waiting for it, taking down
+  the entire request path even for users who aren't touching the struggling
+  service. Circuit breakers exist specifically to prevent cascading failures:
+  once a downstream service starts failing consistently, stop calling it, return
+  a fallback immediately, and check again after a cooldown period.
+
+
+  User-facing versus internal error handling is a distinction that gets missed
+  more often than it should. Users don't need stack traces; they need to know
+  what happened and what they can do about it. "Your payment didn't go through —
+  please try again or use a different card" is a good user-facing error. The
+  internal error (which payment processor returned what error code, with what
+  request parameters, at what timestamp) should be logged in full but never
+  shown to users. Conflating these two — either showing users raw internal
+  errors or hiding errors from your monitoring system — is a common failure
+  pattern in systems built without explicit attention to error handling.
+
+
+  Think of error handling as a contract your system makes with everything that
+  depends on it. When a request fails, your system owes its callers a clear
+  signal (the right HTTP status code, a structured error response), and it owes
+  its operators a complete record (what happened, what the inputs were, what
+  state the system was in). Meeting both obligations simultaneously is what good
+  error handling looks like in practice. A system that surfaces clear errors,
+  captures rich context, and fails gracefully under partial failures is
+  significantly easier to operate and debug than one where errors are an
+  afterthought.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

@@ -138,14 +138,66 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Instrumentation is the practice of making your running system legible. Without
+  it, a production service is essentially a black box: you can observe its
+  inputs and outputs, but everything in between is invisible. When latency
+  spikes at 3am, you're asking "which part of the system slowed down?" If the
+  answer requires reading code and guessing, you're in trouble. If you have a
+  histogram of database query duration, a counter of cache hits and misses, and
+  a trace showing the critical path of each request, you'll find the answer in
+  under five minutes. That difference — between guessing and knowing — is
+  entirely a function of how much instrumentation you put in before the incident
+  happened.
+
+
+  The 80/20 for instrumentation is ruthlessly practical. There are four signals
+  that cover the majority of what goes wrong in production: request rate (are we
+  receiving traffic?), error rate (what fraction of requests are failing?),
+  latency (how slow are we?), and saturation (are we running out of some
+  resource?). These are sometimes called the RED metrics (Rate, Errors,
+  Duration) or the Golden Signals, and if every service emits them consistently,
+  you can diagnose the majority of incidents from dashboards alone. Beyond
+  those, the most valuable thing you can instrument is your business logic — the
+  operations that actually matter to your users, like "payment submitted" or
+  "search executed" or "file uploaded." When a business metric drops, it's often
+  your first real signal that something is wrong, even before the infrastructure
+  metrics start showing it.
+
+
+  The most common mistake in instrumentation is cardinality explosion.
+  Prometheus and similar systems index metrics by label values, which means each
+  unique combination of labels creates a new time series. If you add a label for
+  user_id or request_url with unbounded values, you can bring down your metrics
+  infrastructure within hours of deploying to production. The rule is that
+  labels should represent categorical dimensions with bounded cardinality —
+  service name, endpoint name, HTTP method, status code bucket. User IDs,
+  session tokens, and raw URLs never go in labels. This isn't an academic
+  constraint; it's the difference between a metrics system that scales and one
+  that collapses under its own weight.
+
+
+  Distributed tracing is where instrumentation gets most powerful in
+  microservice systems. A trace captures the entire journey of a request across
+  services, showing which calls happened sequentially versus in parallel, and
+  how much time each hop consumed. Without tracing, a slow request is a mystery
+  that requires correlating logs across four services manually. With tracing,
+  you click into the slow trace and see immediately that 800ms of a 1-second
+  request was spent waiting for a synchronous call to an inventory service that
+  itself spent 750ms waiting on a slow database query. That level of specificity
+  tells you exactly where to focus optimization effort. OpenTelemetry has become
+  the standard instrumentation API — using it means you're not locked to any
+  specific backend and you can export to Jaeger, Honeycomb, Datadog, or anywhere
+  else as your needs evolve.
+
+
+  The mental model that helps most is thinking of instrumentation as
+  documentation for your running system. The same way code comments explain the
+  intent of the code, metrics and traces explain what the code is doing at
+  runtime. The investment you make before launch pays back every time you
+  investigate an incident, do capacity planning, make an architectural decision,
+  or try to answer whether a performance optimization actually helped.
+  Uninstrumented systems force you to reason about behavior from first
+  principles every single time. Well-instrumented systems let you look it up.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

@@ -120,14 +120,69 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Logging is the oldest observability tool and, used well, still one of the most
+  powerful. The pitch is simple: when something goes wrong in production, you
+  need to reconstruct what happened. Logs are the record of what your system
+  did, in chronological order, with enough context to understand why. Without
+  them, you're left with symptoms — a user reported an error, a metric spiked —
+  but no story connecting cause to effect. With good logs, you can often answer
+  "what happened" in minutes rather than hours, because the answer is already
+  written down, you just need to read it.
+
+
+  The shift from unstructured to structured logging is the most important
+  practice change in modern logging, and it's worth dwelling on because many
+  systems still haven't made it. Unstructured logs are strings: "User 12345
+  failed to authenticate at 14:03:22." They're human-readable but
+  machine-hostile. To find all authentication failures for user 12345, you write
+  a regex and grep. Structured logs are JSON objects: `{"event": "auth_failure",
+  "user_id": 12345, "timestamp": "...", "reason": "invalid_token"}`. To find the
+  same thing, you query a field. When you're searching across millions of events
+  in a logging platform like Loki, Elasticsearch, or Datadog Logs, the
+  difference between a field query and a full-text regex is the difference
+  between a query that takes half a second and one that takes a minute and a
+  half. Structured logging isn't about aesthetics — it's about whether your logs
+  are actually queryable at the scale and speed you need during an incident.
+
+
+  Log levels are the 80/20 of log quality. Most teams use INFO for everything
+  important and ERROR for nothing specific, which means their logs are noisy at
+  quiet times and unhelpfully cluttered during incidents. The discipline is
+  simpler than it sounds: DEBUG for verbose internal state useful only during
+  local development, INFO for normal operations you'd want in a production audit
+  trail, WARN for conditions that are abnormal but not yet breaking, and ERROR
+  for conditions that require attention. The key is that WARN and ERROR should
+  be actionable — if you're logging a WARN that fires thousands of times per
+  hour and everyone ignores it, that's a miscalibrated signal and a noise source
+  that makes real problems harder to spot.
+
+
+  Correlation IDs are what elevate logging from a collection of individual event
+  records to a coherent story. When a user makes a request, generate a unique
+  trace ID and propagate it through every downstream call — to the database, to
+  the cache, to any microservices called along the way. When every log line for
+  that request carries the same ID, you can filter to a single trace and see the
+  full sequence of events in order. Without this, debugging a request that
+  touched four services means manually correlating timestamps across four
+  separate log streams, which is slow and error-prone. Modern observability
+  stacks (OpenTelemetry, Jaeger, Datadog APM) can do this correlation
+  automatically when you emit standard trace headers, and it dramatically
+  changes the experience of incident investigation.
+
+
+  The failure mode that bites most teams is logging too much of the wrong thing
+  and too little of the right thing. Logging every SQL statement in a busy API
+  might produce gigabytes of noise that costs real money and slows down queries,
+  while the critical business event — "payment processing started" — might not
+  be logged at all. The principle to apply is: logs should tell the story of
+  your system's behavior, not its implementation details. Business events, state
+  transitions, external calls and their outcomes, errors with full context —
+  these are the things worth logging. Framework internals, routine health
+  checks, high-frequency polling loops — these usually aren't, unless you're
+  actively debugging a specific problem and plan to turn the verbosity back
+  down. Logging has a real cost in storage, ingestion, and index time, and
+  treating it as free leads to systems where the important signal is buried in
+  noise.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

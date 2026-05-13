@@ -115,14 +115,64 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The trouble with CRUD is that it looks solved. Create, read, update, delete —
+  four verbs, elementary SQL, a tutorial you can finish in an afternoon. The
+  illusion holds until you hit production, where two users update the same
+  record simultaneously, a delete operation turns out to be permanent in a
+  system that needed audit history, or a bulk import fails halfway through and
+  leaves the database in a state that nobody anticipated. The verbs are simple.
+  The correctness requirements are not.
+
+
+  Optimistic locking is the first thing most teams discover they needed after
+  they did not implement it. The pattern is straightforward: include a version
+  number or updated_at timestamp in every update query, and reject the update if
+  the value has changed since the record was read. Without it, two concurrent
+  edits to the same record result in the second write silently overwriting the
+  first. Users do not get an error; they get a discrepancy they do not
+  understand and a support ticket. Optimistic locking is cheap to implement and
+  the failure mode without it is invisible until it causes a real problem.
+
+
+  Soft deletes are the other pattern that teams reach for after losing data they
+  did not realize they needed. Hard deletes are permanent and they are fast,
+  which is why they are the default. But production systems accumulate
+  regulatory requirements, customer disputes, audit obligations, and debugging
+  needs that all require answering the question: what did this record look like
+  before it was deleted? A deleted_at timestamp costs almost nothing. Restoring
+  data from backups when a user accidentally deletes their account, or proving
+  to a regulator that a record existed at a specific point in time, costs
+  considerably more. The mistake is treating delete as a simple operation rather
+  than a state transition.
+
+
+  Idempotency matters most in bulk operations and integrations. If a batch job
+  that processes 10,000 records fails at record 7,843, the correct behavior is
+  to resume from where it stopped, not to reprocess from the beginning.
+  Achieving that requires each operation to be safe to run twice: the second run
+  should produce the same result as the first without creating duplicates or
+  double-applying changes. The implementation usually involves a natural key or
+  a client-generated idempotency token that lets you detect whether an operation
+  has already been applied. Without this, retries are destructive, and every
+  failure requires manual cleanup.
+
+
+  The 80/20 in CRUD logic: implement soft deletes for any entity that represents
+  user-created content or business records, add optimistic locking to any entity
+  that multiple users can edit, and make bulk write operations idempotent. An
+  audit log — recording who changed what and when — rounds out the baseline.
+  These four patterns cover the overwhelming majority of production incidents
+  that trace back to data mutation logic. ORMs like Prisma and TypeORM can
+  handle some of this automatically, but only if you configure them to — the
+  defaults are rarely the right choice for a production system.
+
+
+  CRUD logic pairs closely with data integrity (constraints enforced at the
+  database level catch what application code misses), data retention (deciding
+  how long soft-deleted records stick around before permanent removal), and API
+  design (HTTP semantics for idempotency are well-defined in RFC 7231 and worth
+  following rather than reinventing). It is foundational enough that almost
+  every other data-layer topic assumes it is handled correctly.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

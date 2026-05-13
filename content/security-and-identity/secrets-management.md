@@ -112,14 +112,66 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The credential that killed the company almost always had two properties: it
+  was long-lived, and it was sitting somewhere convenient. A `.env` file
+  committed to a public repo three years ago and forgotten. An AWS access key
+  hardcoded in a Lambda function that a departing engineer never rotated. A
+  Postgres password baked into a Docker Compose file that made it to production
+  because it "worked locally." The damage from these mistakes isn't hypothetical
+  — it's a script running in the background, quietly exfiltrating data or
+  spinning up crypto miners on your bill. Secrets management exists because the
+  attack surface of a credential is exactly as wide as the number of places it's
+  stored and the length of time it remains valid.
+
+
+  The 80/20 here is straightforward: get your secrets out of code and off disk,
+  and make sure you know when they were last rotated. A vault like HashiCorp
+  Vault, AWS Secrets Manager, or GCP Secret Manager gives you a single source of
+  truth with access logging. That's the first order of business. Everything else
+  — dynamic credentials, fine-grained RBAC policies, automated rotation
+  workflows, certificate management — matters, but it matters less than the
+  baseline. A team that has centralized secrets storage and a rotation schedule
+  is dramatically safer than one still pulling credentials from environment
+  files checked into version control, even if they haven't implemented
+  zero-trust machine identities yet.
+
+
+  The failure modes you'll run into almost universally fall into a few buckets.
+  First, rotation breaks things because the application was never designed to
+  refresh credentials without a restart — suddenly rotating the database
+  password brings down production because three services are holding stale
+  connections. The fix is to design for rotation from the start: read the
+  credential on each connection attempt, or at a short TTL, not once at startup.
+  Second, access sprawl: secrets get shared broadly because restricting them
+  feels like friction, and six months later you can't audit who actually needed
+  the Stripe API key. Third, the CI/CD pipeline becomes the weakest link — the
+  application vault is locked down tight, but the build pipeline has a
+  `GITHUB_SECRET_EVERYTHING` environment variable that any workflow can read.
+  Treat your CI environment with the same skepticism you treat production.
+
+
+  The mental model that makes secrets management click is thinking about
+  credentials the way you think about cash. You wouldn't leave cash on your desk
+  and hope nobody takes it. You wouldn't make photocopies of your corporate card
+  and hand them to everyone who might ever need to make a purchase. You'd give
+  people the minimum access they need, you'd know exactly who has what, and
+  you'd change the combination on the safe when someone leaves. Secrets
+  management operationalizes that intuition: least privilege, auditability, and
+  time-bounded access. A secret that expires in an hour is worth far less to an
+  attacker than one that never expires. A secret that's logged every time it's
+  accessed gives you a forensic trail when something does go wrong.
+
+
+  In the broader ecosystem, secrets management sits at the intersection of
+  security and infrastructure. It's upstream of almost everything else: your
+  database credentials, your third-party API integrations, your internal
+  service-to-service authentication, your TLS certificates. Getting this right
+  early means every service you add to your stack inherits a sane credential
+  hygiene baseline. Getting it wrong means technical debt that compounds — every
+  new service learns the bad habit from the services that came before it, and by
+  the time you're ready to fix it, you have a hundred credentials scattered
+  across a hundred places that all need to be found, rotated, and migrated
+  simultaneously.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

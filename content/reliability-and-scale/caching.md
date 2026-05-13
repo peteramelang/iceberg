@@ -126,14 +126,69 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Caching is the fastest way to make your application feel faster, and also one
+  of the most reliable ways to introduce subtle correctness bugs that take weeks
+  to diagnose. The performance upside is real — serving from an in-memory cache
+  is orders of magnitude faster than a database round-trip — but the tradeoff is
+  that you now have two representations of the same data, and keeping them
+  consistent is a problem you've taken on for the lifetime of the cache. Phil
+  Karlton's oft-cited remark about cache invalidation being one of the two hard
+  problems in computer science is funny because it's true.
+
+
+  The 80/20 of caching is about picking the right layer for the right data. CDN
+  caching at the edge is almost always the highest-leverage starting point:
+  static assets, cacheable HTML responses, and public API endpoints can be
+  served from a CDN with zero database load and latency measured in single-digit
+  milliseconds globally. This requires correct HTTP cache headers —
+  Cache-Control with appropriate max-age, Vary headers if the response differs
+  by request headers, and ETag or Last-Modified for conditional validation — but
+  once configured, it scales effortlessly. In-process caching (a local memory
+  cache within a single service) is useful for data that is frequently read,
+  expensive to compute, and shared across many requests within that process —
+  things like configuration data or heavily reused reference lookups.
+  Distributed caching with Redis sits in between: it's shared across service
+  instances, supports atomic operations, and is the right choice for session
+  data, rate limiting counters, and hot datasets that multiple services need to
+  read.
+
+
+  Cache invalidation is where teams struggle most. Time-to-live (TTL) expiration
+  is the simplest strategy: cache data for 60 seconds, let it expire, re-fetch.
+  Simple, correct, but it means you'll serve stale data for up to 60 seconds
+  after a write. For most read-heavy data this is fine. For anything that needs
+  to reflect writes immediately — user settings, billing state, permissions —
+  TTL alone isn't sufficient. Event-driven invalidation (invalidate cache
+  entries when the underlying data changes) is more correct but requires the
+  write path to be aware of the cache, which introduces coupling. Write-through
+  caching (write to the cache and the database simultaneously) maintains
+  consistency at the cost of write latency. There is no invalidation strategy
+  that is always right; the choice depends on how stale you can tolerate the
+  data being and how often it changes.
+
+
+  The dominant failure mode for caching in production is the thundering herd.
+  When a popular cache entry expires, dozens or hundreds of requests arrive
+  simultaneously, all find a cache miss, and all proceed to query the database —
+  which may not handle that sudden spike gracefully. The mitigations are:
+  probabilistic early expiration (re-compute the cached value slightly before it
+  expires, with some probability), request coalescing (use a lock to ensure only
+  one request rebuilds a cache entry at a time while others wait), or background
+  refresh (a separate process keeps the cache warm before entries expire).
+  Another common failure is cache stampede during a cold start: deploying a new
+  service instance or clearing the cache under load can trigger a wave of
+  database queries that overwhelms the database before the cache warms up.
+
+
+  Caching belongs in the reliability-and-scale phase because at scale, the
+  database is often the constraint, and caching is the primary way to protect
+  it. It pairs closely with database query optimization (caching doesn't fix a
+  bad query; it just makes it run less often) and with CDN configuration (the
+  HTTP caching layer requires correct server-side headers to function). A
+  well-layered caching strategy — CDN for public content, Redis for shared
+  application state, in-process for frequently read configuration — can extend
+  the life of your current infrastructure significantly before you need to think
+  about horizontal scaling.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

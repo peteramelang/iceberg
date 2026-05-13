@@ -93,14 +93,62 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Cookies are one of those topics where the gap between "it works" and "it works
+  correctly" is wide enough to park a GDPR fine in. A session cookie that is
+  missing HttpOnly is readable by any JavaScript on your page, which means an
+  XSS vulnerability anywhere in your application can steal every active session.
+  A cookie without SameSite can be sent cross-site in certain request flows,
+  enabling CSRF attacks that execute actions on behalf of authenticated users.
+  These are not theoretical concerns — they are the mechanical consequences of
+  omitting attributes that browsers started making available over a decade ago.
+  The configuration is one line. The omission can empty someone's bank account.
+
+
+  The security side of cookies is mostly about getting the attributes right and
+  understanding what each one actually does. Secure ensures the cookie is only
+  sent over HTTPS — without it, the cookie travels in plaintext over any
+  unencrypted connection. HttpOnly prevents JavaScript access, which stops XSS
+  from harvesting session tokens. SameSite controls whether the browser sends
+  the cookie on cross-origin requests; Strict is the safest but breaks some
+  OAuth flows, Lax is a sensible default for most applications, and None
+  requires Secure and is intended for explicitly cross-site use cases like
+  embedded iframes. The Domain and Path attributes scope where the cookie is
+  sent. __Host- and __Secure- prefixes enforce that browsers reject the cookie
+  if the constraints are not met — a useful defense against subdomain takeover
+  attacks.
+
+
+  The consent layer is a separate and increasingly consequential problem. GDPR
+  requires that non-essential cookies — analytics, advertising, A/B testing —
+  only fire after the user has given informed, uncoerced consent. The regulation
+  is specific: pre-ticked boxes do not count, "by using this site you consent"
+  banners do not count, and consent cannot be bundled with terms of service. The
+  practical failure mode is a site that loads Google Analytics, Facebook Pixel,
+  and a session replay tool before the consent modal even renders. The cookies
+  are already set. The data is already in third-party systems. The legal
+  exposure is real. Regulators in the EU have issued significant fines for
+  exactly this pattern.
+
+
+  The 80/20 for most applications: get the session cookie attributes right
+  (HttpOnly, Secure, SameSite=Lax as a baseline), then implement a consent
+  management platform that actually blocks non-essential scripts until consent
+  is granted — not one that just displays a banner. The distinction between a
+  consent banner and a consent mechanism is the most common mistake teams make.
+  A banner that says "we use cookies" while analytics fires in the background is
+  a liability, not compliance. The technical implementation of a real consent
+  gate means loading third-party scripts conditionally, after the user's choice
+  is recorded, and respecting that choice on return visits.
+
+
+  Cookies sit at the intersection of authentication, security, and privacy law —
+  which is an unusual combination. Most security topics pair with authentication
+  and session management; most privacy topics pair with data retention and GDPR
+  compliance more broadly. Understanding cookies well means understanding both:
+  what the browser will and will not send, and what the law requires you to ask
+  before setting certain cookies in the first place. The two halves are not
+  optional — skipping either one creates either a security vulnerability or a
+  legal exposure.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

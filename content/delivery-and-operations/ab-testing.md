@@ -78,14 +78,57 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  A/B testing is how you stop guessing. Without it, every product decision is a
+  bet you can't settle — you ship a change, traffic shifts, and you have no idea
+  if the new onboarding copy caused the uptick or if it was just the seasonal
+  effect from that marketing campaign. The failure mode of skipping
+  experimentation isn't that you make obviously bad decisions. It's that you
+  make confidently wrong ones, and you never find out. Teams that skip A/B
+  testing tend to attribute causality to whatever feature shipped most recently,
+  which is a great way to build an intuition that doesn't match reality.
+
+
+  The 80/20 of A/B testing is this: get your randomization right, pick one
+  primary metric per experiment, and run the test long enough. Almost everything
+  else is refinement. Randomization needs to be stable — the same user should
+  always land in the same bucket, or your results will be polluted by users who
+  see both variants. A consistent hash on a user ID or device ID is the standard
+  approach. The primary metric is the one you're moving the needle on; if you're
+  testing a checkout flow change, that metric is probably conversion, not
+  session length. Running too short is the classic mistake — teams see an early
+  positive signal and call it, not realizing they've caught a fluke in the
+  noise. Two weeks is a common minimum to capture weekly seasonality.
+
+
+  The dominant failure modes are: (1) peeking — stopping the experiment early
+  because the numbers look good, which inflates false positive rates
+  dramatically; (2) running too many simultaneous experiments with overlapping
+  user segments so you can't untangle which change caused which effect; (3)
+  novelty effect — users engage more with anything new, so a short test on a UI
+  change will almost always look positive. The novelty effect decays. Your
+  p-value doesn't care. The other common trap is cargo-culting statistical
+  significance — a p-value of 0.04 on a small experiment doesn't mean much.
+  Effect size and practical significance matter just as much as the threshold.
+
+
+  The mental model that makes this click is thinking of A/B testing as
+  controlled causation. Observational data tells you what correlates with what.
+  An experiment tells you what causes what. That distinction is the entire value
+  of the practice. You're not measuring whether users who see variant B convert
+  more — you're measuring whether seeing variant B *makes* users convert more.
+  The randomization is what enables that causal claim, which is why flawed
+  randomization isn't just a methodological annoyance; it makes the whole
+  exercise meaningless.
+
+
+  This topic sits squarely in the delivery-and-operations phase because it's
+  part of how you deploy changes responsibly. It pairs tightly with feature
+  flags, since flags are often the mechanism for bucketing users into variants,
+  and with analytics infrastructure, since you need reliable event tracking to
+  measure outcomes. It also connects upstream to product decisions — teams that
+  experiment well tend to have clearer hypotheses before they build, because
+  they know they'll need to define success before they ship. That discipline
+  alone makes experimentation worth investing in.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

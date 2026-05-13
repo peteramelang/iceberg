@@ -176,14 +176,73 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Message queues solve a specific and important class of problem: you want to do
+  some work, but you don't want to make the user wait for it. Sending a welcome
+  email after signup doesn't need to happen before you return a success response
+  to the user. Processing an uploaded video can take ten minutes and that's
+  fine, as long as it eventually happens. Updating a search index after a
+  product listing changes can lag a bit behind the write. These are exactly the
+  scenarios where queues shine — offload the work from the request handler to a
+  background worker, and suddenly your API is fast and your expensive operations
+  are handled reliably and asynchronously. The failure mode when you don't do
+  this is an API that's slow because it's doing too much, or worse, one that
+  fails entirely when a downstream service is slow or unavailable.
+
+
+  The 80/20 of message queues is understanding the guarantees your queue
+  provides and designing your consumers around them. Almost every
+  production-grade queue — SQS, RabbitMQ, Kafka, Google Pub/Sub — delivers
+  messages at-least-once, not exactly-once. This means your consumer will
+  occasionally process the same message twice, and your job handler must be
+  idempotent: processing a message twice should produce the same result as
+  processing it once. If you design your consumers assuming exactly-once
+  delivery, you'll get duplicate sends, duplicate writes, and duplicate charges
+  in production, because the edge cases that trigger redelivery (crashes, slow
+  acks, network partitions) happen regularly at scale. Build idempotency in from
+  the start and treat double-delivery as a normal operating condition, not an
+  exceptional one.
+
+
+  Dead-letter queues are the second most important concept to get right early.
+  When a consumer fails to process a message repeatedly — because the payload is
+  malformed, because it depends on data that doesn't exist, or because there's a
+  bug in the consumer logic — the message needs somewhere to go. Without a
+  dead-letter queue, you end up with two bad options: drop the message (losing
+  work) or keep retrying forever (blocking the queue and burning compute on a
+  message that will never succeed). A DLQ gives you a third option: after N
+  failed attempts, park the message somewhere safe, alert on it, and give an
+  engineer time to investigate and replay it once the underlying issue is
+  resolved. This turns an unrecoverable failure into a recoverable one, which is
+  the difference between losing data and debugging a problem.
+
+
+  Kafka deserves specific mention because it's architecturally different from
+  traditional message queues in ways that matter. SQS and RabbitMQ are work
+  queues — messages are consumed, acknowledged, and deleted. Kafka is a
+  distributed log — messages are written to a topic and retained for a
+  configured period, and consumers track their own position (offset) in that
+  log. This means multiple independent consumer groups can read the same stream
+  at different speeds, you can replay historical messages to rebuild a derived
+  dataset, and you can add new consumers without affecting existing ones. The
+  tradeoff is operational complexity: Kafka requires careful partition tuning,
+  offset management, and consumer group coordination. For simple background job
+  processing, SQS or a Redis-backed job queue like Sidekiq or BullMQ is usually
+  a better fit. Kafka's power is in event streaming and log-based architectures
+  where the replay and fan-out capabilities justify the complexity.
+
+
+  The mental model that ties everything together is thinking of a message queue
+  as a buffer between the rate at which your system produces work and the rate
+  at which it can safely consume it. Traffic spikes don't crash your workers —
+  they fill the queue, and the workers drain it at their own pace. A slow
+  downstream service doesn't block your API — the message waits in the queue
+  until the downstream recovers. A consumer deploy causes a brief pause in
+  processing, not a user-facing error. Queues are fundamentally about
+  decoupling: decoupling producers from consumers, decoupling the timing of work
+  from the timing of requests, and decoupling the failure of one component from
+  the failure of another. When you understand them that way, you can make clear
+  decisions about when they're the right tool and when simpler synchronous
+  approaches are good enough.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

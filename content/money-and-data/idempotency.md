@@ -128,14 +128,66 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The failure mode that idempotency prevents is one of the worst kinds: a user
+  gets charged twice, or an email goes out three times, or a record gets created
+  in duplicate — and your system has no idea it happened. These aren't
+  hypothetical edge cases. Any time a network call can time out, a server can
+  restart mid-request, or a client can retry after not hearing back, you're in
+  territory where the operation may have succeeded on the server even though the
+  client never received confirmation. In payment systems this is catastrophic.
+  In notification systems it's embarrassing. In inventory or ledger systems it's
+  an audit nightmare. If you're building anything where operations have side
+  effects — and almost everything interesting does — skipping idempotency means
+  your retry logic is secretly a duplicate-action machine.
+
+
+  The core of it is simple enough to explain in a sentence: give each operation
+  a unique identifier, and let the server use that identifier to decide "I've
+  already done this" instead of doing it again. In practice, this means the
+  client generates an idempotency key (a UUID, typically) before sending a
+  request and includes it in every attempt. The server stores the result of the
+  first successful execution keyed on that identifier, and on any subsequent
+  request with the same key, it returns the stored result without re-executing.
+  That's the whole thing. The complexity is entirely in the implementation
+  details: what do you store, where do you store it, how long do you keep it,
+  and what happens when a request is still in-flight when the retry arrives.
+
+
+  The 80/20 is this: get the key generation and deduplication right for your
+  mutation endpoints, and you've solved most of the problem. The subtle part is
+  external side effects — if your handler charges a card and then sends an
+  email, you need to track which of those external calls succeeded in the first
+  attempt, because on retry you want to skip the charge (already done) while
+  potentially still sending the email (if that failed). This is where naive
+  implementations break down. The server-side deduplication table needs to
+  record not just "this key has been processed" but which external actions were
+  taken, so retry can replay the results rather than repeat the actions.
+  Stripe's API is the canonical example to study here — their implementation of
+  idempotency keys handles this correctly and their documentation explains the
+  reasoning in depth.
+
+
+  A failure mode that trips up even experienced engineers is the "at-least-once
+  vs. exactly-once" confusion. Message queues like SQS or Kafka almost always
+  deliver at-least-once, which means your consumers need to be idempotent
+  regardless of what you do at the API layer. Background job processors face the
+  same problem: a job can be picked up by two workers simultaneously if the
+  first takes too long and the lock expires. If the job handler isn't
+  idempotent, you get duplicate sends, double-writes, or corrupted state. The
+  fix is the same pattern — track a job ID, check before acting, commit the
+  result atomically with the deduplication record.
+
+
+  The mental model to internalize is that idempotency is a server-side
+  responsibility, not a client-side one. Clients should retry aggressively, on
+  any error they're uncertain about, without worrying about what happens on the
+  server. The server's job is to make that safe. When you design with this in
+  mind, you get distributed systems where failures are handled transparently —
+  the SDK retries, the server deduplicates, and the user sees a successful
+  outcome without knowing anything went wrong. That's the goal. It moves
+  complexity out of the coordination layer ("how do I know if this succeeded?")
+  and into the implementation layer ("how do I store and check deduplication
+  state?"), which is a much better place for it to live.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

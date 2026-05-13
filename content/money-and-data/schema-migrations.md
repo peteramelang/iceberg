@@ -133,14 +133,84 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Schema migrations are the problem that sits quietly in the background until
+  the day you need to add a column to a 50-million-row table and discover that a
+  naive ALTER TABLE will lock that table for 20 minutes while your production
+  service returns errors. At that point you have a crash course in why schema
+  migration strategy matters. The core tension is simple: your database schema
+  and your application code need to be in sync, but deploying them together as
+  an atomic unit becomes impossible at any meaningful scale. You have rolling
+  deployments, you have multiple service instances, you have background jobs—the
+  idea that you can atomically swap schema and code everywhere simultaneously is
+  a fiction. Accepting that reality is the beginning of doing schema migrations
+  safely.
+
+
+  The 80/20 of schema migrations is the expand-contract pattern, and it solves
+  the majority of the hard cases. The pattern has three phases. First, expand:
+  add the new column, table, or index in a way that doesn't break the existing
+  code. New columns should be nullable or have defaults that the current code
+  can live with. New indexes should be created concurrently (CONCURRENTLY in
+  Postgres) so they don't lock the table. At this point, the schema has the new
+  thing but the code isn't using it yet. Second, migrate: if you need to
+  backfill data into the new column or restructure existing records, do it in
+  small batches during off-peak hours—never a single UPDATE that touches every
+  row. Third, contract: once all running instances of the application are on the
+  new code that uses the new structure, remove the old columns or indexes. Each
+  phase is a separate deployment, often a separate migration file, potentially
+  separated by days or weeks. This is slower than making a single sweeping
+  change, but it's the price of zero-downtime deployments.
+
+
+  The dominant failure mode in schema migrations is coupling schema changes too
+  tightly to code changes. A migration that renames a column and application
+  code that uses the new name are deployed together. For a split second—or
+  longer, if you're doing rolling deployments—some instances are running old
+  code that references the old column name against a schema that has already
+  been migrated to the new name. The result is errors. The fix is a
+  two-deployment process: add the new column and start writing to both old and
+  new, then deploy the code change, then drop the old column. It feels
+  redundant, but it's the pattern that survives rolling deployments and allows
+  safe rollbacks.
+
+
+  Tooling matters here because manual tracking of migration files across
+  environments is error-prone. Flyway and Liquibase are the established options
+  for JVM stacks; Prisma Migrate has strong adoption in the JavaScript
+  ecosystem; Alembic for Python. All of them give you versioned migration files,
+  a migration history table in the database, and a command to bring any
+  environment up to the current schema. The convention of one migration per
+  logical change, kept in version control alongside the application code that
+  requires it, makes it possible to understand the history of your schema and to
+  reason about what code versions are compatible with what schema states. For
+  Postgres specifically, pgroll is a newer tool that automates the
+  expand-contract pattern with support for online DDL and rollback of
+  migrations—it's worth knowing about even if you don't use it immediately.
+
+
+  Large table migrations—backfills, index creation, column type changes on
+  tables with tens or hundreds of millions of rows—need special handling that
+  most teams don't think about until they're already in trouble. Creating an
+  index concurrently avoids table locks but still takes time and I/O, so it
+  should be done during low-traffic windows with monitoring on replication lag.
+  Backfilling a column should be done in batches with a sleep between batches to
+  avoid overwhelming the database. Adding a NOT NULL constraint to an existing
+  column that has nulls requires backfilling first; in Postgres 12+, NOT NULL
+  constraints with a DEFAULT can be added without a full table rewrite, but only
+  for values that don't require reading existing rows. These are the kinds of
+  details that separate teams who migrate safely at scale from teams who cause
+  incidents.
+
+
+  In the broader money-and-data phase, schema migrations connect directly to
+  deployment strategy, rollbacks, and data integrity. A schema migration that
+  can't be reversed limits your ability to roll back a bad deployment—which is
+  why the expand-contract pattern's reversibility is so valuable. It also
+  connects to your testing strategy: your CI environment needs to run migrations
+  against a copy of production schema state, not just a blank database, to catch
+  the class of bugs where a migration works on an empty table but fails on real
+  data. Teams that build migration testing into their CI pipeline catch these
+  failures before they reach production.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

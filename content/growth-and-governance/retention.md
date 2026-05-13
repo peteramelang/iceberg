@@ -72,14 +72,77 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Retention is the metric that tells you whether your product actually works.
+  Acquisition tells you how good your marketing is. Activation tells you how
+  good your onboarding is. But retention—specifically, whether people come back
+  after their first experience—tells you whether you've built something worth
+  building. Products with low retention can grow for a while through aggressive
+  acquisition, but they're filling a leaky bucket. At some point the math
+  catches up: churn exceeds new signups, and growth reverses. Understanding and
+  improving retention is the difference between building a business and running
+  an expensive experiment.
+
+
+  The 80/20 of retention starts with cohort analysis, not aggregate metrics. An
+  average retention rate hides a lot. What you want to know is: for users who
+  signed up in January, how many came back in week 2? Week 4? Week 12? Do that
+  for every monthly cohort and plot the curves. If you see your week-4 retention
+  improving over time as you ship product changes, you have evidence of
+  improvement. If all your cohorts look the same despite months of work,
+  something more fundamental is broken. Cohort analysis is the lens that makes
+  retention measurable and actionable. Without it, you're guessing.
+
+
+  The dominant failure mode in thinking about retention is optimizing the wrong
+  layer. Most teams, when they see low retention, reach for lifecycle emails:
+  drip campaigns, nudge notifications, re-engagement flows. These can help at
+  the margins, but they don't fix underlying product problems. If users aren't
+  coming back, it's usually because they didn't get lasting value from their
+  first session—not because you didn't send them an email. The research on this,
+  across many product categories, consistently shows that retention correlates
+  most strongly with whether users experienced the core value of the product
+  during onboarding. Email can remind someone to come back; it can't manufacture
+  value they didn't experience. So before investing heavily in lifecycle
+  communications, ask what your most retained users do in their first session
+  that low-retained users don't.
+
+
+  Engagement loops are the structural answer to retention. A good engagement
+  loop has three parts: a trigger that brings the user back to the product, an
+  action they take that generates value, and a reward or outcome that makes the
+  next trigger feel worthwhile. For a project management tool, the trigger might
+  be a notification that someone commented on your task, the action is
+  responding, and the reward is the feeling of the project moving forward.
+  Notice that the trigger is rooted in something real—a collaborator's
+  action—not just a scheduled nudge. The strongest engagement loops are driven
+  by value created by other users or by the product itself, not by marketing.
+  Engineering these loops requires understanding what your users actually value,
+  which requires both qualitative research and behavioral data.
+
+
+  From a technical standpoint, retention analysis requires an event tracking
+  system that captures meaningful user actions with enough fidelity to
+  reconstruct what happened in a session. Tools like Amplitude, Mixpanel, and
+  PostHog are built for this. The schema design matters: you want events that
+  represent user intent (searched for a recipe, created a project, shared a
+  document) rather than low-level interactions (clicked a button, loaded a
+  page). High-level events are stable across UI changes and meaningful to
+  analyze; low-level events accumulate into noise. A common mistake is tracking
+  everything and analyzing nothing—the volume of data becomes a distraction
+  rather than a signal.
+
+
+  In the growth and governance phase, retention connects directly to revenue
+  metrics. For subscription businesses, retention translates directly to net
+  revenue retention: if your users expand their usage over time, NRR exceeds
+  100%, which means your existing customer base grows revenue even without new
+  acquisitions. For consumer apps, retention determines lifetime value, which
+  determines how much you can afford to spend on acquisition. Getting retention
+  right is not just a product problem—it's the foundation of your unit
+  economics. Engineers often undervalue this because retention feels like a
+  product manager's domain, but the features, performance characteristics, and
+  reliability of the system you build are the largest determinants of whether
+  users return.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

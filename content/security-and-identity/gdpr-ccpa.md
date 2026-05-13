@@ -101,14 +101,70 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Privacy compliance is easy to dismiss as a legal problem until the first data
+  subject request arrives in your inbox and you discover that your system has no
+  coherent answer to the question "where does this user's data live." The
+  engineering work required to respond to GDPR and CCPA obligations touches
+  nearly every layer of the stack: the database schema, the data pipeline, the
+  logging infrastructure, the backup and retention systems, and the consent
+  flows in the product itself. Teams that treat privacy as a checkbox at the end
+  of a feature build consistently find themselves doing expensive retroactive
+  work. Teams that treat it as a design constraint from the start find it's
+  manageable.
+
+
+  The two laws cover different jurisdictions but converge on similar principles.
+  GDPR governs personal data of people in the EU and applies globally to any
+  company that processes that data. CCPA governs California residents' data.
+  Both grant individuals meaningful rights: the right to know what data you hold
+  about them, the right to have it deleted, the right to receive a copy of it in
+  a portable format, and the right to correct inaccurate data. GDPR adds
+  restrictions on the legal basis for processing data in the first place — you
+  need a documented reason (consent, legitimate interest, contractual necessity)
+  for collecting and processing personal data, which is a constraint that shapes
+  product design well before any user exercises a right.
+
+
+  The 80/20 for engineering compliance: build a data map first. Before you can
+  delete a user's data, you have to know where it is. Most systems accumulate
+  personal data in places engineers stop thinking about — application databases,
+  analytics event streams, error tracking services (Sentry captures request
+  bodies that may contain PII), log aggregators (Datadog logs may contain IP
+  addresses and user identifiers), email service provider lists, data warehouse
+  snapshots, and cold storage backups. The data map is the prerequisite for
+  everything else. Once you know where data lives, you can build a data subject
+  request (DSR) pipeline: an automated workflow that, when triggered with a user
+  identifier, queries every relevant system and either returns the data (for
+  access requests) or deletes it (for erasure requests). Manual DSR processes
+  break at scale and introduce response-time risk — GDPR requires response
+  within 30 days, CCPA within 45.
+
+
+  The failure modes are predictable. The first is incomplete deletion: the DSR
+  pipeline removes the user from the production database but misses the
+  analytics events table, the backup snapshots, and the search index. A deletion
+  that isn't complete isn't compliant. The second failure mode is consent
+  without control: the cookie consent banner is implemented, but the backend
+  doesn't actually respect what users consent to — data is collected and
+  processed regardless of consent state, with the banner serving as a legal
+  theater prop rather than a functional control. The third is missing audit
+  trails: GDPR requires that you document your data processing activities and be
+  able to demonstrate compliance. If you can't show when consent was given, when
+  a deletion request was processed, and what data was deleted, you can't
+  demonstrate compliance even if you are compliant.
+
+
+  The mental model that makes privacy engineering coherent is to think of
+  personal data as borrowed. The user lent it to you for a specific purpose,
+  under specific terms, for a specific period. Like any loan, there are
+  obligations: use it only for the agreed purpose, return it when asked, and
+  keep records of the transaction. That framing makes the engineering
+  requirements feel less arbitrary. Retention policies (don't keep data longer
+  than the purpose requires) are loan terms. Access controls (only systems that
+  need the data should have it) are custody requirements. DSR pipelines are the
+  mechanism for returning the loan. Consent flows are the loan agreement.
+  Engineers who understand why these mechanisms exist, rather than just that
+  they're required, tend to build them more robustly.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

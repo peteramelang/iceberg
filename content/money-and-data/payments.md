@@ -119,14 +119,76 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Payments are where your production system meets real money, and the cost of
+  getting it wrong is unusually high. A bug in your rendering code shows a
+  broken UI. A bug in your payment code double-charges a customer, silently
+  drops a charge, or creates an inconsistent subscription state that haunts your
+  database for months. The asymmetry between the cost of payment bugs and the
+  cost of other bugs is what makes this topic worth studying carefully rather
+  than just wiring up Stripe's quickstart and hoping for the best.
+
+
+  The 80/20 of payments starts with idempotency. If you understand one thing
+  deeply, understand this: every payment operation needs to be idempotent,
+  meaning you can retry it safely without risk of double execution. Stripe's
+  idempotency keys are the mechanism—you generate a stable key for each logical
+  operation and pass it with every API call. Without idempotency, a network
+  timeout between your server and Stripe leaves you in a state where you don't
+  know if the charge succeeded. With it, you can retry the exact same call and
+  get back the same result. This pattern extends to your own database: writes
+  that follow payment events should also be idempotent, so a webhook delivered
+  twice doesn't give someone two months of access for the price of one.
+  Everything else in payments flows from this foundation.
+
+
+  Webhooks are the second critical thing to get right, and they're where most
+  teams make mistakes. Payment processors don't just respond to your API
+  calls—they also push events to you asynchronously. A subscription renews, a
+  payment fails, a dispute is opened. If you don't handle these webhooks
+  reliably, your application state will drift from reality. The two common
+  failures are: not verifying the webhook signature (meaning anyone can send you
+  a fake event telling you a payment succeeded), and processing webhooks
+  synchronously in a way that can cause duplicates if the processor retries. The
+  correct pattern is to verify the signature, persist the raw event to a queue
+  or database immediately, acknowledge receipt with a 200 status, then process
+  it asynchronously. This decouples receipt from processing and lets you replay
+  events if your processing logic fails.
+
+
+  Subscription billing adds a state machine on top of all this. A subscription
+  is not just a recurring charge—it's a sequence of states: trialing, active,
+  past_due, canceled, paused. Transitions between states have business logic
+  attached: what happens to feature access when a payment fails? How long do you
+  give someone before canceling? What does proration look like when they upgrade
+  mid-cycle? These questions are worth answering explicitly before you write
+  code, because retrofitting state machine logic onto a subscription system that
+  was designed for the happy path is genuinely painful. Stripe handles much of
+  this if you use their billing product faithfully, but you still need to map
+  their state model to your own access control logic.
+
+
+  PCI DSS compliance sounds intimidating but is manageable if you stay in the
+  lowest scope tier: never touch raw card numbers. Use Stripe Elements or
+  Stripe.js to tokenize card data directly in the browser, so the sensitive data
+  never touches your servers. This reduces your PCI scope to SAQ A, the simplest
+  self-assessment questionnaire. The moment you start proxying card data through
+  your backend, your compliance burden increases dramatically. Similarly, 3D
+  Secure authentication (the step where a bank prompts the user to verify their
+  identity) is increasingly required in Europe under SCA regulations—Stripe
+  handles the redirect flow if you use Payment Intents correctly, but you need
+  to handle the asynchronous nature of the confirmation.
+
+
+  In the broader ecosystem, payments touches your user identity system (who owns
+  this subscription?), your feature flagging or entitlements system (what does
+  this subscription tier unlock?), your analytics (what's MRR, churn, LTV?), and
+  your customer support tooling (why did this charge fail?). It's worth
+  designing the interfaces between payments and these systems deliberately. A
+  common mistake is embedding billing logic directly in product code—hardcoded
+  tier names, feature gates checked by querying Stripe directly—which makes the
+  billing system fragile and slow. A thin internal entitlements layer that
+  translates payment state into capabilities, updated by webhooks, tends to age
+  much better.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

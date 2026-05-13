@@ -149,14 +149,81 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Scalability problems are seductive because they feel like success problems.
+  Your product is growing, traffic is up, and now the database is falling
+  over—surely that's a good problem to have? In practice, scalability failures
+  are just as damaging as reliability failures: users experience the same slow
+  page loads and timeouts, churn for the same reasons, and write the same bad
+  reviews. The difference is that scalability failures tend to arrive suddenly—a
+  surge of traffic after a press mention, a viral social post, a product hunt
+  launch—and if you haven't thought about them in advance, you're debugging
+  under fire while the load continues to climb.
+
+
+  The 80/20 of scalability is: your bottleneck is almost always the database,
+  and horizontal scaling your application servers without addressing the
+  database buys you very little. Application servers are stateless (if you've
+  designed them correctly), which means adding more instances behind a load
+  balancer is cheap and effective. Databases are stateful, which means they
+  don't scale the same way. Postgres running on a single instance has a
+  ceiling—for many workloads it's higher than you'd expect, but it's finite. The
+  sequence of interventions that matter most, in order: slow query optimization
+  and index tuning (biggest bang for the smallest investment), connection
+  pooling with PgBouncer (removes a surprising ceiling on concurrent
+  connections), read replicas for read-heavy workloads, then caching with Redis
+  for data that doesn't need to come from the database at all. Sharding and
+  distributed databases are real tools, but most teams reach for them before
+  exhausting the earlier steps, which is expensive both operationally and in
+  engineering time.
+
+
+  Caching deserves its own emphasis because it's the multiplier that changes the
+  shape of the scaling curve most dramatically. A hot path that hits Postgres on
+  every request has a ceiling proportional to your database capacity. The same
+  path served from Redis—with a cache TTL of 30 seconds—can serve orders of
+  magnitude more traffic from a fraction of the infrastructure. The tricky part
+  is cache invalidation: knowing when to expire or update cached data when the
+  underlying data changes. The two main patterns are TTL-based expiration
+  (simple, eventually consistent, works well when a small window of stale data
+  is acceptable) and event-driven invalidation (more complex, strongly
+  consistent, necessary when stale data has real consequences). Pick the right
+  pattern for each cache use case rather than applying one policy uniformly.
+
+
+  Horizontal scaling of application servers requires that they be truly
+  stateless. If user sessions are stored in memory on a single server, adding a
+  second server breaks sessions for users who get routed to it. If background
+  jobs are scheduled in-process with something like a cron thread, running two
+  instances means jobs run twice. The discipline of stateless services—sessions
+  in Redis, files in S3, jobs in a queue, no local state that matters—is what
+  makes horizontal scaling safe and boring rather than dangerous. This is one of
+  those things that's much easier to get right from the start than to retrofit
+  onto a system that grew without it.
+
+
+  Asynchronous processing is the scalability pattern that teams discover late
+  and wish they'd applied earlier. If a user action triggers work that doesn't
+  need to complete before the response—sending an email, resizing an image,
+  updating an aggregate counter, triggering a webhook—putting that work on a
+  queue decouples the user-facing latency from the background processing
+  latency. This lets you handle bursts gracefully: the queue absorbs the spike,
+  and workers process it at whatever rate they can sustain. Systems without
+  queues tend to have latency spikes under load because they're doing too much
+  synchronous work per request. Adding a queue—SQS, RabbitMQ, Redis streams—is
+  one of the higher-leverage architectural changes you can make to a system
+  that's starting to struggle under load.
+
+
+  In the reliability and scale phase, scalability connects directly to capacity
+  planning and cost. Autoscaling policies let you scale up under load and scale
+  down when traffic drops, but they require setting the right metrics and
+  thresholds—scaling on CPU alone misses database-bound workloads, and
+  aggressive scale-down can cause oscillation under sustained moderate load.
+  Load testing before a big launch is the practice that makes scalability
+  confidence real rather than theoretical: you can't know where your system
+  breaks until you break it in a controlled environment. Tools like k6 and
+  Locust let you replay realistic traffic patterns at multiples of your expected
+  peak, which surfaces bottlenecks before your users do.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

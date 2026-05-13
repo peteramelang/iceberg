@@ -159,14 +159,62 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Without a dead-letter queue, a failing message has two possible fates: it gets
+  retried forever, blocking the queue and consuming resources indefinitely, or
+  it gets dropped, taking whatever data it carried with it. Neither outcome is
+  acceptable in a system that processes anything consequential. A payment event
+  that fails processing because of a transient database timeout should not
+  disappear. An order fulfillment message that fails because the downstream
+  service is down should not loop forever. The dead-letter queue is the
+  construct that makes both of these problems manageable: failed messages go
+  somewhere inspectable rather than somewhere lost.
+
+
+  The mental model to build around a DLQ is that it is a quarantine, not a trash
+  can. Messages in a dead-letter queue are not garbage — they are signals. A
+  message that fails consistently is telling you something specific: there is a
+  bug in the consumer, a schema mismatch between producer and consumer, a
+  downstream dependency that is broken, or the message itself is malformed.
+  Examining what is in the DLQ is how you distinguish between transient failures
+  (the database was briefly unavailable) and permanent ones (the message format
+  changed and old consumers cannot parse it). That distinction determines
+  whether the right response is to replay the messages after a fix or to discard
+  them after investigation.
+
+
+  The failure mode that catches teams off guard is not the DLQ filling up — that
+  is visible. It is the DLQ that nobody watches. Setting up SQS with a
+  dead-letter queue and a maxReceiveCount of 3 is a correct configuration.
+  Pointing the DLQ at a queue with no consumer, no alarm, and no documented
+  runbook for what to do when messages arrive is operationally equivalent to
+  dropping the messages with extra steps. Dead-letter queues only provide value
+  when someone — or something — is monitoring them and acting on their contents.
+  An alarm that fires when DLQ depth exceeds zero is the minimum viable
+  operational posture.
+
+
+  Replay is the capability that makes DLQs genuinely useful rather than merely
+  informative. After diagnosing the root cause and deploying a fix, you want to
+  reprocess the failed messages without reconstructing them from scratch. AWS
+  SQS supports redrive policies that replay DLQ messages back to the source
+  queue. Kafka's offset model means consumers can simply re-seek to an earlier
+  position. RabbitMQ has nack with requeue. The exact mechanism varies by
+  system, but the principle is the same: messages are durable and recoverable,
+  not ephemeral. For systems that process events with real business consequences
+  — financial transactions, user account changes, notification sends — the
+  ability to replay is not a nice-to-have.
+
+
+  In the reliability ecosystem, dead-letter queues sit alongside retry logic,
+  idempotency, and circuit breakers. They assume that consumers are idempotent —
+  replaying a message that was partially processed should not cause a
+  double-charge or a duplicate record. This is a non-trivial requirement that
+  needs to be designed in from the start. DLQs also pair with observability: the
+  useful context for diagnosing a failed message is the error that caused it to
+  be dead-lettered, which means the consumer needs to log structured errors
+  before abandoning the message. A DLQ message with no associated log context is
+  a mystery; one with a full stack trace and correlation ID is a solvable
+  problem.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

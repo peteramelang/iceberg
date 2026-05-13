@@ -109,14 +109,60 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Access control is the part of security that actually gets you breached.
+  Authentication gets most of the attention — teams spend weeks on OAuth flows
+  and MFA — but broken access control is consistently the number one
+  vulnerability in the OWASP Top 10, and has been for years. The failure mode
+  isn't usually an attacker breaking encryption. It's a user with a valid
+  session hitting an endpoint they were never supposed to reach and getting back
+  data that wasn't theirs. That happens because the authentication layer worked
+  perfectly and the authorization layer wasn't there.
+
+
+  The core distinction worth internalizing is: authentication answers "who are
+  you?" and access control answers "what are you allowed to do?" Those are
+  completely separate concerns, and conflating them is where teams get into
+  trouble. A common pattern in early-stage apps is to check "is the user logged
+  in?" and then trust that any logged-in user can do anything. That works fine
+  until you add a second user. The moment you have multi-tenancy, admin roles,
+  or shared resources, you need an actual authorization model — and retrofitting
+  one onto an app that wasn't designed for it is painful.
+
+
+  Role-Based Access Control (RBAC) is the right default for most applications.
+  You define roles — admin, member, viewer — and attach permissions to roles
+  rather than directly to users. It's easy to reason about and easy to audit.
+  Where RBAC breaks down is when you need fine-grained control over individual
+  resources: user A can edit document X but not document Y, and user B can only
+  read document X. That's where Relationship-Based Access Control (ReBAC) shines
+  — it models permissions as a graph of relationships between users and objects,
+  which is how Google Zanzibar works and why Notion, Figma, and similar tools
+  can implement sharing with granular per-document control. ABAC is powerful but
+  complex; it's the right tool when you need policy decisions that depend on
+  environmental context like time-of-day or request origin, not the right
+  starting point.
+
+
+  The implementation mistake that causes the most pain is checking permissions
+  in the wrong layer. If your authorization logic lives in the UI — showing or
+  hiding buttons based on role — but not in the API, you have the illusion of
+  access control without the reality. An attacker (or a curious user with dev
+  tools) can call the API directly. Every state-mutating endpoint needs its own
+  authorization check, server-side, regardless of what the client shows. A close
+  second is over-relying on ID obscurity: using UUIDs instead of sequential
+  integers doesn't protect you from IDOR (Insecure Direct Object Reference)
+  vulnerabilities if you're not checking ownership on every lookup.
+
+
+  The mental model: think of every action in your system as a triple — subject,
+  verb, object. "User 42 wants to delete comment 17." Your authorization layer
+  needs to answer that question cleanly and consistently. Tools like Open Policy
+  Agent let you write those rules declaratively and test them in isolation from
+  application code, which is valuable because authorization rules tend to
+  accumulate complexity quickly and need their own test coverage. Access control
+  pairs directly with authentication (you can't authorize without an
+  authenticated identity) and with audit logging (you need a record of who did
+  what for compliance and incident response).
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

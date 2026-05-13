@@ -124,14 +124,60 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  API versioning is a problem that feels hypothetical until it isn't. The first
+  time you need to rename a field, remove an endpoint, or change the shape of a
+  response — and you have external clients or mobile apps that can't be
+  force-updated — you'll understand why teams that skipped versioning strategy
+  are now frozen in place, unable to clean up years of technical debt without
+  risk. The real cost isn't the versioning infrastructure. It's the indefinite
+  maintenance of undocumented compatibility constraints that accumulate when you
+  don't have a formal strategy.
+
+
+  URL path versioning is the most common approach and the most pragmatic for
+  REST APIs: /v1/users, /v2/users. It's explicit, easy to route, easy to test,
+  and the version is visible in logs. Header-based versioning (Accept-Version:
+  2024-01-01) is cleaner for API purists because it doesn't technically violate
+  REST constraints, but it's harder to debug and cache. Stripe's date-based
+  versioning is elegant — you pin a client to the API's behavior on the date
+  they integrated, which means you can evolve the API continuously without
+  breaking existing integrations — but it requires significant infrastructure to
+  maintain multiple behavioral snapshots. Pick URL versioning by default unless
+  you have a specific reason to do otherwise.
+
+
+  The distinction between breaking and non-breaking changes is the foundation
+  everything else is built on. Adding a new optional field to a response?
+  Non-breaking — clients that don't know about it will ignore it. Removing a
+  field? Breaking. Changing a field from a string to an integer? Breaking.
+  Changing a required field to optional? Depends on your client contract. The
+  mistake teams make is treating any server-side change as non-breaking by
+  default, without thinking about what clients actually depend on. This is why
+  having an explicit compatibility policy — written down, versioned, and shared
+  with API consumers — is so valuable. It forces you to be deliberate.
+
+
+  Deprecation is where API versioning either works or doesn't. You can have the
+  best versioning scheme in the world, but if you don't actively drive clients
+  off old versions, you'll support them forever. Effective deprecation means:
+  announcing a sunset date well in advance, instrumenting API version usage so
+  you know which clients are still on old versions, reaching out to high-traffic
+  clients directly, and ultimately enforcing the sunset. The timeline should be
+  generous — 12 to 24 months is standard for externally-facing APIs — but the
+  enforcement needs to be real, or the whole deprecation process becomes
+  theater.
+
+
+  This topic lives in delivery-and-operations because it's really a change
+  management problem with a technical implementation. It pairs naturally with
+  SDK design (if you own client libraries, the SDK version often abstracts the
+  API version from end users), with changelog automation (generating accurate
+  breaking-change summaries from API diffs is achievable with tools like
+  openapi-diff), and with contract testing (consumer-driven contract tests like
+  Pact give you automated verification that your API still works for known
+  clients before you deploy a change). The teams that do this well treat their
+  API as a product with a backwards-compatibility promise, not as an internal
+  implementation detail.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

@@ -129,14 +129,66 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Latency is one of those problems that engineers often misdiagnose because the
+  cause is rarely where you first look. You notice your API is slow, so you look
+  at your application code and find nothing obviously wrong, so you add some
+  caching, and the problem gets slightly better but doesn't go away. What you
+  missed is that the database query behind the API was executing a sequential
+  scan on a table that grew to ten million rows, and no amount of
+  application-level caching was going to fix that. Systematic latency work
+  starts from a different premise: you don't know where the time is going until
+  you measure it, so measure everything first and optimize second.
+
+
+  The 80/20 of latency optimization comes down to finding your dominant source
+  and fixing that before touching anything else. In most web services, the
+  dominant source of latency is database access — slow queries, missing indexes,
+  N+1 query patterns, or simply holding a connection while doing compute. For
+  many APIs, just adding the right indexes or rewriting a hot query drops p99
+  latency by more than any other single change. After databases, the next most
+  common culprits are synchronous calls to external services (payment
+  processors, notification APIs, anything you're calling inside a request
+  handler that could be moved to an async queue), and then excessive
+  serialization or garbage collection pressure in the application itself.
+  Caching gets a lot of attention but is often overemphasized relative to the
+  simpler wins available from query tuning.
+
+
+  Distributed tracing is the tool that actually lets you find the dominant
+  source rather than guess. A trace tells you, for a specific slow request,
+  exactly how long was spent in each component — application logic, database,
+  cache, external calls, serialization. The critical path analysis from a trace
+  is worth more than any amount of general profiling, because it accounts for
+  the actual structure of your request handling including concurrent calls. If
+  two external calls happen in parallel and each takes 200ms, your bottleneck is
+  200ms, not 400ms. If they happen sequentially, it's 400ms. You can't know
+  which situation you're in without tracing.
+
+
+  There are a handful of failure modes that repeat across teams learning latency
+  optimization. The first is optimizing the wrong thing — spending a week on
+  application code when the query is the culprit. The second is optimizing the
+  average instead of the tail: p50 latency can look fine while p99 is ten times
+  worse, and it's the tail that users actually experience during traffic spikes.
+  The third is breaking the system while optimizing it — aggressive caching can
+  cause stale data bugs, aggressive query rewrites can produce wrong results,
+  and moving work async can make the user's experience worse if they expected
+  synchronous confirmation. Every latency optimization should be paired with a
+  correctness check and a metric to confirm the improvement is real.
+
+
+  For teams building AI or LLM-backed features, latency takes on a new
+  dimension. Time to first token is the metric that governs perceived
+  responsiveness — users will tolerate a long generation if they see tokens
+  appearing within a second of submitting their request, but a three-second
+  blank screen feels broken even if the total generation time is the same. The
+  levers here are different from traditional latency work: input prompt length,
+  model quantization, KV cache efficiency, and streaming delivery all matter in
+  ways that don't have direct analogs in conventional web services. The core
+  discipline is the same — measure first, find the dominant source, optimize
+  that — but the vocabulary and tooling are different enough that it's worth
+  treating LLM latency as its own domain rather than assuming your existing
+  intuitions transfer directly.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.

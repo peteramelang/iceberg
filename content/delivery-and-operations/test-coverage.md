@@ -96,14 +96,70 @@ provenance:
   rounds: 1
   stabilized: true
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The codebase without tests isn't a timebomb — it's a timebomb that went off a
+  while ago and you just haven't found all the damage yet. Every change is a
+  coin flip: it might work, it might break something three levels removed from
+  what you touched, and you won't know until a user emails you. Teams in this
+  situation slow down not because the work is harder, but because the mental
+  overhead of "what might I be breaking?" is exhausting and every deploy carries
+  genuine anxiety. Test coverage is fundamentally about confidence: the
+  confidence to refactor without fear, to ship on Friday afternoon, to hand a
+  codebase to a new engineer and have them productive without a two-week oral
+  history from the person who wrote it.
+
+
+  The 80/20 in testing is: write integration tests for your critical paths and
+  skip the unit test ceremony for code that's mostly glue. This contradicts the
+  traditional test pyramid advice, but it's where experienced engineers usually
+  land in practice. A unit test that mocks the database and the HTTP client and
+  the email service is testing almost nothing real — it's just testing that your
+  mock returns what you told it to return. An integration test that hits a real
+  database (a test database, seeded with fixtures) and exercises the actual code
+  path that processes a payment, sends a webhook, and updates a subscription
+  state gives you something genuinely valuable. Add end-to-end tests with
+  Playwright for the three or four user flows that, if broken, would cause
+  customers to churn or lose money. Everything else can be added incrementally.
+
+
+  The failure modes in testing are as predictable as they are frustrating. The
+  most common: tests that pass locally but fail in CI because of timezone
+  differences, database state from a previous test leaking, or a missing
+  environment variable. Flaky tests are worse than no tests in one specific way
+  — they train engineers to re-run the suite until it goes green rather than
+  investigating failures, which means real failures get dismissed as flakiness.
+  Second failure mode: tests coupled to implementation details rather than
+  behavior. When you refactor a class and 40 tests break because they were
+  testing the internal methods you renamed rather than the outcomes those
+  methods produce, the tests are a liability. Write tests from the outside —
+  what does this code do, not how does it do it. Third: the test suite that
+  takes 20 minutes to run. Nobody runs tests that take 20 minutes. Invest early
+  in parallelization and in keeping the feedback loop under two minutes.
+
+
+  The mental model that makes testing decisions easier is to think about who
+  catches the bug if the test doesn't. If a unit test for your date-formatting
+  utility doesn't exist, probably a code reviewer catches it, or you catch it
+  locally. If an integration test for your checkout flow doesn't exist, a
+  customer catches it — and they might not tell you, they might just leave. That
+  asymmetry should guide where you invest. The cost of a test failure is
+  proportional to how deep into production the bug travels before it's caught.
+  Tests at the unit level catch bugs cheaply. Tests at the integration level
+  catch bugs that unit tests miss but before users see them. End-to-end tests
+  catch the subset of integration failures that only manifest in a real browser
+  against a real stack. Each layer has a job.
+
+
+  Test coverage sits in the delivery and operations phase because its primary
+  value is in enabling safe, fast delivery. A good test suite is what allows you
+  to deploy multiple times a day with confidence, to run automated checks in
+  your CI pipeline before code reaches production, and to onboard engineers
+  quickly because the tests serve as executable documentation of how the system
+  is supposed to behave. It connects directly to your CI/CD pipeline — tests
+  should run on every pull request and block merges when they fail. The coverage
+  metric (the percentage of lines executed during test runs) is a useful proxy
+  but not the goal; the goal is the business logic and user-facing behavior
+  being verified. A line that's covered by a test that can't actually fail has
+  zero value.
 pitfalls:
   - title: (pitfall 1 pending)
     explanation: Pending — at least 40 characters explaining why this is a common mistake.
