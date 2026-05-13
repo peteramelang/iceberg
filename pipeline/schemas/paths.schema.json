@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://iceberg.local/schemas/paths.json",
+  "title": "Iceberg Learning Paths",
+  "type": "object",
+  "required": ["version", "paths"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "const": 1 },
+    "paths": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["slug", "title", "description", "audience", "estimatedHours", "topics"],
+        "additionalProperties": false,
+        "properties": {
+          "slug": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 40 },
+          "audience": { "type": "string", "minLength": 1 },
+          "estimatedHours": { "type": "number", "minimum": 1 },
+          "topics": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 15,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

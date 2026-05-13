@@ -20,7 +20,8 @@ const validators = {
   taxonomy: ajv.compile(loadSchema("taxonomy")),
   topicFrontmatter: ajv.compile(loadSchema("topic-frontmatter")),
   connections: ajv.compile(loadSchema("connections")),
-  exportPayload: ajv.compile(loadSchema("export-payload"))
+  exportPayload: ajv.compile(loadSchema("export-payload")),
+  paths: ajv.compile(loadSchema("paths"))
 };
 
 export class ValidationError extends Error {
@@ -42,3 +43,4 @@ export function validateTaxonomy(data: unknown): void { check("taxonomy", data);
 export function validateTopicFrontmatter(data: unknown): void { check("topicFrontmatter", data); }
 export function validateConnections(data: unknown): void { check("connections", data); }
 export function validateExportPayload(data: unknown): void { check("exportPayload", data); }
+export function validatePaths(data: unknown): void { check("paths", data); }
