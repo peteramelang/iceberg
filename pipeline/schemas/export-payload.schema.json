@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://iceberg.local/schemas/export-payload.json",
+  "title": "Iceberg Progress Export Payload",
+  "type": "object",
+  "required": ["format", "version", "exportedAt", "data"],
+  "additionalProperties": false,
+  "properties": {
+    "format": { "const": "iceberg-progress" },
+    "version": { "const": 1 },
+    "exportedAt": { "type": "string", "format": "date-time" },
+    "data": {
+      "type": "object",
+      "required": ["progress", "bookmarks", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "progress": { "type": "object" },
+        "bookmarks": { "type": "array" },
+        "notes": { "type": "object" }
+      }
+    }
+  }
+}

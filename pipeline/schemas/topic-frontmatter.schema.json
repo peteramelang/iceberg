@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://iceberg.local/schemas/topic-frontmatter.json",
+  "title": "Iceberg Topic Frontmatter",
+  "type": "object",
+  "required": ["slug", "title", "phase", "order", "summary", "definition", "resources", "provenance", "needsManualPick"],
+  "additionalProperties": false,
+  "properties": {
+    "slug": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "title": { "type": "string", "minLength": 1 },
+    "phase": { "type": "string" },
+    "order": { "type": "integer", "minimum": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "definition": { "type": "string", "minLength": 1 },
+    "needsManualPick": { "type": "boolean" },
+    "resources": {
+      "type": "object",
+      "required": ["videos", "articles", "services", "courses"],
+      "additionalProperties": false,
+      "properties": {
+        "videos": {
+          "type": "object",
+          "required": ["short", "long"],
+          "additionalProperties": false,
+          "properties": {
+            "short": { "$ref": "#/definitions/VideoResource" },
+            "long":  { "$ref": "#/definitions/VideoResource" }
+          }
+        },
+        "articles": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["url", "title", "kind", "reasoning"],
+            "additionalProperties": false,
+            "properties": {
+              "url": { "type": "string", "format": "uri" },
+              "title": { "type": "string" },
+              "kind": { "enum": ["canonical-doc", "engineering-blog", "tutorial"] },
+              "reasoning": { "type": "string" }
+            }
+          }
+        },
+        "services": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "required": ["name", "url", "category", "reasoning"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "category": { "type": "string" },
+              "reasoning": { "type": "string" }
+            }
+          }
+        },
+        "courses": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["url", "title", "provider", "paid", "reasoning"],
+            "additionalProperties": false,
+            "properties": {
+              "url": { "type": "string", "format": "uri" },
+              "title": { "type": "string" },
+              "provider": { "type": "string" },
+              "paid": { "type": "boolean" },
+              "reasoning": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["researchedAt", "pipelineVersion", "rounds", "stabilized"],
+      "additionalProperties": false,
+      "properties": {
+        "researchedAt": { "type": "string", "format": "date-time" },
+        "pipelineVersion": { "type": "integer", "minimum": 1 },
+        "rounds": { "type": "integer", "minimum": 1 },
+        "stabilized": { "type": "boolean" }
+      }
+    }
+  },
+  "definitions": {
+    "VideoResource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["url", "title", "author", "durationMinutes", "addedAt", "reasoning"],
+          "additionalProperties": false,
+          "properties": {
+            "url": { "type": "string", "format": "uri" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "durationMinutes": { "type": "integer", "minimum": 1 },
+            "addedAt": { "type": "string", "format": "date-time" },
+            "reasoning": { "type": "string" }
+          }
+        },
+        { "type": "null" }
+      ]
+    }
+  }
+}

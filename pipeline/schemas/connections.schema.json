@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://iceberg.local/schemas/connections.json",
+  "title": "Iceberg Connections",
+  "type": "object",
+  "required": ["version", "edges"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "const": 1 },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "type", "weight", "reasoning"],
+        "additionalProperties": false,
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "type": { "enum": ["prerequisite", "related", "often-confused-with", "pairs-with"] },
+          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+          "reasoning": { "type": "string" }
+        }
+      }
+    }
+  }
+}

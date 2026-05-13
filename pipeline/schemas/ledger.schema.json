@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://iceberg.local/schemas/ledger.json",
+  "title": "Iceberg Pipeline Ledger",
+  "type": "object",
+  "required": ["version", "createdAt", "updatedAt", "currentRound", "mode", "stages", "topics", "connections"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "const": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "currentRound": { "type": "integer", "minimum": 1 },
+    "mode": { "enum": ["full", "smoke"] },
+    "stages": {
+      "type": "object",
+      "required": ["stage_0_taxonomy"],
+      "properties": {
+        "stage_0_taxonomy": { "$ref": "#/definitions/StageEntry" }
+      },
+      "additionalProperties": { "$ref": "#/definitions/StageEntry" }
+    },
+    "topics": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/TopicEntry" }
+    },
+    "connections": {
+      "type": "object",
+      "required": ["status", "artifactPath"],
+      "properties": {
+        "status": { "enum": ["pending", "in_progress", "completed", "failed"] },
+        "artifactPath": { "type": "string" }
+      }
+    }
+  },
+  "definitions": {
+    "StageEntry": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pending", "in_progress", "completed", "failed"] },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "userApprovedAt": { "type": "string", "format": "date-time" },
+        "artifactPath": { "type": "string" },
+        "agentRunIds": { "type": "array", "items": { "type": "string" } },
+        "failureReason": { "type": "string" }
+      }
+    },
+    "TopicEntry": {
+      "type": "object",
+      "required": ["phase", "stages"],
+      "properties": {
+        "phase": { "type": "string" },
+        "stages": {
+          "type": "object",
+          "required": ["research", "consistency", "adversarial", "liveness", "stabilized"],
+          "properties": {
+            "research": { "$ref": "#/definitions/TopicStageEntry" },
+            "consistency": { "$ref": "#/definitions/TopicStageEntry" },
+            "adversarial": { "$ref": "#/definitions/TopicStageEntry" },
+            "liveness": { "$ref": "#/definitions/TopicStageEntry" },
+            "stabilized": { "type": "boolean" }
+          }
+        },
+        "lastSwapAt": { "type": ["string", "null"], "format": "date-time" },
+        "retryCounts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "TopicStageEntry": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pending", "in_progress", "completed", "failed"] },
+        "round": { "type": "integer", "minimum": 1 },
+        "agentRunIds": { "type": "array", "items": { "type": "string" } },
+        "artifactPath": { "type": "string" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "failureReason": { "type": "string" }
+      }
+    }
+  }
+}
