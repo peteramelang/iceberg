@@ -232,9 +232,80 @@ pitfalls:
       changes.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Short-lived JWT with refresh token rotation
+    code: |-
+      import jwt from 'jsonwebtoken';
+      import { randomBytes } from 'crypto';
+
+      const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!;
+      const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
+
+      function issueAccessToken(userId: string): string {
+        return jwt.sign({ sub: userId }, ACCESS_SECRET, { expiresIn: '15m' });
+      }
+
+      function issueRefreshToken(): string {
+        // Opaque token stored server-side; not a JWT
+        return randomBytes(40).toString('hex');
+      }
+
+      async function refresh(
+        incomingRefreshToken: string,
+        db: { getRefreshToken: (t: string) => Promise<{ userId: string; revoked: boolean } | null>;
+              revokeRefreshToken: (t: string) => Promise<void>;
+              saveRefreshToken: (t: string, userId: string) => Promise<void>; }
+      ) {
+        const stored = await db.getRefreshToken(incomingRefreshToken);
+        if (!stored || stored.revoked) throw new Error('Invalid refresh token');
+
+        // Rotation: revoke old token and issue a new pair
+        await db.revokeRefreshToken(incomingRefreshToken);
+        const newRefresh = issueRefreshToken();
+        await db.saveRefreshToken(newRefresh, stored.userId);
+
+        return {
+          accessToken: issueAccessToken(stored.userId),
+          refreshToken: newRefresh,
+        };
+      }
+    reasoning: >-
+      Short-lived access tokens (15 min) limit the blast radius of a leaked
+      token, while opaque refresh tokens with server-side rotation allow
+      immediate invalidation — solving the core stateless-JWT revocation
+      problem.
+  - language: typescript
+    title: Constant-time password comparison to avoid timing attacks
+    code: >-
+      import { hash, verify } from 'argon2';
+
+      import { timingSafeEqual, createHash } from 'crypto';
+
+
+      async function hashPassword(plaintext: string): Promise<string> {
+        return hash(plaintext, { memoryCost: 65536, timeCost: 3, parallelism: 1 });
+      }
+
+
+      async function verifyPassword(stored: string, candidate: string):
+      Promise<boolean> {
+        // argon2.verify already uses constant-time comparison internally
+        return verify(stored, candidate);
+      }
+
+
+      // For API key comparison (not argon2), use timingSafeEqual directly:
+
+      function safeCompareApiKey(storedKey: string, candidateKey: string):
+      boolean {
+        // Normalize lengths first to avoid early exit on length mismatch
+        const a = createHash('sha256').update(storedKey).digest();
+        const b = createHash('sha256').update(candidateKey).digest();
+        return timingSafeEqual(a, b);
+      }
+    reasoning: >-
+      Using Argon2 for passwords (vs. bcrypt/md5) and timingSafeEqual for token
+      comparison eliminates the two most common cryptographic implementation
+      mistakes — weak hashing and timing side-channels.
 difficulty: intermediate
 estimatedHours: 6
 ---

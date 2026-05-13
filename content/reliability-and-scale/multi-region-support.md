@@ -226,9 +226,78 @@ pitfalls:
       corruption that is discovered long after the fact.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Route Reads to Nearest Region
+    code: |-
+      type Region = 'us-east-1' | 'eu-west-1' | 'ap-southeast-1';
+
+      interface DbPool {
+        query<T>(sql: string, params?: unknown[]): Promise<T[]>;
+      }
+
+      const readReplicas: Record<Region, DbPool> = {
+        'us-east-1': createPool(process.env.DB_US!),
+        'eu-west-1': createPool(process.env.DB_EU!),
+        'ap-southeast-1': createPool(process.env.DB_AP!),
+      };
+
+      const primaryWriter = createPool(process.env.DB_PRIMARY!);
+
+      function getReaderForRegion(region: Region): DbPool {
+        return readReplicas[region] ?? readReplicas['us-east-1'];
+      }
+
+      // In your request handler:
+      async function getUser(userId: string, region: Region) {
+        // Reads go to the nearest replica — low latency
+        const reader = getReaderForRegion(region);
+        return reader.query('SELECT * FROM users WHERE id = $1', [userId]);
+      }
+
+      async function updateUser(userId: string, data: object) {
+        // Writes always go to primary — strong consistency
+        return primaryWriter.query(
+          'UPDATE users SET data = $1 WHERE id = $2',
+          [JSON.stringify(data), userId]
+        );
+      }
+    reasoning: >-
+      The single highest-leverage multi-region pattern is routing reads to
+      regional replicas while sending writes to a single primary — this snippet
+      makes the separation explicit and concrete so learners can replicate it
+      immediately.
+  - language: yaml
+    title: Fly.io Multi-Region App Config
+    code: |-
+      # fly.toml — deploy to three regions with primary write region
+      app = 'my-app'
+      primary_region = 'iad'
+
+      [build]
+        image = 'registry.fly.io/my-app:latest'
+
+      [[services]]
+        internal_port = 3000
+        protocol = 'tcp'
+
+        [[services.ports]]
+          port = 443
+          handlers = ['tls', 'http']
+
+        [services.concurrency]
+          type = 'requests'
+          hard_limit = 250
+          soft_limit = 200
+
+      [env]
+        FLY_PRIMARY_REGION = 'iad'
+
+      # Replicate to EU and Asia-Pacific
+      # fly scale count 2 --region lhr
+      # fly scale count 2 --region nrt
+    reasoning: >-
+      A real fly.toml shows learners the minimal config needed to go
+      multi-region on a modern platform, grounding the abstract concept in an
+      actual deployment artifact they can copy.
 difficulty: advanced
 estimatedHours: 18
 ---

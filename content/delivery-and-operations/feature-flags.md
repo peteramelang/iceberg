@@ -210,9 +210,121 @@ pitfalls:
       design accordingly.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Feature Flag Evaluation with Progressive Rollout
+    code: >-
+      import crypto from 'crypto';
+
+
+      interface FlagConfig {
+        enabled: boolean;
+        rolloutPercent: number;        // 0-100
+        allowlist?: string[];          // user IDs always on
+        denylist?: string[];           // user IDs always off
+      }
+
+
+      // In production, load from a remote config store; here we use a local
+      map.
+
+      const flags: Record<string, FlagConfig> = {
+        'new-checkout-flow': { enabled: true, rolloutPercent: 10, allowlist: ['internal-user-1'] },
+        'recommendation-engine': { enabled: false, rolloutPercent: 0 },
+      };
+
+
+      function isEnabled(flagKey: string, userId: string): boolean {
+        const flag = flags[flagKey];
+        if (!flag || !flag.enabled) return false;
+        if (flag.denylist?.includes(userId)) return false;
+        if (flag.allowlist?.includes(userId)) return true;
+
+        // Deterministic, sticky hash: same user always gets same bucket
+        const hash = crypto.createHash('sha256').update(`${flagKey}:${userId}`).digest('hex');
+        const bucket = parseInt(hash.slice(0, 8), 16) % 100;
+        return bucket < flag.rolloutPercent;
+      }
+
+
+      // Usage at a service boundary (not scattered throughout business logic)
+
+      async function getCheckoutHandler(userId: string) {
+        if (isEnabled('new-checkout-flow', userId)) {
+          return newCheckout(userId);
+        }
+        return legacyCheckout(userId);
+      }
+
+
+      async function newCheckout(userId: string) { return { flow: 'new', userId
+      }; }
+
+      async function legacyCheckout(userId: string) { return { flow: 'legacy',
+      userId }; }
+    reasoning: >-
+      A sticky hash-based rollout ensures the same user always sees the same
+      experience (preventing flickering) and allows gradual percentage increases
+      — this is the core mechanism behind safe progressive rollouts without a
+      full flag platform.
+  - language: typescript
+    title: Ops Kill-Switch Flag for Graceful Degradation
+    code: >-
+      // ops-flags.ts — operational toggles for graceful degradation under load
+
+
+      interface OpsFlag {
+        key: string;
+        enabled: boolean;
+        fallback: () => unknown;
+      }
+
+
+      const opsFlags: Record<string, OpsFlag> = {
+        'enable-recommendations': {
+          key: 'enable-recommendations',
+          enabled: true,
+          fallback: () => [],   // return empty list when disabled
+        },
+        'enable-search-suggest': {
+          key: 'enable-search-suggest',
+          enabled: true,
+          fallback: () => null,
+        },
+      };
+
+
+      async function withOpsFlag<T>(
+        flagKey: string,
+        fn: () => Promise<T>
+      ): Promise<T | ReturnType<OpsFlag['fallback']>> {
+        const flag = opsFlags[flagKey];
+        if (!flag || !flag.enabled) {
+          console.warn({ flagKey }, 'Ops flag disabled — returning fallback');
+          return flag?.fallback() as T;
+        }
+        return fn();
+      }
+
+
+      // In request handler:
+
+      async function getProductPage(productId: string) {
+        const [product, recommendations] = await Promise.all([
+          fetchProduct(productId),
+          withOpsFlag('enable-recommendations', () => fetchRecommendations(productId)),
+        ]);
+        return { product, recommendations };
+      }
+
+
+      async function fetchProduct(id: string) { return { id, name: 'Widget' }; }
+
+      async function fetchRecommendations(id: string) { return [{ id: 'rec-1'
+      }]; }
+    reasoning: >-
+      Ops-toggle flags that return safe fallbacks when disabled are the
+      mechanism for turning off non-critical features during high load or
+      incidents in seconds — a deploy-free kill-switch that contains blast
+      radius without a rollback.
 difficulty: intermediate
 estimatedHours: 5
 ---

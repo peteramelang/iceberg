@@ -225,10 +225,80 @@ pitfalls:
       and fire regardless of how data enters the system, preventing invalid
       states from persisting.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: sql
+    title: Schema constraints enforcing domain invariants
+    code: |-
+      CREATE TABLE users (
+        id         BIGSERIAL PRIMARY KEY,
+        email      TEXT        NOT NULL UNIQUE,
+        status     TEXT        NOT NULL DEFAULT 'active'
+                     CHECK (status IN ('active', 'suspended', 'deleted')),
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+
+      CREATE TABLE orders (
+        id          BIGSERIAL PRIMARY KEY,
+        user_id     BIGINT      NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+        total_cents INTEGER     NOT NULL CHECK (total_cents > 0),
+        currency    CHAR(3)     NOT NULL CHECK (currency = UPPER(currency)),
+        placed_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+
+      -- Partial unique index: one active subscription per user
+      CREATE UNIQUE INDEX one_active_sub_per_user
+        ON subscriptions (user_id)
+        WHERE cancelled_at IS NULL;
+    reasoning: >-
+      Showing NOT NULL, UNIQUE, CHECK, FOREIGN KEY with ON DELETE RESTRICT, and
+      a partial unique index together demonstrates how database constraints form
+      a layered defense that application code alone cannot replicate.
+  - language: sql
+    title: Serializable transaction preventing double-spend
+    code: >-
+      -- Wallet debit that cannot race: read balance, check, debit — all atomic
+
+      BEGIN ISOLATION LEVEL SERIALIZABLE;
+
+
+      -- Lock the wallet row for the duration of the transaction
+
+      SELECT balance_cents
+
+      FROM wallets
+
+      WHERE user_id = $1
+
+      FOR UPDATE;
+
+
+      -- Application checks balance here; if insufficient, ROLLBACK
+
+      -- Otherwise proceed:
+
+
+      INSERT INTO ledger_entries (user_id, amount_cents, description,
+      created_at)
+
+      VALUES ($1, -$2, $3, NOW());
+
+
+      UPDATE wallets
+
+      SET balance_cents = balance_cents - $2
+
+      WHERE user_id = $1
+        AND balance_cents >= $2;  -- double-guard in case of concurrent update
+
+      -- Verify exactly one row was updated
+
+      -- If 0 rows: balance changed concurrently, ROLLBACK
+
+
+      COMMIT;
+    reasoning: >-
+      A wallet debit using SELECT FOR UPDATE inside a SERIALIZABLE transaction
+      concretely shows why isolation level choice matters for financial
+      operations where READ COMMITTED would allow a double-spend race.
 difficulty: intermediate
 estimatedHours: 5
 ---

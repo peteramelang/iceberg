@@ -288,10 +288,90 @@ pitfalls:
       aggregate is a governance system with no teeth. Track exceptions with
       explicit expiry dates and automate their cleanup.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: python
+    title: OPA Policy Check in Deployment Pipeline
+    code: |-
+      import subprocess
+      import json
+      import sys
+
+      def check_policy(input_data: dict, policy_path: str) -> bool:
+          """Run an OPA policy check and return True if allowed."""
+          result = subprocess.run(
+              ["opa", "eval", "--input", "-", "--data", policy_path, "data.policy.allow"],
+              input=json.dumps(input_data),
+              capture_output=True,
+              text=True,
+          )
+          if result.returncode != 0:
+              print(f"OPA error: {result.stderr}", file=sys.stderr)
+              return False
+          output = json.loads(result.stdout)
+          return output.get("result", [{}])[0].get("expressions", [{}])[0].get("value", False)
+
+      def deploy(service: str, environment: str, requester: str) -> None:
+          input_data = {
+              "service": service,
+              "environment": environment,
+              "requester": requester,
+          }
+          if not check_policy(input_data, "policies/deploy.rego"):
+              print(f"Policy denied deployment of '{service}' to '{environment}' by '{requester}'")
+              sys.exit(1)
+          print(f"Policy approved. Deploying {service} to {environment}...")
+
+      deploy("payments-api", "production", "alice@example.com")
+    reasoning: >-
+      Shows how to integrate an OPA policy check as a hard gate in a deployment
+      pipeline, making governance a machine-enforced step rather than a manual
+      review.
+  - language: yaml
+    title: 'AWS Config Rule: No Public S3 Buckets'
+    code: >-
+      # AWS Config managed rule that flags any S3 bucket with public access
+      enabled.
+
+      # Deploy via CloudFormation or Terraform; Config evaluates on every bucket
+      change.
+
+      AWSTemplateFormatVersion: "2010-09-09"
+
+      Resources:
+        NoPublicS3BucketsRule:
+          Type: AWS::Config::ConfigRule
+          Properties:
+            ConfigRuleName: s3-bucket-public-read-prohibited
+            Source:
+              Owner: AWS
+              SourceIdentifier: S3_BUCKET_PUBLIC_READ_PROHIBITED
+            # Trigger on configuration changes to S3 buckets
+            Scope:
+              ComplianceResourceTypes:
+                - AWS::S3::Bucket
+
+        AutoRemediationRole:
+          Type: AWS::IAM::Role
+          Properties:
+            RoleName: ConfigRemediationRole
+            AssumeRolePolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Principal:
+                    Service: ssm.amazonaws.com
+                  Action: sts:AssumeRole
+            Policies:
+              - PolicyName: S3BlockPublicAccess
+                PolicyDocument:
+                  Version: "2012-10-17"
+                  Statement:
+                    - Effect: Allow
+                      Action: s3:PutBucketPublicAccessBlock
+                      Resource: "*"
+    reasoning: >-
+      Demonstrates declarative, continuously-enforced governance using AWS
+      Config — the policy is always active and automatically flags drift rather
+      than relying on a one-time human review.
 difficulty: intermediate
 estimatedHours: 5
 ---

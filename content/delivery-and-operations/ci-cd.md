@@ -226,10 +226,56 @@ pitfalls:
       top of an unreliable test suite means faster delivery of undetected bugs,
       not safer deployments.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: yaml
+    title: GitHub Actions CI pipeline with test gate
+    code: |-
+      name: CI
+
+      on:
+        pull_request:
+          branches: [main]
+        push:
+          branches: [main]
+
+      jobs:
+        test:
+          runs-on: ubuntu-latest
+          steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                node-version: '20'
+                cache: 'npm'
+
+            - run: npm ci
+
+            - run: npm run lint
+
+            - run: npm test -- --ci --coverage
+
+            - name: Upload coverage
+              uses: actions/upload-artifact@v4
+              with:
+                name: coverage
+                path: coverage/
+
+        deploy:
+          needs: test
+          if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+          runs-on: ubuntu-latest
+          environment: production
+          steps:
+            - uses: actions/checkout@v4
+            - run: npm ci
+            - run: npm run build
+            - run: ./scripts/deploy.sh
+              env:
+                DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+    reasoning: >-
+      A minimal but complete GitHub Actions workflow shows the two-job pattern —
+      test gate on every PR, deploy only on main — which is the 80/20 of CI/CD
+      for most teams.
 difficulty: intermediate
 estimatedHours: 6
 ---

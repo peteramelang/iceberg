@@ -173,10 +173,75 @@ pitfalls:
       most qualified person to document it and will never be more available to
       do so than right now.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: bash
+    title: Pre-commit hook enforcing doc updates
+    code: |-
+      #!/usr/bin/env bash
+      # .git/hooks/pre-commit
+      # Block commits that touch src/ without also touching docs/
+
+      set -euo pipefail
+
+      CHANGED_SRC=$(git diff --cached --name-only | grep -E '^src/' || true)
+      CHANGED_DOCS=$(git diff --cached --name-only | grep -E '^docs/' || true)
+
+      if [[ -n "$CHANGED_SRC" && -z "$CHANGED_DOCS" ]]; then
+        echo "ERROR: You modified files under src/ but did not update docs/" >&2
+        echo "Changed src files:" >&2
+        echo "$CHANGED_SRC" | sed 's/^/  /' >&2
+        echo "" >&2
+        echo "Update or add a doc in docs/ before committing, or bypass with:" >&2
+        echo "  SKIP_DOC_CHECK=1 git commit" >&2
+        [[ "${SKIP_DOC_CHECK:-}" == "1" ]] && exit 0
+        exit 1
+      fi
+
+      exit 0
+    reasoning: >-
+      A pre-commit hook that fails fast when src/ changes are not accompanied by
+      docs/ changes encodes the 'docs as part of definition of done' principle
+      directly into the workflow, making staleness a build-time error rather
+      than a process aspiration.
+  - language: yaml
+    title: MkDocs config with enforced doc structure
+    code: |-
+      # mkdocs.yml — single source of truth for all team docs
+      site_name: Iceberg Engineering Docs
+      site_url: https://docs.iceberg.internal
+      docs_dir: docs
+      strict: true
+
+      theme:
+        name: material
+        features:
+          - navigation.sections
+          - search.highlight
+
+      nav:
+        - Home: index.md
+        - Runbooks:
+          - Auth Service: runbooks/auth-service.md
+          - Database Failover: runbooks/db-failover.md
+        - ADRs:
+          - "ADR-001: Event bus choice": adrs/001-event-bus.md
+          - "ADR-002: Auth strategy": adrs/002-auth-strategy.md
+        - Onboarding: onboarding/getting-started.md
+        - API Reference: api/reference.md
+
+      plugins:
+        - search
+        - git-revision-date-localized:
+            enable_creation_date: true
+        - broken-links
+
+      markdown_extensions:
+        - admonition
+        - pymdownx.highlight
+    reasoning: >-
+      An explicit nav structure in the site config forces every doc category
+      (runbooks, ADRs, onboarding, API reference) to be a first-class citizen
+      with a known location, directly solving the orphaned-documentation problem
+      where docs are scattered across multiple wikis and drives.
 difficulty: beginner
 estimatedHours: 2
 ---

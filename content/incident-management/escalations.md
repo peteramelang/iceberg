@@ -170,10 +170,65 @@ pitfalls:
       contacts are current, and that the on-call rotation reflects who is
       actually available.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: yaml
+    title: Severity Levels and Escalation Paths Runbook
+    code: |-
+      # runbooks/escalation-policy.yaml
+      ---
+      description: >
+        Escalation policy for production incidents. Read this before you need it.
+        When in doubt, escalate earlier. The cost of an unnecessary page is
+        lower than the cost of a delayed escalation.
+
+      severity_levels:
+        sev1:
+          definition: Full service outage or data loss affecting all users
+          examples:
+            - Payments API returning 5xx for all requests
+            - Production database unreachable
+            - Data corruption confirmed
+          response_time: 15 minutes
+          immediate_actions:
+            - Page on-call engineer (PagerDuty: "sev1-oncall")
+            - Open incident channel: #inc-YYYYMMDD-<service>
+            - Assign incident commander from on-call rotation
+            - Post initial status page update within 10 minutes
+          stakeholder_notify_after: 15 minutes (exec, customer-success, support)
+          update_cadence: every 15 minutes until resolved
+
+        sev2:
+          definition: Partial outage or degraded performance affecting subset of users
+          examples:
+            - Checkout failing for 10% of users
+            - Search returning stale results (>5 min lag)
+          response_time: 30 minutes
+          immediate_actions:
+            - Page on-call engineer
+            - Open thread in #incidents
+          stakeholder_notify_after: 30 minutes if not resolved
+          update_cadence: every 30 minutes
+
+        sev3:
+          definition: Minor degradation, workaround available, no data loss
+          examples:
+            - Slow background job (email delivery delayed ~30 min)
+            - Non-critical dashboard widget broken
+          response_time: next business day
+          immediate_actions:
+            - File a ticket in Linear, label sev3
+            - No after-hours page required
+
+      escalation_contacts:
+        oncall: PagerDuty rotation "engineering-oncall"
+        dba_lead: dba-lead@example.com / PagerDuty "dba-oncall"
+        security: security@example.com (for data breach or unauthorized access)
+        exec: cto@example.com (Sev-1 only, after 15 min)
+        customer_success: cs-lead@example.com (Sev-1 or Sev-2 customer-visible)
+    reasoning: >-
+      A concrete severity matrix with response times, escalation contacts, and
+      update cadences eliminates decision-making overhead during incidents —
+      when everything is defined in advance, engineers focus on fixing rather
+      than coordinating.
 difficulty: beginner
 estimatedHours: 2
 ---

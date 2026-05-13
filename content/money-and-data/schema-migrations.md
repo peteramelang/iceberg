@@ -257,10 +257,77 @@ pitfalls:
       engineers, and keep old indexes alive. The contract step should be treated
       as a required deployment, not an optional cleanup.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: sql
+    title: Safe Backfill in Batches Without Locking
+    code: >-
+      -- Backfill a new NOT NULL column in batches to avoid long-running
+      transactions.
+
+      -- Run repeatedly until rows_updated = 0.
+
+
+      DO $$
+
+      DECLARE
+        rows_updated INT;
+      BEGIN
+        LOOP
+          UPDATE users
+          SET display_name = COALESCE(full_name, email)
+          WHERE display_name IS NULL
+            AND id IN (
+              SELECT id FROM users
+              WHERE display_name IS NULL
+              ORDER BY id
+              LIMIT 1000
+              FOR UPDATE SKIP LOCKED
+            );
+
+          GET DIAGNOSTICS rows_updated = ROW_COUNT;
+          EXIT WHEN rows_updated = 0;
+
+          -- Yield to other transactions between batches
+          PERFORM pg_sleep(0.05);
+        END LOOP;
+      END $$;
+
+
+      -- Once backfill complete, add the constraint without a full table scan:
+
+      ALTER TABLE users ALTER COLUMN display_name SET NOT NULL;
+    reasoning: >-
+      Batched backfill with FOR UPDATE SKIP LOCKED and pg_sleep is the
+      production-safe pattern for large table migrations — learners need to see
+      the exact SQL to avoid the single-UPDATE mistake.
+  - language: bash
+    title: Flyway Migration File Naming Convention
+    code: |-
+      #!/usr/bin/env bash
+      # Create a new Flyway-style versioned migration file.
+      # Output: db/migrations/V20240515_142301__add_display_name_to_users.sql
+      set -euo pipefail
+
+      DESCRIPTION=${1:?"Usage: $0 <description_with_underscores>"}
+      DIR="db/migrations"
+      TIMESTAMP=$(date -u '+%Y%m%d_%H%M%S')
+      FILENAME="${DIR}/V${TIMESTAMP}__${DESCRIPTION}.sql"
+
+      mkdir -p "$DIR"
+      cat > "$FILENAME" <<SQL
+      -- Migration: ${DESCRIPTION//_/ }
+      -- Author: $(git config user.name)
+      -- Date: $(date -u '+%Y-%m-%d')
+
+      -- Write your SQL here.
+      -- Remember: add columns as nullable first (expand phase).
+      SQL
+
+      echo "Created: $FILENAME"
+      $EDITOR "$FILENAME"
+    reasoning: >-
+      A script that enforces versioned migration file naming makes the 'one
+      migration per logical change' convention automatic, showing learners the
+      discipline before they accumulate ad-hoc SQL files.
 difficulty: intermediate
 estimatedHours: 6
 ---

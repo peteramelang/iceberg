@@ -237,9 +237,111 @@ pitfalls:
       behavior controlled entirely by its environment.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Environment Config with Validation at Startup
+    code: >-
+      // config.ts — fail fast if env is misconfigured
+
+      function requireEnv(name: string): string {
+        const value = process.env[name];
+        if (!value) throw new Error(`Missing required environment variable: ${name}`);
+        return value;
+      }
+
+
+      function optionalEnv(name: string, fallback: string): string {
+        return process.env[name] ?? fallback;
+      }
+
+
+      const ENV = requireEnv('APP_ENV'); // 'development' | 'staging' |
+      'production'
+
+
+      if (!['development', 'staging', 'production'].includes(ENV)) {
+        throw new Error(`APP_ENV must be development|staging|production, got: ${ENV}`);
+      }
+
+
+      export const config = {
+        env: ENV as 'development' | 'staging' | 'production',
+        isProduction: ENV === 'production',
+        databaseUrl: requireEnv('DATABASE_URL'),
+        stripeSecretKey: requireEnv('STRIPE_SECRET_KEY'),
+        logLevel: optionalEnv('LOG_LEVEL', ENV === 'production' ? 'warn' : 'debug'),
+        stripeWebhookSecret: requireEnv('STRIPE_WEBHOOK_SECRET'),
+        port: parseInt(optionalEnv('PORT', '3000'), 10),
+      } as const;
+
+
+      // Usage: import { config } from './config';
+
+      // config.databaseUrl — always a string, never undefined
+    reasoning: >-
+      Validating all required environment variables at startup — rather than
+      lazily at first use — turns silent misconfigurations into immediate,
+      readable errors that catch environment drift before it causes mysterious
+      production failures.
+  - language: yaml
+    title: GitHub Actions Preview Environment on Pull Request
+    code: |-
+      # .github/workflows/preview.yml
+      name: Preview Environment
+
+      on:
+        pull_request:
+          types: [opened, synchronize, reopened, closed]
+
+      jobs:
+        deploy-preview:
+          if: github.event.action != 'closed'
+          runs-on: ubuntu-latest
+          environment: preview
+          steps:
+            - uses: actions/checkout@v4
+
+            - name: Deploy preview
+              id: deploy
+              env:
+                APP_ENV: staging
+                DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
+                STRIPE_SECRET_KEY: ${{ secrets.STRIPE_TEST_KEY }}
+                STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_TEST_WEBHOOK_SECRET }}
+              run: |
+                IMAGE_TAG="pr-${{ github.event.pull_request.number }}"
+                docker build -t myapp:$IMAGE_TAG .
+                # Deploy to ephemeral namespace, e.g. with Helm:
+                helm upgrade --install "preview-${IMAGE_TAG}" ./chart \
+                  --namespace "preview-${IMAGE_TAG}" \
+                  --create-namespace \
+                  --set image.tag="${IMAGE_TAG}" \
+                  --set env.APP_ENV=staging
+                echo "url=https://pr-${{ github.event.pull_request.number }}.preview.example.com" >> $GITHUB_OUTPUT
+
+            - name: Comment preview URL on PR
+              uses: actions/github-script@v7
+              with:
+                script: |
+                  github.rest.issues.createComment({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: `Preview deployed: ${{ steps.deploy.outputs.url }}`
+                  });
+
+        teardown-preview:
+          if: github.event.action == 'closed'
+          runs-on: ubuntu-latest
+          steps:
+            - name: Destroy preview namespace
+              run: |
+                helm uninstall "preview-pr-${{ github.event.pull_request.number }}" \
+                  --namespace "preview-pr-${{ github.event.pull_request.number }}"
+                kubectl delete namespace "preview-pr-${{ github.event.pull_request.number }}"
+    reasoning: >-
+      Ephemeral preview environments per pull request eliminate the 'staging is
+      occupied' problem and ensure each feature is validated against a real
+      deployment before merging, not against a shared environment carrying
+      another team's in-progress changes.
 difficulty: intermediate
 estimatedHours: 4
 ---

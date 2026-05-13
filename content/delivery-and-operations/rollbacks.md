@@ -242,10 +242,59 @@ pitfalls:
       rollback in staging or production during a low-risk window—reveal gaps in
       documentation, permissions, and tooling before they matter.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: bash
+    title: Kubernetes Image Rollback by Git SHA
+    code: |-
+      #!/usr/bin/env bash
+      # Roll back a Kubernetes deployment to a specific git SHA.
+      # Usage: ./rollback.sh api a3f1b2c
+      set -euo pipefail
+
+      DEPLOYMENT=${1:?"Usage: $0 <deployment> <git-sha>"}
+      SHA=${2:?"Usage: $0 <deployment> <git-sha>"}
+      IMAGE="registry.example.com/app:${SHA}"
+
+      echo "Rolling back ${DEPLOYMENT} to ${IMAGE}..."
+
+      kubectl set image "deployment/${DEPLOYMENT}" \
+        "app=${IMAGE}" \
+        --record
+
+      kubectl rollout status "deployment/${DEPLOYMENT}" --timeout=120s
+
+      if [ $? -eq 0 ]; then
+        echo "Rollback complete. Current image: ${IMAGE}"
+      else
+        echo "ERROR: rollout did not complete. Check kubectl describe deployment/${DEPLOYMENT}"
+        exit 1
+      fi
+    reasoning: >-
+      Tagging images by git SHA and rolling back by SHA makes rollbacks
+      deterministic and auditable — this script is the ops-primitive every team
+      should have before they need it.
+  - language: sql
+    title: Expand-Contract Column Rename Migration
+    code: |-
+      -- PHASE 1: Expand — add new column, keep old one
+      -- Safe to deploy with either version of the application code.
+      ALTER TABLE orders ADD COLUMN total_cents INTEGER;
+
+      UPDATE orders
+      SET total_cents = total_amount_cents
+      WHERE total_cents IS NULL
+        AND id BETWEEN 0 AND 100000; -- batch; repeat until done
+
+      -- PHASE 2: After all app instances use total_cents,
+      --           drop the old column (separate deployment / migration).
+      -- ALTER TABLE orders DROP COLUMN total_amount_cents;
+
+      -- Index creation is non-blocking with CONCURRENTLY:
+      CREATE INDEX CONCURRENTLY idx_orders_total_cents ON orders (total_cents);
+    reasoning: >-
+      The expand-contract pattern is the single most important schema migration
+      concept — showing both the safe backfill batching and the CONCURRENTLY
+      index in one snippet gives learners everything they need to avoid table
+      locks.
 difficulty: intermediate
 estimatedHours: 6
 ---

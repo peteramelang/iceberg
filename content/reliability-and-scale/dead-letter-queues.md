@@ -250,10 +250,90 @@ pitfalls:
       DLQ. Without this, each dead-lettered message requires a separate
       debugging session to understand.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: python
+    title: SQS consumer with DLQ alarm and redrive
+    code: |-
+      import boto3
+      import json
+      import logging
+
+      logger = logging.getLogger(__name__)
+      sqs = boto3.client('sqs', region_name='us-east-1')
+
+      SOURCE_URL = 'https://sqs.us-east-1.amazonaws.com/123456789/orders'
+      DLQ_URL   = 'https://sqs.us-east-1.amazonaws.com/123456789/orders-dlq'
+
+      def process_message(body: dict) -> None:
+          # Idempotent: use body['idempotency_key'] to skip already-processed messages
+          order_id = body['order_id']
+          logger.info('Processing order', extra={'order_id': order_id})
+          # ... business logic ...
+
+      def poll_forever() -> None:
+          while True:
+              resp = sqs.receive_message(
+                  QueueUrl=SOURCE_URL,
+                  MaxNumberOfMessages=10,
+                  WaitTimeSeconds=20,
+                  AttributeNames=['ApproximateReceiveCount'],
+              )
+              for msg in resp.get('Messages', []):
+                  try:
+                      body = json.loads(msg['Body'])
+                      process_message(body)
+                      sqs.delete_message(QueueUrl=SOURCE_URL, ReceiptHandle=msg['ReceiptHandle'])
+                  except Exception:
+                      receive_count = int(msg['Attributes']['ApproximateReceiveCount'])
+                      logger.error(
+                          'Message processing failed',
+                          extra={'receive_count': receive_count, 'message_id': msg['MessageId']},
+                          exc_info=True,
+                      )
+                      # Do NOT delete — SQS will retry until maxReceiveCount, then move to DLQ
+
+      if __name__ == '__main__':
+          poll_forever()
+    reasoning: >-
+      Showing that the consumer intentionally does not delete failed messages is
+      the key insight — SQS handles the retry counting and DLQ routing
+      automatically when the message stays visible, so the consumer's job is
+      only to log and re-raise.
+  - language: python
+    title: Redrive DLQ messages back to source queue
+    code: |-
+      import boto3
+      import json
+
+      sqs = boto3.client('sqs', region_name='us-east-1')
+
+      SOURCE_URL = 'https://sqs.us-east-1.amazonaws.com/123456789/orders'
+      DLQ_URL   = 'https://sqs.us-east-1.amazonaws.com/123456789/orders-dlq'
+
+      def redrive_dlq(max_messages: int = 100) -> int:
+          """Move messages from DLQ back to the source queue after a bug fix."""
+          replayed = 0
+          while replayed < max_messages:
+              resp = sqs.receive_message(
+                  QueueUrl=DLQ_URL,
+                  MaxNumberOfMessages=min(10, max_messages - replayed),
+                  WaitTimeSeconds=5,
+              )
+              messages = resp.get('Messages', [])
+              if not messages:
+                  break
+              for msg in messages:
+                  sqs.send_message(QueueUrl=SOURCE_URL, MessageBody=msg['Body'])
+                  sqs.delete_message(QueueUrl=DLQ_URL, ReceiptHandle=msg['ReceiptHandle'])
+                  replayed += 1
+          print(f'Redrove {replayed} messages')
+          return replayed
+
+      if __name__ == '__main__':
+          redrive_dlq()
+    reasoning: >-
+      Replay is what makes a DLQ operationally useful rather than just
+      informative — this script shows the concrete pattern of pulling from the
+      DLQ and re-enqueuing to the source after a fix is deployed.
 difficulty: intermediate
 estimatedHours: 5
 ---

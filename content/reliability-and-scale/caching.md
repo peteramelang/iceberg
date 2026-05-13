@@ -234,9 +234,92 @@ pitfalls:
       relevant, by tenant or user scope.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Redis cache-aside with stampede protection
+    code: >-
+      import { createClient } from 'redis';
+
+
+      const redis = createClient({ url: process.env.REDIS_URL });
+
+      await redis.connect();
+
+
+      async function getOrSet<T>(
+        key: string,
+        ttlSeconds: number,
+        fetch: () => Promise<T>
+      ): Promise<T> {
+        const cached = await redis.get(key);
+        if (cached) return JSON.parse(cached) as T;
+
+        // Distributed lock prevents thundering herd on cache miss
+        const lockKey = `lock:${key}`;
+        const acquired = await redis.set(lockKey, '1', { NX: true, EX: 5 });
+
+        if (!acquired) {
+          // Another process is rebuilding — wait briefly and retry from cache
+          await new Promise((r) => setTimeout(r, 200));
+          const retried = await redis.get(key);
+          if (retried) return JSON.parse(retried) as T;
+        }
+
+        try {
+          const value = await fetch();
+          await redis.set(key, JSON.stringify(value), { EX: ttlSeconds });
+          return value;
+        } finally {
+          await redis.del(lockKey);
+        }
+      }
+
+
+      // Usage
+
+      const user = await getOrSet(`user:${userId}`, 60, () =>
+      db.users.findUnique({ where: { id: userId } }));
+    reasoning: >-
+      The cache-aside pattern with a distributed lock prevents the thundering
+      herd problem where a popular cache expiry triggers dozens of simultaneous
+      database queries — the most common production caching failure mode.
+  - language: typescript
+    title: HTTP cache headers for CDN edge caching
+    code: |-
+      import type { Request, Response } from 'express';
+
+      // Public API endpoint cacheable at the CDN edge
+      function getPublicFeed(req: Request, res: Response) {
+        const feed = [{ id: 1, title: 'Hello' }]; // fetched from DB
+
+        // Cache at CDN for 60s; allow stale for 10s while revalidating in background
+        res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=10');
+
+        // ETag enables conditional requests: client sends If-None-Match,
+        // server returns 304 Not Modified if content unchanged
+        const etag = `"${hashContent(feed)}"`;
+        res.set('ETag', etag);
+
+        if (req.headers['if-none-match'] === etag) {
+          res.status(304).end();
+          return;
+        }
+
+        res.json(feed);
+      }
+
+      // Private endpoint: never cache at shared (CDN) layer
+      function getUserProfile(_req: Request, res: Response) {
+        res.set('Cache-Control', 'private, no-store');
+        res.json({ id: 'me', email: 'user@example.com' });
+      }
+
+      function hashContent(data: unknown): string {
+        const { createHash } = require('crypto');
+        return createHash('sha1').update(JSON.stringify(data)).digest('hex').slice(0, 16);
+      }
+    reasoning: >-
+      Correctly setting Cache-Control and ETag headers on public endpoints lets
+      a CDN absorb read traffic without any application code changes — the
+      highest-leverage caching layer for most web APIs.
 difficulty: intermediate
 estimatedHours: 8
 ---

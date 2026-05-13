@@ -248,10 +248,130 @@ pitfalls:
       should be excluded from SLI measurement or accounted for separately so the
       budget reflects unplanned reliability, not intentional operational events.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: python
+    title: Compute Error Budget Burn Rate
+    code: >-
+      from dataclasses import dataclass
+
+      from datetime import datetime, timedelta
+
+
+
+      @dataclass
+
+      class SLOWindow:
+          name: str           # e.g. "30d", "1h"
+          duration: timedelta
+          slo_target: float   # e.g. 0.999 for 99.9%
+
+
+      @dataclass
+
+      class SLISnapshot:
+          good_requests: int
+          total_requests: int
+          window_start: datetime
+          window_end: datetime
+
+
+      def error_budget_remaining(window: SLOWindow, snapshot: SLISnapshot) ->
+      dict:
+          """Return error budget status for a given SLO window."""
+          if snapshot.total_requests == 0:
+              return {"error": "no data"}
+
+          sli = snapshot.good_requests / snapshot.total_requests
+          allowed_bad_rate = 1.0 - window.slo_target
+          actual_bad_rate = 1.0 - sli
+
+          budget_total_minutes = window.duration.total_seconds() / 60 * allowed_bad_rate
+          budget_consumed_minutes = window.duration.total_seconds() / 60 * actual_bad_rate
+          budget_remaining_pct = max(0.0, 1.0 - (actual_bad_rate / allowed_bad_rate))
+
+          burn_rate = actual_bad_rate / allowed_bad_rate  # >1 means burning too fast
+
+          return {
+              "sli": round(sli, 6),
+              "slo_target": window.slo_target,
+              "budget_total_minutes": round(budget_total_minutes, 2),
+              "budget_consumed_minutes": round(budget_consumed_minutes, 2),
+              "budget_remaining_pct": round(budget_remaining_pct * 100, 2),
+              "burn_rate": round(burn_rate, 3),
+              "status": "OK" if burn_rate <= 1.0 else "BURNING",
+          }
+
+
+      # Example: 99.9% SLO over 30 days, 150 bad requests out of 200_000
+
+      window = SLOWindow("30d", timedelta(days=30), slo_target=0.999)
+
+      snapshot = SLISnapshot(
+          good_requests=199_850,
+          total_requests=200_000,
+          window_start=datetime(2026, 5, 1),
+          window_end=datetime(2026, 5, 14),
+      )
+
+      print(error_budget_remaining(window, snapshot))
+    reasoning: >-
+      Burn rate — not raw uptime percentage — is what tells you whether you're
+      on track to exhaust the error budget before the window closes; this shows
+      the core calculation concretely.
+  - language: yaml
+    title: Prometheus SLO Recording Rules
+    code: >-
+      # prometheus/rules/slo-api.yml
+
+      # Records 5-minute SLI windows so multi-window burn rate alerts are cheap
+      to query.
+
+
+      groups:
+        - name: slo_api_availability
+          interval: 1m
+          rules:
+            # SLI: fraction of HTTP requests that are 'good' (non-5xx, <500ms)
+            - record: job:http_requests_good:rate5m
+              expr: |
+                sum(rate(http_requests_total{job="api",status!~"5.."}[5m]))
+
+            - record: job:http_requests_total:rate5m
+              expr: |
+                sum(rate(http_requests_total{job="api"}[5m]))
+
+            - record: job:sli_availability:ratio_rate5m
+              expr: |
+                job:http_requests_good:rate5m
+                /
+                job:http_requests_total:rate5m
+
+        - name: slo_api_burn_rate_alerts
+          rules:
+            # Fast burn: consuming 14.4x budget — page immediately
+            - alert: SLOFastBurn
+              expr: |
+                (
+                  1 - job:sli_availability:ratio_rate5m
+                ) / (1 - 0.999) > 14.4
+              for: 2m
+              labels:
+                severity: page
+              annotations:
+                summary: "API error budget burning 14x faster than allowed"
+
+            # Slow burn: consuming 3x budget — ticket in business hours
+            - alert: SLOSlowBurn
+              expr: |
+                (
+                  1 - job:sli_availability:ratio_rate5m
+                ) / (1 - 0.999) > 3
+              for: 30m
+              labels:
+                severity: ticket
+    reasoning: >-
+      Multi-window burn rate alerting is the Google SRE recommendation and this
+      shows the exact Prometheus rule structure — more actionable than a raw
+      uptime threshold.
 difficulty: intermediate
 estimatedHours: 5
 ---

@@ -237,9 +237,75 @@ pitfalls:
       the entitlement layer.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Subscription State Machine With Feature Access
+    code: |-
+      type SubscriptionState =
+        | 'trialing'
+        | 'active'
+        | 'past_due'
+        | 'paused'
+        | 'non_renewing'
+        | 'canceled'
+        | 'expired';
+
+      type Feature = 'api_access' | 'exports' | 'team_seats' | 'support';
+
+      // Single source of truth: which states grant which features
+      const FEATURE_ACCESS: Record<SubscriptionState, Set<Feature>> = {
+        trialing:     new Set(['api_access', 'exports', 'team_seats', 'support']),
+        active:       new Set(['api_access', 'exports', 'team_seats', 'support']),
+        non_renewing: new Set(['api_access', 'exports', 'team_seats', 'support']),
+        past_due:     new Set(['api_access', 'support']),  // restricted but not cut off
+        paused:       new Set([]),
+        canceled:     new Set([]),
+        expired:      new Set([]),
+      };
+
+      // Allowed state transitions (source → valid next states)
+      const TRANSITIONS: Record<SubscriptionState, SubscriptionState[]> = {
+        trialing:     ['active', 'canceled', 'expired'],
+        active:       ['past_due', 'paused', 'non_renewing', 'canceled'],
+        past_due:     ['active', 'canceled', 'expired'],
+        paused:       ['active', 'canceled'],
+        non_renewing: ['canceled'],
+        canceled:     [],
+        expired:      [],
+      };
+
+      export class Subscription {
+        constructor(
+          public readonly id: string,
+          private state: SubscriptionState,
+        ) {}
+
+        can(feature: Feature): boolean {
+          return FEATURE_ACCESS[this.state].has(feature);
+        }
+
+        transition(next: SubscriptionState): void {
+          const allowed = TRANSITIONS[this.state];
+          if (!allowed.includes(next)) {
+            throw new Error(
+              `Invalid transition: ${this.state} → ${next}`
+            );
+          }
+          this.state = next;
+        }
+
+        getState(): SubscriptionState { return this.state; }
+      }
+
+      // Usage
+      const sub = new Subscription('sub_123', 'active');
+      console.log(sub.can('exports'));   // true
+      sub.transition('past_due');
+      console.log(sub.can('exports'));   // false — restricted in past_due
+      sub.transition('active');          // payment recovered
+      console.log(sub.can('exports'));   // true
+    reasoning: >-
+      Centralizing both the transition graph and feature access in one place
+      eliminates the scattered conditionals that lead to inconsistent access
+      control across a codebase.
 difficulty: intermediate
 estimatedHours: 7
 ---

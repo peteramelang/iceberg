@@ -187,9 +187,97 @@ pitfalls:
       common because it's the default integration path for most marketing tools.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Set secure session cookie in Express
+    code: |-
+      import express, { Request, Response } from 'express';
+      import session from 'express-session';
+
+      const app = express();
+
+      app.use(
+        session({
+          secret: process.env.SESSION_SECRET!,
+          name: '__Host-sid',   // __Host- prefix: browser rejects if not Secure + path=/
+          resave: false,
+          saveUninitialized: false,
+          cookie: {
+            httpOnly: true,       // not readable by JS
+            secure: true,         // HTTPS only
+            sameSite: 'lax',      // blocks most CSRF, allows top-level GET navigations
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          },
+        })
+      );
+
+      app.post('/login', (req: Request, res: Response) => {
+        // authenticate user...
+        (req.session as any).userId = 42;
+        res.json({ ok: true });
+      });
+
+      app.post('/logout', (req: Request, res: Response) => {
+        req.session.destroy(() => {
+          res.clearCookie('__Host-sid');
+          res.json({ ok: true });
+        });
+      });
+    reasoning: >-
+      Showing the full set of secure cookie attributes (HttpOnly, Secure,
+      SameSite, __Host- prefix) in a real Express session configuration makes
+      the abstractions concrete and explains why each attribute matters.
+  - language: typescript
+    title: Consent gate that blocks analytics scripts
+    code: >-
+      // consentManager.ts — load third-party scripts only after consent
+
+      type ConsentCategory = 'analytics' | 'marketing';
+
+
+      const CONSENT_KEY = 'cookie_consent_v1';
+
+
+      export function getConsent(): Record<ConsentCategory, boolean> {
+        try {
+          return JSON.parse(localStorage.getItem(CONSENT_KEY) ?? 'null') ?? {};
+        } catch {
+          return {};
+        }
+      }
+
+
+      export function saveConsent(choices: Record<ConsentCategory, boolean>):
+      void {
+        localStorage.setItem(CONSENT_KEY, JSON.stringify(choices));
+        applyConsent(choices);
+      }
+
+
+      function applyConsent(choices: Record<ConsentCategory, boolean>): void {
+        if (choices.analytics) {
+          loadScript('https://www.googletagmanager.com/gtag/js?id=G-XXXXXX');
+        }
+        if (choices.marketing) {
+          loadScript('https://connect.facebook.net/en_US/fbevents.js');
+        }
+      }
+
+
+      function loadScript(src: string): void {
+        if (document.querySelector(`script[src="${src}"]`)) return;
+        const s = document.createElement('script');
+        s.src = src;
+        s.async = true;
+        document.head.appendChild(s);
+      }
+
+
+      // On page load: only apply if consent was previously given
+
+      applyConsent(getConsent());
+    reasoning: >-
+      A real consent gate that conditionally loads third-party scripts
+      illustrates the critical difference between a consent banner (decoration)
+      and a consent mechanism (actual script gating required by GDPR).
 difficulty: intermediate
 estimatedHours: 4
 ---

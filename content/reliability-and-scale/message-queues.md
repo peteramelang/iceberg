@@ -295,10 +295,128 @@ pitfalls:
       messages small, decouples payload lifecycle from queue lifecycle, and
       sidesteps size limits entirely.
 codeExamples:
+  - language: python
+    title: Idempotent SQS Consumer with Dead-Letter Queue
+    code: >-
+      """Consume SQS messages exactly once using a processed-IDs set,
+
+      and move unprocessable messages to a dead-letter queue after max
+      retries."""
+
+      import boto3
+
+      import json
+
+
+      SQUEUE_URL = "https://sqs.us-east-1.amazonaws.com/123456789/orders"
+
+      # DLQ is configured on the SQS queue itself (maxReceiveCount=3 in queue
+      attrs);
+
+      # messages that fail 3 times are automatically moved there by AWS.
+
+
+      sqs = boto3.client("sqs", region_name="us-east-1")
+
+      # In production use Redis or a DB table; a set works for the illustration
+
+      processed_ids: set = set()
+
+
+      def send_welcome_email(order_id: str, email: str) -> None:
+          print(f"Sending welcome email for order {order_id} to {email}")
+
+      def process_message(body: dict, receipt_handle: str) -> None:
+          order_id = body["order_id"]
+
+          # Idempotency guard — SQS delivers at-least-once
+          if order_id in processed_ids:
+              print(f"Duplicate delivery for {order_id}, skipping")
+              sqs.delete_message(QueueUrl=SQUEUE_URL, ReceiptHandle=receipt_handle)
+              return
+
+          send_welcome_email(order_id, body["email"])
+          processed_ids.add(order_id)
+          sqs.delete_message(QueueUrl=SQUEUE_URL, ReceiptHandle=receipt_handle)
+          print(f"Processed and deleted {order_id}")
+
+      def poll_forever() -> None:
+          while True:
+              resp = sqs.receive_message(
+                  QueueUrl=SQUEUE_URL,
+                  MaxNumberOfMessages=10,
+                  WaitTimeSeconds=20,  # long-poll to reduce empty receives
+              )
+              for msg in resp.get("Messages", []):
+                  try:
+                      process_message(json.loads(msg["Body"]), msg["ReceiptHandle"])
+                  except Exception as exc:
+                      # Do NOT delete — SQS will redeliver and eventually DLQ it
+                      print(f"Failed to process {msg['MessageId']}: {exc}")
+
+      poll_forever()
+    reasoning: >-
+      Shows the two most important SQS consumer patterns together — idempotency
+      guard against duplicate delivery and deliberate non-deletion on failure so
+      the DLQ can catch unprocessable messages.
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Enqueue Background Job from HTTP Handler
+    code: >-
+      import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+
+      import { randomUUID } from "crypto";
+
+
+      const sqs = new SQSClient({ region: "us-east-1" });
+
+      const QUEUE_URL = process.env.JOB_QUEUE_URL!;
+
+
+      interface OrderCreatedPayload {
+        orderId: string;
+        userId: string;
+        email: string;
+        amountCents: number;
+      }
+
+
+      async function enqueueOrderCreated(payload: OrderCreatedPayload):
+      Promise<void> {
+        await sqs.send(
+          new SendMessageCommand({
+            QueueUrl: QUEUE_URL,
+            MessageBody: JSON.stringify(payload),
+            // MessageDeduplicationId makes FIFO queues idempotent on the send side
+            MessageDeduplicationId: payload.orderId,
+            MessageGroupId: payload.userId, // FIFO per user preserves order
+          })
+        );
+      }
+
+
+      // Simulated HTTP POST /orders handler
+
+      async function handleCreateOrder(req: { body: Omit<OrderCreatedPayload,
+      "orderId"> }) {
+        const orderId = randomUUID();
+        // 1. Write to DB (synchronous — user waits for this)
+        console.log(`Order ${orderId} saved to database`);
+
+        // 2. Enqueue slow work (async — user does NOT wait for this)
+        await enqueueOrderCreated({ orderId, ...req.body });
+
+        // Return immediately; worker sends email, charges card, updates index, etc.
+        return { orderId, status: "created" };
+      }
+
+
+      handleCreateOrder({ body: { userId: "usr_1", email: "alice@example.com",
+      amountCents: 4999 } })
+        .then(console.log);
+    reasoning: >-
+      Demonstrates the HTTP handler pattern that keeps APIs fast: write to the
+      DB synchronously for the user-facing response, then enqueue all slow
+      downstream work so the response returns in milliseconds.
 difficulty: intermediate
 estimatedHours: 6
 ---

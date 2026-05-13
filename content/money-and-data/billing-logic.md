@@ -221,9 +221,93 @@ pitfalls:
       cheaper than getting it wrong.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Idempotent Stripe webhook handler
+    code: >-
+      import Stripe from 'stripe';
+
+      import type { Request, Response } from 'express';
+
+
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion:
+      '2024-04-10' });
+
+
+      export async function stripeWebhook(req: Request, res: Response) {
+        const sig = req.headers['stripe-signature'] as string;
+        let event: Stripe.Event;
+
+        try {
+          event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+        } catch (err) {
+          res.status(400).send(`Webhook signature verification failed`);
+          return;
+        }
+
+        // Idempotency: skip events already processed
+        const alreadyProcessed = await db.webhookEvents.findUnique({ where: { stripeEventId: event.id } });
+        if (alreadyProcessed) {
+          res.json({ received: true });
+          return;
+        }
+
+        switch (event.type) {
+          case 'invoice.payment_succeeded': {
+            const invoice = event.data.object as Stripe.Invoice;
+            await db.subscriptions.update({
+              where: { stripeCustomerId: invoice.customer as string },
+              data: { status: 'active', currentPeriodEnd: new Date(invoice.period_end * 1000) },
+            });
+            break;
+          }
+          case 'invoice.payment_failed': {
+            const invoice = event.data.object as Stripe.Invoice;
+            await db.subscriptions.update({
+              where: { stripeCustomerId: invoice.customer as string },
+              data: { status: 'past_due' },
+            });
+            break;
+          }
+        }
+
+        await db.webhookEvents.create({ data: { stripeEventId: event.id, processedAt: new Date() } });
+        res.json({ received: true });
+      }
+
+
+      // db is a Prisma client stub
+
+      declare const db: any;
+    reasoning: >-
+      Recording processed webhook event IDs prevents double-billing when Stripe
+      retries delivery — this idempotency check is the single most important
+      pattern in billing webhook handlers.
+  - language: sql
+    title: Store money as integer cents not float
+    code: |-
+      -- Never store money as FLOAT or DOUBLE — floating point cannot represent
+      -- many decimal values exactly, causing rounding errors that compound.
+      -- Store as integer cents (or smallest currency unit) instead.
+
+      CREATE TABLE invoices (
+        id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        customer_id   UUID NOT NULL REFERENCES customers(id),
+        -- All monetary values stored as integer cents (USD: 100 = $1.00)
+        subtotal_cents   INTEGER NOT NULL CHECK (subtotal_cents >= 0),
+        tax_cents        INTEGER NOT NULL CHECK (tax_cents >= 0),
+        discount_cents   INTEGER NOT NULL CHECK (discount_cents >= 0),
+        total_cents      INTEGER GENERATED ALWAYS AS
+                           (subtotal_cents + tax_cents - discount_cents) STORED,
+        currency         CHAR(3) NOT NULL DEFAULT 'USD',
+        status           TEXT NOT NULL DEFAULT 'draft',
+        created_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
+
+      -- Query: display as dollars in application layer, not DB
+      -- SELECT id, total_cents / 100.0 AS total_dollars FROM invoices;
+    reasoning: >-
+      Storing prices as integer cents and enforcing non-negativity constraints
+      at the schema level eliminates an entire class of floating-point rounding
+      bugs that silently corrupt billing totals.
 difficulty: advanced
 estimatedHours: 16
 ---

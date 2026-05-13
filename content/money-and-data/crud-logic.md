@@ -210,10 +210,80 @@ pitfalls:
       records, and the absence of an audit log turns a routine question into a
       multi-day forensics project.
 codeExamples:
+  - language: sql
+    title: Optimistic locking update with version check
+    code: >-
+      -- Schema: version column on every mutable table
+
+      ALTER TABLE articles ADD COLUMN version INTEGER NOT NULL DEFAULT 1;
+
+
+      -- Application performs: SELECT, user edits, then UPDATE with version
+      guard
+
+      WITH updated AS (
+        UPDATE articles
+        SET
+          title   = $1,
+          body    = $2,
+          version = version + 1,
+          updated_at = NOW()
+        WHERE id = $3
+          AND version = $4   -- must match what was read
+        RETURNING id, version
+      )
+
+      SELECT
+        CASE
+          WHEN EXISTS (SELECT 1 FROM updated) THEN 'ok'
+          ELSE 'conflict'   -- row was modified by another writer since we read it
+        END AS result;
+    reasoning: >-
+      A raw SQL optimistic lock is the clearest way to show the pattern — the
+      version guard in the WHERE clause is the entire mechanism, and seeing it
+      directly removes the ORM abstraction that obscures what is actually
+      happening.
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Soft delete with audit trail in Postgres
+    code: |-
+      import { Pool } from 'pg';
+
+      const db = new Pool({ connectionString: process.env.DATABASE_URL });
+
+      async function softDelete(
+        table: string,
+        id: number,
+        deletedBy: number
+      ): Promise<void> {
+        await db.query('BEGIN');
+        try {
+          // Mark deleted
+          await db.query(
+            `UPDATE ${table} SET deleted_at = NOW() WHERE id = $1 AND deleted_at IS NULL`,
+            [id]
+          );
+          // Append audit record
+          await db.query(
+            `INSERT INTO audit_log (table_name, record_id, action, actor_id, occurred_at)
+             VALUES ($1, $2, 'DELETE', $3, NOW())`,
+            [table, id, deletedBy]
+          );
+          await db.query('COMMIT');
+        } catch (err) {
+          await db.query('ROLLBACK');
+          throw err;
+        }
+      }
+
+      // Queries exclude soft-deleted rows by convention
+      const { rows } = await db.query(
+        'SELECT * FROM articles WHERE deleted_at IS NULL AND id = $1',
+        [articleId]
+      );
+    reasoning: >-
+      Combining soft delete with a transactional audit log insert shows that
+      both operations must succeed together — the transaction is the point, and
+      the audit trail is what makes deletion recoverable and auditable.
 difficulty: intermediate
 estimatedHours: 5
 ---

@@ -200,9 +200,82 @@ pitfalls:
       the task, reviewed periodically.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: RBAC permission check middleware
+    code: >-
+      type Permission = 'posts:read' | 'posts:write' | 'posts:delete' |
+      'admin:users';
+
+
+      const ROLE_PERMISSIONS: Record<string, Permission[]> = {
+        viewer:  ['posts:read'],
+        editor:  ['posts:read', 'posts:write'],
+        admin:   ['posts:read', 'posts:write', 'posts:delete', 'admin:users'],
+      };
+
+
+      function can(userRole: string, action: Permission): boolean {
+        return ROLE_PERMISSIONS[userRole]?.includes(action) ?? false;
+      }
+
+
+      // Express middleware factory
+
+      import type { Request, Response, NextFunction } from 'express';
+
+
+      function requirePermission(action: Permission) {
+        return (req: Request, res: Response, next: NextFunction) => {
+          const role = (req as any).user?.role;
+          if (!role || !can(role, action)) {
+            res.status(403).json({ error: 'Forbidden' });
+            return;
+          }
+          next();
+        };
+      }
+
+
+      // Usage on route
+
+      // router.delete('/posts/:id', requirePermission('posts:delete'),
+      deletePostHandler);
+    reasoning: >-
+      A single reusable middleware that checks permissions server-side on every
+      mutating route is the most common RBAC pattern — it prevents the UI-only
+      access control trap.
+  - language: typescript
+    title: Resource ownership check prevents IDOR
+    code: |-
+      import type { Request, Response } from 'express';
+      import { db } from './db';
+
+      async function getComment(req: Request, res: Response) {
+        const commentId = Number(req.params.id);
+        const userId = (req as any).user.id;
+
+        const comment = await db.query(
+          'SELECT * FROM comments WHERE id = $1',
+          [commentId]
+        );
+
+        if (!comment) {
+          res.status(404).json({ error: 'Not found' });
+          return;
+        }
+
+        // Ownership check: logged-in user must own the resource
+        if (comment.author_id !== userId) {
+          // Return 404, not 403, to avoid leaking resource existence
+          res.status(404).json({ error: 'Not found' });
+          return;
+        }
+
+        res.json(comment);
+      }
+    reasoning: >-
+      Checking resource ownership at the data-fetch layer (not just in the UI)
+      is the fix for IDOR vulnerabilities — returning 404 instead of 403 also
+      avoids leaking whether a resource exists.
 difficulty: intermediate
 estimatedHours: 8
 ---

@@ -123,9 +123,76 @@ pitfalls:
       migration.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Storage Adapter Abstraction Over S3
+    code: >-
+      // Thin abstraction: swap S3 for R2, GCS, or local disk without touching
+      callers
+
+
+      export interface StorageAdapter {
+        put(key: string, body: Buffer, contentType: string): Promise<void>;
+        get(key: string): Promise<Buffer>;
+        delete(key: string): Promise<void>;
+        publicUrl(key: string): string;
+      }
+
+
+      // Production: AWS S3
+
+      import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand
+      } from '@aws-sdk/client-s3';
+
+
+      export class S3Adapter implements StorageAdapter {
+        private client = new S3Client({ region: 'us-east-1' });
+        constructor(private bucket: string, private baseUrl: string) {}
+
+        async put(key: string, body: Buffer, contentType: string) {
+          await this.client.send(new PutObjectCommand({ Bucket: this.bucket, Key: key, Body: body, ContentType: contentType }));
+        }
+
+        async get(key: string): Promise<Buffer> {
+          const res = await this.client.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
+          const chunks: Uint8Array[] = [];
+          for await (const chunk of res.Body as AsyncIterable<Uint8Array>) chunks.push(chunk);
+          return Buffer.concat(chunks);
+        }
+
+        async delete(key: string) {
+          await this.client.send(new DeleteObjectCommand({ Bucket: this.bucket, Key: key }));
+        }
+
+        publicUrl(key: string) { return `${this.baseUrl}/${key}`; }
+      }
+
+
+      // Local / test: filesystem — no AWS credentials needed in CI
+
+      import { readFile, writeFile, unlink } from 'fs/promises';
+
+      import { join } from 'path';
+
+
+      export class LocalAdapter implements StorageAdapter {
+        constructor(private root: string, private baseUrl: string) {}
+        async put(key: string, body: Buffer) { await writeFile(join(this.root, key), body); }
+        async get(key: string) { return readFile(join(this.root, key)); }
+        async delete(key: string) { await unlink(join(this.root, key)); }
+        publicUrl(key: string) { return `${this.baseUrl}/${key}`; }
+      }
+
+
+      // Wire up at the composition root — callers never import S3Client
+      directly
+
+      export const storage: StorageAdapter =
+        process.env.NODE_ENV === 'test'
+          ? new LocalAdapter('/tmp/test-uploads', 'http://localhost:3000/uploads')
+          : new S3Adapter(process.env.S3_BUCKET!, process.env.CDN_BASE_URL!);
+    reasoning: >-
+      Object storage is the most common place to accidentally hard-code vendor
+      SDK calls throughout a codebase; a single interface file keeps migration
+      cost to one afternoon.
 difficulty: beginner
 estimatedHours: 2
 ---

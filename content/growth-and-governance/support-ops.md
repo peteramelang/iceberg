@@ -121,9 +121,128 @@ pitfalls:
       limits.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Audited Admin Action Wrapper
+    code: >-
+      // Every support action goes through this — never raw DB writes from an
+      admin UI
+
+
+      interface AdminContext {
+        actorId: string;   // support agent's user ID
+        reason: string;    // required: why this action is being taken
+        ticketRef?: string;
+      }
+
+
+      interface AuditLog {
+        actorId: string;
+        action: string;
+        targetId: string;
+        before: unknown;
+        after: unknown;
+        reason: string;
+        ticketRef?: string;
+        performedAt: Date;
+      }
+
+
+      // Simulated dependencies
+
+      declare const db: {
+        auditLogs: { insert(log: AuditLog): Promise<void> };
+      };
+
+
+      async function adminAction<T>(
+        action: string,
+        targetId: string,
+        ctx: AdminContext,
+        perform: () => Promise<{ before: unknown; after: T }>,
+      ): Promise<T> {
+        const { before, after } = await perform();
+
+        await db.auditLogs.insert({
+          actorId: ctx.actorId,
+          action,
+          targetId,
+          before,
+          after,
+          reason: ctx.reason,
+          ticketRef: ctx.ticketRef,
+          performedAt: new Date(),
+        });
+
+        return after;
+      }
+
+
+      // Example: resend a verification email through a tested code path
+
+      async function resendVerificationEmail(
+        userId: string,
+        ctx: AdminContext,
+      ) {
+        return adminAction('resend_verification_email', userId, ctx, async () => {
+          // before state for the audit record
+          const before = { emailSentAt: null };
+          // actual action — same code path as the normal product flow
+          await sendVerificationEmail(userId);
+          const after = { emailSentAt: new Date().toISOString() };
+          return { before, after };
+        });
+      }
+
+
+      declare function sendVerificationEmail(userId: string): Promise<void>;
+    reasoning: >-
+      The audit wrapper pattern forces every support action through a logged,
+      intentional interface rather than ad-hoc DB writes, making actions
+      traceable and safe by default.
+  - language: sql
+    title: Support Lookup View For Read Replica
+    code: >-
+      -- A read-only view for support tooling: answers the top questions without
+      DB write access
+
+      -- Point your admin dashboard at the read replica with a read-only role.
+
+
+      CREATE OR REPLACE VIEW support_user_summary AS
+
+      SELECT
+        u.id                             AS user_id,
+        u.email,
+        u.created_at,
+        u.last_sign_in_at,
+        s.state                          AS subscription_state,
+        s.current_period_end             AS access_until,
+        s.plan_id,
+        p.last_four                      AS card_last_four,
+        p.next_retry_at                  AS payment_retry_at,
+        COUNT(DISTINCT t.id)             AS open_ticket_count,
+        MAX(al.performed_at)             AS last_admin_action_at
+      FROM users u
+
+      LEFT JOIN subscriptions s  ON s.user_id = u.id AND s.is_current
+
+      LEFT JOIN payment_methods p ON p.user_id = u.id AND p.is_primary
+
+      LEFT JOIN tickets t         ON t.user_id = u.id AND t.status = 'open'
+
+      LEFT JOIN audit_logs al     ON al.target_id = u.id::text
+
+      GROUP BY u.id, u.email, u.created_at, u.last_sign_in_at,
+               s.state, s.current_period_end, s.plan_id,
+               p.last_four, p.next_retry_at;
+
+      -- Grant read-only role access (never write access from the support
+      dashboard)
+
+      GRANT SELECT ON support_user_summary TO support_readonly_role;
+    reasoning: >-
+      A single denormalized view over the read replica answers 80% of support
+      lookups without giving agents write access or requiring raw table
+      knowledge.
 difficulty: beginner
 estimatedHours: 3
 ---

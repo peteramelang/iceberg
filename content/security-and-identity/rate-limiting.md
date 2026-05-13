@@ -211,9 +211,62 @@ pitfalls:
       algorithms eliminate this boundary exploit for endpoints where it matters.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Token Bucket Rate Limiter With Redis
+    code: >-
+      import { createClient } from 'redis';
+
+
+      const redis = createClient({ url: process.env.REDIS_URL });
+
+      await redis.connect();
+
+
+      interface RateLimitResult {
+        allowed: boolean;
+        remaining: number;
+        resetAt: number; // unix seconds
+      }
+
+
+      async function checkRateLimit(
+        key: string,        // e.g. `rl:user:${userId}`
+        limit: number,      // max tokens (requests) per window
+        windowSecs: number  // refill period in seconds
+      ): Promise<RateLimitResult> {
+        const now = Math.floor(Date.now() / 1000);
+        const windowKey = `${key}:${Math.floor(now / windowSecs)}`;
+
+        const count = await redis.incr(windowKey);
+        if (count === 1) {
+          await redis.expire(windowKey, windowSecs * 2);
+        }
+
+        const resetAt = (Math.floor(now / windowSecs) + 1) * windowSecs;
+        const remaining = Math.max(0, limit - count);
+        return { allowed: count <= limit, remaining, resetAt };
+      }
+
+
+      // Middleware usage
+
+      export async function rateLimitMiddleware(req: Request, res: Response,
+      next: NextFunction) {
+        const userId = req.user?.id ?? req.ip;
+        const result = await checkRateLimit(`rl:user:${userId}`, 100, 60);
+
+        res.setHeader('X-RateLimit-Limit', 100);
+        res.setHeader('X-RateLimit-Remaining', result.remaining);
+        res.setHeader('X-RateLimit-Reset', result.resetAt);
+
+        if (!result.allowed) {
+          return res.status(429).json({ error: 'Too Many Requests' });
+        }
+        next();
+      }
+    reasoning: >-
+      A Redis-backed sliding-window limiter with proper response headers is the
+      production-ready pattern learners need — keyed by user ID, includes the
+      headers that let clients back off gracefully.
 difficulty: intermediate
 estimatedHours: 4
 ---

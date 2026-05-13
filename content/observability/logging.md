@@ -236,10 +236,118 @@ pitfalls:
       sampling for high-volume low-value events, and actively prune log
       statements that serve no investigation purpose.
 codeExamples:
+  - language: python
+    title: Structured JSON Logger with Correlation ID
+    code: |-
+      import json
+      import logging
+      import sys
+      import uuid
+      from contextvars import ContextVar
+      from datetime import datetime, timezone
+
+      # Per-request trace ID propagated through async context
+      trace_id_var: ContextVar[str] = ContextVar("trace_id", default="")
+
+      class StructuredFormatter(logging.Formatter):
+          def format(self, record: logging.LogRecord) -> str:
+              log = {
+                  "ts":      datetime.now(timezone.utc).isoformat(),
+                  "level":   record.levelname,
+                  "logger":  record.name,
+                  "message": record.getMessage(),
+                  "trace_id": trace_id_var.get(),
+              }
+              if record.exc_info:
+                  log["exception"] = self.formatException(record.exc_info)
+              # Merge any extra fields passed by the caller
+              for key, val in record.__dict__.items():
+                  if key not in logging.LogRecord.__dict__ and not key.startswith("_"):
+                      log[key] = val
+              return json.dumps(log)
+
+      def get_logger(name: str) -> logging.Logger:
+          handler = logging.StreamHandler(sys.stdout)
+          handler.setFormatter(StructuredFormatter())
+          logger = logging.getLogger(name)
+          logger.setLevel(logging.INFO)
+          logger.addHandler(handler)
+          logger.propagate = False
+          return logger
+
+      logger = get_logger("payments")
+
+      def handle_payment(customer_id: str, amount: int) -> None:
+          trace_id_var.set(str(uuid.uuid4()))
+          logger.info("payment_started", extra={"customer_id": customer_id, "amount_cents": amount})
+          try:
+              if amount > 100_000:
+                  raise ValueError("amount exceeds single-charge limit")
+              logger.info("payment_succeeded", extra={"customer_id": customer_id})
+          except Exception as exc:
+              logger.error("payment_failed", exc_info=True, extra={"customer_id": customer_id, "reason": str(exc)})
+
+      handle_payment("cus_abc", 4999)
+      handle_payment("cus_xyz", 200_000)
+    reasoning: >-
+      Demonstrates structured JSON logging with a per-request correlation ID and
+      arbitrary extra fields — the combination that makes logs queryable by
+      field in any log platform and traceable across service calls.
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Log Level Discipline in a Request Handler
+    code: >-
+      type LogLevel = "debug" | "info" | "warn" | "error";
+
+
+      function log(level: LogLevel, event: string, fields: Record<string,
+      unknown> = {}): void {
+        const entry = { ts: new Date().toISOString(), level, event, ...fields };
+        process.stdout.write(JSON.stringify(entry) + "\n");
+      }
+
+
+      async function processOrder(orderId: string, userId: string):
+      Promise<void> {
+        // DEBUG: verbose state useful only during local development
+        log("debug", "order_processing_start", { orderId, userId, step: "validate" });
+
+        const inventory = await checkInventory(orderId);
+
+        if (inventory.quantity === 0) {
+          // WARN: abnormal but not yet broken — will retry later
+          log("warn", "inventory_low", { orderId, sku: inventory.sku, quantity: 0 });
+        }
+
+        try {
+          await chargeAndFulfill(orderId, userId);
+          // INFO: normal business event worth keeping in the audit trail
+          log("info", "order_fulfilled", { orderId, userId });
+        } catch (err) {
+          // ERROR: requires attention; include enough context to act without re-reading code
+          log("error", "order_fulfillment_failed", {
+            orderId,
+            userId,
+            reason: (err as Error).message,
+          });
+          throw err;
+        }
+      }
+
+
+      // Stubs so the example compiles standalone
+
+      async function checkInventory(id: string) { return { sku: "sku_1",
+      quantity: 3 }; }
+
+      async function chargeAndFulfill(orderId: string, userId: string) { return;
+      }
+
+
+      processOrder("ord_001", "usr_abc").catch(() => {});
+    reasoning: >-
+      Shows concretely how to apply DEBUG/INFO/WARN/ERROR discipline to real
+      business logic — the single highest-leverage practice for keeping logs
+      useful rather than noisy in production.
 difficulty: intermediate
 estimatedHours: 3
 ---

@@ -220,9 +220,136 @@ pitfalls:
       instrumentation layer.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Data Subject Erasure Request Pipeline
+    code: >-
+      import { createHash } from 'crypto';
+
+
+      interface ErasureResult {
+        system: string;
+        status: 'erased' | 'not_found' | 'error';
+        detail?: string;
+      }
+
+
+      // Anonymise rather than hard-delete where referential integrity requires
+      it
+
+      function pseudonymise(userId: string): string {
+        return 'deleted-' + createHash('sha256').update(userId).digest('hex').slice(0, 16);
+      }
+
+
+      async function handleErasureRequest(
+        userId: string,
+        requestId: string
+      ): Promise<ErasureResult[]> {
+        const results: ErasureResult[] = [];
+
+        // 1. Application database: anonymise PII fields, keep order records for accounting
+        try {
+          await db.query(
+            `UPDATE users
+             SET email = $2, name = 'Deleted User', phone = NULL,
+                 address = NULL, deleted_at = now(), gdpr_erasure_id = $3
+             WHERE id = $1 AND deleted_at IS NULL`,
+            [userId, `${pseudonymise(userId)}@deleted.invalid`, requestId]
+          );
+          results.push({ system: 'postgres:users', status: 'erased' });
+        } catch (err: any) {
+          results.push({ system: 'postgres:users', status: 'error', detail: err.message });
+        }
+
+        // 2. Analytics event store — delete or redact
+        try {
+          await analyticsClient.deleteUserEvents(userId);
+          results.push({ system: 'analytics:events', status: 'erased' });
+        } catch (err: any) {
+          results.push({ system: 'analytics:events', status: 'error', detail: err.message });
+        }
+
+        // 3. Email service list
+        try {
+          await emailProvider.unsubscribeAndDelete(userId);
+          results.push({ system: 'email-provider', status: 'erased' });
+        } catch (err: any) {
+          results.push({ system: 'email-provider', status: 'error', detail: err.message });
+        }
+
+        // 4. Audit log — immutable, records the erasure itself
+        await auditLog.record({ event: 'gdpr.erasure', userId, requestId, results, ts: new Date() });
+
+        return results;
+      }
+
+
+      // Stubs for illustration
+
+      const db = { query: async (..._: any[]) => {} };
+
+      const analyticsClient = { deleteUserEvents: async (_: string) => {} };
+
+      const emailProvider = { unsubscribeAndDelete: async (_: string) => {} };
+
+      const auditLog = { record: async (_: object) => {} };
+    reasoning: >-
+      A multi-system erasure pipeline that pseudonymises rather than
+      hard-deletes (preserving referential integrity), covers every data store
+      in sequence, and writes an immutable audit record is the practical
+      implementation of the GDPR right to erasure — the most operationally
+      complex of the data subject rights.
+  - language: sql
+    title: Data Retention Enforcement Query
+    code: >-
+      -- Run nightly as a scheduled job to enforce retention policy.
+
+      -- Adjust intervals per your privacy policy and legal review.
+
+
+      -- 1. Anonymise users inactive beyond retention window (e.g. 3 years)
+
+      UPDATE users
+
+      SET
+        email       = 'retained-' || encode(sha256(id::text::bytea), 'hex') || '@deleted.invalid',
+        name        = 'Retained User',
+        phone       = NULL,
+        address     = NULL,
+        deleted_at  = now()
+      WHERE
+        last_active_at < now() - INTERVAL '3 years'
+        AND deleted_at IS NULL;
+
+      -- 2. Purge analytics events older than 13 months (common GDPR practice)
+
+      DELETE FROM analytics_events
+
+      WHERE created_at < now() - INTERVAL '13 months';
+
+
+      -- 3. Purge raw session logs older than 90 days
+
+      DELETE FROM session_logs
+
+      WHERE created_at < now() - INTERVAL '90 days';
+
+
+      -- 4. Record that the retention job ran (immutable audit trail)
+
+      INSERT INTO retention_audit_log (run_at, users_anonymised, events_purged,
+      session_logs_purged)
+
+      SELECT
+        now(),
+        (SELECT count(*) FROM users WHERE deleted_at >= now() - INTERVAL '1 minute'),
+        (SELECT count(*) FROM analytics_events WHERE created_at < now() - INTERVAL '13 months'),
+        0
+      ;
+    reasoning: >-
+      Automated retention enforcement via a nightly SQL job is more reliable
+      than manual processes and directly implements the GDPR principle of
+      storage limitation — retaining personal data only as long as the purpose
+      requires — with an audit record that demonstrates compliance.
 difficulty: intermediate
 estimatedHours: 8
 ---

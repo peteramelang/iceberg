@@ -171,9 +171,80 @@ pitfalls:
       Every experiment must have one primary metric declared before it starts.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Stable user bucketing via consistent hash
+    code: >-
+      import { createHash } from 'crypto';
+
+
+      function bucketUser(userId: string, experimentId: string, variants:
+      string[]): string {
+        // Combine userId + experimentId so each experiment is independent
+        const hash = createHash('sha256').update(`${experimentId}:${userId}`).digest('hex');
+        const bucket = parseInt(hash.slice(0, 8), 16) % variants.length;
+        return variants[bucket];
+      }
+
+
+      // Usage
+
+      const variant = bucketUser('user-42', 'checkout-cta-color', ['control',
+      'treatment']);
+
+      console.log(variant); // Always the same for this user+experiment pair
+
+
+      // Works cleanly for traffic splits (e.g. 10% treatment)
+
+      function isInRollout(userId: string, featureId: string, percentPct:
+      number): boolean {
+        const hash = createHash('sha256').update(`${featureId}:${userId}`).digest('hex');
+        const bucket = (parseInt(hash.slice(0, 8), 16) % 100) + 1;
+        return bucket <= percentPct;
+      }
+    reasoning: >-
+      Stable, deterministic user bucketing is the most fundamental A/B testing
+      primitive — without it the same user lands in different variants across
+      requests, poisoning every measurement.
+  - language: typescript
+    title: Record experiment exposure event
+    code: |-
+      import type { Request, Response, NextFunction } from 'express';
+
+      interface ExperimentConfig {
+        id: string;
+        variants: string[];
+        trafficPct: number; // 0-100
+      }
+
+      function experimentMiddleware(config: ExperimentConfig) {
+        return (req: Request, res: Response, next: NextFunction) => {
+          const userId = (req as any).user?.id;
+          if (!userId) return next();
+
+          const variant = bucketUser(userId, config.id, config.variants);
+          res.locals.experiments = res.locals.experiments ?? {};
+          res.locals.experiments[config.id] = variant;
+
+          // Fire-and-forget: log exposure so analysis can find who saw what
+          setImmediate(() => {
+            analytics.track(userId, 'experiment_exposure', {
+              experimentId: config.id,
+              variant,
+              timestamp: Date.now(),
+            });
+          });
+
+          next();
+        };
+      }
+
+      // Declare analytics as a stub so snippet is self-contained
+      const analytics = { track: (_u: string, _e: string, _p: object) => {} };
+      declare function bucketUser(u: string, e: string, v: string[]): string;
+    reasoning: >-
+      Logging the exposure event at assignment time (not at conversion) is
+      required for correct intent-to-treat analysis; skipping it leads to
+      survivor bias in experiment results.
 difficulty: intermediate
 estimatedHours: 8
 ---

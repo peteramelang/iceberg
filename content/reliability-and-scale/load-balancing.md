@@ -253,10 +253,52 @@ pitfalls:
       imbalance so you can identify hot instances before they become the
       bottleneck.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: go
+    title: Round-Robin Load Balancer with Health Checks
+    code: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"net/http/httputil\"\n\t\"net/url\"\n\t\"sync\"\n\t\"sync/atomic\"\n)\n\ntype Backend struct {\n\tURL     *url.URL\n\tHealthy atomic.Bool\n}\n\ntype LoadBalancer struct {\n\tbackends []*Backend\n\tcurrent  atomic.Uint64\n\tmu       sync.RWMutex\n}\n\nfunc (lb *LoadBalancer) next() *Backend {\n\ttotal := uint64(len(lb.backends))\n\tfor range lb.backends {\n\t\tidx := lb.current.Add(1) % total\n\t\tb := lb.backends[idx]\n\t\tif b.Healthy.Load() {\n\t\t\treturn b\n\t\t}\n\t}\n\treturn nil\n}\n\nfunc (lb *LoadBalancer) ServeHTTP(w http.ResponseWriter, r *http.Request) {\n\tb := lb.next()\n\tif b == nil {\n\t\thttp.Error(w, \"no healthy backends\", http.StatusServiceUnavailable)\n\t\treturn\n\t}\n\thttputil.NewSingleHostReverseProxy(b.URL).ServeHTTP(w, r)\n}\n\nfunc (lb *LoadBalancer) healthCheck(b *Backend) {\n\tresp, err := http.Get(b.URL.String() + \"/healthz\")\n\tb.Healthy.Store(err == nil && resp.StatusCode == http.StatusOK)\n\tif err != nil {\n\t\tfmt.Printf(\"backend %s unhealthy: %v\\n\", b.URL, err)\n\t}\n}\n\nfunc main() {\n\turls := []string{\"http://app1:8080\", \"http://app2:8080\", \"http://app3:8080\"}\n\tlb := &LoadBalancer{}\n\tfor _, u := range urls {\n\t\tparsed, _ := url.Parse(u)\n\t\tb := &Backend{URL: parsed}\n\t\tb.Healthy.Store(true)\n\t\tlb.backends = append(lb.backends, b)\n\t}\n\tfmt.Println(\"Load balancer listening on :8000\")\n\thttp.ListenAndServe(\":8000\", lb)\n}"
+    reasoning: >-
+      Implements a minimal but complete round-robin load balancer with
+      health-aware routing in idiomatic Go, showing the core mechanics — atomic
+      counter, healthy-only dispatch, reverse proxy — without framework magic.
+  - language: yaml
+    title: Nginx Upstream with Health Checks and Draining
+    code: |-
+      # nginx.conf — Layer 7 load balancing with active health checks
+      # and slow_start for graceful instance introduction.
+      http:
+        upstream app_servers {
+          # Least-connections distributes load more fairly than round-robin
+          # when requests have variable duration.
+          least_conn;
+
+          server app1:8080 weight=1 max_fails=3 fail_timeout=30s;
+          server app2:8080 weight=1 max_fails=3 fail_timeout=30s;
+          # slow_start ramps new instance to full weight over 60 s,
+          # avoiding thundering-herd on fresh deployments.
+          server app3:8080 weight=1 slow_start=60s;
+        }
+
+        server {
+          listen 80;
+
+          location / {
+            proxy_pass         http://app_servers;
+            proxy_next_upstream error timeout http_502 http_503;
+            proxy_connect_timeout 2s;
+            proxy_read_timeout    30s;
+
+            # Propagate real client IP to application
+            proxy_set_header X-Real-IP        $remote_addr;
+            proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+          }
+
+          # Passive health: nginx marks a backend down after max_fails
+          # within fail_timeout and retries the next upstream automatically.
+        }
+    reasoning: >-
+      Covers the production-critical Nginx settings — least-conn algorithm,
+      passive health checks, slow_start for rolling deploys, and automatic retry
+      on failure — that prevent user-visible errors during instance churn.
 difficulty: intermediate
 estimatedHours: 5
 ---

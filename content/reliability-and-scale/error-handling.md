@@ -246,9 +246,121 @@ pitfalls:
       after a week of customer complaints. Set it up before you need it.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Retry with Exponential Backoff and Error Classification
+    code: >-
+      class RetryableError extends Error {}
+
+      class PermanentError extends Error {}
+
+
+      async function withRetry<T>(
+        fn: () => Promise<T>,
+        { maxAttempts = 3, baseDelayMs = 100 }: { maxAttempts?: number; baseDelayMs?: number } = {}
+      ): Promise<T> {
+        let lastError: Error;
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+          try {
+            return await fn();
+          } catch (err: any) {
+            if (err instanceof PermanentError) {
+              // Do not retry: invalid credentials, bad input, etc.
+              throw err;
+            }
+            lastError = err;
+            if (attempt < maxAttempts) {
+              const delay = baseDelayMs * 2 ** (attempt - 1);
+              console.warn({ attempt, delay, error: err.message }, 'Retrying after transient error');
+              await new Promise(r => setTimeout(r, delay));
+            }
+          }
+        }
+        throw lastError!;
+      }
+
+
+      // Caller classifies errors at the boundary
+
+      async function chargeCard(token: string, amountCents: number):
+      Promise<string> {
+        try {
+          const res = await fetch('https://api.stripe.com/v1/charges', { method: 'POST' });
+          if (res.status === 402) throw new PermanentError('Card declined');
+          if (res.status === 401) throw new PermanentError('Invalid Stripe API key');
+          if (!res.ok) throw new RetryableError(`Stripe ${res.status}`);
+          const data = await res.json();
+          return data.id;
+        } catch (err) {
+          if (err instanceof PermanentError || err instanceof RetryableError) throw err;
+          // Network error — treat as transient
+          throw new RetryableError(`Network error: ${(err as Error).message}`);
+        }
+      }
+
+
+      // Usage
+
+      const chargeId = await withRetry(() => chargeCard('tok_visa', 2999));
+    reasoning: >-
+      Classifying errors as retryable vs permanent before any retry logic runs
+      is the foundational distinction in production error handling — retrying
+      permanent failures wastes resources and delays user feedback, while not
+      retrying transient failures needlessly degrades the user experience.
+  - language: typescript
+    title: Structured Error Logging with Context
+    code: >-
+      import pino from 'pino';
+
+
+      const logger = pino({ level: process.env.LOG_LEVEL ?? 'info' });
+
+
+      interface RequestContext {
+        requestId: string;
+        userId?: string;
+        path: string;
+      }
+
+
+      // Middleware: attach structured context to every log in a request
+
+      function createRequestLogger(ctx: RequestContext) {
+        return logger.child(ctx);
+      }
+
+
+      // Service boundary: always log full context, never expose it to users
+
+      async function processOrder(
+        orderId: string,
+        ctx: RequestContext
+      ): Promise<{ success: true; orderId: string } | { success: false;
+      userMessage: string }> {
+        const log = createRequestLogger(ctx);
+        try {
+          const result = await callPaymentService(orderId);
+          log.info({ orderId, chargeId: result.chargeId }, 'Order processed');
+          return { success: true, orderId };
+        } catch (err: any) {
+          log.error(
+            { orderId, errorCode: err.code, stack: err.stack },
+            'Order processing failed'
+          );
+          // User sees a safe message; operators see full context in structured logs
+          return { success: false, userMessage: 'Payment could not be processed. Please try again.' };
+        }
+      }
+
+
+      async function callPaymentService(orderId: string): Promise<{ chargeId:
+      string }> {
+        // stub
+        return { chargeId: 'ch_123' };
+      }
+    reasoning: >-
+      Separating the internal error context (full stack, error codes, order/user
+      IDs) logged with structure from the safe user-facing message demonstrates
+      the dual obligation every error handler must meet: rich signal for
+      operators, clear signal for users.
 difficulty: intermediate
 estimatedHours: 5
 ---

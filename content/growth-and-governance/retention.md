@@ -179,10 +179,86 @@ pitfalls:
       around for the team to fix it. Performance regression monitoring belongs
       in the same workflow as retention analysis.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: sql
+    title: Weekly Retention Cohort Query
+    code: |-
+      -- Week-over-week retention by signup cohort.
+      -- Assumes: events(user_id, event_type, created_at)
+      -- and users(id, created_at)
+
+      WITH cohorts AS (
+        SELECT
+          id AS user_id,
+          DATE_TRUNC('week', created_at) AS cohort_week
+        FROM users
+      ),
+      activities AS (
+        SELECT
+          e.user_id,
+          c.cohort_week,
+          DATE_TRUNC('week', e.created_at) AS activity_week
+        FROM events e
+        JOIN cohorts c ON c.user_id = e.user_id
+        WHERE e.event_type = 'session_start'
+      ),
+      week_numbers AS (
+        SELECT
+          user_id,
+          cohort_week,
+          EXTRACT(EPOCH FROM (activity_week - cohort_week)) / 604800 AS week_num
+        FROM activities
+      )
+      SELECT
+        cohort_week,
+        week_num,
+        COUNT(DISTINCT user_id) AS retained_users
+      FROM week_numbers
+      WHERE week_num BETWEEN 0 AND 12
+      GROUP BY 1, 2
+      ORDER BY 1, 2;
+    reasoning: >-
+      Cohort retention analysis is the foundational query every growth-focused
+      engineer must know — this self-contained SQL produces the retention
+      triangle without any BI tool dependency.
+  - language: python
+    title: Identify Disengaged Users for Nudge Campaign
+    code: |-
+      from datetime import datetime, timedelta, timezone
+      from dataclasses import dataclass
+      from typing import Iterator
+
+      @dataclass
+      class User:
+          id: str
+          email: str
+          last_active_at: datetime
+          signup_at: datetime
+
+      def disengaged_users(
+          users: list[User],
+          inactive_days: int = 14,
+          max_age_days: int = 90,
+      ) -> Iterator[User]:
+          """Yield users who activated but haven't returned recently."""
+          now = datetime.now(timezone.utc)
+          cutoff = now - timedelta(days=inactive_days)
+          too_old = now - timedelta(days=max_age_days)
+
+          for user in users:
+              signed_up_recently = user.signup_at > too_old
+              has_been_active = user.last_active_at > user.signup_at
+              gone_quiet = user.last_active_at < cutoff
+
+              if signed_up_recently and has_been_active and gone_quiet:
+                  yield user
+
+      # Usage
+      for user in disengaged_users(all_users, inactive_days=14):
+          send_reengagement_email(user)
+    reasoning: >-
+      Segmenting users who activated but drifted away — and targeting them
+      before they churn — is the lifecycle communication pattern with the
+      highest ROI, and this shows the logic purely.
 difficulty: intermediate
 estimatedHours: 4
 ---

@@ -233,10 +233,59 @@ pitfalls:
       from past experiments, overprovisioning that compounds over time — until
       the absolute numbers become too large to ignore.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: python
+    title: Tag all untagged EC2 instances via boto3
+    code: |-
+      import boto3
+
+      REQUIRED_TAGS = {'team', 'environment', 'service'}
+
+      ec2 = boto3.client('ec2', region_name='us-east-1')
+
+      paginator = ec2.get_paginator('describe_instances')
+      for page in paginator.paginate():
+          for reservation in page['Reservations']:
+              for instance in reservation['Instances']:
+                  if instance['State']['Name'] not in ('running', 'stopped'):
+                      continue
+                  existing = {t['Key'] for t in instance.get('Tags', [])}
+                  missing = REQUIRED_TAGS - existing
+                  if missing:
+                      print(f"Instance {instance['InstanceId']} missing tags: {missing}")
+                      ec2.create_tags(
+                          Resources=[instance['InstanceId']],
+                          Tags=[{'Key': k, 'Value': 'UNSET'} for k in missing],
+                      )
+    reasoning: >-
+      Enforcing consistent cost-allocation tags on EC2 instances is the first
+      concrete step toward attributing every cloud dollar to a team or service —
+      tagging hygiene is the prerequisite for FinOps.
+  - language: bash
+    title: Schedule non-production RDS stop via cron
+    code: |-
+      #!/usr/bin/env bash
+      # Run via cron or EventBridge: stop dev/staging RDS at 8 PM, start at 8 AM
+      set -euo pipefail
+
+      ACTION=${1:?"Usage: $0 start|stop"}
+      ENV_FILTER="dev staging"
+
+      for env in $ENV_FILTER; do
+        mapfile -t CLUSTERS < <(
+          aws rds describe-db-clusters \
+            --filters "Name=tag:environment,Values=$env" \
+            --query 'DBClusters[*].DBClusterIdentifier' \
+            --output text | tr '\t' '\n'
+        )
+        for cluster in "${CLUSTERS[@]}"; do
+          echo "$ACTION $cluster (env=$env)"
+          aws rds "${ACTION}-db-cluster" --db-cluster-identifier "$cluster"
+        done
+      done
+    reasoning: >-
+      Scheduled start/stop of non-production databases is one of the highest-ROI
+      cloud cost actions — dev and staging clusters running 24/7 are pure waste,
+      and this script makes the pattern repeatable.
 difficulty: intermediate
 estimatedHours: 5
 ---

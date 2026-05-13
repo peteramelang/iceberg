@@ -242,10 +242,64 @@ pitfalls:
       direct link to the relevant runbook and enough context in the alert body
       to start debugging immediately.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: yaml
+    title: SLO burn rate alert in Prometheus
+    code: |-
+      # AlertManager rule: page on fast error-budget burn before SLO breach
+      groups:
+        - name: slo_alerts
+          rules:
+            - alert: HighErrorBudgetBurn
+              expr: |
+                (
+                  rate(http_requests_total{job="api",status=~"5.."}[1h])
+                  /
+                  rate(http_requests_total{job="api"}[1h])
+                ) > 14.4 * 0.001
+              for: 2m
+              labels:
+                severity: page
+              annotations:
+                summary: "High error budget burn rate (>14.4x)"
+                description: |
+                  API is burning error budget at {{ $value | humanizePercentage }} error rate.
+                  At this rate the monthly SLO budget will be exhausted in ~2 hours.
+                runbook: https://wiki.example.com/runbooks/high-error-rate
+    reasoning: >-
+      Alerting on SLO burn rate (how fast you consume error budget) rather than
+      raw error count produces alerts that fire only when user impact is
+      meaningful, directly reducing alert fatigue.
+  - language: yaml
+    title: Alert inhibition to suppress downstream noise
+    code: >-
+      # AlertManager config: suppress downstream alerts when the database is
+      down
+
+      inhibit_rules:
+        - source_match:
+            alertname: DatabaseDown
+            severity: page
+          target_match_re:
+            # Silence any service-level error alerts while DB is the root cause
+            alertname: HighErrorBudgetBurn|SlowResponseTime|QueueDepthHigh
+          equal:
+            - env
+
+      route:
+        receiver: pagerduty-critical
+        group_by: ['alertname', 'env']
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 4h
+        routes:
+          - match:
+              severity: warning
+            receiver: slack-warnings
+            continue: false
+    reasoning: >-
+      Inhibition rules prevent alert storms — when a database goes down and 50
+      services degrade, only the root cause fires a page rather than 50
+      simultaneous notifications that overwhelm the on-call engineer.
 difficulty: intermediate
 estimatedHours: 6
 ---

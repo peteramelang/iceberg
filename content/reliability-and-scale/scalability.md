@@ -270,9 +270,89 @@ pitfalls:
       proxy that looks correlated in normal operation.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Cache Aside Pattern With Redis TTL
+    code: |-
+      import { createClient } from 'redis';
+
+      const redis = createClient({ url: process.env.REDIS_URL });
+      await redis.connect();
+
+      async function getCachedUser(userId: string): Promise<User> {
+        const cacheKey = `user:${userId}`;
+
+        // 1. Check cache first
+        const cached = await redis.get(cacheKey);
+        if (cached) {
+          return JSON.parse(cached) as User;
+        }
+
+        // 2. Cache miss — fetch from DB
+        const user = await db.query<User>(
+          'SELECT id, name, email, plan FROM users WHERE id = $1',
+          [userId]
+        ).then(rows => rows[0]);
+
+        if (!user) throw new Error(`User ${userId} not found`);
+
+        // 3. Populate cache, 60-second TTL
+        await redis.set(cacheKey, JSON.stringify(user), { EX: 60 });
+
+        return user;
+      }
+
+      async function invalidateUserCache(userId: string): Promise<void> {
+        await redis.del(`user:${userId}`);
+      }
+    reasoning: >-
+      Cache-aside with explicit invalidation is the pattern that changes the
+      shape of the database scaling curve most dramatically — showing it
+      end-to-end including the invalidation call makes it immediately usable.
+  - language: python
+    title: Async Job Queue With Background Worker
+    code: |-
+      import json
+      import time
+      import boto3
+      from dataclasses import dataclass
+
+      sqs = boto3.client('sqs', region_name='us-east-1')
+      QUEUE_URL = 'https://sqs.us-east-1.amazonaws.com/123/my-jobs'
+
+      @dataclass
+      class Job:
+          type: str
+          payload: dict
+
+      def enqueue(job: Job) -> None:
+          """Called in the web request — returns immediately."""
+          sqs.send_message(
+              QueueUrl=QUEUE_URL,
+              MessageBody=json.dumps({'type': job.type, 'payload': job.payload}),
+          )
+
+      def worker_loop() -> None:
+          """Runs in a separate process; scales independently of the web tier."""
+          while True:
+              resp = sqs.receive_message(QueueUrl=QUEUE_URL, MaxNumberOfMessages=10,
+                                         WaitTimeSeconds=20)
+              for msg in resp.get('Messages', []):
+                  job = json.loads(msg['Body'])
+                  try:
+                      handle(job['type'], job['payload'])
+                      sqs.delete_message(QueueUrl=QUEUE_URL,
+                                         ReceiptHandle=msg['ReceiptHandle'])
+                  except Exception as e:
+                      print(f"Job failed, will retry: {e}")
+
+      def handle(job_type: str, payload: dict) -> None:
+          if job_type == 'send_email':
+              send_email(payload['to'], payload['subject'], payload['body'])
+          elif job_type == 'resize_image':
+              resize_image(payload['key'])
+    reasoning: >-
+      Decoupling slow work from the request path via SQS is the scalability
+      intervention with the highest bang-for-buck — this shows the full
+      enqueue/consume cycle in one self-contained example.
 difficulty: advanced
 estimatedHours: 14
 ---

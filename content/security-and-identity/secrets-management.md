@@ -211,9 +211,97 @@ pitfalls:
       deviate from the established baseline.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Fetch Secret From AWS Secrets Manager
+    code: >-
+      import { SecretsManagerClient, GetSecretValueCommand } from
+      '@aws-sdk/client-secrets-manager';
+
+
+      const client = new SecretsManagerClient({ region: 'us-east-1' });
+
+
+      // Cache secrets in memory with a short TTL — never hold them forever
+
+      const cache = new Map<string, { value: string; expiresAt: number }>();
+
+      const TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+
+      export async function getSecret(secretId: string): Promise<string> {
+        const cached = cache.get(secretId);
+        if (cached && cached.expiresAt > Date.now()) {
+          return cached.value;
+        }
+
+        const response = await client.send(
+          new GetSecretValueCommand({ SecretId: secretId })
+        );
+
+        const value = response.SecretString;
+        if (!value) throw new Error(`Secret ${secretId} has no string value`);
+
+        cache.set(secretId, { value, expiresAt: Date.now() + TTL_MS });
+        return value;
+      }
+
+
+      // Usage: always fetch at call time, never store in a module-level const
+
+      async function connectToDatabase() {
+        const password = await getSecret('prod/myapp/db-password');
+        return createConnection({ password });
+      }
+
+
+      function createConnection(opts: { password: string }) {
+        // ... database connection logic
+        return { connected: true };
+      }
+    reasoning: >-
+      Shows the key pattern that prevents rotation from breaking production:
+      fetching the secret at call time with a short TTL cache, so a rotated
+      credential is picked up within minutes without a restart.
+  - language: bash
+    title: Audit Which Secrets Are Stale In Vault
+    code: >-
+      #!/usr/bin/env bash
+
+      # List all secrets in a Vault KV mount and flag those not rotated in 90
+      days
+
+
+      set -euo pipefail
+
+
+      VAULT_ADDR=${VAULT_ADDR:-https://vault.example.com}
+
+      MOUNT=${1:-secret}
+
+      STALE_DAYS=90
+
+      STALE_EPOCH=$(( $(date +%s) - STALE_DAYS * 86400 ))
+
+
+      echo "Checking secrets under ${MOUNT}/ not rotated in ${STALE_DAYS}
+      days..."
+
+
+      vault kv list -format=json "${MOUNT}/" | jq -r '.[]' | while read -r key;
+      do
+        metadata=$(vault kv metadata get -format=json "${MOUNT}/${key}" 2>/dev/null) || continue
+
+        updated_time=$(echo "$metadata" | jq -r '.data.updated_time')
+        updated_epoch=$(date -d "$updated_time" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%S" "${updated_time%%.*}" +%s)
+
+        if [[ $updated_epoch -lt $STALE_EPOCH ]]; then
+          days_old=$(( ( $(date +%s) - updated_epoch ) / 86400 ))
+          echo "STALE [${days_old}d]: ${MOUNT}/${key}"
+        fi
+      done
+    reasoning: >-
+      Rotation is only useful if you can find the secrets that were never
+      rotated; this script surfaces stale credentials before an audit or
+      incident forces you to.
 difficulty: intermediate
 estimatedHours: 4
 ---

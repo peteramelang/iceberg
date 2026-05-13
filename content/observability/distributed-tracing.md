@@ -250,9 +250,73 @@ pitfalls:
       customer-reported slowness.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: OpenTelemetry Trace Context Propagation
+    code: >-
+      import { NodeSDK } from '@opentelemetry/sdk-node';
+
+      import { OTLPTraceExporter } from
+      '@opentelemetry/exporter-trace-otlp-http';
+
+      import { trace, context, propagation } from '@opentelemetry/api';
+
+      import { W3CTraceContextPropagator } from '@opentelemetry/core';
+
+
+      // Bootstrap once at app entry point
+
+      const sdk = new NodeSDK({
+        traceExporter: new OTLPTraceExporter({ url: 'http://otel-collector:4318/v1/traces' }),
+      });
+
+      sdk.start();
+
+
+      const tracer = trace.getTracer('payments-service', '1.0.0');
+
+
+      // Inbound request: extract context from HTTP headers
+
+      async function handleCheckout(headers: Record<string, string>, orderId:
+      string) {
+        const parentCtx = propagation.extract(context.active(), headers);
+
+        return context.with(parentCtx, async () => {
+          const span = tracer.startSpan('checkout.process', {
+            attributes: { 'order.id': orderId },
+          });
+          return context.with(trace.setSpan(context.active(), span), async () => {
+            try {
+              await chargeCard(orderId);
+              span.setStatus({ code: 1 }); // OK
+            } catch (err: any) {
+              span.recordException(err);
+              span.setStatus({ code: 2, message: err.message }); // ERROR
+              throw err;
+            } finally {
+              span.end();
+            }
+          });
+        });
+      }
+
+
+      // Outbound call: inject context into headers so downstream spans link up
+
+      async function chargeCard(orderId: string) {
+        const outboundHeaders: Record<string, string> = {};
+        propagation.inject(context.active(), outboundHeaders);
+
+        await fetch('http://payment-processor/charge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...outboundHeaders },
+          body: JSON.stringify({ orderId }),
+        });
+      }
+    reasoning: >-
+      Context propagation — extracting on inbound and injecting on outbound — is
+      the single mechanism that stitches spans from different services into one
+      trace; without it you get orphaned spans that reveal nothing about
+      cross-service latency.
 difficulty: intermediate
 estimatedHours: 8
 ---

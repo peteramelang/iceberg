@@ -239,10 +239,108 @@ pitfalls:
       every feature: if you cannot observe the operation in production, the
       feature is not finished.
 codeExamples:
+  - language: python
+    title: RED Metrics with Prometheus Client
+    code: |-
+      from prometheus_client import Counter, Histogram, start_http_server
+      import time
+      import random
+
+      # Rate, Errors, Duration — the three signals that cover most incidents
+      REQUEST_COUNT = Counter(
+          "http_requests_total",
+          "Total HTTP requests",
+          ["method", "endpoint", "status"],
+      )
+      REQUEST_DURATION = Histogram(
+          "http_request_duration_seconds",
+          "HTTP request latency",
+          ["method", "endpoint"],
+          buckets=[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5],
+      )
+
+      def handle_request(method: str, endpoint: str) -> None:
+          start = time.perf_counter()
+          status = "200"
+          try:
+              # Simulate work with occasional errors
+              if random.random() < 0.05:
+                  raise ValueError("downstream timeout")
+              time.sleep(random.uniform(0.01, 0.15))
+          except Exception:
+              status = "500"
+          finally:
+              duration = time.perf_counter() - start
+              REQUEST_COUNT.labels(method=method, endpoint=endpoint, status=status).inc()
+              REQUEST_DURATION.labels(method=method, endpoint=endpoint).observe(duration)
+
+      if __name__ == "__main__":
+          start_http_server(9090)  # Prometheus scrapes localhost:9090/metrics
+          print("Metrics server running on :9090")
+          for _ in range(20):
+              handle_request("GET", "/api/orders")
+          print("Done — scrape localhost:9090/metrics to see counters and histograms")
+    reasoning: >-
+      Implements the three core RED signals (Rate, Errors, Duration) with
+      Prometheus best practices — bounded label cardinality, histogram buckets
+      tuned for web services — in the fewest lines needed to understand the
+      pattern.
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: OpenTelemetry Span with Custom Attributes
+    code: >-
+      import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
+
+      import { SimpleSpanProcessor, ConsoleSpanExporter } from
+      "@opentelemetry/sdk-trace-base";
+
+      import { trace, SpanStatusCode } from "@opentelemetry/api";
+
+
+      // In production replace ConsoleSpanExporter with OtlpTraceExporter
+
+      const provider = new NodeTracerProvider();
+
+      provider.addSpanProcessor(new SimpleSpanProcessor(new
+      ConsoleSpanExporter()));
+
+      provider.register();
+
+
+      const tracer = trace.getTracer("payments-service", "1.0.0");
+
+
+      async function chargeCustomer(customerId: string, amountCents: number):
+      Promise<string> {
+        return tracer.startActiveSpan("charge_customer", async (span) => {
+          // Record business-relevant attributes — NOT unbounded values like raw URLs
+          span.setAttributes({
+            "payment.customer_id": customerId,
+            "payment.amount_cents": amountCents,
+            "payment.currency": "usd",
+          });
+          try {
+            // Simulate downstream call
+            await new Promise((r) => setTimeout(r, 45));
+            const chargeId = `ch_${Math.random().toString(36).slice(2)}`;
+            span.setAttributes({ "payment.charge_id": chargeId });
+            span.setStatus({ code: SpanStatusCode.OK });
+            return chargeId;
+          } catch (err) {
+            span.setStatus({ code: SpanStatusCode.ERROR, message: String(err) });
+            span.recordException(err as Error);
+            throw err;
+          } finally {
+            span.end();
+          }
+        });
+      }
+
+
+      chargeCustomer("cus_abc", 4999).then((id) => console.log("Charged:", id));
+    reasoning: >-
+      Shows the canonical OpenTelemetry span pattern — start span, attach
+      business attributes, record errors, end span — which is the building block
+      for distributed tracing across any microservice.
 difficulty: intermediate
 estimatedHours: 6
 ---

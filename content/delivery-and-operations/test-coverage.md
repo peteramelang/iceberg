@@ -205,9 +205,64 @@ pitfalls:
       undertested because they require deliberate effort to simulate.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Integration Test For Checkout Flow
+    code: >-
+      // Hits a real test database — no mocks for the code paths that matter
+
+      import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+
+      import { createTestDb, cleanTestDb } from './helpers/db';
+
+      import { processCheckout } from '../src/checkout';
+
+      import type { Cart, User } from '../src/types';
+
+
+      describe('processCheckout', () => {
+        let db: Awaited<ReturnType<typeof createTestDb>>;
+
+        beforeEach(async () => {
+          db = await createTestDb();
+        });
+
+        afterEach(async () => {
+          await cleanTestDb(db);
+        });
+
+        it('creates an order and deducts inventory on success', async () => {
+          const user: User = await db.users.create({ email: 'buyer@example.com' });
+          const product = await db.products.create({ sku: 'WIDGET-1', stock: 10, priceCents: 999 });
+          const cart: Cart = { items: [{ productId: product.id, qty: 2 }] };
+
+          const result = await processCheckout({ userId: user.id, cart, db });
+
+          expect(result.status).toBe('confirmed');
+          expect(result.order.totalCents).toBe(1998);
+
+          const updated = await db.products.findById(product.id);
+          expect(updated.stock).toBe(8); // inventory actually deducted
+        });
+
+        it('returns insufficient_stock when inventory is too low', async () => {
+          const user: User = await db.users.create({ email: 'buyer2@example.com' });
+          const product = await db.products.create({ sku: 'WIDGET-2', stock: 1, priceCents: 999 });
+          const cart: Cart = { items: [{ productId: product.id, qty: 5 }] };
+
+          const result = await processCheckout({ userId: user.id, cart, db });
+
+          expect(result.status).toBe('insufficient_stock');
+          const unchanged = await db.products.findById(product.id);
+          expect(unchanged.stock).toBe(1); // rollback confirmed
+        });
+      });
+
+
+      declare function processCheckout(opts: { userId: string; cart: Cart; db:
+      unknown }): Promise<{ status: string; order?: { totalCents: number } }>;
+    reasoning: >-
+      Testing behavior against a real database (not mocks) catches the class of
+      bugs that most unit tests miss — transaction rollbacks, constraint
+      failures, and inventory race conditions.
 difficulty: intermediate
 estimatedHours: 5
 ---

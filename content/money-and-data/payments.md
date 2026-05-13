@@ -233,9 +233,99 @@ pitfalls:
       your servers.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Create Stripe Payment Intent With Idempotency
+    code: >-
+      import Stripe from 'stripe';
+
+
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+
+      interface ChargeParams {
+        amountCents: number;
+        currency: string;
+        customerId: string;
+        orderId: string; // stable identifier — used as idempotency key
+      }
+
+
+      async function createPaymentIntent(params: ChargeParams):
+      Promise<Stripe.PaymentIntent> {
+        const { amountCents, currency, customerId, orderId } = params;
+
+        // Idempotency key scoped to this order — safe to retry on network failure
+        const idempotencyKey = `pi-${orderId}`;
+
+        return stripe.paymentIntents.create(
+          {
+            amount: amountCents,
+            currency,
+            customer: customerId,
+            metadata: { orderId },
+          },
+          { idempotencyKey }
+        );
+      }
+
+
+      // Usage
+
+      const intent = await createPaymentIntent({
+        amountCents: 2999,
+        currency: 'usd',
+        customerId: 'cus_abc123',
+        orderId: 'order_xyz789',
+      });
+
+      console.log('client_secret:', intent.client_secret);
+    reasoning: >-
+      Idempotency keys are the single most important correctness primitive in
+      payment code — this snippet makes the pattern concrete and shows exactly
+      where to derive the key from.
+  - language: typescript
+    title: Verify and Queue Stripe Webhook
+    code: |-
+      import Stripe from 'stripe';
+      import type { Request, Response } from 'express';
+
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
+      // Accepts raw body — must use express.raw() middleware for this route
+      export async function stripeWebhook(req: Request, res: Response) {
+        const sig = req.headers['stripe-signature'] as string;
+
+        let event: Stripe.Event;
+        try {
+          event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+        } catch {
+          return res.status(400).send('Webhook signature verification failed');
+        }
+
+        // Acknowledge immediately — process asynchronously to allow safe retries
+        res.status(200).json({ received: true });
+
+        // Persist to queue / DB for idempotent async processing
+        await enqueueWebhookEvent({
+          id: event.id,
+          type: event.type,
+          data: event.data.object,
+          createdAt: new Date(event.created * 1000),
+        });
+      }
+
+      async function enqueueWebhookEvent(event: object) {
+        // INSERT ... ON CONFLICT (id) DO NOTHING — deduplicate replays
+        await db.query(
+          'INSERT INTO webhook_events (id, payload) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+          [(event as { id: string }).id, JSON.stringify(event)]
+        );
+      }
+    reasoning: >-
+      Signature verification plus immediate acknowledgment plus idempotent
+      persistence is the complete webhook safety pattern — showing all three
+      together prevents the partial implementations that cause real payment
+      bugs.
 difficulty: advanced
 estimatedHours: 12
 ---

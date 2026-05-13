@@ -162,10 +162,64 @@ pitfalls:
       pipeline as routine patches, without specific regression coverage, is how
       silent behavioral regressions reach production.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: bash
+    title: Audit npm dependencies for vulnerabilities and licenses
+    code: |-
+      #!/usr/bin/env bash
+      # Run in CI to gate on known vulnerabilities and disallowed licenses
+      set -euo pipefail
+
+      echo '=== Vulnerability audit ==='
+      # Fail if any high or critical CVEs are found
+      npm audit --audit-level=high
+
+      echo '=== License check ==='
+      # license-checker is a well-known npm package
+      npx license-checker \
+        --production \
+        --excludePrivatePackages \
+        --failOn 'GPL-2.0;GPL-3.0;AGPL-3.0;LGPL-2.0;LGPL-2.1;LGPL-3.0' \
+        --out /tmp/licenses.csv
+
+      echo "License report written to /tmp/licenses.csv"
+      echo 'Audit passed.'
+    reasoning: >-
+      Running both `npm audit` and a license check in CI makes supply-chain
+      hygiene automatic — developers cannot accidentally ship a GPL transitive
+      dependency or ignore a high-severity CVE without breaking the build.
+  - language: yaml
+    title: Dependabot config for weekly dependency updates
+    code: |-
+      # .github/dependabot.yml
+      version: 2
+      updates:
+        - package-ecosystem: npm
+          directory: /
+          schedule:
+            interval: weekly
+            day: monday
+            time: '09:00'
+            timezone: America/New_York
+          open-pull-requests-limit: 5
+          groups:
+            # Batch minor/patch updates to reduce PR noise
+            minor-and-patch:
+              update-types:
+                - minor
+                - patch
+          ignore:
+            # Pin major upgrades for manual review
+            - dependency-name: '*'
+              update-types: ['version-update:semver-major']
+
+        - package-ecosystem: github-actions
+          directory: /
+          schedule:
+            interval: weekly
+    reasoning: >-
+      A Dependabot config that groups minor/patch updates and blocks major bumps
+      from auto-PRing captures the practical balance between keeping
+      dependencies current and avoiding surprise breaking changes.
 difficulty: beginner
 estimatedHours: 3
 ---

@@ -175,10 +175,84 @@ pitfalls:
       drill. Verify that your team has documented steps for every layer of the
       recovery process, not just the database snapshot retrieval.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: bash
+    title: Timed Postgres Restore Drill Script
+    code: |-
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      BACKUP_FILE="${1:?Usage: $0 <backup.dump>}"
+      RESTORE_DB="restore_drill_$(date +%Y%m%d_%H%M%S)"
+      START=$(date +%s)
+
+      echo "[DR DRILL] Starting restore into: $RESTORE_DB"
+      createdb "$RESTORE_DB"
+
+      pg_restore \
+        --dbname="$RESTORE_DB" \
+        --jobs=4 \
+        --no-owner \
+        --no-privileges \
+        "$BACKUP_FILE"
+
+      END=$(date +%s)
+      ELAPSED=$(( END - START ))
+
+      ROW_COUNT=$(psql "$RESTORE_DB" -At -c "SELECT count(*) FROM users;")
+
+      echo "[DR DRILL] Restore complete in ${ELAPSED}s"
+      echo "[DR DRILL] Users row count: $ROW_COUNT"
+      echo "[DR DRILL] RTO target check: elapsed=${ELAPSED}s, target=7200s"
+
+      if [ "$ELAPSED" -gt 7200 ]; then
+        echo "[DR DRILL] WARN: RTO target exceeded!"
+        exit 1
+      fi
+
+      dropdb "$RESTORE_DB"
+      echo "[DR DRILL] Drill DB cleaned up. All good."
+    reasoning: >-
+      A timed, scripted restore drill is the single highest-leverage DR
+      investment — it proves the backup is usable, measures actual RTO, and
+      surfaces credential or topology problems before a real disaster does.
+  - language: yaml
+    title: DR Runbook Frontmatter with RPO/RTO
+    code: |-
+      # runbooks/disaster-recovery.yaml
+      ---
+      service: payments-api
+      owner: platform-eng@example.com
+      last_tested: 2026-04-01
+
+      rpo_minutes: 5      # max acceptable data loss
+      rto_minutes: 120    # max acceptable downtime
+
+      backup:
+        type: postgres-logical
+        frequency: every 5 minutes (WAL streaming)
+        location: s3://backups-prod/payments-api/
+        retention_days: 30
+        restore_command: |
+          aws s3 cp s3://backups-prod/payments-api/latest.dump /tmp/latest.dump
+          bash runbooks/scripts/restore-drill.sh /tmp/latest.dump
+
+      failover_steps:
+        - Confirm primary is unreachable (3 consecutive health-check failures)
+        - Promote RDS read replica: aws rds promote-read-replica --db-instance-identifier payments-replica
+        - Update DNS CNAME payments-db.internal -> replica endpoint
+        - Notify #incidents and update status page
+        - Verify application connectivity with smoke test
+        - Page DBA lead if replica lag was > rpo_minutes at time of failure
+
+      contacts:
+        primary_oncall: PagerDuty rotation "payments-oncall"
+        dba_escalation: dba-lead@example.com
+        exec_notify_after_minutes: 30
+    reasoning: >-
+      Encoding RPO, RTO, backup location, and ordered failover steps in a
+      machine-readable YAML runbook co-located with the service keeps DR
+      procedures findable and auditable, and the explicit targets make drill
+      outcomes measurable.
 difficulty: advanced
 estimatedHours: 14
 ---

@@ -231,9 +231,89 @@ pitfalls:
       one execution completes — not just check for a completed record.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Idempotency Key Deduplication with Redis
+    code: |-
+      import { createClient } from "redis";
+      import { randomUUID } from "crypto";
+
+      const redis = createClient();
+      await redis.connect();
+
+      async function processPayment(
+        idempotencyKey: string,
+        amount: number,
+        customerId: string
+      ): Promise<{ status: string; chargeId: string }> {
+        const cacheKey = `idem:payment:${idempotencyKey}`;
+
+        // Check for a cached result from a prior attempt
+        const cached = await redis.get(cacheKey);
+        if (cached) {
+          console.log("Returning cached result for idempotency key", idempotencyKey);
+          return JSON.parse(cached);
+        }
+
+        // Acquire a short lock so concurrent retries don't both execute
+        const lockKey = `lock:${cacheKey}`;
+        const locked = await redis.set(lockKey, "1", { NX: true, EX: 10 });
+        if (!locked) {
+          throw new Error("Request in progress — retry shortly");
+        }
+
+        try {
+          // Execute the real side-effectful operation once
+          const chargeId = `ch_${randomUUID()}`;
+          console.log(`Charging customer ${customerId} $${amount} → ${chargeId}`);
+          // await stripe.charges.create({ amount, currency: "usd", customer: customerId });
+
+          const result = { status: "succeeded", chargeId };
+          // Store result for 24 h so retries get the same response
+          await redis.set(cacheKey, JSON.stringify(result), { EX: 86400 });
+          return result;
+        } finally {
+          await redis.del(lockKey);
+        }
+      }
+
+      // Client generates key once and reuses it on every retry
+      const key = randomUUID();
+      console.log(await processPayment(key, 2000, "cus_abc123"));
+      console.log(await processPayment(key, 2000, "cus_abc123")); // cache hit
+    reasoning: >-
+      Demonstrates the complete server-side idempotency pattern — cache lookup,
+      in-flight lock, single execution, and 24-hour result storage — so retries
+      are safe for payment operations.
+  - language: sql
+    title: Atomic Upsert for Job Deduplication
+    code: |-
+      -- Track processed job IDs to prevent duplicate execution.
+      -- Workers INSERT OR IGNORE before doing any work; a duplicate
+      -- row means the job already ran and the worker should skip it.
+
+      CREATE TABLE processed_jobs (
+        job_id       TEXT PRIMARY KEY,
+        processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        result       JSONB
+      );
+
+      -- Worker claims the job atomically. If another worker already
+      -- inserted this job_id the insert is a no-op (0 rows affected).
+      INSERT INTO processed_jobs (job_id)
+      VALUES ('job_7f3a9c')
+      ON CONFLICT (job_id) DO NOTHING;
+
+      -- Check whether THIS worker won the race
+      -- (application reads the affected row count; skip if 0)
+
+      -- After completing work, store the result so retries can
+      -- return it without re-executing.
+      UPDATE processed_jobs
+      SET result = '{"emails_sent": 1}'::jsonb
+      WHERE job_id = 'job_7f3a9c';
+    reasoning: >-
+      Shows the minimal SQL pattern for idempotent job processing: an atomic
+      INSERT ... ON CONFLICT that lets any database enforce exactly-once
+      execution without application-level locking.
 difficulty: intermediate
 estimatedHours: 4
 ---

@@ -121,10 +121,73 @@ pitfalls:
       a painful and preventable situation — retention periods should be long
       enough to cover realistic incident detection lag.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: sql
+    title: Purge soft-deleted rows past retention window
+    code: |-
+      -- Run nightly via pg_cron or an external scheduler
+      -- Permanently removes records soft-deleted more than 90 days ago
+
+      BEGIN;
+
+      -- Delete audit logs for the rows we are about to purge (FK order matters)
+      DELETE FROM audit_log
+      WHERE table_name = 'user_sessions'
+        AND record_id IN (
+          SELECT id FROM user_sessions
+          WHERE deleted_at < NOW() - INTERVAL '90 days'
+        );
+
+      -- Now purge the parent rows
+      DELETE FROM user_sessions
+      WHERE deleted_at < NOW() - INTERVAL '90 days';
+
+      -- Financial records kept 7 years — only purge older
+      DELETE FROM payment_events
+      WHERE created_at < NOW() - INTERVAL '7 years';
+
+      COMMIT;
+
+      -- Reclaim space
+      ANALYZE user_sessions;
+      ANALYZE payment_events;
+    reasoning: >-
+      A concrete purge script with different retention windows per data class
+      (90 days for sessions, 7 years for financial records) shows that retention
+      is an implementation problem, not just a policy document.
+  - language: python
+    title: S3 lifecycle rule applied programmatically
+    code: |-
+      import boto3
+
+      s3 = boto3.client('s3')
+
+      BUCKET = 'my-app-logs'
+
+      s3.put_bucket_lifecycle_configuration(
+          Bucket=BUCKET,
+          LifecycleConfiguration={
+              'Rules': [
+                  {
+                      'ID': 'app-logs-tiering',
+                      'Status': 'Enabled',
+                      'Filter': {'Prefix': 'app-logs/'},
+                      'Transitions': [
+                          # Move to infrequent access after 30 days
+                          {'Days': 30, 'StorageClass': 'STANDARD_IA'},
+                          # Move to Glacier after 90 days
+                          {'Days': 90, 'StorageClass': 'GLACIER'},
+                      ],
+                      # Hard delete after 2 years
+                      'Expiration': {'Days': 730},
+                  },
+              ]
+          }
+      )
+    reasoning: >-
+      An S3 lifecycle rule shows that retention applies to object storage too,
+      not just relational databases — tiering to Glacier before expiration is
+      the cost-aware pattern for logs that must be retained but are rarely
+      accessed.
 difficulty: intermediate
 estimatedHours: 4
 ---

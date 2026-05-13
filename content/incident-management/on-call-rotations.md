@@ -132,10 +132,81 @@ pitfalls:
       action items to change those conditions—are the feedback loop that
       actually prevents recurrence.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: python
+    title: Compute Current On-Call From Schedule
+    code: |-
+      from datetime import datetime, timezone
+      from dataclasses import dataclass
+      from typing import List
+
+      @dataclass
+      class Engineer:
+          name: str
+          email: str
+          phone: str
+
+      # Define the rotation — order determines who is primary each week
+      ROTATION: List[Engineer] = [
+          Engineer('alice', 'alice@example.com', '+15550001'),
+          Engineer('bob',   'bob@example.com',   '+15550002'),
+          Engineer('carol', 'carol@example.com', '+15550003'),
+          Engineer('dave',  'dave@example.com',  '+15550004'),
+      ]
+
+      # Epoch of first on-call week (Monday 00:00 UTC)
+      ROTATION_START = datetime(2024, 1, 1, tzinfo=timezone.utc)
+      WEEK_SECONDS = 7 * 24 * 3600
+
+      def current_on_call(now: datetime | None = None) -> Engineer:
+          now = now or datetime.now(timezone.utc)
+          elapsed = (now - ROTATION_START).total_seconds()
+          week_index = int(elapsed // WEEK_SECONDS)
+          return ROTATION[week_index % len(ROTATION)]
+
+      if __name__ == '__main__':
+          oncall = current_on_call()
+          print(f'On-call: {oncall.name} ({oncall.email})')
+    reasoning: >-
+      A simple modular-arithmetic rotation calculator shows the core logic teams
+      build before reaching for PagerDuty — understanding this makes any tooling
+      choice deliberate rather than accidental.
+  - language: bash
+    title: Audit Last Week Alert Volume
+    code: >-
+      #!/usr/bin/env bash
+
+      # Summarize pages from PagerDuty CLI for the last 7 days.
+
+      # Requires: pd (PagerDuty CLI) authenticated.
+
+      set -euo pipefail
+
+
+      SINCE=$(date -u -v-7d '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null \
+           || date -u -d '7 days ago' '+%Y-%m-%dT%H:%M:%SZ')
+
+      echo "=== Alert volume since $SINCE ==="
+
+
+      pd incident list \
+        --since "$SINCE" \
+        --output json \
+      | jq -r '
+          group_by(.service.summary)
+          | map({ service: .[0].service.summary, count: length })
+          | sort_by(-.count)
+          | .[] | "\(.count)\t\(.service)"
+        ' \
+      | column -t
+
+
+      echo ""
+
+      echo "Total: $(pd incident list --since "$SINCE" --output json | jq
+      length) pages"
+    reasoning: >-
+      Alert-volume auditing per service is the first step to reducing on-call
+      toil — this script makes that review a one-liner so teams actually run it.
 difficulty: intermediate
 estimatedHours: 3
 ---

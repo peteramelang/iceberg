@@ -213,10 +213,129 @@ pitfalls:
       communications role at declaration, and protect the technical team from
       interrupt-driven status requests.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: bash
+    title: Incident Declaration and Runbook Trigger Script
+    code: >-
+      #!/usr/bin/env bash
+
+      # declare-incident.sh — creates a timestamped incident channel and posts a
+      runbook link
+
+      set -euo pipefail
+
+
+      SEVERITY="${1:?Usage: declare-incident.sh <sev1|sev2|sev3> <description>}"
+
+      DESCRIPTION="${2:?description required}"
+
+      INCIDENT_ID="inc-$(date -u +%Y%m%d-%H%M%S)"
+
+      CHANNEL="incident-${INCIDENT_ID}"
+
+      RUNBOOK_BASE="https://runbooks.internal/"
+
+
+      echo "Declaring ${SEVERITY} incident: ${INCIDENT_ID}"
+
+      echo "Description: ${DESCRIPTION}"
+
+
+      # Create a Slack channel for coordination (requires slack CLI)
+
+      # slack conversations create --name "${CHANNEL}" --private
+
+
+      # Page the on-call engineer
+
+      if [[ "${SEVERITY}" == "sev1" ]]; then
+        echo "[PD] Paging on-call via PagerDuty..."
+        # pd trigger --description "${SEVERITY}: ${DESCRIPTION}" --urgency high
+      fi
+
+
+      # Post initial incident message with role assignments
+
+      cat <<EOF
+
+      === INCIDENT DECLARED ===
+
+      ID:          ${INCIDENT_ID}
+
+      Severity:    ${SEVERITY}
+
+      Description: ${DESCRIPTION}
+
+      Channel:     #${CHANNEL}
+
+      Runbook:     ${RUNBOOK_BASE}${SEVERITY}
+
+      IC:          <assign incident commander>
+
+      Comms:       <assign communications lead>
+
+      Started:     $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+      EOF
+
+
+      echo "Incident ${INCIDENT_ID} declared. Join #${CHANNEL} to coordinate."
+    reasoning: >-
+      Codifies the critical first step of incident response — fast, repeatable
+      declaration with role placeholders and runbook link — so no time is lost
+      to process confusion when a real incident hits.
+  - language: python
+    title: Structured Incident Timeline Logger
+    code: >-
+      """incident_log.py — append timestamped entries to an incident timeline
+      file."""
+
+      import json
+
+      import sys
+
+      from datetime import datetime, timezone
+
+      from pathlib import Path
+
+
+      LOG_DIR = Path("/var/log/incidents")
+
+
+      def log_event(incident_id: str, author: str, kind: str, message: str) ->
+      None:
+          LOG_DIR.mkdir(parents=True, exist_ok=True)
+          log_file = LOG_DIR / f"{incident_id}.jsonl"
+          entry = {
+              "ts": datetime.now(timezone.utc).isoformat(),
+              "incident": incident_id,
+              "author": author,
+              "kind": kind,   # e.g. update | mitigation | escalation | resolved
+              "message": message,
+          }
+          with log_file.open("a") as f:
+              f.write(json.dumps(entry) + "\n")
+          print(f"[{entry['ts']}] ({kind}) {message}")
+
+      def replay_timeline(incident_id: str) -> None:
+          log_file = LOG_DIR / f"{incident_id}.jsonl"
+          if not log_file.exists():
+              print("No timeline found for", incident_id)
+              return
+          for line in log_file.read_text().splitlines():
+              e = json.loads(line)
+              print(f"{e['ts']}  {e['author']:15s}  [{e['kind']:12s}]  {e['message']}")
+
+      if __name__ == "__main__":
+          inc = "inc-20260514-143000"
+          log_event(inc, "alice", "update",     "High error rate on payments-api, investigating")
+          log_event(inc, "bob",   "mitigation", "Rolled back to v2.3.1; error rate dropping")
+          log_event(inc, "alice", "resolved",   "Error rate back to baseline, incident closed")
+          print()
+          replay_timeline(inc)
+    reasoning: >-
+      Provides an append-only, structured incident timeline that feeds directly
+      into postmortems, ensuring the chronology of decisions and mitigations is
+      captured in real time rather than reconstructed from memory.
 difficulty: intermediate
 estimatedHours: 5
 ---

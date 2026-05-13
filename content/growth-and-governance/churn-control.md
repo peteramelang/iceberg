@@ -116,10 +116,96 @@ pitfalls:
       low-friction way to build a dataset that directly informs both product
       priorities and at-risk user interventions.
 codeExamples:
+  - language: sql
+    title: Identify at-risk users by engagement drop
+    code: >-
+      -- Users who were active in the prior 14-day window but went silent in the
+      last 7 days
+
+      -- Useful as a daily job to populate a churn-risk queue for outreach
+
+      SELECT
+        u.id,
+        u.email,
+        u.plan,
+        MAX(e.occurred_at) AS last_seen,
+        COUNT(CASE WHEN e.occurred_at >= NOW() - INTERVAL '7 days' THEN 1 END)  AS events_last_7d,
+        COUNT(CASE WHEN e.occurred_at >= NOW() - INTERVAL '21 days'
+                    AND e.occurred_at <  NOW() - INTERVAL '7 days' THEN 1 END) AS events_prior_14d
+      FROM users u
+
+      JOIN events e ON e.user_id = u.id
+
+      WHERE
+        u.plan IS NOT NULL                          -- paying customers only
+        AND u.cancelled_at IS NULL                  -- not already churned
+        AND e.occurred_at >= NOW() - INTERVAL '21 days'
+      GROUP BY u.id, u.email, u.plan
+
+      HAVING
+        COUNT(CASE WHEN e.occurred_at >= NOW() - INTERVAL '7 days' THEN 1 END) = 0
+        AND COUNT(CASE WHEN e.occurred_at >= NOW() - INTERVAL '21 days'
+                        AND e.occurred_at <  NOW() - INTERVAL '7 days' THEN 1 END) >= 3
+      ORDER BY last_seen ASC;
+    reasoning: >-
+      A sliding-window engagement drop query surfaces at-risk users days before
+      they cancel, giving the customer success team a lead list to act on before
+      the churn becomes voluntary.
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Stripe smart dunning retry on failed payment
+    code: >-
+      import Stripe from 'stripe';
+
+
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion:
+      '2024-04-10' });
+
+
+      // Delay strategy keyed by Stripe decline codes
+
+      const RETRY_DELAY_DAYS: Record<string, number[]> = {
+        insufficient_funds:     [3, 5, 7],     // likely temporary cash flow issue
+        do_not_honor:           [1, 3],        // bank blocking; retry sooner
+        card_velocity_exceeded: [1],           // daily limit; retry next day
+        default:                [3, 5, 10],    // unknown reason
+      };
+
+
+      function nextRetryDate(declineCode: string | null, attemptCount: number):
+      Date | null {
+        const schedule = RETRY_DELAY_DAYS[declineCode ?? 'default'] ?? RETRY_DELAY_DAYS.default;
+        if (attemptCount > schedule.length) return null; // exhausted retries
+        const delayDays = schedule[attemptCount - 1];
+        const date = new Date();
+        date.setDate(date.getDate() + delayDays);
+        return date;
+      }
+
+
+      async function handleFailedInvoice(invoiceId: string, attemptCount:
+      number) {
+        const invoice = await stripe.invoices.retrieve(invoiceId, {
+          expand: ['payment_intent.last_payment_error'],
+        });
+        const declineCode =
+          (invoice.payment_intent as Stripe.PaymentIntent)
+            ?.last_payment_error?.decline_code ?? null;
+
+        const retryAt = nextRetryDate(declineCode, attemptCount);
+        if (!retryAt) {
+          // Max retries exceeded — mark subscription as canceled, email customer
+          console.log(`Invoice ${invoiceId} uncollectable after ${attemptCount} attempts`);
+          return;
+        }
+
+        console.log(`Will retry invoice ${invoiceId} on ${retryAt.toISOString()} (code: ${declineCode})`);
+        // Schedule the retry in your job queue at retryAt
+      }
+    reasoning: >-
+      Intelligent retry timing based on the specific decline code recovers more
+      involuntary churn than uniform retries — insufficient_funds resolves
+      differently than a blocked card, and treating them identically wastes
+      retries.
 difficulty: intermediate
 estimatedHours: 6
 ---

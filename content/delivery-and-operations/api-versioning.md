@@ -215,9 +215,88 @@ pitfalls:
       version increment.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: URL-versioned router with deprecation header
+    code: |-
+      import express from 'express';
+      import type { Request, Response, NextFunction } from 'express';
+
+      const app = express();
+
+      // Middleware that adds a deprecation warning on old versions
+      function deprecationWarning(sunsetDate: string) {
+        return (_req: Request, res: Response, next: NextFunction) => {
+          res.set('Deprecation', 'true');
+          res.set('Sunset', sunsetDate);
+          res.set('Link', '</v2/users>; rel="successor-version"');
+          next();
+        };
+      }
+
+      // v1 router — field shape is the old contract
+      const v1 = express.Router();
+      v1.use(deprecationWarning('2025-12-31'));
+      v1.get('/users/:id', (_req: Request, res: Response) => {
+        res.json({ id: '1', full_name: 'Jane Doe' }); // old field name
+      });
+
+      // v2 router — breaking rename: full_name -> name
+      const v2 = express.Router();
+      v2.get('/users/:id', (_req: Request, res: Response) => {
+        res.json({ id: '1', name: 'Jane Doe' }); // new field name
+      });
+
+      app.use('/v1', v1);
+      app.use('/v2', v2);
+    reasoning: >-
+      URL path versioning combined with RFC 8594 Sunset and Deprecation response
+      headers gives clients machine-readable notice of a version's end-of-life,
+      enabling automated tooling to surface warnings before the deadline.
+  - language: typescript
+    title: Non-breaking vs breaking change checklist in code
+    code: >-
+      // Illustrates the contract boundary by making it explicit in types
+
+
+      // v1 response — existing clients depend on this exact shape
+
+      interface UserV1 {
+        id: string;
+        full_name: string;      // will be renamed in v2
+        email: string;
+      }
+
+
+      // v2 response — 'full_name' renamed to 'name' (BREAKING)
+
+      //               'avatar_url' added as optional (non-breaking for
+      consumers)
+
+      interface UserV2 {
+        id: string;
+        name: string;           // renamed from full_name
+        email: string;
+        avatar_url?: string;    // new optional field — safe to add
+      }
+
+
+      // Adapter: maps the shared DB model to the version-specific shape
+
+      interface UserDB { id: string; full_name: string; email: string;
+      avatar_url: string | null; }
+
+
+      function toV1(u: UserDB): UserV1 {
+        return { id: u.id, full_name: u.full_name, email: u.email };
+      }
+
+
+      function toV2(u: UserDB): UserV2 {
+        return { id: u.id, name: u.full_name, email: u.email, ...(u.avatar_url ? { avatar_url: u.avatar_url } : {}) };
+      }
+    reasoning: >-
+      Explicit per-version response types and adapter functions make the
+      compatibility contract visible and type-safe, preventing accidental
+      breaking changes from leaking through as the DB model evolves.
 difficulty: intermediate
 estimatedHours: 5
 ---

@@ -240,10 +240,89 @@ pitfalls:
       formats or pre-serialization for objects that are expensive to encode on
       every request.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: sql
+    title: EXPLAIN ANALYZE to Find Slow Query Path
+    code: |-
+      -- Step 1: spot the slow query in pg_stat_statements
+      SELECT query,
+             calls,
+             round(mean_exec_time::numeric, 2)  AS mean_ms,
+             round(total_exec_time::numeric, 2) AS total_ms
+      FROM   pg_stat_statements
+      ORDER  BY total_exec_time DESC
+      LIMIT  10;
+
+      -- Step 2: run EXPLAIN ANALYZE on the offender to see the plan
+      EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+      SELECT o.id, o.created_at, c.email
+      FROM   orders o
+      JOIN   customers c ON c.id = o.customer_id
+      WHERE  o.status = 'pending'
+        AND  o.created_at > NOW() - INTERVAL '24 hours';
+
+      -- If the plan shows "Seq Scan" on a large table, add an index:
+      -- CREATE INDEX CONCURRENTLY idx_orders_status_created
+      --   ON orders (status, created_at DESC)
+      --   WHERE status = 'pending';
+    reasoning: >-
+      The database is the dominant latency source in most web services; this
+      two-step workflow — find the top query by total time, then inspect its
+      plan — is the highest-leverage starting point before touching any
+      application code.
+  - language: python
+    title: Fan-Out Concurrent Requests to Cut Latency
+    code: >-
+      """Replace sequential downstream calls with concurrent ones to minimize
+      critical path."""
+
+      import asyncio
+
+      import time
+
+
+      async def fetch_user(user_id: int) -> dict:
+          await asyncio.sleep(0.12)  # simulates 120 ms DB call
+          return {"id": user_id, "name": "Alice"}
+
+      async def fetch_orders(user_id: int) -> list:
+          await asyncio.sleep(0.15)  # simulates 150 ms DB call
+          return [{"order_id": 1, "total": 99}]
+
+      async def fetch_recommendations(user_id: int) -> list:
+          await asyncio.sleep(0.08)  # simulates 80 ms ML service call
+          return ["product_42", "product_7"]
+
+      async def build_dashboard_sequential(user_id: int) -> dict:
+          """Total latency = 120 + 150 + 80 = 350 ms"""
+          user  = await fetch_user(user_id)
+          orders = await fetch_orders(user_id)
+          recs  = await fetch_recommendations(user_id)
+          return {"user": user, "orders": orders, "recommendations": recs}
+
+      async def build_dashboard_concurrent(user_id: int) -> dict:
+          """Total latency = max(120, 150, 80) = 150 ms"""
+          user, orders, recs = await asyncio.gather(
+              fetch_user(user_id),
+              fetch_orders(user_id),
+              fetch_recommendations(user_id),
+          )
+          return {"user": user, "orders": orders, "recommendations": recs}
+
+      async def main() -> None:
+          t = time.perf_counter()
+          await build_dashboard_sequential(1)
+          print(f"Sequential: {(time.perf_counter() - t)*1000:.0f} ms")
+
+          t = time.perf_counter()
+          await build_dashboard_concurrent(1)
+          print(f"Concurrent: {(time.perf_counter() - t)*1000:.0f} ms")
+
+      asyncio.run(main())
+    reasoning: >-
+      Makes the critical-path insight concrete: three independent downstream
+      calls that run sequentially cost 350 ms but run concurrently cost only 150
+      ms — the single most common architectural fix for slow composite
+      endpoints.
 difficulty: intermediate
 estimatedHours: 8
 ---
