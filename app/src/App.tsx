@@ -4,6 +4,7 @@ import { Phase } from "./routes/Phase.js";
 import { Topic } from "./routes/Topic.js";
 import { Bookmarks } from "./routes/Bookmarks.js";
 import { Settings } from "./routes/Settings.js";
+import { Graph } from "./routes/Graph.js";
 
 export function App() {
   return (
@@ -13,6 +14,7 @@ export function App() {
       <Route path="/topic/:topicSlug" element={<Topic />} />
       <Route path="/bookmarks" element={<Bookmarks />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/graph" element={<Graph />} />
     </Routes>
   );
 }
