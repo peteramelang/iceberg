@@ -1,0 +1,20 @@
+{
+  "name": "iceberg",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["app", "pipeline"],
+  "scripts": {
+    "dev": "npm run dev --workspace=app",
+    "build": "npm run build:content --workspace=pipeline && npm run build --workspace=app",
+    "build:content": "npm run build:content --workspace=pipeline",
+    "preview": "npm run preview --workspace=app",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "pipeline": "echo 'Open this repo in Claude Code and say: continue the iceberg pipeline. Claude will read pipeline/runbook.md and resume from the ledger.'",
+    "pipeline:smoke": "ICEBERG_MODE=smoke npm run pipeline"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

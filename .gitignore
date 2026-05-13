@@ -1,0 +1,21 @@
+node_modules/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Build outputs
+app/dist/
+app/src/content/topics.generated.json
+
+# Smoke run output
+content-smoke/
+content/_ledger.smoke.json
+
+# TypeScript
+*.tsbuildinfo
+
+# Editors
+.vscode/
+.idea/
