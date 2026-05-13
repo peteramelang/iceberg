@@ -1,0 +1,941 @@
+{
+  "version": 1,
+  "createdAt": "2026-05-13T22:15:20.116Z",
+  "updatedAt": "2026-05-13T22:15:20.141Z",
+  "currentRound": 1,
+  "mode": "full",
+  "stages": {
+    "stage_0_taxonomy": {
+      "status": "completed",
+      "userApprovedAt": "2026-05-13T22:15:20.118Z",
+      "artifactPath": "content/_taxonomy.json",
+      "completedAt": "2026-05-13T22:15:20.118Z"
+    }
+  },
+  "topics": {
+    "authentication": {
+      "phase": "security-and-identity",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "access-control": {
+      "phase": "security-and-identity",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "secrets-management": {
+      "phase": "security-and-identity",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "rate-limiting": {
+      "phase": "security-and-identity",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "cookies": {
+      "phase": "security-and-identity",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "gdpr-ccpa": {
+      "phase": "security-and-identity",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "payments": {
+      "phase": "money-and-data",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "billing-logic": {
+      "phase": "money-and-data",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "subscription-states": {
+      "phase": "money-and-data",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "idempotency": {
+      "phase": "money-and-data",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "data-integrity": {
+      "phase": "money-and-data",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "schema-migrations": {
+      "phase": "money-and-data",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "crud-logic": {
+      "phase": "money-and-data",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "logging": {
+      "phase": "observability",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "alerting": {
+      "phase": "observability",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "instrumentation": {
+      "phase": "observability",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "distributed-tracing": {
+      "phase": "observability",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "slos-and-slis": {
+      "phase": "observability",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "cloud-costs": {
+      "phase": "observability",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "scalability": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "latency-optimization": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "caching": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "load-balancing": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "message-queues": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "dead-letter-queues": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "multi-region-support": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "error-handling": {
+      "phase": "reliability-and-scale",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "ci-cd": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "environments": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "rollbacks": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "feature-flags": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "test-coverage": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "ab-testing": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "vendor-lock-in": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "api-versioning": {
+      "phase": "delivery-and-operations",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "incident-response": {
+      "phase": "incident-management",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "on-call-rotations": {
+      "phase": "incident-management",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "disaster-recovery": {
+      "phase": "incident-management",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "data-retention": {
+      "phase": "incident-management",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "escalations": {
+      "phase": "incident-management",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "retention": {
+      "phase": "growth-and-governance",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "churn-control": {
+      "phase": "growth-and-governance",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "support-ops": {
+      "phase": "growth-and-governance",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "governance": {
+      "phase": "growth-and-governance",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "documentation": {
+      "phase": "growth-and-governance",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    },
+    "dependency-management": {
+      "phase": "growth-and-governance",
+      "stages": {
+        "research": {
+          "status": "pending"
+        },
+        "consistency": {
+          "status": "pending"
+        },
+        "adversarial": {
+          "status": "pending"
+        },
+        "liveness": {
+          "status": "pending"
+        },
+        "stabilized": false
+      },
+      "lastSwapAt": null,
+      "retryCounts": {}
+    }
+  },
+  "connections": {
+    "status": "pending",
+    "artifactPath": "content/_connections.json"
+  }
+}
