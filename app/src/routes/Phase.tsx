@@ -11,6 +11,7 @@ export function Phase() {
   useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
   const phase = getPhase(phaseSlug!);
   if (!phase || !taxonomy) return <Page><div>Phase not found.</div></Page>;
+  const tax = taxonomy;
 
   return (
     <Page>
@@ -22,7 +23,7 @@ export function Phase() {
 
       <Section label="Topics">
         {phase.topics.map(slug => {
-          const t = taxonomy.topics[slug];
+          const t = tax.topics[slug];
           const tf = topics.find(x => x.frontmatter.slug === slug)?.frontmatter;
           const prog = progressStore.getTopicProgress(slug);
           const totalRes = tf

@@ -4,6 +4,7 @@ import { connections, taxonomy } from "../../content/index.js";
 export function ConnectionSidebar({ slug }: { slug: string }) {
   const edges = connections.filter(e => e.from === slug || e.to === slug);
   if (edges.length === 0 || !taxonomy) return null;
+  const tax = taxonomy;
   const grouped: Record<string, { other: string; reasoning: string }[]> = {};
   for (const e of edges) {
     const other = e.from === slug ? e.to : e.from;
@@ -22,7 +23,7 @@ export function ConnectionSidebar({ slug }: { slug: string }) {
         <div key={type} className="mb-lg">
           <div className="text-caption-md text-mute mb-xs">{labels[type] ?? type}</div>
           {items.map(({ other }) => {
-            const t = taxonomy.topics[other];
+            const t = tax.topics[other];
             if (!t) return null;
             return <div key={other}><Link to={`/topic/${other}`} className="underline">{t.title}</Link></div>;
           })}
