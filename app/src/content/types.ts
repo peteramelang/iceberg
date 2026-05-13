@@ -46,6 +46,20 @@ export const CourseResourceSchema = z.object({
   ...AttributionFields
 });
 
+export const PitfallSchema = z.object({
+  title: z.string().min(1),
+  explanation: z.string().min(40)
+});
+export type Pitfall = z.infer<typeof PitfallSchema>;
+
+export const CodeExampleSchema = z.object({
+  language: z.enum(["typescript","javascript","python","go","rust","sql","bash","yaml","json","ruby","java","csharp"]),
+  title: z.string().min(1),
+  code: z.string().min(20),
+  reasoning: z.string().min(1)
+});
+export type CodeExample = z.infer<typeof CodeExampleSchema>;
+
 export const TopicFrontmatterSchema = z.object({
   slug: z.string(),
   title: z.string(),
@@ -53,6 +67,11 @@ export const TopicFrontmatterSchema = z.object({
   order: z.number().int(),
   summary: z.string(),
   definition: z.string(),
+  narrative: z.string().min(400),
+  pitfalls: z.array(PitfallSchema).min(3).max(8),
+  codeExamples: z.array(CodeExampleSchema).min(1).max(3),
+  difficulty: z.enum(["beginner","intermediate","advanced"]),
+  estimatedHours: z.number().min(0.5).max(40),
   needsManualPick: z.boolean(),
   resources: z.object({
     videos: z.object({ short: VideoResourceSchema.nullable(), long: VideoResourceSchema.nullable() }),
@@ -99,3 +118,18 @@ export const TaxonomySchema = z.object({
   }))
 });
 export type Taxonomy = z.infer<typeof TaxonomySchema>;
+
+export const PathSchema = z.object({
+  slug: z.string(),
+  title: z.string(),
+  description: z.string().min(40),
+  audience: z.string(),
+  estimatedHours: z.number().min(1),
+  topics: z.array(z.string()).min(4).max(15)
+});
+export type LearningPath = z.infer<typeof PathSchema>;
+
+export const PathsDocSchema = z.object({
+  version: z.literal(1),
+  paths: z.array(PathSchema)
+});

@@ -17,9 +17,11 @@ if (!existsSync(contentDir)) {
 
 const taxonomyPath = join(contentDir, "_taxonomy.json");
 const connectionsPath = join(contentDir, "_connections.json");
+const pathsPath = join(contentDir, "_paths.json");
 
 const taxonomy = existsSync(taxonomyPath) ? JSON.parse(readFileSync(taxonomyPath, "utf8")) : null;
 const connections = existsSync(connectionsPath) ? JSON.parse(readFileSync(connectionsPath, "utf8")) : { version: 1, edges: [] };
+const paths = existsSync(pathsPath) ? JSON.parse(readFileSync(pathsPath, "utf8")) : null;
 
 const topics = parseAllTopics(contentDir);
 
@@ -28,7 +30,8 @@ const bundle = {
   mode,
   taxonomy,
   connections,
-  topics: topics.map(t => ({ frontmatter: t.frontmatter, body: t.body }))
+  topics: topics.map(t => ({ frontmatter: t.frontmatter, body: t.body })),
+  paths
 };
 
 const out = join(repoRoot, "app", "src", "content", "topics.generated.json");
