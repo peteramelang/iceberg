@@ -37,6 +37,7 @@ resources:
       reasoning: >-
         Official Stripe intro covering core payment flow, tokenization, and card
         handling basics.
+      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=ZNQ9-jzv_Z0'
       title: 'Building a Payment System: Stripe & SaaS Architecture'
@@ -46,6 +47,7 @@ resources:
       reasoning: >-
         Deep dive into production payment architecture, webhook handling,
         idempotency, and recurring billing patterns.
+      source: ai-researcher
   articles:
     - url: 'https://stripe.com/docs/payments'
       title: Payments Overview
@@ -53,18 +55,24 @@ resources:
       reasoning: >-
         Stripe's official payment documentation covering Payment Intents API,
         card handling, 3D Secure, and best practices.
+      publisher: Stripe
+      source: ai-researcher
     - url: 'https://stripe.com/docs/billing/subscriptions/overview'
       title: Subscriptions & Recurring Billing
       kind: canonical-doc
       reasoning: >-
         Canonical reference for recurring revenue, subscription state machines,
         prorations, and dunning workflows.
+      publisher: Stripe
+      source: ai-researcher
     - url: 'https://increment.com/payments/'
       title: The Increment Guide to Payments
       kind: engineering-blog
       reasoning: >-
         Comprehensive engineering guide covering payment system architecture,
         failure modes, and production patterns from Stripe's engineering blog.
+      publisher: Increment Magazine (Stripe)
+      source: ai-researcher
   services:
     - name: Stripe
       url: 'https://stripe.com'
@@ -72,6 +80,7 @@ resources:
       reasoning: >-
         Industry-leading payment processor with extensive API, webhooks, and
         ecosystem. Essential reference for payment patterns and PCI compliance.
+      source: ai-researcher
     - name: Paddle
       url: 'https://www.paddle.com'
       category: payments-platform
@@ -79,6 +88,7 @@ resources:
         Alternative processor focused on SaaS with built-in billing, tax
         handling, and compliance—useful for understanding different
         architectural trade-offs.
+      source: ai-researcher
     - name: Adyen
       url: 'https://www.adyen.com'
       category: global-processor
@@ -86,12 +96,14 @@ resources:
         Enterprise-grade processor supporting global payments, strong fraud
         detection, and multi-currency handling—demonstrates mature payment
         infrastructure.
+      source: ai-researcher
     - name: Square
       url: 'https://squareup.com'
       category: omnichannel-payments
       reasoning: >-
         Omnichannel platform covering in-person, online, and subscription
         payments—useful for understanding unified payment architecture.
+      source: ai-researcher
   courses:
     - url: 'https://stripe.com/en-gb/developers'
       title: Stripe Developer Guides
@@ -100,6 +112,7 @@ resources:
       reasoning: >-
         Free interactive guides, API reference, and real-world examples covering
         integration patterns, testing, and production readiness.
+      source: ai-researcher
     - url: 'https://www.udemy.com/course/stripe-js-react-node/'
       title: 'Stripe JS + React + Node.js: Build a SaaS'
       provider: Udemy
@@ -107,6 +120,7 @@ resources:
       reasoning: >-
         Hands-on course implementing full payment flow with Stripe, covering
         subscriptions, webhooks, and production deployment.
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

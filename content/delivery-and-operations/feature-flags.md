@@ -47,35 +47,45 @@ resources:
       url: 'https://martinfowler.com/articles/feature-toggles.html'
       kind: canonical-doc
       reasoning: ''
+      publisher: Martin Fowler
+      source: ai-researcher
     - title: Homegrown Feature Flag Systems vs. Enterprise Solutions
       url: 'https://launchdarkly.com/blog'
       kind: canonical-doc
       reasoning: ''
+      publisher: LaunchDarkly
+      source: ai-researcher
   services:
     - name: LaunchDarkly
       url: 'https://launchdarkly.com'
       category: platform
       reasoning: ''
+      source: ai-researcher
     - name: GrowthBook
       url: 'https://www.growthbook.io'
       category: platform
       reasoning: ''
+      source: ai-researcher
     - name: PostHog
       url: 'https://posthog.com/docs/feature-flags'
       category: platform
       reasoning: ''
+      source: ai-researcher
     - name: Flagsmith
       url: 'https://flagsmith.com'
       category: platform
       reasoning: ''
+      source: ai-researcher
     - name: Unleash
       url: 'https://www.getunleash.io'
       category: platform
       reasoning: ''
+      source: ai-researcher
     - name: Statsig
       url: 'https://statsig.com'
       category: platform
       reasoning: ''
+      source: ai-researcher
   courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

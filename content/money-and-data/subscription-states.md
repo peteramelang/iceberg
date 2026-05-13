@@ -33,6 +33,7 @@ resources:
       reasoning: >-
         Direct overview of subscription billing models from official Stripe,
         covers state transitions in billing lifecycle
+      source: ai-researcher
     long: null
   articles:
     - url: 'https://docs.stripe.com/billing/subscriptions/overview'
@@ -41,6 +42,8 @@ resources:
       reasoning: >-
         Canonical Stripe documentation on subscription states: incomplete,
         trialing, active, past_due, canceled, unpaid
+      publisher: Stripe
+      source: ai-researcher
     - url: >-
         https://docs.recurly.com/recurly-subscriptions/docs/subscription-lifecycle
       title: Subscription lifecycle
@@ -48,24 +51,32 @@ resources:
       reasoning: >-
         Recurly's complete subscription lifecycle model including pauses,
         expirations, and state transitions
+      publisher: Recurly
+      source: ai-researcher
     - url: 'https://www.chargebee.com/docs/2.0/subscription-life-time.html'
       title: Subscription Lifetime
       kind: canonical-doc
       reasoning: >-
         Chargebee documentation on subscription states: Future, In Trial,
         Active, Non Renewing, Paused, Canceled
+      publisher: Chargebee
+      source: ai-researcher
     - url: 'https://xstate.js.org/'
       title: XState - JavaScript State Machines and Statecharts
       kind: canonical-doc
       reasoning: >-
         Production-ready state machine library for implementing subscription
         state machines with explicit guards and actions
+      publisher: Stately (XState)
+      source: ai-researcher
     - url: 'https://stately.ai/docs/xstate'
       title: XState Documentation
       kind: canonical-doc
       reasoning: >-
         Comprehensive guide to building state machines and actors for complex
         subscription workflows
+      publisher: Stately
+      source: ai-researcher
   services:
     - name: Stripe Billing
       url: 'https://stripe.com/billing'
@@ -73,30 +84,36 @@ resources:
       reasoning: >-
         Industry standard for managing subscription states with comprehensive
         API for state transitions and webhooks
+      vendor: Stripe
+      source: ai-researcher
     - name: Recurly
       url: 'https://recurly.com'
       category: subscription_management
       reasoning: >-
         Purpose-built subscription management platform with explicit lifecycle
         states and feature gates
+      source: ai-researcher
     - name: Chargebee
       url: 'https://www.chargebee.com'
       category: subscription_management
       reasoning: >-
         Comprehensive subscription billing with state machine model supporting
         pauses, non-renewing, and cancellation
+      source: ai-researcher
     - name: Stigg
       url: 'https://www.stigg.io'
       category: entitlement_control
       reasoning: >-
         Monetization control layer that manages feature access based on
         subscription state and entitlements
+      source: ai-researcher
     - name: Paddle
       url: 'https://www.paddle.com'
       category: subscription_management
       reasoning: >-
         Billing and revenue optimization platform with subscription lifecycle
         and state management features
+      source: ai-researcher
   courses:
     - url: 'https://stately.ai/docs/machines'
       title: State machines
@@ -105,6 +122,7 @@ resources:
       reasoning: >-
         Free foundational documentation on designing state machines applicable
         to subscription modeling
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

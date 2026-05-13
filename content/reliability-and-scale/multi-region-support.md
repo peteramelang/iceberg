@@ -41,6 +41,8 @@ resources:
       reasoning: >-
         Foundational AWS architecture pattern for designing systems that remain
         stable across zone failures, a prerequisite for multi-region thinking
+      publisher: Amazon Web Services
+      source: ai-researcher
     - url: 'https://aws.amazon.com/architecture/multi-region/'
       title: Multi-Region Architecture
       kind: tutorial
@@ -48,12 +50,16 @@ resources:
         Comprehensive AWS reference architecture documenting patterns,
         trade-offs, and best practices for deploying applications across
         multiple regions
+      publisher: Amazon Web Services
+      source: ai-researcher
     - url: 'https://www.cockroachlabs.com/docs/stable/multiregion-overview.html'
       title: CockroachDB Multi-Region Overview
       kind: canonical-doc
       reasoning: >-
         Detailed documentation of distributed database patterns for multi-region
         deployments with strong consistency guarantees across regions
+      publisher: Cockroach Labs
+      source: ai-researcher
     - url: 'https://fly.io/docs/reference/regions/'
       title: Fly.io Regions Reference
       kind: canonical-doc
@@ -61,6 +67,8 @@ resources:
         Platform-specific multi-region deployment guide showing practical
         patterns for containerized applications with automatic geographic
         distribution
+      publisher: Fly.io
+      source: ai-researcher
   services:
     - name: Fly.io
       url: 'https://fly.io'
@@ -69,18 +77,22 @@ resources:
         Container deployment platform with native multi-region support,
         automatic edge deployment, and built-in traffic management across
         regions
+      source: ai-researcher
     - name: PlanetScale
       url: 'https://planetscale.com'
       category: database
       reasoning: >-
         MySQL-compatible serverless database with vitess-powered horizontal
         scaling and multi-region replication capabilities
+      source: ai-researcher
     - name: CockroachDB
       url: 'https://www.cockroachlabs.com'
       category: database
       reasoning: >-
         Distributed SQL database designed for multi-region deployments with
         strong consistency and automatic failover across geographic regions
+      vendor: Cockroach Labs
+      source: ai-researcher
     - name: AWS Global Accelerator
       url: 'https://aws.amazon.com'
       category: networking
@@ -88,18 +100,23 @@ resources:
         AWS service that optimizes network path selection and provides anycast
         IP addresses for intelligent geographic traffic routing to multiple
         regions
+      vendor: Amazon Web Services
+      source: ai-researcher
     - name: Cloudflare
       url: 'https://www.cloudflare.com'
       category: cdn
       reasoning: >-
         Global content delivery and edge computing platform providing DNS, DDoS
         protection, and geographic load balancing across regions
+      source: ai-researcher
     - name: Cloudflare Workers
       url: 'https://workers.cloudflare.com'
       category: edge-computing
       reasoning: >-
         Serverless edge computing platform enabling code execution at
         Cloudflare's global edge locations for low-latency application logic
+      vendor: Cloudflare
+      source: ai-researcher
   courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

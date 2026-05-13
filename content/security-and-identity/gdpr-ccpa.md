@@ -34,6 +34,7 @@ resources:
       reasoning: >-
         Comprehensive overview of GDPR compliance fundamentals and data-handling
         requirements.
+      source: ai-researcher
   articles:
     - url: 'https://gdpr.eu'
       title: GDPR — Official EU Regulation
@@ -41,39 +42,50 @@ resources:
       reasoning: >-
         Canonical EU source for GDPR guidance and data-subject-rights
         definitions.
+      publisher: GDPR.eu
+      source: ai-researcher
     - url: 'https://oag.ca.gov/privacy/ccpa'
       title: California Consumer Privacy Act — Attorney General
       kind: canonical-doc
       reasoning: Official CCPA requirements and business obligations.
+      publisher: California Attorney General
+      source: ai-researcher
     - url: 'https://www.iapp.org'
       title: IAPP — International Association of Privacy Professionals
       kind: canonical-doc
       reasoning: >-
         Professional body providing GDPR/CCPA training, certifications, and
         global tracking.
+      publisher: IAPP
+      source: ai-researcher
   services:
     - name: OneTrust
       url: 'https://www.onetrust.com'
       category: privacy-platform
       reasoning: Market-leading enterprise privacy and compliance platform.
+      source: ai-researcher
     - name: TrustArc
       url: 'https://trustarc.com'
       category: privacy-platform
       reasoning: Privacy data governance with automated compliance and DSR management.
+      source: ai-researcher
     - name: Securiti
       url: 'https://securiti.ai'
       category: privacyops
       reasoning: PrivacyOps platform automating PI discovery and DSR workflows.
+      source: ai-researcher
     - name: DataGrail
       url: 'https://www.datagrail.io'
       category: dsr-orchestration
       reasoning: >-
         Specialized DSR platform orchestrating requests across thousands of
         integrations.
+      source: ai-researcher
     - name: Transcend
       url: 'https://transcend.io'
       category: privacy-platform
       reasoning: 'Compliance layer automating data deletion, access, and opt-outs.'
+      source: ai-researcher
   courses:
     - url: 'https://www.udemy.com/course/learn-gdpr/'
       title: 'GDPR Complete Guide: Data Protection and Privacy Compliance'
@@ -82,6 +94,7 @@ resources:
       reasoning: >-
         Comprehensive course on GDPR governance, cookie rules, and real-world
         enforcement.
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

@@ -49,6 +49,8 @@ resources:
         Defines the fundamental pattern of storing all environment-specific
         configuration in environment variables, separated from code—the
         foundation of modern environment management.
+      publisher: 12factor.net (Adam Wiggins)
+      source: ai-researcher
     - url: >-
         https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/
       title: 'Automating Safe, Hands-Off Deployments'
@@ -57,6 +59,8 @@ resources:
         AWS Builders' Library article on staging environment strategies and safe
         deployment patterns including canary deployments and progressive traffic
         shifting across environments.
+      publisher: Amazon Web Services
+      source: ai-researcher
     - url: 'https://www.honeycomb.io/blog/the-open-source-observability-project/'
       title: Preview Environments and Observability
       kind: engineering-blog
@@ -64,6 +68,8 @@ resources:
         Honeycomb's perspective on using preview/ephemeral environments for
         feature validation and the role of observability in testing across
         different environment stages.
+      publisher: Honeycomb
+      source: ai-researcher
   services:
     - name: Doppler
       url: 'https://www.doppler.com'
@@ -72,6 +78,7 @@ resources:
         Centralized secrets and environment variable management across dev,
         staging, and production with audit trails, access control, and automatic
         rotation.
+      source: ai-researcher
     - name: Vercel
       url: 'https://vercel.com'
       category: environment-management
@@ -79,6 +86,7 @@ resources:
         Provides environment variable management, preview deployments for every
         PR, and staging/production environment separation with integrated GitOps
         workflows.
+      source: ai-researcher
     - name: Fly.io
       url: 'https://fly.io'
       category: deployment-platform
@@ -86,6 +94,7 @@ resources:
         Container deployment platform with built-in support for multiple
         environments, encrypted secrets management, and automatic
         staging/production infrastructure provisioning.
+      source: ai-researcher
     - name: Docker
       url: 'https://www.docker.com'
       category: containerization
@@ -93,6 +102,7 @@ resources:
         Containerization ensures consistent environments across development,
         staging, and production by packaging applications with all dependencies
         in identical runtime images.
+      source: ai-researcher
     - name: Kubernetes
       url: 'https://kubernetes.io'
       category: orchestration
@@ -100,6 +110,8 @@ resources:
         Orchestration platform with native support for environment-specific
         configuration through ConfigMaps for non-sensitive config and Secrets
         for sensitive data across multiple namespaces.
+      vendor: Kubernetes (CNCF)
+      source: ai-researcher
   courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

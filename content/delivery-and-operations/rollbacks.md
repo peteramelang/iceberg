@@ -37,6 +37,7 @@ resources:
       reasoning: >-
         Quick visual explanation of blue-green deployment pattern for safe
         rollbacks and zero-downtime deployments.
+      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=Nz4J5YVl1Wc'
       title: 'Advanced Kubernetes Deployments: Blue-Green, Canary, and Rolling Updates'
@@ -46,6 +47,7 @@ resources:
       reasoning: >-
         Comprehensive guide covering deployment strategies, rollback mechanisms,
         and when to use each approach for safe release management.
+      source: ai-researcher
   articles:
     - url: 'https://martinfowler.com/bliki/BlueGreenDeployment.html'
       title: Blue-Green Deployment
@@ -53,18 +55,24 @@ resources:
       reasoning: >-
         Martin Fowler's canonical reference on blue-green deployment pattern,
         explaining the mechanics and tradeoffs for safe rollbacks.
+      publisher: Martin Fowler
+      source: ai-researcher
     - url: 'https://martinfowler.com/bliki/CanaryRelease.html'
       title: Canary Release
       kind: canonical-doc
       reasoning: >-
         Martin Fowler's explanation of canary deployment strategy for gradual
         rollout with built-in rollback capability.
+      publisher: Martin Fowler
+      source: ai-researcher
     - url: 'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/'
       title: 'Kubernetes Deployments: Rolling Updates and Rollback'
       kind: canonical-doc
       reasoning: >-
         Official Kubernetes documentation on native rollout and rollback
         mechanisms, revision history, and health monitoring.
+      publisher: Kubernetes (CNCF)
+      source: ai-researcher
     - url: >-
         https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/
       title: 'Automating Safe, Hands-Off Deployments'
@@ -72,12 +80,16 @@ resources:
       reasoning: >-
         Amazon's engineering approach to safe deployments with automatic
         rollback, staggered wave deployment, and continuous monitoring.
+      publisher: Amazon Web Services
+      source: ai-researcher
     - url: 'https://argoproj.github.io/argo-rollouts/'
       title: 'Argo Rollouts: Advanced Deployment Strategies'
       kind: canonical-doc
       reasoning: >-
         Official Argo Rollouts documentation covering blue-green, canary, and
         progressive delivery with automated analysis and rollback.
+      publisher: Argo (CNCF)
+      source: ai-researcher
   services:
     - name: Kubernetes
       url: 'https://kubernetes.io'
@@ -85,18 +97,23 @@ resources:
       reasoning: >-
         Native Kubernetes Deployment controller with built-in rolling updates,
         rollout history, and kubectl rollback commands.
+      vendor: Kubernetes (CNCF)
+      source: ai-researcher
     - name: Argo Rollouts
       url: 'https://argoproj.github.io/argo-rollouts/'
       category: progressive-delivery
       reasoning: >-
         Advanced Kubernetes-native controller enabling blue-green and canary
         deployments with automated metric-based rollbacks.
+      vendor: Argo (CNCF)
+      source: ai-researcher
     - name: Flagger
       url: 'https://flagger.app'
       category: progressive-delivery
       reasoning: >-
         Cloud-native operator for automated progressive delivery with canary
         analysis, service mesh integration, and automatic rollback.
+      source: ai-researcher
     - name: Spinnaker
       url: 'https://spinnaker.io'
       category: multi-cloud-cd-platform
@@ -104,12 +121,14 @@ resources:
         Netflix's multi-cloud continuous delivery platform supporting blue-green
         deployments, canary analysis, and traffic management across cloud
         providers.
+      source: ai-researcher
     - name: Heroku
       url: 'https://www.heroku.com'
       category: paas-deployment-platform
       reasoning: >-
         PaaS with instant code and database rollback capabilities, simplifying
         safe deployments without infrastructure management.
+      source: ai-researcher
   courses:
     - url: 'https://www.linux-foundation.org/training/kubernetes-basics/'
       title: Kubernetes Basics
@@ -118,6 +137,7 @@ resources:
       reasoning: >-
         Foundational course on Kubernetes deployments including rolling updates
         and rollback mechanisms.
+      source: ai-researcher
     - url: 'https://www.pluralsight.com/courses/kubernetes-deployments'
       title: Kubernetes Deployments
       provider: Pluralsight
@@ -125,6 +145,7 @@ resources:
       reasoning: >-
         Advanced course covering deployment strategies, health checks, and
         rollback automation in Kubernetes.
+      source: ai-researcher
     - url: >-
         https://learn.microsoft.com/en-us/azure/architecture/guide/operator/mission-critical-deployment-strategy
       title: Mission-Critical Deployment Strategies
@@ -133,6 +154,7 @@ resources:
       reasoning: >-
         Guidance on safe deployment patterns including blue-green and canary
         strategies with rollback planning.
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

@@ -25,20 +25,26 @@ export interface TopicFrontmatter {
   };
 }
 
+export type AttributionSource = "ai-researcher" | "human-curator";
+
 export interface VideoResource {
   url: string; title: string; author: string;
   durationMinutes: number; addedAt: string; reasoning: string;
+  channelUrl?: string; license?: string; source?: AttributionSource;
 }
 export interface ArticleResource {
   url: string; title: string;
   kind: "canonical-doc" | "engineering-blog" | "tutorial";
   reasoning: string;
+  publisher?: string; author?: string; license?: string; source?: AttributionSource;
 }
 export interface ServiceResource {
   name: string; url: string; category: string; reasoning: string;
+  vendor?: string; license?: string; source?: AttributionSource;
 }
 export interface CourseResource {
   url: string; title: string; provider: string; paid: boolean; reasoning: string;
+  instructor?: string; license?: string; source?: AttributionSource;
 }
 
 export interface TopicFile {

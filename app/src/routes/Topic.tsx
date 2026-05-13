@@ -27,9 +27,23 @@ export function Topic() {
 
           {fm.resources.videos.short && (
             <Section label="Videos">
-              <ResourceRow topicSlug={fm.slug} resourceKey="videos.short" title={fm.resources.videos.short.title} url={fm.resources.videos.short.url} meta={`${fm.resources.videos.short.durationMinutes} min`} />
+              <ResourceRow
+                topicSlug={fm.slug}
+                resourceKey="videos.short"
+                title={fm.resources.videos.short.title}
+                url={fm.resources.videos.short.url}
+                attribution={fm.resources.videos.short.author}
+                meta={`${fm.resources.videos.short.durationMinutes} min`}
+              />
               {fm.resources.videos.long && (
-                <ResourceRow topicSlug={fm.slug} resourceKey="videos.long" title={fm.resources.videos.long.title} url={fm.resources.videos.long.url} meta={`${fm.resources.videos.long.durationMinutes} min`} />
+                <ResourceRow
+                  topicSlug={fm.slug}
+                  resourceKey="videos.long"
+                  title={fm.resources.videos.long.title}
+                  url={fm.resources.videos.long.url}
+                  attribution={fm.resources.videos.long.author}
+                  meta={`${fm.resources.videos.long.durationMinutes} min`}
+                />
               )}
             </Section>
           )}
@@ -37,7 +51,15 @@ export function Topic() {
           {fm.resources.articles.length > 0 && (
             <Section label="Articles & Docs">
               {fm.resources.articles.map((a, i) => (
-                <ResourceRow key={i} topicSlug={fm.slug} resourceKey={`articles.${i}`} title={a.title} url={a.url} meta={a.kind} />
+                <ResourceRow
+                  key={i}
+                  topicSlug={fm.slug}
+                  resourceKey={`articles.${i}`}
+                  title={a.title}
+                  url={a.url}
+                  attribution={a.author ?? a.publisher}
+                  meta={a.kind}
+                />
               ))}
             </Section>
           )}
@@ -45,7 +67,15 @@ export function Topic() {
           {fm.resources.services.length > 0 && (
             <Section label="Services">
               {fm.resources.services.map((s, i) => (
-                <ResourceRow key={i} topicSlug={fm.slug} resourceKey={`services.${i}`} title={s.name} url={s.url} meta={s.category} />
+                <ResourceRow
+                  key={i}
+                  topicSlug={fm.slug}
+                  resourceKey={`services.${i}`}
+                  title={s.name}
+                  url={s.url}
+                  attribution={s.vendor && s.vendor !== s.name ? s.vendor : undefined}
+                  meta={s.category}
+                />
               ))}
             </Section>
           )}
@@ -53,13 +83,28 @@ export function Topic() {
           {fm.resources.courses.length > 0 && (
             <Section label="Courses">
               {fm.resources.courses.map((c, i) => (
-                <ResourceRow key={i} topicSlug={fm.slug} resourceKey={`courses.${i}`} title={c.title} url={c.url} meta={`${c.provider}${c.paid ? " · paid" : ""}`} />
+                <ResourceRow
+                  key={i}
+                  topicSlug={fm.slug}
+                  resourceKey={`courses.${i}`}
+                  title={c.title}
+                  url={c.url}
+                  attribution={c.instructor}
+                  meta={`${c.provider}${c.paid ? " · paid" : ""}`}
+                />
               ))}
             </Section>
           )}
 
           <Section label="Your notes">
             <NotesField slug={fm.slug} />
+          </Section>
+
+          <Section label="Attribution">
+            <p className="text-caption-md text-mute">
+              These resources are owned by their original creators. iceberg curates and links, but does not redistribute.{" "}
+              <Link to="/credits" className="underline">Full credits</Link>.
+            </p>
           </Section>
         </div>
         <ConnectionSidebar slug={fm.slug} />

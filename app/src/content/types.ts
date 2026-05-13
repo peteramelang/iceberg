@@ -1,12 +1,19 @@
 import { z } from "zod";
 
+const AttributionFields = {
+  license: z.string().optional(),
+  source: z.enum(["ai-researcher", "human-curator"]).optional()
+};
+
 export const VideoResourceSchema = z.object({
   url: z.string().url(),
   title: z.string(),
   author: z.string(),
   durationMinutes: z.number().int().positive(),
   addedAt: z.string(),
-  reasoning: z.string()
+  reasoning: z.string(),
+  channelUrl: z.string().url().optional(),
+  ...AttributionFields
 });
 export type VideoResource = z.infer<typeof VideoResourceSchema>;
 
@@ -14,14 +21,19 @@ export const ArticleResourceSchema = z.object({
   url: z.string().url(),
   title: z.string(),
   kind: z.enum(["canonical-doc", "engineering-blog", "tutorial"]),
-  reasoning: z.string()
+  reasoning: z.string(),
+  publisher: z.string().optional(),
+  author: z.string().optional(),
+  ...AttributionFields
 });
 
 export const ServiceResourceSchema = z.object({
   name: z.string(),
   url: z.string().url(),
   category: z.string(),
-  reasoning: z.string()
+  reasoning: z.string(),
+  vendor: z.string().optional(),
+  ...AttributionFields
 });
 
 export const CourseResourceSchema = z.object({
@@ -29,7 +41,9 @@ export const CourseResourceSchema = z.object({
   title: z.string(),
   provider: z.string(),
   paid: z.boolean(),
-  reasoning: z.string()
+  reasoning: z.string(),
+  instructor: z.string().optional(),
+  ...AttributionFields
 });
 
 export const TopicFrontmatterSchema = z.object({

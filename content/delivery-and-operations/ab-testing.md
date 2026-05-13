@@ -26,39 +26,57 @@ resources:
       title: 'Microsoft: Experimentation Platform and A/B Testing'
       kind: tutorial
       reasoning: (no reasoning captured)
+      publisher: Microsoft
+      source: ai-researcher
   services:
     - name: 'Optimizely: A/B Testing Platform'
       url: 'https://www.optimizely.com/ab-testing/'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: Optimizely
+      source: ai-researcher
     - name: 'GrowthBook: Open Source A/B Testing'
       url: 'https://www.growthbook.io/'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: GrowthBook
+      source: ai-researcher
     - name: 'Statsig: Feature Experimentation Platform'
       url: 'https://statsig.com/'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: Statsig
+      source: ai-researcher
     - name: 'PostHog: Product Analytics & Experimentation'
       url: 'https://posthog.com/'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: PostHog
+      source: ai-researcher
     - name: 'Split.io: Feature Flagging and Experimentation'
       url: 'https://www.split.io/'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: Split
+      source: ai-researcher
     - name: 'VWO: A/B Testing and Conversion Optimization'
       url: 'https://vwo.com/'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: VWO
+      source: ai-researcher
     - name: 'Booking.ai: A/B Testing at Scale'
       url: 'https://booking.ai/'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: Booking
+      source: ai-researcher
     - name: 'Lyft: A/B Testing at Scale'
       url: 'https://lyft.com/careers'
       category: platform
       reasoning: (no reasoning captured)
+      vendor: Lyft
+      source: ai-researcher
   courses: []
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'

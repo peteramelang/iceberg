@@ -1,0 +1,248 @@
+# Credits
+
+Iceberg curates learning resources created by the people and organizations below. This list is auto-generated from `content/**/*.md` by `pipeline/scripts/generate-credits.ts`. **The original creators retain all rights to their content; iceberg links to their work but does not redistribute it.**
+
+Total contributors: **220** across **46** topics.
+
+If you are listed here and would like attribution changed, removed, or a link replaced, please open an issue.
+
+---
+
+- **(unspecified)** — 1 resource across 1 topic
+- **12factor.net (Adam Wiggins)** — 1 resource across 1 topic
+- **1Password** — 1 resource across 1 topic
+- **ACM Queue** — 2 resources across 1 topic
+- **ADR community** — 1 resource across 1 topic
+- **Adyen** — 1 resource across 1 topic
+- **Aip** — 1 resource across 1 topic
+- **AlgoMaster** — 1 resource across 1 topic
+- **Amazon Web Services** — 28 resources across 16 topics
+- **Amplitude** — 2 resources across 1 topic
+- **Andrew Chen** — 1 resource across 1 topic
+- **Apache Kafka** — 2 resources across 2 topics
+- **Aphyr / Kyle Kingsbury** — 2 resources across 1 topic
+- **Apptio** — 1 resource across 1 topic
+- **Argo (CNCF)** — 2 resources across 1 topic
+- **Atlas** — 1 resource across 1 topic
+- **Atlassian** — 5 resources across 2 topics
+- **Atlassian (Opsgenie)** — 1 resource across 1 topic
+- **Auth0** — 2 resources across 2 topics
+- **AWS** — 1 resource across 1 topic
+- **Axiom** — 1 resource across 1 topic
+- **Baeldung** — 1 resource across 1 topic
+- **Better Stack** — 3 resources across 3 topics
+- **Biteinteractive** — 1 resource across 1 topic
+- **Booking** — 1 resource across 1 topic
+- **Brandur Leach** — 2 resources across 2 topics
+- **Brendan Gregg** — 3 resources across 1 topic
+- **Bridgecrew (Checkov)** — 2 resources across 1 topic
+- **BugSnag** — 1 resource across 1 topic
+- **Buildkite** — 1 resource across 1 topic
+- **Bytebytego** — 1 resource across 1 topic
+- **ByteByteGo** — 6 resources across 3 topics
+- **California Attorney General** — 1 resource across 1 topic
+- **Casbin** — 1 resource across 1 topic
+- **Chargebee** — 3 resources across 2 topics
+- **CircleCI** — 1 resource across 1 topic
+- **Clerk** — 1 resource across 1 topic
+- **Cloud Native Computing Foundation** — 2 resources across 1 topic
+- **Cloudconformity** — 1 resource across 1 topic
+- **Cloudflare** — 8 resources across 6 topics
+- **CloudZero** — 1 resource across 1 topic
+- **CNCF** — 1 resource across 1 topic
+- **Cockroach Labs** — 4 resources across 3 topics
+- **Confluent** — 5 resources across 2 topics
+- **Convention Center Tech** — 1 resource across 1 topic
+- **Cookiebot (Usercentrics)** — 1 resource across 1 topic
+- **Coursera** — 6 resources across 6 topics
+- **Coursera (Google Cloud)** — 1 resource across 1 topic
+- **Coursera (IBM)** — 1 resource across 1 topic
+- **Cypress** — 1 resource across 1 topic
+- **Datadog** — 8 resources across 6 topics
+- **DataGrail** — 1 resource across 1 topic
+- **DevOps/SRE** — 1 resource across 1 topic
+- **Diátaxis (Daniele Procida)** — 1 resource across 1 topic
+- **Divio** — 1 resource across 1 topic
+- **Docker** — 2 resources across 2 topics
+- **Docusaurus (Meta)** — 1 resource across 1 topic
+- **Doppler** — 2 resources across 2 topics
+- **DORA (Google)** — 1 resource across 1 topic
+- **Drizzle ORM** — 1 resource across 1 topic
+- **Dynatrace** — 1 resource across 1 topic
+- **Educative** — 1 resource across 1 topic
+- **edX** — 1 resource across 1 topic
+- **Enterpriseintegrationpatterns** — 1 resource across 1 topic
+- **Envoy** — 3 resources across 2 topics
+- **Fastly** — 2 resources across 2 topics
+- **FinOps Foundation** — 4 resources across 1 topic
+- **FireHydrant** — 1 resource across 1 topic
+- **Fireship** — 1 resource across 1 topic
+- **Flagger** — 1 resource across 1 topic
+- **Flagsmith** — 1 resource across 1 topic
+- **Fly.io** — 3 resources across 2 topics
+- **GDPR.eu** — 1 resource across 1 topic
+- **GeeksforGeeks** — 1 resource across 1 topic
+- **GitBook** — 1 resource across 1 topic
+- **GitHub** — 7 resources across 4 topics
+- **GitLab** — 1 resource across 1 topic
+- **Go (Google)** — 1 resource across 1 topic
+- **Google (Firebase)** — 1 resource across 1 topic
+- **Google (web.dev)** — 1 resource across 1 topic
+- **Google Cloud** — 5 resources across 4 topics
+- **Google Research** — 1 resource across 1 topic
+- **Google SRE** — 11 resources across 6 topics
+- **Grafana Labs** — 7 resources across 5 topics
+- **GrowthBook** — 2 resources across 2 topics
+- **HAProxy** — 1 resource across 1 topic
+- **HashiCorp** — 1 resource across 1 topic
+- **HashiCorp (Vault)** — 1 resource across 1 topic
+- **Hasura** — 2 resources across 1 topic
+- **Heap** — 1 resource across 1 topic
+- **Heroku** — 1 resource across 1 topic
+- **High Scalability** — 1 resource across 1 topic
+- **Honeybadger** — 1 resource across 1 topic
+- **Honeycomb** — 8 resources across 5 topics
+- **Hussein Nasser** — 1 resource across 1 topic
+- **IAPP** — 1 resource across 1 topic
+- **IETF** — 2 resources across 2 topics
+- **incident.io** — 3 resources across 2 topics
+- **Increment Magazine (Stripe)** — 1 resource across 1 topic
+- **Infisical** — 2 resources across 1 topic
+- **Infracost** — 1 resource across 1 topic
+- **Inngest** — 3 resources across 3 topics
+- **Is it Observable** — 1 resource across 1 topic
+- **iubenda** — 1 resource across 1 topic
+- **Jaeger (CNCF)** — 1 resource across 1 topic
+- **Jenkins** — 1 resource across 1 topic
+- **Jepsen** — 1 resource across 1 topic
+- **Jest** — 1 resource across 1 topic
+- **Jez Humble** — 1 resource across 1 topic
+- **Kentcdodds** — 1 resource across 1 topic
+- **Keycloak** — 1 resource across 1 topic
+- **Konghq** — 1 resource across 1 topic
+- **Kubernetes (CNCF)** — 4 resources across 3 topics
+- **LaunchDarkly** — 2 resources across 1 topic
+- **LinkedIn Learning** — 1 resource across 1 topic
+- **Linux Academy** — 2 resources across 2 topics
+- **Linux Foundation** — 6 resources across 5 topics
+- **Liquibase** — 1 resource across 1 topic
+- **Lyft** — 1 resource across 1 topic
+- **Martin Fowler** — 13 resources across 8 topics
+- **Martin Kleppmann / University of Cambridge** — 1 resource across 1 topic
+- **MDN / Mozilla** — 2 resources across 2 topics
+- **Memcached** — 1 resource across 1 topic
+- **Mend (Renovate)** — 1 resource across 1 topic
+- **Microsoft** — 2 resources across 2 topics
+- **Microsoft (Playwright)** — 1 resource across 1 topic
+- **Microsoft Learn** — 7 resources across 4 topics
+- **Mixpanel** — 2 resources across 1 topic
+- **MkDocs** — 1 resource across 1 topic
+- **Mongodb** — 1 resource across 1 topic
+- **Mysql** — 1 resource across 1 topic
+- **New Relic** — 1 resource across 1 topic
+- **NGINX** — 3 resources across 2 topics
+- **NIST** — 1 resource across 1 topic
+- **Nobl9** — 2 resources across 1 topic
+- **Notion** — 1 resource across 1 topic
+- **npm (GitHub)** — 1 resource across 1 topic
+- **O'Reilly / Martin Kleppmann** — 1 resource across 1 topic
+- **Okta** — 1 resource across 1 topic
+- **OneTrust** — 2 resources across 2 topics
+- **Open Policy Agent (CNCF)** — 3 resources across 2 topics
+- **OpenAPI Initiative (Linux Foundation)** — 1 resource across 1 topic
+- **OpenTelemetry (CNCF)** — 6 resources across 3 topics
+- **OpenTelemetry Community** — 1 resource across 1 topic
+- **Optimizely** — 1 resource across 1 topic
+- **Orb** — 1 resource across 1 topic
+- **Osano** — 1 resource across 1 topic
+- **Oso** — 3 resources across 1 topic
+- **OWASP** — 5 resources across 5 topics
+- **Paddle** — 2 resources across 2 topics
+- **PagerDuty** — 6 resources across 3 topics
+- **Percona** — 1 resource across 1 topic
+- **Pingdom** — 1 resource across 1 topic
+- **PlanetScale** — 4 resources across 3 topics
+- **Pluralsight** — 4 resources across 4 topics
+- **PostgreSQL** — 4 resources across 2 topics
+- **PostgREST** — 1 resource across 1 topic
+- **PostHog** — 3 resources across 3 topics
+- **Postman** — 1 resource across 1 topic
+- **Pragmatic Web Security** — 1 resource across 1 topic
+- **Prisma** — 5 resources across 3 topics
+- **Program With Gio** — 1 resource across 1 topic
+- **Prometheus (CNCF)** — 5 resources across 2 topics
+- **PromLabs** — 1 resource across 1 topic
+- **RabbitMQ** — 4 resources across 2 topics
+- **React (Meta)** — 1 resource across 1 topic
+- **ReadMe** — 1 resource across 1 topic
+- **Recurly** — 2 resources across 1 topic
+- **Redgate (Flyway)** — 1 resource across 1 topic
+- **Redis** — 6 resources across 3 topics
+- **Redis University** — 1 resource across 1 topic
+- **Rollbar** — 1 resource across 1 topic
+- **Rootly** — 1 resource across 1 topic
+- **Securiti** — 1 resource across 1 topic
+- **Semantic Versioning** — 2 resources across 2 topics
+- **Sentry** — 1 resource across 1 topic
+- **Sidekiq** — 1 resource across 1 topic
+- **Signoz** — 1 resource across 1 topic
+- **Simplilearn** — 1 resource across 1 topic
+- **SLSA (OpenSSF)** — 1 resource across 1 topic
+- **SmartBear (Swagger)** — 2 resources across 1 topic
+- **Snyk** — 2 resources across 2 topics
+- **Spacelift** — 2 resources across 1 topic
+- **Spinnaker** — 1 resource across 1 topic
+- **Split** — 1 resource across 1 topic
+- **Sqitch** — 1 resource across 1 topic
+- **Square** — 1 resource across 1 topic
+- **Stately** — 2 resources across 1 topic
+- **Stately (XState)** — 1 resource across 1 topic
+- **Statsig** — 2 resources across 2 topics
+- **Steve McGhee** — 1 resource across 1 topic
+- **Stigg** — 1 resource across 1 topic
+- **Stripe** — 17 resources across 6 topics
+- **Supabase** — 1 resource across 1 topic
+- **Sysdig** — 1 resource across 1 topic
+- **System Design Basics** — 1 resource across 1 topic
+- **System Design Primer** — 1 resource across 1 topic
+- **Tech Dummies** — 1 resource across 1 topic
+- **TechWorld with Nana** — 1 resource across 1 topic
+- **Temporal** — 3 resources across 3 topics
+- **Testing Library** — 1 resource across 1 topic
+- **Thecodeforge** — 1 resource across 1 topic
+- **Thoughtworks** — 1 resource across 1 topic
+- **Tom Scott (Tom's Tech Talks)** — 1 resource across 1 topic
+- **Traefik** — 2 resources across 1 topic
+- **Transcend** — 1 resource across 1 topic
+- **TrustArc** — 1 resource across 1 topic
+- **Udemy** — 8 resources across 8 topics
+- **Unknown** — 3 resources across 2 topics
+- **Unleash** — 1 resource across 1 topic
+- **Vantage** — 2 resources across 1 topic
+- **Varnish** — 1 resource across 1 topic
+- **Veeam** — 1 resource across 1 topic
+- **Vercel** — 1 resource across 1 topic
+- **Vitest** — 1 resource across 1 topic
+- **VWO** — 1 resource across 1 topic
+- **Web Dev Simplified** — 2 resources across 1 topic
+- **Wikipedia** — 1 resource across 1 topic
+- **Zipkin** — 1 resource across 1 topic
+- **Zuora** — 1 resource across 1 topic
+
+---
+
+## Foundational frameworks and references
+
+Beyond the per-resource credits above, the iceberg taxonomy and curriculum design draws on broader bodies of work:
+
+- **Google SRE Book and Workbook** — Site Reliability Engineering as a discipline; SLO/SLI vocabulary; incident response.
+- **OWASP** — security cheat sheets, threat models, and authorization patterns.
+- **Martin Fowler** — patterns for continuous delivery, feature toggles, evolutionary database design.
+- **Cloud Native Computing Foundation (CNCF)** — vendor-neutral specifications and projects (OpenTelemetry, Prometheus, Kubernetes, Jaeger, OPA, Argo).
+- **The Twelve-Factor App** — environment and configuration discipline.
+- **AWS Builders' Library** — production-engineering practice notes.
+- **Brendan Gregg, Aphyr (Kyle Kingsbury / Jepsen), Charity Majors and the observability community** — performance and reliability methodologies.
+
+---
+
+Generated 2026-05-13.

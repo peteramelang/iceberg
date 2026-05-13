@@ -30,6 +30,7 @@ resources:
       durationMinutes: 8
       addedAt: '2026-05-14T00:00:00Z'
       reasoning: Quick overview of continuous delivery principles and benefits
+      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=X9WHKX-21oxA'
       title: Continuous Delivery Practices & Patterns
@@ -39,6 +40,7 @@ resources:
       reasoning: >-
         Deep dive into deployment pipelines, testing strategies, and operational
         practices for safe continuous delivery
+      source: ai-researcher
   articles:
     - url: 'https://martinfowler.com/articles/continuousIntegration.html'
       title: Continuous Integration
@@ -46,30 +48,40 @@ resources:
       reasoning: >-
         Canonical Martin Fowler article on CI practices, principles, and
         implementation approaches
+      publisher: Martin Fowler
+      source: ai-researcher
     - url: 'https://martinfowler.com/bliki/ContinuousDelivery.html'
       title: Continuous Delivery
       kind: tutorial
       reasoning: >-
         Martin Fowler's bliki entry explaining the core concepts and distinction
         between CI and CD
+      publisher: Martin Fowler
+      source: ai-researcher
     - url: 'https://martinfowler.com/articles/cd4ml.html'
       title: Continuous Delivery for Machine Learning
       kind: tutorial
       reasoning: >-
         How to apply CD principles to ML systems, addressing challenges unique
         to data and model deployments
+      publisher: Martin Fowler
+      source: ai-researcher
     - url: 'https://dora.dev/'
       title: DevOps Research and Assessment (DORA)
       kind: canonical-doc
       reasoning: >-
         Official DORA site with Four Keys metrics framework for measuring CI/CD
         and DevOps performance
+      publisher: DORA (Google)
+      source: ai-researcher
     - url: 'https://docs.github.com/en/actions'
       title: GitHub Actions Documentation
       kind: canonical-doc
       reasoning: >-
         Complete reference for GitHub's native CI/CD platform with workflow
         automation and deployment examples
+      publisher: GitHub
+      source: ai-researcher
   services:
     - name: GitHub Actions
       url: 'https://github.com/features/actions'
@@ -77,30 +89,37 @@ resources:
       reasoning: >-
         Native GitHub CI/CD with integrated repository, no extra infrastructure;
         ideal for GitHub-hosted projects
+      vendor: GitHub
+      source: ai-researcher
     - name: CircleCI
       url: 'https://circleci.com'
       category: ci-cd-platform
       reasoning: >-
         Cloud-native CI/CD platform with free tier, fast builds, and strong
         container/Docker support
+      source: ai-researcher
     - name: Buildkite
       url: 'https://buildkite.com'
       category: ci-cd-platform
       reasoning: >-
         Flexible CI/CD platform supporting on-premise or cloud agents, great for
         teams needing control over build infrastructure
+      source: ai-researcher
     - name: GitLab CI/CD
       url: 'https://gitlab.com'
       category: ci-cd-platform
       reasoning: >-
         Integrated CI/CD within GitLab with container registry, monitoring, and
         full DevOps platform capabilities
+      vendor: GitLab
+      source: ai-researcher
     - name: Jenkins
       url: 'https://www.jenkins.io'
       category: ci-cd-platform
       reasoning: >-
         Open-source CI/CD automation server with extensive plugin ecosystem and
         on-premise deployment flexibility
+      source: ai-researcher
   courses:
     - url: 'https://www.coursera.org/learn/devops-continuous-integration'
       title: Continuous Integration with Jenkins
@@ -109,6 +128,7 @@ resources:
       reasoning: >-
         Foundational course on CI practices using Jenkins, available on audit
         basis
+      source: ai-researcher
     - url: 'https://www.pluralsight.com/courses/continuous-delivery-pipeline'
       title: 'Continuous Delivery: Pipeline Automation'
       provider: Pluralsight
@@ -116,6 +136,7 @@ resources:
       reasoning: >-
         Advanced course covering deployment pipelines, testing strategies, and
         production-ready practices
+      source: ai-researcher
     - url: 'https://www.linux-foundation.org/training/cd-and-devops/'
       title: CD and DevOps Training
       provider: Linux Foundation
@@ -123,6 +144,7 @@ resources:
       reasoning: >-
         Industry-standard certification training covering CI/CD fundamentals
         through advanced practices
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

@@ -5,6 +5,7 @@ import { Topic } from "./routes/Topic.js";
 import { Bookmarks } from "./routes/Bookmarks.js";
 import { Settings } from "./routes/Settings.js";
 import { Graph } from "./routes/Graph.js";
+import { Credits } from "./routes/Credits.js";
 
 export function App() {
   return (
@@ -15,6 +16,7 @@ export function App() {
       <Route path="/bookmarks" element={<Bookmarks />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/graph" element={<Graph />} />
+      <Route path="/credits" element={<Credits />} />
     </Routes>
   );
 }

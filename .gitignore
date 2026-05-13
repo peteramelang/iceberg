@@ -19,3 +19,6 @@ content/_ledger.smoke.json
 # Editors
 .vscode/
 .idea/
+
+# brainstorming visual companion artifacts
+.superpowers/

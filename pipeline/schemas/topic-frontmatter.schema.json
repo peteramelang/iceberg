@@ -39,7 +39,11 @@
               "url": { "type": "string", "format": "uri" },
               "title": { "type": "string" },
               "kind": { "enum": ["canonical-doc", "engineering-blog", "tutorial"] },
-              "reasoning": { "type": "string" }
+              "reasoning": { "type": "string" },
+              "publisher": { "type": "string" },
+              "author": { "type": "string" },
+              "license": { "type": "string" },
+              "source": { "enum": ["ai-researcher", "human-curator"] }
             }
           }
         },
@@ -55,7 +59,10 @@
               "name": { "type": "string" },
               "url": { "type": "string", "format": "uri" },
               "category": { "type": "string" },
-              "reasoning": { "type": "string" }
+              "reasoning": { "type": "string" },
+              "vendor": { "type": "string" },
+              "license": { "type": "string" },
+              "source": { "enum": ["ai-researcher", "human-curator"] }
             }
           }
         },
@@ -72,7 +79,10 @@
               "title": { "type": "string" },
               "provider": { "type": "string" },
               "paid": { "type": "boolean" },
-              "reasoning": { "type": "string" }
+              "reasoning": { "type": "string" },
+              "instructor": { "type": "string" },
+              "license": { "type": "string" },
+              "source": { "enum": ["ai-researcher", "human-curator"] }
             }
           }
         }
@@ -103,7 +113,10 @@
             "author": { "type": "string" },
             "durationMinutes": { "type": "integer", "minimum": 1 },
             "addedAt": { "type": "string", "format": "date-time" },
-            "reasoning": { "type": "string" }
+            "reasoning": { "type": "string" },
+            "channelUrl": { "type": "string", "format": "uri" },
+            "license": { "type": "string" },
+            "source": { "enum": ["ai-researcher", "human-curator"] }
           }
         },
         { "type": "null" }

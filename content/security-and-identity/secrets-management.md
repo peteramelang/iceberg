@@ -33,6 +33,7 @@ resources:
       durationMinutes: 10
       addedAt: '2026-05-14T00:00:00Z'
       reasoning: Beginner-friendly demonstration of a modern open-source secrets manager.
+      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=ae72pKpXe-s'
       title: HashiCorp Vault Tutorial for Beginners — Full Course
@@ -42,6 +43,7 @@ resources:
       reasoning: >-
         Comprehensive 1-hour course on Vault, the industry-standard secrets
         manager.
+      source: ai-researcher
   articles:
     - url: >-
         https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
@@ -50,11 +52,15 @@ resources:
       reasoning: >-
         Authoritative OWASP reference for secrets management concepts and best
         practices.
+      publisher: OWASP
+      source: ai-researcher
     - url: >-
         https://microsoft.github.io/code-with-engineering-playbook/CI-CD/dev-sec-ops/secrets-management/
       title: Secrets Management — Engineering Fundamentals Playbook
       kind: engineering-blog
       reasoning: Microsoft's official playbook covering tools and CI/CD integration.
+      publisher: Microsoft
+      source: ai-researcher
   services:
     - name: HashiCorp Vault
       url: 'https://www.vaultproject.io'
@@ -62,28 +68,36 @@ resources:
       reasoning: >-
         Industry-leading open-source secrets management with multi-cloud support
         and dynamic secrets.
+      vendor: HashiCorp (Vault)
+      source: ai-researcher
     - name: AWS Secrets Manager
       url: 'https://aws.amazon.com/secrets-manager/'
       category: managed-secrets
       reasoning: >-
         Managed AWS service with tight ecosystem integration and automatic
         rotation.
+      vendor: Amazon Web Services
+      source: ai-researcher
     - name: Doppler
       url: 'https://www.doppler.com'
       category: secrets-manager
       reasoning: >-
         Developer-first SaaS secrets management with automatic syncing across
         environments.
+      source: ai-researcher
     - name: Infisical
       url: 'https://infisical.com'
       category: secrets-manager
       reasoning: >-
         Open-source platform with self-hosted and cloud options for
         machine-to-machine secrets.
+      source: ai-researcher
     - name: 1Password Secrets Automation
       url: 'https://1password.com/products/secrets'
       category: secrets-manager
       reasoning: Enterprise-grade automation built on 1Password's security foundation.
+      vendor: 1Password
+      source: ai-researcher
   courses:
     - url: >-
         https://www.coursera.org/learn/packt-hashicorp-vault-foundations-and-secrets-management-hbxj3
@@ -91,6 +105,7 @@ resources:
       provider: Coursera
       paid: true
       reasoning: Structured course on Vault foundations with hands-on labs.
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

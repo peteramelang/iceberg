@@ -2,8 +2,13 @@ import { progressStore } from "../../stores/index.js";
 import { useTopicProgress } from "../../hooks/useTopicProgress.js";
 import { BookmarkButton } from "../interactive/BookmarkButton.js";
 
-export function ResourceRow({ topicSlug, resourceKey, title, url, meta }: {
-  topicSlug: string; resourceKey: string; title: string; url: string; meta?: string;
+export function ResourceRow({ topicSlug, resourceKey, title, url, meta, attribution }: {
+  topicSlug: string;
+  resourceKey: string;
+  title: string;
+  url: string;
+  meta?: string;
+  attribution?: string;
 }) {
   const prog = useTopicProgress(topicSlug);
   const checked = !!prog.resources[resourceKey];
@@ -18,7 +23,10 @@ export function ResourceRow({ topicSlug, resourceKey, title, url, meta }: {
         [{checked ? "x" : " "}]
       </button>
       <BookmarkButton topic={topicSlug} resource={resourceKey} />
-      <a href={url} target="_blank" rel="noreferrer" className="flex-1 underline">{title}</a>
+      <div className="flex-1">
+        <a href={url} target="_blank" rel="noreferrer" className="underline">{title}</a>
+        {attribution && <span className="text-caption-md text-mute ml-md">— {attribution}</span>}
+      </div>
       {meta && <span className="text-caption-md text-mute">{meta}</span>}
     </div>
   );

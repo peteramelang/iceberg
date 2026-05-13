@@ -31,6 +31,7 @@ resources:
       durationMinutes: 12
       addedAt: '2026-05-14T00:00:00Z'
       reasoning: Concise explanation linking API design and rate limiting strategies.
+      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=FU4WlwfS3G0'
       title: 'System Design: Rate Limiting (Token Bucket Algorithm)'
@@ -40,38 +41,52 @@ resources:
       reasoning: >-
         Deep dive into rate-limiting algorithms with practical implementation
         details.
+      source: ai-researcher
   articles:
     - url: 'https://stripe.com/blog/rate-limiters'
       title: Scaling your API with rate limiting
       kind: engineering-blog
       reasoning: Stripe's production-hardened approach to rate limiting at scale.
+      publisher: Stripe
+      source: ai-researcher
     - url: 'https://developers.cloudflare.com/waf/rate-limiting-rules/'
       title: 'Cloudflare WAF: Rate Limiting Rules'
       kind: canonical-doc
       reasoning: Authoritative Cloudflare documentation on edge-network rate limiting.
+      publisher: Cloudflare
+      source: ai-researcher
   services:
     - name: Cloudflare WAF
       url: 'https://www.cloudflare.com/waf/'
       category: edge-rate-limiter
       reasoning: Edge-first rate limiting with DDoS protection and managed rules.
+      vendor: Cloudflare
+      source: ai-researcher
     - name: AWS WAF
       url: 'https://aws.amazon.com/waf/'
       category: managed-waf
       reasoning: AWS-native rate limiting integrated with CloudFront and ALB.
+      vendor: Amazon Web Services
+      source: ai-researcher
     - name: Kong API Gateway
       url: 'https://konghq.com'
       category: api-gateway
       reasoning: >-
         Open-source and commercial gateway with first-class rate-limiting
         plugins.
+      vendor: Konghq
+      source: ai-researcher
     - name: NGINX
       url: 'https://www.nginx.com'
       category: reverse-proxy
       reasoning: Industry-standard reverse proxy with ngx_http_limit_req_module.
+      source: ai-researcher
     - name: Envoy Proxy
       url: 'https://www.envoyproxy.io'
       category: service-proxy
       reasoning: Modern service proxy with local and distributed rate-limiting filters.
+      vendor: Envoy
+      source: ai-researcher
   courses:
     - url: 'https://bytebytego.com'
       title: ByteByteGo System Design Course
@@ -80,6 +95,7 @@ resources:
       reasoning: >-
         Comprehensive system design course covering rate-limiting algorithms and
         tradeoffs.
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1

@@ -30,6 +30,7 @@ resources:
       reasoning: >-
         Concise technical overview of load balancing concepts, algorithms, and
         common architectures
+      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=zRYZToFg64E'
       title: Mastering Load Balancing at Scale
@@ -39,6 +40,7 @@ resources:
       reasoning: >-
         Comprehensive deep-dive covering Layer 4/7 load balancing, sticky
         sessions, health checks, and scaling strategies
+      source: ai-researcher
   articles:
     - url: 'https://www.nginx.com/resources/glossary/load-balancing/'
       title: Load Balancing Glossary
@@ -46,12 +48,16 @@ resources:
       reasoning: >-
         Canonical NGINX reference defining load balancing, algorithms
         (round-robin, least connections, IP hash), and deployment patterns
+      publisher: NGINX
+      source: ai-researcher
     - url: 'https://aws.amazon.com/elasticloadbalancing/features/'
       title: Elastic Load Balancing Features
       kind: tutorial
       reasoning: >-
         AWS ELB architecture overview covering ALB, NLB, and CLB with use cases,
         routing rules, and scalability characteristics
+      publisher: Amazon Web Services
+      source: ai-researcher
     - url: >-
         https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/overview
       title: Envoy Load Balancing Overview
@@ -59,18 +65,24 @@ resources:
       reasoning: >-
         Modern proxy perspective on load balancing algorithms, health checking,
         priority levels, and endpoint weighting in cloud-native stacks
+      publisher: Envoy
+      source: ai-researcher
     - url: 'https://cloud.google.com/load-balancing/docs'
       title: Google Cloud Load Balancing Documentation
       kind: canonical-doc
       reasoning: >-
         Cloud-native load balancing patterns including global HTTP(S), TCP/UDP,
         and internal load balancing with autoscaling integration
+      publisher: Google Cloud
+      source: ai-researcher
     - url: 'https://traefik.io/traefik/'
       title: Traefik Documentation
       kind: canonical-doc
       reasoning: >-
         Modern edge router and load balancer designed for microservices with
         dynamic service discovery, middleware, and container orchestration
+      publisher: Traefik
+      source: ai-researcher
   services:
     - name: NGINX
       url: 'https://www.nginx.com'
@@ -78,36 +90,43 @@ resources:
       reasoning: >-
         Industry-standard open-source and commercial load balancer for Layer 7
         HTTP/HTTPS routing with high performance
+      source: ai-researcher
     - name: HAProxy
       url: 'https://www.haproxy.org'
       category: load-balancer
       reasoning: >-
         High-availability proxy supporting both Layer 4 and Layer 7 load
         balancing with minimal resource overhead
+      source: ai-researcher
     - name: Envoy
       url: 'https://www.envoyproxy.io'
       category: service-proxy
       reasoning: >-
         Cloud-native proxy serving as control plane for service meshes, edge
         gateways, and load balancing in Kubernetes
+      source: ai-researcher
     - name: AWS Elastic Load Balancing
       url: 'https://aws.amazon.com/elasticloadbalancing/'
       category: cloud-service
       reasoning: >-
         Managed AWS load balancing service with ALB (Layer 7), NLB (Layer 4),
         and auto-scaling integration
+      vendor: Amazon Web Services
+      source: ai-researcher
     - name: Traefik
       url: 'https://traefik.io'
       category: edge-router
       reasoning: >-
         Modern reverse proxy and load balancer with built-in service discovery
         for Docker, Kubernetes, and cloud deployments
+      source: ai-researcher
     - name: Cloudflare
       url: 'https://www.cloudflare.com'
       category: cdn-edge
       reasoning: >-
         Global edge network providing load balancing, failover, and DDoS
         protection at geographic scale
+      source: ai-researcher
   courses:
     - url: 'https://www.edx.org/course/cloud-infrastructure-technologies'
       title: Cloud Infrastructure Technologies
@@ -116,6 +135,7 @@ resources:
       reasoning: >-
         Foundational cloud concepts including load balancing patterns,
         auto-scaling, and fault tolerance
+      source: ai-researcher
     - url: 'https://www.coursera.org/learn/cloud-computing-basics'
       title: Cloud Computing Basics
       provider: Coursera
@@ -123,6 +143,7 @@ resources:
       reasoning: >-
         Comprehensive introduction to cloud architecture covering load
         balancing, redundancy, and scalability patterns
+      source: ai-researcher
     - url: 'https://www.linux.com/training/'
       title: Linux Foundation Training Paths
       provider: Linux Foundation
@@ -130,6 +151,7 @@ resources:
       reasoning: >-
         Professional certification paths including Kubernetes and container
         orchestration with service load balancing
+      source: ai-researcher
 provenance:
   researchedAt: '2026-05-13T22:45:46.767Z'
   pipelineVersion: 1
