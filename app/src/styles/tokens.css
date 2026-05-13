@@ -1,0 +1,6 @@
+/* CSS variables mirroring DESIGN.md tokens. Add as needed. */
+:root {
+  --color-canvas: #fdfcfc;
+  --color-ink: #201d1d;
+  --color-hairline: rgba(15, 0, 0, 0.12);
+}
