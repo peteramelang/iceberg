@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { mkdtempSync, rmSync, existsSync, readFileSync } from "node:fs";
+import { mkdtempSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -43,9 +43,9 @@ describe("ledger lifecycle", () => {
     writeLedger(path, createInitialLedger("smoke"));
     setTopicStageStatus(path, "logging", "reliability", "research", "in_progress", { round: 1 });
     const led = readLedger(path);
-    expect(led.topics.logging.phase).toBe("reliability");
-    expect(led.topics.logging.stages.research.status).toBe("in_progress");
-    expect(led.topics.logging.stages.research.round).toBe(1);
+    expect(led.topics.logging!.phase).toBe("reliability");
+    expect(led.topics.logging!.stages.research.status).toBe("in_progress");
+    expect(led.topics.logging!.stages.research.round).toBe(1);
   });
 
   it("findNextAction returns stage_0 when nothing started", () => {
