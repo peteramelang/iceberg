@@ -30,7 +30,6 @@ resources:
         Direct and concise explanation of core concepts distinguishing
         authentication from authorization, ideal for beginners just starting to
         understand identity management fundamentals.
-      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=WPiqNDapQrk'
       title: Master Senior Level Authentication In 4 Hours
@@ -41,7 +40,6 @@ resources:
         Comprehensive deep-dive covering advanced authentication patterns,
         implementation strategies, and real-world best practices for building
         production authentication systems.
-      source: ai-researcher
   articles:
     - url: 'https://developer.mozilla.org/en-US/docs/Web/Security/Authentication'
       title: Authentication - Security - MDN Web Docs
@@ -50,8 +48,6 @@ resources:
         Mozilla's canonical guide covering main authentication techniques
         including passwords, OTP, WebAuthn, federated identity, and session
         management with best practices.
-      publisher: MDN / Mozilla
-      source: ai-researcher
     - url: >-
         https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
       title: OWASP Authentication Cheat Sheet
@@ -60,8 +56,6 @@ resources:
         OWASP's authoritative security reference defining authentication,
         covering common threats, and providing practical guidance for
         implementing secure authentication systems.
-      publisher: OWASP
-      source: ai-researcher
     - url: 'https://datatracker.ietf.org/doc/html/rfc6749'
       title: RFC 6749 - The OAuth 2.0 Authorization Framework
       kind: canonical-doc
@@ -69,8 +63,6 @@ resources:
         Official IETF specification for OAuth 2.0, the industry-standard
         protocol for delegated authentication and authorization widely adopted
         across the web.
-      publisher: IETF
-      source: ai-researcher
   services:
     - name: Auth0
       url: 'https://auth0.com/'
@@ -79,7 +71,6 @@ resources:
         Production-grade identity platform supporting 30+ SDKs, handling
         billions of login transactions monthly, and offering passwordless
         authentication, adaptive MFA, and enterprise SSO.
-      source: ai-researcher
     - name: Clerk
       url: 'https://clerk.com/'
       category: identity-platform
@@ -87,7 +78,6 @@ resources:
         Modern authentication platform with drop-in UI components, built-in
         session management, OAuth support, MFA, and organizations features
         tailored for modern web and mobile apps.
-      source: ai-researcher
     - name: Okta
       url: 'https://www.okta.com/'
       category: identity-platform
@@ -95,7 +85,6 @@ resources:
         Enterprise-scale identity provider offering comprehensive authentication
         and authorization for employees, customers, and AI agents with strong
         security and compliance features.
-      source: ai-researcher
     - name: Firebase Authentication
       url: 'https://firebase.google.com/products/auth'
       category: identity-platform
@@ -103,8 +92,6 @@ resources:
         Google's authentication service integrating with Firebase ecosystem,
         supporting email, phone, OAuth providers, and multi-factor
         authentication with minimal setup.
-      vendor: Google (Firebase)
-      source: ai-researcher
     - name: Keycloak
       url: 'https://www.keycloak.org/'
       category: open-source-library
@@ -112,7 +99,6 @@ resources:
         Open-source Apache 2.0 licensed IAM platform supporting OAuth 2.0,
         OpenID Connect, SAML, user federation, and fine-grained authorization
         with full admin control.
-      source: ai-researcher
   courses:
     - url: >-
         https://courses.pragmaticwebsecurity.com/courses/introduction-to-oauth-2-0-and-openid-connect
@@ -123,9 +109,8 @@ resources:
         Free foundational course by security researcher Philippe De Ryck
         demystifying OAuth 2.0 and OpenID Connect with clear examples and
         real-world applications.
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

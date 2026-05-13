@@ -19,48 +19,34 @@ resources:
       title: GitHub Supply Chain Security
       kind: canonical-doc
       reasoning: (no reasoning captured)
-      publisher: GitHub
-      source: ai-researcher
     - url: 'https://docs.npmjs.com/cli/v10/commands/npm-audit'
       title: npm audit
       kind: tutorial
       reasoning: (no reasoning captured)
-      publisher: npm (GitHub)
-      source: ai-researcher
   services:
     - name: Renovate Documentation
       url: 'https://docs.renovatebot.com'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: Mend (Renovate)
-      source: ai-researcher
     - name: Snyk Open Source
       url: 'https://snyk.io'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: Snyk
-      source: ai-researcher
     - name: OWASP Dependency-Check
       url: 'https://owasp.org/www-project-dependency-check/'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: OWASP
-      source: ai-researcher
     - name: Semantic Versioning (SemVer)
       url: 'https://semver.org'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: Semantic Versioning
-      source: ai-researcher
     - name: SLSA Framework
       url: 'https://slsa.dev'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: SLSA (OpenSSF)
-      source: ai-researcher
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

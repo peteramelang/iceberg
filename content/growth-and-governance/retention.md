@@ -14,7 +14,13 @@ resources:
   videos:
     short: null
     long: null
-  articles: []
+  articles:
+    - url: 'https://amplitude.com/blog/cohort-analysis-guide'
+      title: Cohort Analysis Guide
+      kind: tutorial
+      reasoning: >-
+        Deep dive into cohort analysis methodology, retention curves, and how to
+        segment users by behavior and time for accurate retention measurement.
   services:
     - name: Amplitude
       url: 'https://amplitude.com'
@@ -23,7 +29,6 @@ resources:
         Digital analytics platform with cohort analysis, retention tracking, and
         AI agents for autonomous data analysis. Supports product, web, and
         behavioral analytics with 11,000+ users.
-      source: ai-researcher
     - name: Mixpanel
       url: 'https://mixpanel.com'
       category: platform
@@ -31,7 +36,6 @@ resources:
         Product analytics platform with retention funnels, cohort analysis,
         metric trees, and AI-powered insights. Enables rapid experimentation and
         user segmentation.
-      source: ai-researcher
     - name: PostHog
       url: 'https://posthog.com'
       category: platform
@@ -39,7 +43,6 @@ resources:
         Open-source product analytics with built-in retention analysis, session
         replay, and engagement tracking. Includes cohort-based retention curves
         and lifecycle insights.
-      source: ai-researcher
     - name: Heap
       url: 'https://www.heap.io'
       category: platform
@@ -47,7 +50,13 @@ resources:
         Product analytics platform with automatic event capture, session replay,
         heatmaps, and AI-powered friction detection. Serves 10,000+ companies
         for behavioral analysis.
-      source: ai-researcher
+    - name: Retention & Cohort Analysis
+      url: 'https://mixpanel.com/blog'
+      category: platform
+      reasoning: >-
+        Guide to retention metrics, cohort segmentation, and using product
+        analytics to identify engagement patterns and lifecycle communication
+        opportunities.
     - name: Andrew Chen on Growth & Retention
       url: 'https://andrewchen.com'
       category: platform
@@ -55,8 +64,6 @@ resources:
         Essays on consumer product metrics, retention challenges, network
         effects, and retention fundamentals from a16z GP and growth strategy
         expert.
-      vendor: Andrew Chen
-      source: ai-researcher
   courses:
     - url: 'https://www.reforge.com'
       title: Reforge Growth & Retention
@@ -65,9 +72,8 @@ resources:
       reasoning: >-
         Comprehensive course on measuring and improving retention through cohort
         analysis, engagement loops, and lifecycle communications strategies.
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

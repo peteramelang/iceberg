@@ -10,27 +10,6 @@
     },
     {
       "from": "authentication",
-      "to": "rate-limiting",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "authentication should be understood before rate-limiting, per taxonomy prerequisite chain."
-    },
-    {
-      "from": "authentication",
-      "to": "cookies",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "authentication should be understood before cookies, per taxonomy prerequisite chain."
-    },
-    {
-      "from": "gdpr-ccpa",
-      "to": "cookies",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "gdpr-ccpa should be understood before cookies, per taxonomy prerequisite chain."
-    },
-    {
-      "from": "authentication",
       "to": "payments",
       "type": "prerequisite",
       "weight": 0.9,
@@ -121,13 +100,6 @@
       "reasoning": "instrumentation should be understood before slos-and-slis, per taxonomy prerequisite chain."
     },
     {
-      "from": "instrumentation",
-      "to": "cloud-costs",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "instrumentation should be understood before cloud-costs, per taxonomy prerequisite chain."
-    },
-    {
       "from": "load-balancing",
       "to": "scalability",
       "type": "prerequisite",
@@ -154,13 +126,6 @@
       "type": "prerequisite",
       "weight": 0.9,
       "reasoning": "caching should be understood before latency-optimization, per taxonomy prerequisite chain."
-    },
-    {
-      "from": "data-integrity",
-      "to": "caching",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "data-integrity should be understood before caching, per taxonomy prerequisite chain."
     },
     {
       "from": "environments",
@@ -254,20 +219,6 @@
       "reasoning": "instrumentation should be understood before ab-testing, per taxonomy prerequisite chain."
     },
     {
-      "from": "cloud-costs",
-      "to": "vendor-lock-in",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "cloud-costs should be understood before vendor-lock-in, per taxonomy prerequisite chain."
-    },
-    {
-      "from": "crud-logic",
-      "to": "api-versioning",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "crud-logic should be understood before api-versioning, per taxonomy prerequisite chain."
-    },
-    {
       "from": "alerting",
       "to": "incident-response",
       "type": "prerequisite",
@@ -287,6 +238,13 @@
       "type": "prerequisite",
       "weight": 0.9,
       "reasoning": "alerting should be understood before on-call-rotations, per taxonomy prerequisite chain."
+    },
+    {
+      "from": "incident-response",
+      "to": "on-call-rotations",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "incident-response should be understood before on-call-rotations, per taxonomy prerequisite chain."
     },
     {
       "from": "incident-response",
@@ -367,6 +325,20 @@
     },
     {
       "from": "authentication",
+      "to": "rate-limiting",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "authentication",
+      "to": "cookies",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "authentication",
       "to": "gdpr-ccpa",
       "type": "related",
       "weight": 0.4,
@@ -430,6 +402,13 @@
     },
     {
       "from": "rate-limiting",
+      "to": "gdpr-ccpa",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "cookies",
       "to": "gdpr-ccpa",
       "type": "related",
       "weight": 0.4,
@@ -577,6 +556,13 @@
     },
     {
       "from": "alerting",
+      "to": "cloud-costs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "instrumentation",
       "to": "cloud-costs",
       "type": "related",
       "weight": 0.4,
@@ -921,13 +907,6 @@
     {
       "from": "vendor-lock-in",
       "to": "api-versioning",
-      "type": "related",
-      "weight": 0.4,
-      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
-    },
-    {
-      "from": "incident-response",
-      "to": "on-call-rotations",
       "type": "related",
       "weight": 0.4,
       "reasoning": "Both topics belong to the same learning phase and are commonly studied together."

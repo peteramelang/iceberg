@@ -105,51 +105,763 @@
     }
   ],
   "topics": {
-    "authentication": { "slug": "authentication", "title": "Authentication", "phase": "security-and-identity", "order": 1, "summary": "Verify user identity securely using industry-standard protocols such as OAuth 2.0, OIDC, and session management best practices.", "prerequisites": [], "tags": ["security", "identity", "sessions", "oauth"], "addedByStage0": false },
-    "access-control": { "slug": "access-control", "title": "Access Control", "phase": "security-and-identity", "order": 2, "summary": "Enforce who can do what in your application using RBAC, ABAC, or policy-based authorization systems.", "prerequisites": ["authentication"], "tags": ["security", "authorization", "rbac", "permissions"], "addedByStage0": false },
-    "secrets-management": { "slug": "secrets-management", "title": "Secrets Management", "phase": "security-and-identity", "order": 3, "summary": "Store, rotate, and audit API keys and credentials using dedicated vaults rather than hardcoding them in source or environment files.", "prerequisites": [], "tags": ["security", "credentials", "vault", "rotation"], "addedByStage0": false },
-    "rate-limiting": { "slug": "rate-limiting", "title": "Rate Limiting", "phase": "security-and-identity", "order": 4, "summary": "Protect your APIs and infrastructure from abuse, scraping, and denial-of-service attacks by capping request rates per client.", "prerequisites": ["authentication"], "tags": ["security", "reliability", "api", "abuse-prevention"], "addedByStage0": false },
-    "cookies": { "slug": "cookies", "title": "Cookies & Consent", "phase": "security-and-identity", "order": 5, "summary": "Manage first- and third-party cookies correctly for security (SameSite, HttpOnly, Secure) and obtain lawful consent for tracking under privacy regulations.", "prerequisites": ["authentication", "gdpr-ccpa"], "tags": ["security", "privacy", "compliance", "frontend"], "addedByStage0": false },
-    "gdpr-ccpa": { "slug": "gdpr-ccpa", "title": "GDPR / CCPA Compliance", "phase": "security-and-identity", "order": 6, "summary": "Implement data subject rights (access, deletion, portability) and consent flows to comply with major global privacy regulations.", "prerequisites": [], "tags": ["compliance", "privacy", "legal", "data"], "addedByStage0": false },
-    "payments": { "slug": "payments", "title": "Payments", "phase": "money-and-data", "order": 1, "summary": "Integrate payment processors securely to accept one-time and recurring charges while handling card validation, fraud, and PCI scope.", "prerequisites": ["authentication", "idempotency"], "tags": ["payments", "stripe", "pci", "money"], "addedByStage0": false },
-    "billing-logic": { "slug": "billing-logic", "title": "Billing Logic", "phase": "money-and-data", "order": 2, "summary": "Model invoicing, proration, credits, refunds, and dunning correctly so that money in the database always matches money in the payment processor.", "prerequisites": ["payments", "idempotency"], "tags": ["billing", "money", "accounting", "subscriptions"], "addedByStage0": false },
-    "subscription-states": { "slug": "subscription-states", "title": "Subscription States", "phase": "money-and-data", "order": 3, "summary": "Model the full lifecycle of a subscription (trial, active, past-due, paused, canceled) as an explicit state machine with correct feature access at each state.", "prerequisites": ["billing-logic"], "tags": ["subscriptions", "state-machine", "billing", "saas"], "addedByStage0": false },
-    "idempotency": { "slug": "idempotency", "title": "Idempotency", "phase": "money-and-data", "order": 4, "summary": "Design APIs and background jobs so that retrying an operation never produces duplicate side effects such as double-charges or duplicate records.", "prerequisites": [], "tags": ["reliability", "api", "distributed-systems", "payments"], "addedByStage0": false },
-    "data-integrity": { "slug": "data-integrity", "title": "Data Integrity", "phase": "money-and-data", "order": 5, "summary": "Use database constraints, transactions, and application-level validation to guarantee that stored data is always valid and consistent.", "prerequisites": [], "tags": ["database", "reliability", "transactions", "validation"], "addedByStage0": false },
-    "schema-migrations": { "slug": "schema-migrations", "title": "Schema Migrations", "phase": "money-and-data", "order": 6, "summary": "Apply database schema changes safely in production using expand-contract patterns and zero-downtime migration strategies.", "prerequisites": ["data-integrity"], "tags": ["database", "reliability", "deployment", "zero-downtime"], "addedByStage0": true },
-    "crud-logic": { "slug": "crud-logic", "title": "CRUD Logic", "phase": "money-and-data", "order": 7, "summary": "Designing reliable create, read, update, and delete operations: soft deletes, optimistic locking, bulk-operation safety, and audit trails.", "prerequisites": ["data-integrity", "access-control"], "tags": ["data", "architecture", "foundational"], "addedByStage0": false },
-    "logging": { "slug": "logging", "title": "Logging", "phase": "observability", "order": 1, "summary": "Emit structured, queryable logs from all application components so that the sequence of events leading to any outcome can be reconstructed.", "prerequisites": [], "tags": ["observability", "debugging", "operations"], "addedByStage0": false },
-    "alerting": { "slug": "alerting", "title": "Alerting", "phase": "observability", "order": 2, "summary": "Configure threshold- and anomaly-based alerts on metrics and logs so that on-call engineers are notified of production problems before customers are.", "prerequisites": ["logging", "slos-and-slis"], "tags": ["observability", "operations", "reliability"], "addedByStage0": false },
-    "instrumentation": { "slug": "instrumentation", "title": "Instrumentation", "phase": "observability", "order": 3, "summary": "Add metrics, counters, histograms, and spans throughout your code to expose system health and business behavior to your observability stack.", "prerequisites": ["logging"], "tags": ["observability", "metrics", "performance", "monitoring"], "addedByStage0": false },
-    "distributed-tracing": { "slug": "distributed-tracing", "title": "Distributed Tracing", "phase": "observability", "order": 4, "summary": "Propagate trace context across service boundaries to visualize end-to-end request flows and pinpoint latency bottlenecks in distributed systems.", "prerequisites": ["instrumentation"], "tags": ["observability", "distributed-systems", "latency", "debugging"], "addedByStage0": true },
-    "slos-and-slis": { "slug": "slos-and-slis", "title": "SLOs & SLIs", "phase": "observability", "order": 5, "summary": "Define measurable reliability targets (SLOs) backed by concrete indicators (SLIs) and error budgets to make data-driven decisions about reliability vs. velocity.", "prerequisites": ["instrumentation"], "tags": ["reliability", "sre", "observability", "operations"], "addedByStage0": true },
-    "cloud-costs": { "slug": "cloud-costs", "title": "Cloud Cost Management", "phase": "observability", "order": 6, "summary": "Monitor, attribute, and optimize cloud spending using tagging, budgets, rightsizing, and reserved capacity to prevent bill shock at scale.", "prerequisites": ["instrumentation"], "tags": ["cloud", "cost", "finops", "operations"], "addedByStage0": false },
-    "scalability": { "slug": "scalability", "title": "Scalability", "phase": "reliability-and-scale", "order": 1, "summary": "Design application and data layers to handle order-of-magnitude growth in traffic and data volume without fundamental rearchitecting.", "prerequisites": ["load-balancing", "caching"], "tags": ["performance", "architecture", "distributed-systems"], "addedByStage0": false },
-    "latency-optimization": { "slug": "latency-optimization", "title": "Latency Optimization", "phase": "reliability-and-scale", "order": 2, "summary": "Identify and eliminate the dominant sources of request latency using profiling, query analysis, and architectural changes like caching and async work.", "prerequisites": ["distributed-tracing", "caching"], "tags": ["performance", "database", "networking", "user-experience"], "addedByStage0": false },
-    "caching": { "slug": "caching", "title": "Caching", "phase": "reliability-and-scale", "order": 3, "summary": "Apply in-process, distributed, and CDN caching at the right layer with correct invalidation strategies to reduce latency and database load.", "prerequisites": ["data-integrity"], "tags": ["performance", "redis", "cdn", "database"], "addedByStage0": true },
-    "load-balancing": { "slug": "load-balancing", "title": "Load Balancing", "phase": "reliability-and-scale", "order": 4, "summary": "Distribute traffic across multiple application instances to eliminate single points of failure and enable horizontal scaling.", "prerequisites": ["environments"], "tags": ["infrastructure", "reliability", "networking", "scalability"], "addedByStage0": false },
-    "message-queues": { "slug": "message-queues", "title": "Message Queues & Job Processing", "phase": "reliability-and-scale", "order": 5, "summary": "Offload slow or failure-prone work to asynchronous job queues to improve response times, decouple services, and absorb traffic spikes.", "prerequisites": ["idempotency"], "tags": ["async", "queues", "reliability", "distributed-systems"], "addedByStage0": true },
-    "dead-letter-queues": { "slug": "dead-letter-queues", "title": "Dead-Letter Queues", "phase": "reliability-and-scale", "order": 6, "summary": "Capture messages that repeatedly fail processing into a separate queue for inspection and replay so that poison messages never silently disappear.", "prerequisites": ["message-queues"], "tags": ["async", "queues", "reliability", "error-handling"], "addedByStage0": true },
-    "multi-region-support": { "slug": "multi-region-support", "title": "Multi-Region Support", "phase": "reliability-and-scale", "order": 7, "summary": "Deploy across geographic regions to reduce latency for global users and maintain availability during regional cloud provider outages.", "prerequisites": ["load-balancing", "data-integrity"], "tags": ["infrastructure", "reliability", "latency", "cloud"], "addedByStage0": false },
-    "error-handling": { "slug": "error-handling", "title": "Error Handling", "phase": "reliability-and-scale", "order": 8, "summary": "Principled strategies for catching, surfacing, containing, and recovering from errors in production systems, including graceful degradation and user-facing vs. internal error distinctions.", "prerequisites": [], "tags": ["reliability", "fundamentals", "architecture"], "addedByStage0": true },
-    "ci-cd": { "slug": "ci-cd", "title": "CI / CD", "phase": "delivery-and-operations", "order": 1, "summary": "Automate the build, test, and deployment pipeline so that every merged change can reach production safely with minimal manual intervention.", "prerequisites": ["test-coverage", "environments"], "tags": ["automation", "deployment", "devops", "testing"], "addedByStage0": false },
-    "environments": { "slug": "environments", "title": "Environments", "phase": "delivery-and-operations", "order": 2, "summary": "Maintain distinct development, staging, and production environments with environment-specific configuration and data isolation.", "prerequisites": ["secrets-management"], "tags": ["devops", "deployment", "configuration", "safety"], "addedByStage0": false },
-    "rollbacks": { "slug": "rollbacks", "title": "Rollbacks", "phase": "delivery-and-operations", "order": 3, "summary": "Design deployments so that a bad release can be quickly reverted without data loss using strategies like blue-green deployments and database migration reversibility.", "prerequisites": ["ci-cd", "schema-migrations"], "tags": ["deployment", "reliability", "safety", "devops"], "addedByStage0": false },
-    "feature-flags": { "slug": "feature-flags", "title": "Feature Flags", "phase": "delivery-and-operations", "order": 4, "summary": "Decouple feature deployment from feature release using runtime flags that allow gradual rollouts, instant kill-switches, and targeted user targeting.", "prerequisites": ["ci-cd"], "tags": ["deployment", "product", "safety", "experimentation"], "addedByStage0": false },
-    "test-coverage": { "slug": "test-coverage", "title": "Test Coverage", "phase": "delivery-and-operations", "order": 5, "summary": "Build a layered test suite of unit, integration, and end-to-end tests that catches regressions before they reach production.", "prerequisites": [], "tags": ["testing", "quality", "automation", "reliability"], "addedByStage0": false },
-    "ab-testing": { "slug": "ab-testing", "title": "A/B Testing", "phase": "delivery-and-operations", "order": 6, "summary": "Run controlled experiments by exposing different product variants to user segments and measuring statistically significant differences in behavior.", "prerequisites": ["feature-flags", "instrumentation"], "tags": ["experimentation", "product", "data", "growth"], "addedByStage0": false },
-    "vendor-lock-in": { "slug": "vendor-lock-in", "title": "Vendor Lock-In", "phase": "delivery-and-operations", "order": 7, "summary": "Assess and mitigate dependency on specific cloud providers or SaaS vendors through abstraction layers, open standards, and portability planning.", "prerequisites": ["cloud-costs"], "tags": ["architecture", "risk", "cloud", "strategy"], "addedByStage0": false },
-    "api-versioning": { "slug": "api-versioning", "title": "API Versioning", "phase": "delivery-and-operations", "order": 8, "summary": "Evolve APIs without breaking existing clients: URL/header versioning, deprecation policies, and backward-compatibility contracts.", "prerequisites": ["crud-logic"], "tags": ["api", "reliability", "compatibility"], "addedByStage0": true },
-    "incident-response": { "slug": "incident-response", "title": "Incident Response", "phase": "incident-management", "order": 1, "summary": "Execute a repeatable process for detecting, communicating, mitigating, and resolving production incidents with defined roles and runbooks.", "prerequisites": ["alerting", "logging"], "tags": ["operations", "reliability", "process", "sre"], "addedByStage0": false },
-    "on-call-rotations": { "slug": "on-call-rotations", "title": "On-Call Rotations", "phase": "incident-management", "order": 2, "summary": "Establish sustainable on-call schedules, escalation policies, and toil-reduction practices so that production issues always reach a human quickly without burning out the team.", "prerequisites": ["alerting"], "tags": ["operations", "process", "reliability", "team"], "addedByStage0": true },
-    "disaster-recovery": { "slug": "disaster-recovery", "title": "Disaster Recovery", "phase": "incident-management", "order": 3, "summary": "Define and regularly test RPO/RTO targets, backup procedures, and recovery playbooks to restore service after catastrophic failures.", "prerequisites": ["incident-response"], "tags": ["reliability", "data", "operations", "compliance"], "addedByStage0": false },
-    "data-retention": { "slug": "data-retention", "title": "Data Retention", "phase": "incident-management", "order": 4, "summary": "Define how long different classes of data are stored, archived, and deleted to balance compliance obligations, cost, and recovery needs.", "prerequisites": ["gdpr-ccpa"], "tags": ["compliance", "data", "legal", "cost"], "addedByStage0": false },
-    "escalations": { "slug": "escalations", "title": "Escalations", "phase": "incident-management", "order": 5, "summary": "Define clear escalation paths for technical incidents and customer-impacting issues so the right people are looped in at the right severity threshold.", "prerequisites": ["incident-response"], "tags": ["operations", "process", "reliability", "customer"], "addedByStage0": false },
-    "retention": { "slug": "retention", "title": "Retention", "phase": "growth-and-governance", "order": 1, "summary": "Measure and improve how many users return to your product over time using cohort analysis, engagement loops, and lifecycle communications.", "prerequisites": ["instrumentation"], "tags": ["growth", "product", "analytics", "saas"], "addedByStage0": false },
-    "churn-control": { "slug": "churn-control", "title": "Churn Control", "phase": "growth-and-governance", "order": 2, "summary": "Identify at-risk subscribers, trigger proactive interventions, and handle cancellation flows to reduce involuntary and voluntary churn.", "prerequisites": ["subscription-states", "retention"], "tags": ["growth", "billing", "saas", "product"], "addedByStage0": false },
-    "support-ops": { "slug": "support-ops", "title": "Support Operations", "phase": "growth-and-governance", "order": 3, "summary": "Build tooling and processes for customer support, including admin dashboards, audit logs, and runbooks so support staff can resolve issues without direct database access.", "prerequisites": ["logging", "access-control"], "tags": ["operations", "customer", "tooling", "process"], "addedByStage0": false },
-    "governance": { "slug": "governance", "title": "Governance", "phase": "growth-and-governance", "order": 4, "summary": "Establish engineering standards, change management processes, and audit trails that keep the system compliant and accountable as the organization grows.", "prerequisites": ["gdpr-ccpa", "access-control"], "tags": ["compliance", "process", "security", "risk"], "addedByStage0": false },
-    "documentation": { "slug": "documentation", "title": "Documentation", "phase": "growth-and-governance", "order": 5, "summary": "Maintain up-to-date runbooks, API references, architectural decision records, and onboarding guides so institutional knowledge survives team changes.", "prerequisites": [], "tags": ["process", "knowledge", "operations", "team"], "addedByStage0": false },
-    "dependency-management": { "slug": "dependency-management", "title": "Dependency Management", "phase": "growth-and-governance", "order": 6, "summary": "Pin, audit, and update third-party dependencies. Manage supply-chain risk, vulnerability scanning, and license compliance for production software.", "prerequisites": [], "tags": ["security", "operations", "supply-chain"], "addedByStage0": true }
+    "authentication": {
+      "slug": "authentication",
+      "title": "Authentication",
+      "phase": "security-and-identity",
+      "order": 1,
+      "summary": "Verify user identity securely using industry-standard protocols such as OAuth 2.0, OIDC, and session management best practices.",
+      "prerequisites": [],
+      "tags": [
+        "security",
+        "identity",
+        "sessions",
+        "oauth"
+      ],
+      "addedByStage0": false
+    },
+    "access-control": {
+      "slug": "access-control",
+      "title": "Access Control",
+      "phase": "security-and-identity",
+      "order": 2,
+      "summary": "Enforce who can do what in your application using RBAC, ABAC, or policy-based authorization systems.",
+      "prerequisites": [
+        "authentication"
+      ],
+      "tags": [
+        "security",
+        "authorization",
+        "rbac",
+        "permissions"
+      ],
+      "addedByStage0": false
+    },
+    "secrets-management": {
+      "slug": "secrets-management",
+      "title": "Secrets Management",
+      "phase": "security-and-identity",
+      "order": 3,
+      "summary": "Store, rotate, and audit API keys and credentials using dedicated vaults rather than hardcoding them in source or environment files.",
+      "prerequisites": [],
+      "tags": [
+        "security",
+        "credentials",
+        "vault",
+        "rotation"
+      ],
+      "addedByStage0": false
+    },
+    "rate-limiting": {
+      "slug": "rate-limiting",
+      "title": "Rate Limiting",
+      "phase": "security-and-identity",
+      "order": 4,
+      "summary": "Protect your APIs and infrastructure from abuse, scraping, and denial-of-service attacks by capping request rates per client.",
+      "prerequisites": [],
+      "tags": [
+        "security",
+        "reliability",
+        "api",
+        "abuse-prevention"
+      ],
+      "addedByStage0": false
+    },
+    "cookies": {
+      "slug": "cookies",
+      "title": "Cookies & Consent",
+      "phase": "security-and-identity",
+      "order": 5,
+      "summary": "Manage first- and third-party cookies correctly for security (SameSite, HttpOnly, Secure) and obtain lawful consent for tracking under privacy regulations.",
+      "prerequisites": [],
+      "tags": [
+        "security",
+        "privacy",
+        "compliance",
+        "frontend"
+      ],
+      "addedByStage0": false
+    },
+    "gdpr-ccpa": {
+      "slug": "gdpr-ccpa",
+      "title": "GDPR / CCPA Compliance",
+      "phase": "security-and-identity",
+      "order": 6,
+      "summary": "Implement data subject rights (access, deletion, portability) and consent flows to comply with major global privacy regulations.",
+      "prerequisites": [],
+      "tags": [
+        "compliance",
+        "privacy",
+        "legal",
+        "data"
+      ],
+      "addedByStage0": false
+    },
+    "payments": {
+      "slug": "payments",
+      "title": "Payments",
+      "phase": "money-and-data",
+      "order": 1,
+      "summary": "Integrate payment processors securely to accept one-time and recurring charges while handling card validation, fraud, and PCI scope.",
+      "prerequisites": [
+        "authentication",
+        "idempotency"
+      ],
+      "tags": [
+        "payments",
+        "stripe",
+        "pci",
+        "money"
+      ],
+      "addedByStage0": false
+    },
+    "billing-logic": {
+      "slug": "billing-logic",
+      "title": "Billing Logic",
+      "phase": "money-and-data",
+      "order": 2,
+      "summary": "Model invoicing, proration, credits, refunds, and dunning correctly so that money in the database always matches money in the payment processor.",
+      "prerequisites": [
+        "payments",
+        "idempotency"
+      ],
+      "tags": [
+        "billing",
+        "money",
+        "accounting",
+        "subscriptions"
+      ],
+      "addedByStage0": false
+    },
+    "subscription-states": {
+      "slug": "subscription-states",
+      "title": "Subscription States",
+      "phase": "money-and-data",
+      "order": 3,
+      "summary": "Model the full lifecycle of a subscription (trial, active, past-due, paused, canceled) as an explicit state machine with correct feature access at each state.",
+      "prerequisites": [
+        "billing-logic"
+      ],
+      "tags": [
+        "subscriptions",
+        "state-machine",
+        "billing",
+        "saas"
+      ],
+      "addedByStage0": false
+    },
+    "idempotency": {
+      "slug": "idempotency",
+      "title": "Idempotency",
+      "phase": "money-and-data",
+      "order": 4,
+      "summary": "Design APIs and background jobs so that retrying an operation never produces duplicate side effects such as double-charges or duplicate records.",
+      "prerequisites": [],
+      "tags": [
+        "reliability",
+        "api",
+        "distributed-systems",
+        "payments"
+      ],
+      "addedByStage0": false
+    },
+    "data-integrity": {
+      "slug": "data-integrity",
+      "title": "Data Integrity",
+      "phase": "money-and-data",
+      "order": 5,
+      "summary": "Use database constraints, transactions, and application-level validation to guarantee that stored data is always valid and consistent.",
+      "prerequisites": [],
+      "tags": [
+        "database",
+        "reliability",
+        "transactions",
+        "validation"
+      ],
+      "addedByStage0": false
+    },
+    "schema-migrations": {
+      "slug": "schema-migrations",
+      "title": "Schema Migrations",
+      "phase": "money-and-data",
+      "order": 6,
+      "summary": "Apply database schema changes safely in production using expand-contract patterns and zero-downtime migration strategies.",
+      "prerequisites": [
+        "data-integrity"
+      ],
+      "tags": [
+        "database",
+        "reliability",
+        "deployment",
+        "zero-downtime"
+      ],
+      "addedByStage0": true
+    },
+    "crud-logic": {
+      "slug": "crud-logic",
+      "title": "CRUD Logic",
+      "phase": "money-and-data",
+      "order": 7,
+      "summary": "Designing reliable create, read, update, and delete operations: soft deletes, optimistic locking, bulk-operation safety, and audit trails.",
+      "prerequisites": [
+        "data-integrity",
+        "access-control"
+      ],
+      "tags": [
+        "data",
+        "architecture",
+        "foundational"
+      ],
+      "addedByStage0": false
+    },
+    "logging": {
+      "slug": "logging",
+      "title": "Logging",
+      "phase": "observability",
+      "order": 1,
+      "summary": "Emit structured, queryable logs from all application components so that the sequence of events leading to any outcome can be reconstructed.",
+      "prerequisites": [],
+      "tags": [
+        "observability",
+        "debugging",
+        "operations"
+      ],
+      "addedByStage0": false
+    },
+    "alerting": {
+      "slug": "alerting",
+      "title": "Alerting",
+      "phase": "observability",
+      "order": 2,
+      "summary": "Configure threshold- and anomaly-based alerts on metrics and logs so that on-call engineers are notified of production problems before customers are.",
+      "prerequisites": [
+        "logging",
+        "slos-and-slis"
+      ],
+      "tags": [
+        "observability",
+        "operations",
+        "reliability"
+      ],
+      "addedByStage0": false
+    },
+    "instrumentation": {
+      "slug": "instrumentation",
+      "title": "Instrumentation",
+      "phase": "observability",
+      "order": 3,
+      "summary": "Add metrics, counters, histograms, and spans throughout your code to expose system health and business behavior to your observability stack.",
+      "prerequisites": [
+        "logging"
+      ],
+      "tags": [
+        "observability",
+        "metrics",
+        "performance",
+        "monitoring"
+      ],
+      "addedByStage0": false
+    },
+    "distributed-tracing": {
+      "slug": "distributed-tracing",
+      "title": "Distributed Tracing",
+      "phase": "observability",
+      "order": 4,
+      "summary": "Propagate trace context across service boundaries to visualize end-to-end request flows and pinpoint latency bottlenecks in distributed systems.",
+      "prerequisites": [
+        "instrumentation"
+      ],
+      "tags": [
+        "observability",
+        "distributed-systems",
+        "latency",
+        "debugging"
+      ],
+      "addedByStage0": true
+    },
+    "slos-and-slis": {
+      "slug": "slos-and-slis",
+      "title": "SLOs & SLIs",
+      "phase": "observability",
+      "order": 5,
+      "summary": "Define measurable reliability targets (SLOs) backed by concrete indicators (SLIs) and error budgets to make data-driven decisions about reliability vs. velocity.",
+      "prerequisites": [
+        "instrumentation"
+      ],
+      "tags": [
+        "reliability",
+        "sre",
+        "observability",
+        "operations"
+      ],
+      "addedByStage0": true
+    },
+    "cloud-costs": {
+      "slug": "cloud-costs",
+      "title": "Cloud Cost Management",
+      "phase": "observability",
+      "order": 6,
+      "summary": "Monitor, attribute, and optimize cloud spending using tagging, budgets, rightsizing, and reserved capacity to prevent bill shock at scale.",
+      "prerequisites": [],
+      "tags": [
+        "cloud",
+        "cost",
+        "finops",
+        "operations"
+      ],
+      "addedByStage0": false
+    },
+    "scalability": {
+      "slug": "scalability",
+      "title": "Scalability",
+      "phase": "reliability-and-scale",
+      "order": 1,
+      "summary": "Design application and data layers to handle order-of-magnitude growth in traffic and data volume without fundamental rearchitecting.",
+      "prerequisites": [
+        "load-balancing",
+        "caching"
+      ],
+      "tags": [
+        "performance",
+        "architecture",
+        "distributed-systems"
+      ],
+      "addedByStage0": false
+    },
+    "latency-optimization": {
+      "slug": "latency-optimization",
+      "title": "Latency Optimization",
+      "phase": "reliability-and-scale",
+      "order": 2,
+      "summary": "Identify and eliminate the dominant sources of request latency using profiling, query analysis, and architectural changes like caching and async work.",
+      "prerequisites": [
+        "distributed-tracing",
+        "caching"
+      ],
+      "tags": [
+        "performance",
+        "database",
+        "networking",
+        "user-experience"
+      ],
+      "addedByStage0": false
+    },
+    "caching": {
+      "slug": "caching",
+      "title": "Caching",
+      "phase": "reliability-and-scale",
+      "order": 3,
+      "summary": "Apply in-process, distributed, and CDN caching at the right layer with correct invalidation strategies to reduce latency and database load.",
+      "prerequisites": [],
+      "tags": [
+        "performance",
+        "redis",
+        "cdn",
+        "database"
+      ],
+      "addedByStage0": true
+    },
+    "load-balancing": {
+      "slug": "load-balancing",
+      "title": "Load Balancing",
+      "phase": "reliability-and-scale",
+      "order": 4,
+      "summary": "Distribute traffic across multiple application instances to eliminate single points of failure and enable horizontal scaling.",
+      "prerequisites": [
+        "environments"
+      ],
+      "tags": [
+        "infrastructure",
+        "reliability",
+        "networking",
+        "scalability"
+      ],
+      "addedByStage0": false
+    },
+    "message-queues": {
+      "slug": "message-queues",
+      "title": "Message Queues & Job Processing",
+      "phase": "reliability-and-scale",
+      "order": 5,
+      "summary": "Offload slow or failure-prone work to asynchronous job queues to improve response times, decouple services, and absorb traffic spikes.",
+      "prerequisites": [
+        "idempotency"
+      ],
+      "tags": [
+        "async",
+        "queues",
+        "reliability",
+        "distributed-systems"
+      ],
+      "addedByStage0": true
+    },
+    "dead-letter-queues": {
+      "slug": "dead-letter-queues",
+      "title": "Dead-Letter Queues",
+      "phase": "reliability-and-scale",
+      "order": 6,
+      "summary": "Capture messages that repeatedly fail processing into a separate queue for inspection and replay so that poison messages never silently disappear.",
+      "prerequisites": [
+        "message-queues"
+      ],
+      "tags": [
+        "async",
+        "queues",
+        "reliability",
+        "error-handling"
+      ],
+      "addedByStage0": true
+    },
+    "multi-region-support": {
+      "slug": "multi-region-support",
+      "title": "Multi-Region Support",
+      "phase": "reliability-and-scale",
+      "order": 7,
+      "summary": "Deploy across geographic regions to reduce latency for global users and maintain availability during regional cloud provider outages.",
+      "prerequisites": [
+        "load-balancing",
+        "data-integrity"
+      ],
+      "tags": [
+        "infrastructure",
+        "reliability",
+        "latency",
+        "cloud"
+      ],
+      "addedByStage0": false
+    },
+    "error-handling": {
+      "slug": "error-handling",
+      "title": "Error Handling",
+      "phase": "reliability-and-scale",
+      "order": 8,
+      "summary": "Principled strategies for catching, surfacing, containing, and recovering from errors in production systems, including graceful degradation and user-facing vs. internal error distinctions.",
+      "prerequisites": [],
+      "tags": [
+        "reliability",
+        "fundamentals",
+        "architecture"
+      ],
+      "addedByStage0": true
+    },
+    "ci-cd": {
+      "slug": "ci-cd",
+      "title": "CI / CD",
+      "phase": "delivery-and-operations",
+      "order": 1,
+      "summary": "Automate the build, test, and deployment pipeline so that every merged change can reach production safely with minimal manual intervention.",
+      "prerequisites": [
+        "test-coverage",
+        "environments"
+      ],
+      "tags": [
+        "automation",
+        "deployment",
+        "devops",
+        "testing"
+      ],
+      "addedByStage0": false
+    },
+    "environments": {
+      "slug": "environments",
+      "title": "Environments",
+      "phase": "delivery-and-operations",
+      "order": 2,
+      "summary": "Maintain distinct development, staging, and production environments with environment-specific configuration and data isolation.",
+      "prerequisites": [
+        "secrets-management"
+      ],
+      "tags": [
+        "devops",
+        "deployment",
+        "configuration",
+        "safety"
+      ],
+      "addedByStage0": false
+    },
+    "rollbacks": {
+      "slug": "rollbacks",
+      "title": "Rollbacks",
+      "phase": "delivery-and-operations",
+      "order": 3,
+      "summary": "Design deployments so that a bad release can be quickly reverted without data loss using strategies like blue-green deployments and database migration reversibility.",
+      "prerequisites": [
+        "ci-cd",
+        "schema-migrations"
+      ],
+      "tags": [
+        "deployment",
+        "reliability",
+        "safety",
+        "devops"
+      ],
+      "addedByStage0": false
+    },
+    "feature-flags": {
+      "slug": "feature-flags",
+      "title": "Feature Flags",
+      "phase": "delivery-and-operations",
+      "order": 4,
+      "summary": "Decouple feature deployment from feature release using runtime flags that allow gradual rollouts, instant kill-switches, and targeted user targeting.",
+      "prerequisites": [
+        "ci-cd"
+      ],
+      "tags": [
+        "deployment",
+        "product",
+        "safety",
+        "experimentation"
+      ],
+      "addedByStage0": false
+    },
+    "test-coverage": {
+      "slug": "test-coverage",
+      "title": "Test Coverage",
+      "phase": "delivery-and-operations",
+      "order": 5,
+      "summary": "Build a layered test suite of unit, integration, and end-to-end tests that catches regressions before they reach production.",
+      "prerequisites": [],
+      "tags": [
+        "testing",
+        "quality",
+        "automation",
+        "reliability"
+      ],
+      "addedByStage0": false
+    },
+    "ab-testing": {
+      "slug": "ab-testing",
+      "title": "A/B Testing",
+      "phase": "delivery-and-operations",
+      "order": 6,
+      "summary": "Run controlled experiments by exposing different product variants to user segments and measuring statistically significant differences in behavior.",
+      "prerequisites": [
+        "feature-flags",
+        "instrumentation"
+      ],
+      "tags": [
+        "experimentation",
+        "product",
+        "data",
+        "growth"
+      ],
+      "addedByStage0": false
+    },
+    "vendor-lock-in": {
+      "slug": "vendor-lock-in",
+      "title": "Vendor Lock-In",
+      "phase": "delivery-and-operations",
+      "order": 7,
+      "summary": "Assess and mitigate dependency on specific cloud providers or SaaS vendors through abstraction layers, open standards, and portability planning.",
+      "prerequisites": [],
+      "tags": [
+        "architecture",
+        "risk",
+        "cloud",
+        "strategy"
+      ],
+      "addedByStage0": false
+    },
+    "api-versioning": {
+      "slug": "api-versioning",
+      "title": "API Versioning",
+      "phase": "delivery-and-operations",
+      "order": 8,
+      "summary": "Evolve APIs without breaking existing clients: URL/header versioning, deprecation policies, and backward-compatibility contracts.",
+      "prerequisites": [],
+      "tags": [
+        "api",
+        "reliability",
+        "compatibility"
+      ],
+      "addedByStage0": true
+    },
+    "incident-response": {
+      "slug": "incident-response",
+      "title": "Incident Response",
+      "phase": "incident-management",
+      "order": 1,
+      "summary": "Execute a repeatable process for detecting, communicating, mitigating, and resolving production incidents with defined roles and runbooks.",
+      "prerequisites": [
+        "alerting",
+        "logging"
+      ],
+      "tags": [
+        "operations",
+        "reliability",
+        "process",
+        "sre"
+      ],
+      "addedByStage0": false
+    },
+    "on-call-rotations": {
+      "slug": "on-call-rotations",
+      "title": "On-Call Rotations",
+      "phase": "incident-management",
+      "order": 2,
+      "summary": "Establish sustainable on-call schedules, escalation policies, and toil-reduction practices so that production issues always reach a human quickly without burning out the team.",
+      "prerequisites": [
+        "alerting",
+        "incident-response"
+      ],
+      "tags": [
+        "operations",
+        "process",
+        "reliability",
+        "team"
+      ],
+      "addedByStage0": true
+    },
+    "disaster-recovery": {
+      "slug": "disaster-recovery",
+      "title": "Disaster Recovery",
+      "phase": "incident-management",
+      "order": 3,
+      "summary": "Define and regularly test RPO/RTO targets, backup procedures, and recovery playbooks to restore service after catastrophic failures.",
+      "prerequisites": [
+        "incident-response"
+      ],
+      "tags": [
+        "reliability",
+        "data",
+        "operations",
+        "compliance"
+      ],
+      "addedByStage0": false
+    },
+    "data-retention": {
+      "slug": "data-retention",
+      "title": "Data Retention",
+      "phase": "incident-management",
+      "order": 4,
+      "summary": "Define how long different classes of data are stored, archived, and deleted to balance compliance obligations, cost, and recovery needs.",
+      "prerequisites": [
+        "gdpr-ccpa"
+      ],
+      "tags": [
+        "compliance",
+        "data",
+        "legal",
+        "cost"
+      ],
+      "addedByStage0": false
+    },
+    "escalations": {
+      "slug": "escalations",
+      "title": "Escalations",
+      "phase": "incident-management",
+      "order": 5,
+      "summary": "Define clear escalation paths for technical incidents and customer-impacting issues so the right people are looped in at the right severity threshold.",
+      "prerequisites": [
+        "incident-response"
+      ],
+      "tags": [
+        "operations",
+        "process",
+        "reliability",
+        "customer"
+      ],
+      "addedByStage0": false
+    },
+    "retention": {
+      "slug": "retention",
+      "title": "Retention",
+      "phase": "growth-and-governance",
+      "order": 1,
+      "summary": "Measure and improve how many users return to your product over time using cohort analysis, engagement loops, and lifecycle communications.",
+      "prerequisites": [
+        "instrumentation"
+      ],
+      "tags": [
+        "growth",
+        "product",
+        "analytics",
+        "saas"
+      ],
+      "addedByStage0": false
+    },
+    "churn-control": {
+      "slug": "churn-control",
+      "title": "Churn Control",
+      "phase": "growth-and-governance",
+      "order": 2,
+      "summary": "Identify at-risk subscribers, trigger proactive interventions, and handle cancellation flows to reduce involuntary and voluntary churn.",
+      "prerequisites": [
+        "subscription-states",
+        "retention"
+      ],
+      "tags": [
+        "growth",
+        "billing",
+        "saas",
+        "product"
+      ],
+      "addedByStage0": false
+    },
+    "support-ops": {
+      "slug": "support-ops",
+      "title": "Support Operations",
+      "phase": "growth-and-governance",
+      "order": 3,
+      "summary": "Build tooling and processes for customer support, including admin dashboards, audit logs, and runbooks so support staff can resolve issues without direct database access.",
+      "prerequisites": [
+        "logging",
+        "access-control"
+      ],
+      "tags": [
+        "operations",
+        "customer",
+        "tooling",
+        "process"
+      ],
+      "addedByStage0": false
+    },
+    "governance": {
+      "slug": "governance",
+      "title": "Governance",
+      "phase": "growth-and-governance",
+      "order": 4,
+      "summary": "Establish engineering standards, change management processes, and audit trails that keep the system compliant and accountable as the organization grows.",
+      "prerequisites": [
+        "gdpr-ccpa",
+        "access-control"
+      ],
+      "tags": [
+        "compliance",
+        "process",
+        "security",
+        "risk"
+      ],
+      "addedByStage0": false
+    },
+    "documentation": {
+      "slug": "documentation",
+      "title": "Documentation",
+      "phase": "growth-and-governance",
+      "order": 5,
+      "summary": "Maintain up-to-date runbooks, API references, architectural decision records, and onboarding guides so institutional knowledge survives team changes.",
+      "prerequisites": [],
+      "tags": [
+        "process",
+        "knowledge",
+        "operations",
+        "team"
+      ],
+      "addedByStage0": false
+    },
+    "dependency-management": {
+      "slug": "dependency-management",
+      "title": "Dependency Management",
+      "phase": "growth-and-governance",
+      "order": 6,
+      "summary": "Pin, audit, and update third-party dependencies. Manage supply-chain risk, vulnerability scanning, and license compliance for production software.",
+      "prerequisites": [],
+      "tags": [
+        "security",
+        "operations",
+        "supply-chain"
+      ],
+      "addedByStage0": true
+    }
   }
 }

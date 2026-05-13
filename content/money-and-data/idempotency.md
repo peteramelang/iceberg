@@ -42,8 +42,6 @@ resources:
         Canonical deep dive on idempotency key design. Covers atomic phases,
         recovery points, and foreign state mutation handling with a practical
         payment-processing example.
-      publisher: Brandur Leach
-      source: ai-researcher
     - url: 'https://stripe.com/blog/idempotency'
       title: Designing robust and predictable APIs with idempotency
       kind: canonical-doc
@@ -51,8 +49,6 @@ resources:
         Stripe's official idempotency primer. Explains the problem (network
         unreliability), idempotency principles, HTTP semantics, retry
         strategies, and responsible backoff.
-      publisher: Stripe
-      source: ai-researcher
     - url: >-
         https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/
       title: Making Retries Safe with Idempotent APIs
@@ -61,8 +57,6 @@ resources:
         AWS Builders Library canonical resource. Covers unique request
         identifiers, semantic equivalence, atomic storage, token retention, and
         edge cases like late-arriving requests.
-      publisher: Amazon Web Services
-      source: ai-researcher
     - url: 'https://thecodeforge.io/system-design/idempotency-api-design/'
       title: 'Idempotency in API Design: Why It Matters and How to Build It Right'
       kind: tutorial
@@ -70,16 +64,12 @@ resources:
         2026 tutorial with real-world analogies, code examples, and common
         mistakes. Covers Idempotency-Key headers for POST/PATCH operations and
         practical checkout/payment scenarios.
-      publisher: Thecodeforge
-      source: ai-researcher
     - url: 'https://blog.bytebytego.com/p/mastering-idempotency-building-reliable'
       title: 'Mastering Idempotency: Building Reliable APIs'
       kind: engineering-blog
       reasoning: >-
         ByteByteGo engineering deep-dive on idempotent API design patterns,
         request deduplication, and production implementation strategies.
-      publisher: Bytebytego
-      source: ai-researcher
   services:
     - name: Stripe
       url: 'https://stripe.com'
@@ -88,7 +78,6 @@ resources:
         Stripe's Idempotency-Key header standard is widely adopted across
         payment platforms. Enables exactly-once charging semantics via
         client-provided UUIDs.
-      source: ai-researcher
     - name: AWS SQS
       url: 'https://aws.amazon.com/sqs/'
       category: message-queue
@@ -96,8 +85,6 @@ resources:
         Message deduplication feature provides idempotency for asynchronous job
         processing. Deduplication IDs and 5-minute windows prevent duplicate
         processing.
-      vendor: Amazon Web Services
-      source: ai-researcher
     - name: Temporal
       url: 'https://temporal.io'
       category: durable-execution
@@ -105,7 +92,6 @@ resources:
         Durable execution engine with built-in workflow and activity
         idempotency. Workflow ID acts as idempotency key; activities support
         retry-safe deduplication.
-      source: ai-researcher
     - name: Inngest
       url: 'https://www.inngest.com'
       category: durable-execution
@@ -113,17 +99,15 @@ resources:
         Workflow engine with event-level and function-level idempotency
         guarantees. 24-hour deduplication windows and step-level execution
         safety for background jobs.
-      source: ai-researcher
     - name: Redis
       url: 'https://redis.io'
       category: cache-storage
       reasoning: >-
         Can implement custom idempotency key storage with atomic SET/GET and
         automatic expiration. Suitable for high-throughput deduplication caches.
-      source: ai-researcher
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

@@ -41,7 +41,6 @@ resources:
       durationMinutes: 45
       addedAt: '2026-05-14T00:00:00Z'
       reasoning: Deep dive into Redis for caching and real-time data patterns.
-      source: ai-researcher
   articles:
     - url: 'https://redis.io/docs/manual/client-side-caching/'
       title: Client-Side Caching
@@ -49,24 +48,28 @@ resources:
       reasoning: >-
         Canonical Redis documentation on implementing client-side caching
         strategies.
-      publisher: Redis
-      source: ai-researcher
     - url: 'https://aws.amazon.com/caching/'
       title: AWS Caching Solutions Overview
       kind: tutorial
       reasoning: >-
         Comprehensive overview of caching strategies and AWS ElastiCache
         offerings.
-      publisher: Amazon Web Services
-      source: ai-researcher
+    - url: 'https://martinfowler.com/bliki/CacheAsidePattern.html'
+      title: Cache-Aside Pattern
+      kind: canonical-doc
+      reasoning: >-
+        Martin Fowler's canonical explanation of the cache-aside (lazy loading)
+        pattern.
+    - url: 'https://martinfowler.com/bliki/WriteThrough.html'
+      title: Write-Through Cache Pattern
+      kind: canonical-doc
+      reasoning: Martin Fowler's explanation of write-through caching strategy.
     - url: 'https://web.dev/articles/http-cache'
       title: HTTP Caching
       kind: tutorial
       reasoning: >-
         Web.dev guide on HTTP caching mechanisms, cache headers, and browser
         caching strategies.
-      publisher: Google (web.dev)
-      source: ai-researcher
   services:
     - name: Redis
       url: 'https://redis.io'
@@ -74,43 +77,36 @@ resources:
       reasoning: >-
         Canonical in-memory data structure store, widely used for distributed
         caching and session management.
-      source: ai-researcher
     - name: Memcached
       url: 'https://memcached.org'
       category: distributed-cache
       reasoning: >-
         Canonical distributed memory caching system, optimized for
         high-performance caching of simple key-value data.
-      source: ai-researcher
     - name: Varnish
       url: 'https://varnish-cache.org'
       category: http-cache
       reasoning: >-
         Canonical HTTP accelerator and reverse proxy, ideal for caching dynamic
         content and reducing origin server load.
-      source: ai-researcher
     - name: AWS ElastiCache
       url: 'https://aws.amazon.com/elasticache/'
       category: managed-distributed-cache
       reasoning: >-
         AWS managed caching service supporting Redis and Memcached for scalable
         distributed caching.
-      vendor: Amazon Web Services
-      source: ai-researcher
     - name: Cloudflare
       url: 'https://www.cloudflare.com'
       category: cdn-cache
       reasoning: >-
         CDN and edge caching service providing global HTTP caching and
         acceleration at the network edge.
-      source: ai-researcher
     - name: Fastly
       url: 'https://www.fastly.com'
       category: cdn-cache
       reasoning: >-
         High-performance CDN focused on instant cache purging and real-time
         caching control.
-      source: ai-researcher
   courses:
     - url: 'https://redis.io/university/'
       title: Redis University
@@ -119,9 +115,15 @@ resources:
       reasoning: >-
         Official Redis training courses covering caching patterns, data
         structures, and real-world applications.
-      source: ai-researcher
+    - url: 'https://www.coursera.org/learn/database-design-web-apps'
+      title: Database Design and Web Apps
+      provider: Coursera
+      paid: true
+      reasoning: >-
+        Comprehensive course covering database optimization including caching
+        strategies at multiple layers.
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

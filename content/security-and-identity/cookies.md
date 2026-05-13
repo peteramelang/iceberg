@@ -32,7 +32,6 @@ resources:
       reasoning: >-
         Practical tutorial covering the three critical security attributes with
         examples.
-      source: ai-researcher
     long: null
   articles:
     - url: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies'
@@ -41,8 +40,6 @@ resources:
       reasoning: >-
         MDN's authoritative reference on cookie syntax, security attributes, and
         best practices.
-      publisher: MDN / Mozilla
-      source: ai-researcher
     - url: >-
         https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
       title: OWASP Session Management Cheat Sheet
@@ -50,8 +47,6 @@ resources:
       reasoning: >-
         Hardened cookie configuration patterns and threat models for CSRF/XSS
         prevention.
-      publisher: OWASP
-      source: ai-researcher
   services:
     - name: OneTrust
       url: 'https://www.onetrust.com'
@@ -59,25 +54,20 @@ resources:
       reasoning: >-
         Enterprise CMP covering privacy, risk, data, and compliance across 300+
         jurisdictions.
-      source: ai-researcher
     - name: Cookiebot
       url: 'https://www.cookiebot.com'
       category: consent-management-platform
       reasoning: >-
         Lightweight automated CMP with high scanning accuracy and Google Consent
         Mode V2 support.
-      vendor: Cookiebot (Usercentrics)
-      source: ai-researcher
     - name: Osano
       url: 'https://www.osano.com'
       category: consent-management-platform
       reasoning: All-in-one privacy ops platform with jurisdiction-aware consent banners.
-      source: ai-researcher
     - name: iubenda
       url: 'https://www.iubenda.com'
       category: consent-management-platform
       reasoning: Google-certified CMP with auto-updating legal docs across 27 languages.
-      source: ai-researcher
   courses:
     - url: 'https://www.udemy.com/course/cookie-compliance-for-websites-and-apps/'
       title: Cookie Compliance for Websites and Apps
@@ -86,9 +76,8 @@ resources:
       reasoning: >-
         Course covering GDPR cookie exemptions, policy templates, and CMP tool
         selection.
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

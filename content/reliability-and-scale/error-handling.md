@@ -43,8 +43,6 @@ resources:
         Foundational pattern for containing rendering errors in UI applications;
         demonstrates how to prevent entire component trees from crashing due to
         child component failures.
-      publisher: React (Meta)
-      source: ai-researcher
     - url: 'https://go.dev/blog/error-handling-and-go'
       title: Error Handling and Go
       kind: engineering-blog
@@ -52,8 +50,6 @@ resources:
         Canonical resource on Go's error handling philosophy; establishes the
         principle that errors are values and should be handled explicitly,
         applicable to many production systems.
-      publisher: Go (Google)
-      source: ai-researcher
     - url: >-
         https://aws.amazon.com/builders-library/avoiding-fallback-in-distributed-systems/
       title: Avoiding Fallback in Distributed Systems
@@ -62,8 +58,6 @@ resources:
         Amazon's architectural guidance on designing systems resilient to
         failures; addresses when fallbacks work and when they compound problems
         in distributed contexts.
-      publisher: Amazon Web Services
-      source: ai-researcher
     - url: >-
         https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker
       title: Circuit Breaker Pattern
@@ -72,8 +66,6 @@ resources:
         Foundational resilience pattern that prevents cascading failures by
         stopping requests to failing services; essential for production error
         handling in microservices.
-      publisher: Microsoft Learn
-      source: ai-researcher
   services:
     - name: Sentry
       url: 'https://sentry.io'
@@ -82,7 +74,6 @@ resources:
         Real-time error tracking with source maps, session replay, and release
         tracking; enables teams to detect and fix errors before users report
         them.
-      source: ai-researcher
     - name: Rollbar
       url: 'https://rollbar.com'
       category: Error Tracking
@@ -90,7 +81,6 @@ resources:
         Comprehensive error tracking platform with intelligent grouping and
         alerting; provides context about who was affected and under what
         conditions.
-      source: ai-researcher
     - name: Bugsnag
       url: 'https://www.bugsnag.com'
       category: Error Tracking
@@ -98,15 +88,12 @@ resources:
         Cross-platform error monitoring with before-notifier filters and
         automatic error grouping; supports rich diagnostics for native and web
         applications.
-      vendor: BugSnag
-      source: ai-researcher
     - name: Honeybadger
       url: 'https://www.honeybadger.io'
       category: Error Tracking
       reasoning: >-
         Lightweight error tracking focused on uptime monitoring and exception
         tracking; designed for rapid setup in smaller production environments.
-      source: ai-researcher
     - name: Datadog
       url: 'https://www.datadoghq.com'
       category: Error Tracking
@@ -114,10 +101,9 @@ resources:
         Unified monitoring platform with error tracking, APM, and log analysis;
         provides correlated view of errors alongside infrastructure and
         performance data.
-      source: ai-researcher
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

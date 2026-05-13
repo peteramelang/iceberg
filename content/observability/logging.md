@@ -28,7 +28,6 @@ resources:
       reasoning: >-
         Beginner-friendly introduction to OpenTelemetry logging fundamentals;
         clear, foundational content from canonical source.
-      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=BJqGCj0huvw'
       title: Complete Tutorial - How to Collect Logs with OpenTelemetry
@@ -38,7 +37,6 @@ resources:
       reasoning: >-
         Deep-dive technical tutorial on collecting logs with OpenTelemetry;
         comprehensive hands-on content from recognized observability educator.
-      source: ai-researcher
   articles:
     - url: 'https://opentelemetry.io/docs/specs/otel/logs/'
       title: OpenTelemetry Logging Specification
@@ -46,24 +44,18 @@ resources:
       reasoning: >-
         Authoritative specification document defining the OpenTelemetry logs
         data model, API, and SDK; foundational canonical reference.
-      publisher: OpenTelemetry (CNCF)
-      source: ai-researcher
     - url: 'https://www.honeycomb.io/blog/engineers-checklist-logging-best-practices'
       title: 'Logging Best Practices: An Engineer''s Checklist'
       kind: engineering-blog
       reasoning: >-
         Practical guide from Honeycomb (observability pioneer); actionable
         checklist for implementing production-grade logging.
-      publisher: Honeycomb
-      source: ai-researcher
     - url: 'https://docs.datadoghq.com/logs/guide/best-practices-for-log-management/'
       title: Best Practices for Log Management
       kind: canonical-doc
       reasoning: >-
         Datadog's authoritative guide covering cost optimization, retention, and
         effective log management strategies at scale.
-      publisher: Datadog
-      source: ai-researcher
   services:
     - name: Honeycomb
       url: 'https://www.honeycomb.io/'
@@ -72,28 +64,24 @@ resources:
         Industry-leading observability platform for structured logging with
         high-cardinality querying and trace correlation; founded by
         observability pioneers.
-      source: ai-researcher
     - name: Datadog
       url: 'https://www.datadoghq.com/'
       category: observability-platform
       reasoning: >-
         Comprehensive SaaS platform with log aggregation, indexing, and
         analysis; widely adopted enterprise solution.
-      source: ai-researcher
     - name: Better Stack
       url: 'https://betterstack.com/'
       category: logging-platform
       reasoning: >-
         Cost-effective OpenTelemetry-native log management built on ClickHouse;
         strong alternative to expensive legacy platforms.
-      source: ai-researcher
     - name: Axiom
       url: 'https://axiom.co/'
       category: logging-platform
       reasoning: >-
         Edge-native observability platform with unfixed retention and no
         sampling; optimized for serverless and event-driven architectures.
-      source: ai-researcher
     - name: Grafana Loki
       url: 'https://grafana.com/oss/loki/'
       category: open-source-platform
@@ -101,8 +89,6 @@ resources:
         Industry-standard open-source log aggregation system with efficient
         indexing; integrates with Grafana, Mimir, and Tempo for unified
         observability.
-      vendor: Grafana Labs
-      source: ai-researcher
   courses:
     - url: >-
         https://www.coursera.org/learn/monitoring-and-observability-for-development-and-devops
@@ -113,9 +99,8 @@ resources:
         Free foundational course covering the three pillars of observability
         including structured logging; covers industry tools like Prometheus and
         Grafana.
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

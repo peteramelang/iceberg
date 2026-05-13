@@ -31,7 +31,6 @@ resources:
       reasoning: >-
         Quick, practical overview demonstrating real-world scenarios where DLQs
         prevent data loss and system failures.
-      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=ReW6V2DxQEI'
       title: Dead-Letter Queues in .NET Explained with Amazon SQS
@@ -42,7 +41,6 @@ resources:
         Comprehensive deep-dive on implementing DLQs with AWS SQS in a .NET
         context, covering configuration, best practices, and operational
         considerations.
-      source: ai-researcher
   articles:
     - url: >-
         https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html
@@ -51,8 +49,6 @@ resources:
       reasoning: >-
         AWS canonical documentation on SQS DLQ configuration, redrive policies,
         message retention, and best practices for queue management.
-      publisher: Amazon Web Services
-      source: ai-researcher
     - url: 'https://www.rabbitmq.com/dlx.html'
       title: Dead Letter Exchanges in RabbitMQ
       kind: canonical-doc
@@ -60,16 +56,12 @@ resources:
         RabbitMQ official guide on Dead Letter Exchanges (DLX), covering
         triggering events, message routing, header modifications, and
         configuration approaches.
-      publisher: RabbitMQ
-      source: ai-researcher
     - url: 'https://www.confluent.io/learn/kafka-dead-letter-queue/'
       title: 'Apache Kafka Dead Letter Queue: A Comprehensive Guide'
       kind: tutorial
       reasoning: >-
         Confluent's authoritative overview of Kafka DLQ patterns, implementation
         approaches, benefits, and how managed services enhance DLQ capabilities.
-      publisher: Confluent
-      source: ai-researcher
     - url: 'https://docs.confluent.io/platform/current/connect/concepts.html'
       title: Dead Letter Queues and Error Handling in Kafka Connect
       kind: canonical-doc
@@ -77,8 +69,6 @@ resources:
         Confluent's reference for Kafka Connect DLQ configuration with error
         tolerance settings, topic creation, header support, and security
         considerations.
-      publisher: Confluent
-      source: ai-researcher
     - url: >-
         https://www.enterpriseintegrationpatterns.com/patterns/messaging/DeadLetterChannel.html
       title: Dead Letter Channel - Enterprise Integration Patterns
@@ -87,8 +77,6 @@ resources:
         Foundational reference from Gregor Hohpe's enterprise integration
         patterns library, defining the conceptual model and use cases for
         dead-letter channels.
-      publisher: Enterpriseintegrationpatterns
-      source: ai-researcher
   services:
     - name: AWS SQS
       url: 'https://aws.amazon.com/sqs/'
@@ -96,15 +84,12 @@ resources:
       reasoning: >-
         Native SQS DLQ support with redrive policies, max receive count
         configuration, and CloudWatch integration for monitoring.
-      vendor: Amazon Web Services
-      source: ai-researcher
     - name: RabbitMQ
       url: 'https://www.rabbitmq.com'
       category: message-broker
       reasoning: >-
         Dead Letter Exchange (DLX) mechanism for routing failed messages, with
         flexible configuration via policies or queue arguments.
-      source: ai-researcher
     - name: Apache Kafka
       url: 'https://kafka.apache.org'
       category: streaming-platform
@@ -112,21 +97,18 @@ resources:
         Kafka DLQ patterns implemented at application level or via Kafka
         Connect, with support for error tolerance and topic-based dead
         lettering.
-      source: ai-researcher
     - name: Inngest
       url: 'https://www.inngest.com'
       category: workflow-orchestration
       reasoning: >-
         Durable execution platform with automatic retries, replay functionality,
         and failure handlers as modern alternative to traditional DLQ patterns.
-      source: ai-researcher
     - name: Temporal
       url: 'https://temporal.io'
       category: workflow-orchestration
       reasoning: >-
         Open-source durable execution platform with automatic state persistence,
         built-in retries, and activity-level resilience as DLQ alternative.
-      source: ai-researcher
   courses:
     - url: 'https://www.baeldung.com/kafka-spring-dead-letter-queue'
       title: Dead Letter Queue for Kafka With Spring
@@ -135,7 +117,6 @@ resources:
       reasoning: >-
         Free practical tutorial on implementing DLQ patterns with Spring Kafka,
         covering configuration and error handling strategies.
-      source: ai-researcher
     - url: 'https://algomaster.io/learn/system-design/dead-letter-queues'
       title: Dead Letter Queues | System Design
       provider: AlgoMaster
@@ -143,7 +124,6 @@ resources:
       reasoning: >-
         System design course module covering DLQ concepts, architecture
         patterns, and use cases in distributed systems.
-      source: ai-researcher
     - url: >-
         https://www.geeksforgeeks.org/system-design/dead-letter-queue-system-design/
       title: Dead Letter Queue - System Design
@@ -152,9 +132,8 @@ resources:
       reasoning: >-
         Free educational content on DLQ system design principles, implementation
         patterns, and trade-offs.
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

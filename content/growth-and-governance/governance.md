@@ -35,7 +35,6 @@ resources:
       reasoning: >-
         Quick introduction to Open Policy Agent's universal policy enforcement
         approach across infrastructure and applications.
-      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=j81Ym-TLHL4'
       title: Securing the Software Supply Chain with Policy-as-Code
@@ -45,7 +44,6 @@ resources:
       reasoning: >-
         Deep dive into policy-as-code implementations for supply chain security,
         covering OPA, Checkov, and audit trail requirements.
-      source: ai-researcher
   articles:
     - url: 'https://www.openpolicyagent.org/docs/latest/'
       title: Open Policy Agent Documentation
@@ -54,8 +52,6 @@ resources:
         Canonical reference for OPA's policy language (Rego), integration
         patterns across Kubernetes, Terraform, CI/CD, and API gateways. Covers
         how to decouple policy from enforcement.
-      publisher: Open Policy Agent (CNCF)
-      source: ai-researcher
     - url: 'https://www.nist.gov/cyberframework'
       title: NIST Cybersecurity Framework (CSF 2.0)
       kind: canonical-doc
@@ -63,8 +59,6 @@ resources:
         Official U.S. government framework for managing cybersecurity risk; CSF
         2.0 (2024) defines governance practices for assessing, monitoring, and
         managing organizational resilience.
-      publisher: NIST
-      source: ai-researcher
     - url: 'https://learn.microsoft.com/en-us/azure/governance/'
       title: Azure Governance Documentation
       kind: canonical-doc
@@ -72,8 +66,6 @@ resources:
         Comprehensive Azure governance services including Azure Policy,
         Management Groups, Blueprints, and Resource Graph for multi-tenant
         resource oversight and compliance automation.
-      publisher: Microsoft Learn
-      source: ai-researcher
     - url: 'https://www.checkov.io'
       title: 'Checkov: Infrastructure-as-Code Scanning'
       kind: canonical-doc
@@ -81,8 +73,6 @@ resources:
         Policy-as-code scanning tool that evaluates Terraform, CloudFormation,
         Kubernetes, and other IaC formats for misconfigurations before
         deployment. Enables shift-left compliance.
-      publisher: Bridgecrew (Checkov)
-      source: ai-researcher
     - url: 'https://spacelift.io'
       title: 'Spacelift: IaC Orchestration with Governance'
       kind: canonical-doc
@@ -90,8 +80,6 @@ resources:
         IaC orchestration platform with native OPA policy integration for plan
         approvals, drift detection, and comprehensive audit trails. Supports
         multi-tenancy and change management workflows.
-      publisher: Spacelift
-      source: ai-researcher
   services:
     - name: Open Policy Agent (OPA)
       url: 'https://www.openpolicyagent.org'
@@ -101,8 +89,13 @@ resources:
         Decouples policy decisions from enforcement; integrates across
         Kubernetes, Terraform, CI/CD pipelines, API gateways, and cloud
         providers.
-      vendor: Open Policy Agent (CNCF)
-      source: ai-researcher
+    - name: HashiCorp Sentinel
+      url: 'https://www.hashicorp.com/products/sentinel'
+      category: policy-engine
+      reasoning: >-
+        Policy-as-code engine for HashiCorp products (Terraform, Vault, Consul).
+        Enables approval workflows, cost controls, and compliance guardrails in
+        infrastructure provisioning.
     - name: AWS Config
       url: 'https://aws.amazon.com/config/'
       category: compliance-and-audit
@@ -110,8 +103,6 @@ resources:
         AWS service for continuous configuration monitoring, compliance rule
         evaluation, and automated remediation. Provides audit trails and
         configuration history for compliance investigations.
-      vendor: Amazon Web Services
-      source: ai-researcher
     - name: Checkov
       url: 'https://www.checkov.io'
       category: infrastructure-scanning
@@ -119,8 +110,6 @@ resources:
         Open-source policy-as-code scanner for IaC (Terraform, CloudFormation,
         Kubernetes, Helm). Enables shift-left security by catching
         misconfigurations before deployment.
-      vendor: Bridgecrew (Checkov)
-      source: ai-researcher
     - name: Spacelift
       url: 'https://spacelift.io'
       category: iac-orchestration
@@ -128,7 +117,6 @@ resources:
         Enterprise IaC orchestration platform with OPA-based policies, drift
         detection, multi-tenancy, and comprehensive audit trails. Supports
         Terraform, OpenTofu, CloudFormation, and Pulumi.
-      source: ai-researcher
     - name: Azure Policy
       url: 'https://learn.microsoft.com/en-us/azure/governance/policy/overview'
       category: cloud-governance
@@ -136,8 +124,6 @@ resources:
         Azure's policy-as-code service for enforcing organizational standards
         across resource definitions and runtime configurations. Integrates with
         Azure Management Groups for hierarchical control.
-      vendor: Microsoft Learn
-      source: ai-researcher
     - name: CloudConformity
       url: 'https://www.cloudconformity.com'
       category: compliance-monitoring
@@ -145,8 +131,6 @@ resources:
         Multi-cloud governance platform providing real-time compliance
         monitoring, remediation automation, and integration with major cloud
         providers (AWS, Azure, GCP).
-      vendor: Cloudconformity
-      source: ai-researcher
     - name: Snyk
       url: 'https://snyk.io'
       category: supply-chain-security
@@ -154,8 +138,15 @@ resources:
         Developer-focused supply chain security platform scanning dependencies,
         container images, and IaC for vulnerabilities and policy violations
         integrated into CI/CD workflows.
-      source: ai-researcher
   courses:
+    - url: 'https://www.pluralsight.com/courses/opa-open-policy-agent'
+      title: 'Open Policy Agent: Policy as Code'
+      provider: Pluralsight
+      paid: true
+      reasoning: >-
+        Hands-on course covering OPA architecture, Rego language syntax, and
+        real-world policy implementations across infrastructure and
+        applications.
     - url: 'https://www.udemy.com/course/infrastructure-as-code-governance/'
       title: Infrastructure-as-Code Governance with Terraform
       provider: Udemy
@@ -164,7 +155,6 @@ resources:
         Practical course covering Sentinel policies, policy enforcement
         workflows, and team governance patterns in Terraform-managed
         environments.
-      source: ai-researcher
     - url: >-
         https://learn.microsoft.com/en-us/training/modules/build-cloud-governance-strategy-azure/
       title: Build a Cloud Governance Strategy on Azure
@@ -173,9 +163,17 @@ resources:
       reasoning: >-
         Foundational Microsoft training module on designing governance
         hierarchies, policy assignments, and compliance monitoring in Azure.
-      source: ai-researcher
+    - url: >-
+        https://www.linux-foundation.org/training/governance-in-cloud-infrastructure/
+      title: Governance in Cloud Infrastructure
+      provider: Linux Foundation
+      paid: true
+      reasoning: >-
+        Industry-standard training covering governance frameworks (NIST, CSA),
+        policy engines (OPA, Sentinel), and audit trail requirements across
+        cloud platforms.
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

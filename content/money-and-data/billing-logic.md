@@ -42,7 +42,6 @@ resources:
       reasoning: >-
         Official Stripe video covering proration mechanics, invoice generation,
         and reconciliation patterns used in production billing systems.
-      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=3GhEBjUxHUw'
       title: Building Reliable Billing Systems
@@ -52,7 +51,6 @@ resources:
       reasoning: >-
         In-depth walkthrough of billing architecture, covering subscription
         state machines, reconciliation logic, and handling failures at scale.
-      source: ai-researcher
   articles:
     - url: 'https://stripe.com/docs/billing/subscriptions/prorations'
       title: Proration in Stripe Billing
@@ -61,16 +59,19 @@ resources:
         Authoritative documentation on how Stripe calculates prorations during
         mid-cycle changes, essential for understanding the payment processor's
         model.
-      publisher: Stripe
-      source: ai-researcher
     - url: 'https://stripe.com/docs/billing/invoices'
       title: Invoicing with Stripe
       kind: canonical-doc
       reasoning: >-
         Core reference for invoice generation, drafts, finalization, and
         lifecycle management in Stripe's billing system.
-      publisher: Stripe
-      source: ai-researcher
+    - url: 'https://www.biteinteractive.com/the-complete-guide-to-saas-billing/'
+      title: The Complete Guide to SaaS Billing
+      kind: engineering-blog
+      reasoning: >-
+        Comprehensive overview of SaaS billing patterns including subscriptions,
+        dunning, refunds, and reconciliation best practices from industry
+        experience.
   services:
     - name: Stripe Billing
       url: 'https://stripe.com/billing'
@@ -78,29 +79,24 @@ resources:
       reasoning: >-
         Industry-standard payment processor with comprehensive billing APIs for
         subscriptions, invoicing, and dunning workflows.
-      vendor: Stripe
-      source: ai-researcher
     - name: Zuora
       url: 'https://www.zuora.com'
       category: billing-platform
       reasoning: >-
         Dedicated billing and revenue recognition platform designed for complex
         subscription models and multi-entity accounting.
-      source: ai-researcher
     - name: Chargebee
       url: 'https://www.chargebee.com'
       category: billing-platform
       reasoning: >-
         Full-featured subscription management and billing platform with built-in
         proration, dunning, and revenue recognition capabilities.
-      source: ai-researcher
     - name: Orb
       url: 'https://www.getorb.com'
       category: metering-billing
       reasoning: >-
         Modern metering and usage-based billing platform for complex pricing
         models requiring real-time usage aggregation and invoice generation.
-      source: ai-researcher
   courses:
     - url: 'https://www.udemy.com/course/saas-business-model/'
       title: SaaS Business Model & Metrics Fundamentals
@@ -109,9 +105,8 @@ resources:
       reasoning: >-
         Covers SaaS financial mechanics including billing models, unit
         economics, and revenue recognition that inform billing system design.
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

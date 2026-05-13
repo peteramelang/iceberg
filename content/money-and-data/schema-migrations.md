@@ -38,16 +38,12 @@ resources:
       reasoning: >-
         Canonical reference by Martin Fowler on versioning and evolutionary
         database patterns; foundational for expand-contract strategies
-      publisher: Martin Fowler
-      source: ai-researcher
     - url: 'https://planetscale.com/blog/safe-schema-changes-for-mysql'
       title: Safe Schema Changes for MySQL
       kind: engineering-blog
       reasoning: >-
         PlanetScale's definitive guide on expand-contract and zero-downtime
         migrations; practical MySQL focus
-      publisher: PlanetScale
-      source: ai-researcher
     - url: >-
         https://www.prisma.io/dataguide/types/relational/expand-and-contract-pattern
       title: Expand and Contract Pattern
@@ -55,16 +51,12 @@ resources:
       reasoning: >-
         Prisma's detailed explanation of the expand-contract pattern with code
         examples and deployment workflow
-      publisher: Prisma
-      source: ai-researcher
     - url: 'https://github.com/xataio/pgroll'
       title: 'pgroll: Postgres Roll Migrations'
       kind: canonical-doc
       reasoning: >-
         Xata's open-source tool automating expand-contract migrations for
         PostgreSQL; demonstrates modern zero-downtime practices
-      publisher: GitHub
-      source: ai-researcher
   services:
     - name: Flyway
       url: 'https://www.flywaydb.org'
@@ -72,52 +64,42 @@ resources:
       reasoning: >-
         Industry-standard versioned migration framework; supports multiple
         databases and enforces repeatable/repeatable patterns
-      vendor: Redgate (Flyway)
-      source: ai-researcher
     - name: Liquibase
       url: 'https://www.liquibase.org'
       category: migration-tool
       reasoning: >-
         Comprehensive database change management; supports complex rollback and
         multi-database deployments
-      source: ai-researcher
     - name: Prisma Migrate
       url: 'https://www.prisma.io'
       category: orm-migration
       reasoning: >-
         Schema-first ORM with integrated migrations; handles expand-contract and
         relation updates; schema inheritance from code
-      vendor: Prisma
-      source: ai-researcher
     - name: PlanetScale
       url: 'https://planetscale.com'
       category: managed-db
       reasoning: >-
         MySQL service with native zero-downtime DDL, reverse migrations, and
         schema automation; production-grade zero-downtime built-in
-      source: ai-researcher
     - name: Atlas
       url: 'https://atlasgo.io'
       category: migration-tool
       reasoning: >-
         Modern declarative migration tool with drift detection and
         expand-contract automation; supports multiple databases
-      source: ai-researcher
     - name: Sqitch
       url: 'https://sqitch.org'
       category: migration-tool
       reasoning: >-
         SQL-based change management with native PostgreSQL/MySQL support and
         dependency resolution
-      source: ai-researcher
     - name: pgroll
       url: 'https://github.com/xataio/pgroll'
       category: postgres-migration
       reasoning: >-
         Purpose-built for PostgreSQL zero-downtime migrations; automates
         expand-contract and provides reversible migrations
-      vendor: GitHub
-      source: ai-researcher
   courses:
     - url: 'https://www.prisma.io/dataguide'
       title: 'Prisma Data Guide: Schema Design & Migrations'
@@ -126,9 +108,8 @@ resources:
       reasoning: >-
         Free comprehensive guide covering schema design, relationships, and
         migration patterns with modern examples
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

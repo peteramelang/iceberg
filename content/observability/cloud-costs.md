@@ -21,7 +21,16 @@ definition: >-
 needsManualPick: false
 resources:
   videos:
-    short: null
+    short:
+      url: 'https://www.youtube.com/watch?v=76A8BshRAHs'
+      title: Use AWS COST EXPLORER to Answer Your COST & USAGE Queries | DEMO
+      author: AWS
+      durationMinutes: 12
+      addedAt: '2026-05-14T00:00:00Z'
+      reasoning: >-
+        Practical demonstration of AWS Cost Explorer for real-world cost query
+        scenarios, covering filter options and dimensions essential for cost
+        visibility.
     long: null
   articles:
     - url: >-
@@ -31,8 +40,6 @@ resources:
       reasoning: >-
         Canonical AWS resource covering the five-stage framework: accessing,
         organizing, understanding, controlling, and optimizing cloud costs.
-      publisher: Amazon Web Services
-      source: ai-researcher
     - url: 'https://aws.amazon.com/blogs/aws-cost-management/'
       title: AWS Cloud Financial Management Blog
       kind: engineering-blog
@@ -40,32 +47,24 @@ resources:
         Official AWS blog with continuous updates on cost optimization best
         practices, Savings Plans, Reserved Instances, and Well-Architected
         frameworks.
-      publisher: Amazon Web Services
-      source: ai-researcher
     - url: 'https://cloud.google.com/blog/topics/cost-management'
       title: Google Cloud Cost Management Blog
       kind: engineering-blog
       reasoning: >-
         Canonical Google Cloud resource covering FinOps automation, spend caps,
         AI cost visibility, and Commitment Use Discounts (CUDs).
-      publisher: Google Cloud
-      source: ai-researcher
     - url: 'https://www.finops.org/framework/domains/optimize-usage-cost/'
       title: 'FinOps Framework: Optimize Usage & Cost Domain'
       kind: tutorial
       reasoning: >-
         Official FinOps Foundation domain documentation on cost optimization
         activities, rightsizing, and rate negotiation strategies.
-      publisher: FinOps Foundation
-      source: ai-researcher
     - url: 'https://www.vantage.sh/blog/top-finops-tools-for-cloud-cost-optimization'
       title: Top 10 Best FinOps Tools for Cloud Cost Optimization in 2026
       kind: engineering-blog
       reasoning: >-
         Curated overview of leading FinOps tooling landscape comparing Vantage,
         CloudZero, nOps, and other platforms for different organizational needs.
-      publisher: Vantage
-      source: ai-researcher
   services:
     - name: AWS Cloud Financial Management
       url: 'https://aws.amazon.com/aws-cost-management/'
@@ -73,8 +72,6 @@ resources:
       reasoning: >-
         AWS native solution providing Cost Explorer, Budgets, Anomaly Detection,
         Billing Conductor, and Reserved Instance/Savings Plan recommendations.
-      vendor: Amazon Web Services
-      source: ai-researcher
     - name: Vantage
       url: 'https://www.vantage.sh'
       category: third-party
@@ -82,7 +79,6 @@ resources:
         Multi-cloud cost management platform with FinOps Agent, Autopilot
         Savings Plans purchasing, virtual tagging, and Kubernetes cost
         monitoring across 25+ cloud providers.
-      source: ai-researcher
     - name: CloudZero
       url: 'https://www.cloudzero.com'
       category: third-party
@@ -90,7 +86,6 @@ resources:
         Cost intelligence platform connecting cloud spend to business outcomes
         with code-driven cost allocation, unit economics, and AI anomaly
         detection across 50+ providers.
-      source: ai-researcher
     - name: Infracost
       url: 'https://www.infracost.io'
       category: third-party
@@ -98,7 +93,6 @@ resources:
         FinOps governance platform for Infrastructure-as-Code pipelines
         integrating with Terraform, CloudFormation, CDK, and CI/CD systems to
         shift cost awareness left.
-      source: ai-researcher
     - name: IBM Cloudability
       url: 'https://www.apptio.com/products/cloudability/'
       category: third-party
@@ -106,15 +100,12 @@ resources:
         Enterprise cloud financial management platform for multi-cloud cost
         analysis, TotalCost capture, anomaly detection, and commitment coverage
         optimization.
-      vendor: Apptio
-      source: ai-researcher
     - name: FinOps Foundation
       url: 'https://www.finops.org'
       category: framework
       reasoning: >-
         Open source framework and community defining FinOps principles, domains,
         personas, and maturity model for organizational cost governance.
-      source: ai-researcher
   courses:
     - url: 'https://learn.finops.org/path/finops-certified-practitioner-self-paced'
       title: FinOps Certified Practitioner
@@ -124,7 +115,6 @@ resources:
         Industry-recognized certification covering FinOps fundamentals aligned
         with the FinOps Framework; available self-paced, instructor-led, or
         exam-only with 12 months access.
-      source: ai-researcher
     - url: 'https://learn.finops.org/introduction-to-finops'
       title: Introduction to FinOps
       provider: FinOps Foundation
@@ -132,9 +122,8 @@ resources:
       reasoning: >-
         Free beginner course providing foundational FinOps understanding and
         community involvement; prerequisite-free for new practitioners.
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

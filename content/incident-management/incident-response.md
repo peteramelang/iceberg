@@ -38,63 +38,47 @@ resources:
       url: 'https://response.pagerduty.com'
       kind: engineering-blog
       reasoning: ''
-      publisher: PagerDuty
-      source: ai-researcher
     - title: Incident Response – Google SRE Workbook
       url: 'https://sre.google/workbook/incident-response/'
       kind: canonical-doc
       reasoning: ''
-      publisher: Google SRE
-      source: ai-researcher
     - title: Managing Incidents – Google SRE Book
       url: 'https://sre.google/sre-book/managing-incidents/'
       kind: canonical-doc
       reasoning: ''
-      publisher: Google SRE
-      source: ai-researcher
     - title: 'Incident Response: Best Practices for Quick Resolution – Atlassian'
       url: 'https://www.atlassian.com/incident-management/incident-response'
       kind: engineering-blog
       reasoning: ''
-      publisher: Atlassian
-      source: ai-researcher
   services:
     - name: PagerDuty
       url: 'https://www.pagerduty.com'
       category: platform
       reasoning: ''
-      source: ai-researcher
     - name: Incident.io
       url: 'https://incident.io'
       category: platform
       reasoning: ''
-      vendor: incident.io
-      source: ai-researcher
     - name: FireHydrant
       url: 'https://firehydrant.com'
       category: platform
       reasoning: ''
-      source: ai-researcher
     - name: Rootly
       url: 'https://www.rootly.com'
       category: platform
       reasoning: ''
-      source: ai-researcher
     - name: Atlassian Incident Management
       url: 'https://www.atlassian.com/incident-management'
       category: platform
       reasoning: ''
-      vendor: Atlassian
-      source: ai-researcher
   courses:
     - title: Incident Response Training Course
       provider: PagerDuty
       url: 'https://response.pagerduty.com'
       paid: false
       reasoning: ''
-      source: ai-researcher
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

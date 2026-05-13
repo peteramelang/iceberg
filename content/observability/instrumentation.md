@@ -40,7 +40,6 @@ resources:
       reasoning: >-
         CNCF official introduction to OTel metrics; covers collector, exporters,
         and basic instrumentation patterns.
-      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=1yCKRi4fTrA'
       title: Observability with OpenTelemetry and Prometheus
@@ -50,7 +49,6 @@ resources:
       reasoning: >-
         Deep dive into OTel ecosystem, metric types, cardinality control, and
         integration with Prometheus for production systems.
-      source: ai-researcher
   articles:
     - url: 'https://opentelemetry.io/docs/specs/otel/metrics/'
       title: OpenTelemetry Metrics Specification
@@ -58,40 +56,30 @@ resources:
       reasoning: >-
         Canonical reference for OTel metrics API, semantic conventions, and
         supported metric types (Counter, Gauge, Histogram, Asynchronous).
-      publisher: OpenTelemetry (CNCF)
-      source: ai-researcher
     - url: 'https://prometheus.io/docs/practices/instrumentation/'
       title: Prometheus Instrumentation Best Practices
       kind: canonical-doc
       reasoning: >-
         Industry standard guide on metric naming, label design, cardinality
         control, and avoiding high-cardinality traps.
-      publisher: Prometheus (CNCF)
-      source: ai-researcher
     - url: 'https://sre.google/sre-book/monitoring-distributed-systems/'
       title: Monitoring Distributed Systems (Google SRE Book)
       kind: canonical-doc
       reasoning: >-
         Foundational principles for monitoring at scale; covers the Four Golden
         Signals and symptom-based alerting philosophy.
-      publisher: Google SRE
-      source: ai-researcher
     - url: 'https://opentelemetry.io/docs/instrumentation/'
       title: OpenTelemetry Instrumentation Documentation
       kind: canonical-doc
       reasoning: >-
         Language-specific instrumentation guides for automatic and manual
         instrumentation, covering Java, Python, Go, Node.js, and .NET.
-      publisher: OpenTelemetry (CNCF)
-      source: ai-researcher
     - url: 'https://prometheus.io/docs/concepts/metric_types/'
       title: Prometheus Metric Types
       kind: canonical-doc
       reasoning: >-
         Detailed explanation of Counter, Gauge, Histogram, and Summary types;
         when to use each and common pitfalls.
-      publisher: Prometheus (CNCF)
-      source: ai-researcher
   services:
     - name: OpenTelemetry
       url: 'https://opentelemetry.io'
@@ -99,41 +87,54 @@ resources:
       reasoning: >-
         Vendor-agnostic standard for metrics, traces, and logs; supported by all
         major observability platforms.
-      vendor: OpenTelemetry (CNCF)
-      source: ai-researcher
     - name: Prometheus
       url: 'https://prometheus.io'
       category: metrics_platform
       reasoning: >-
         Industry-standard open-source metrics server; defines metric best
         practices and pull-based collection model.
-      vendor: Prometheus (CNCF)
-      source: ai-researcher
     - name: Grafana
       url: 'https://grafana.com'
       category: visualization
       reasoning: >-
         Leading visualization and alerting platform; integrates with Prometheus,
         Loki, and other datasources for dashboards and observability.
-      vendor: Grafana Labs
-      source: ai-researcher
     - name: Datadog
       url: 'https://www.datadoghq.com'
       category: saas_platform
       reasoning: >-
         Enterprise SaaS observability platform with out-of-the-box integrations;
         automatic instrumentation via agents and APM.
-      source: ai-researcher
     - name: Honeycomb
       url: 'https://www.honeycomb.io'
       category: saas_platform
       reasoning: >-
         Event-based observability focused on high-cardinality dimensions and
         exploratory analysis; strong on distributed tracing.
-      source: ai-researcher
-  courses: []
+  courses:
+    - url: 'https://www.linux.com/training/observability-with-opentelemetry/'
+      title: Observability with OpenTelemetry
+      provider: Linux Foundation
+      paid: false
+      reasoning: >-
+        Free introductory course covering OTel concepts, architecture, and
+        hands-on labs with metrics and traces.
+    - url: 'https://www.udemy.com/course/prometheus-masterclass/'
+      title: Prometheus Masterclass
+      provider: Udemy
+      paid: true
+      reasoning: >-
+        Comprehensive paid course on Prometheus, metric design, alerting, and
+        Grafana integration; includes real-world examples.
+    - url: 'https://learn.honeycomb.io/'
+      title: Honeycomb University
+      provider: Honeycomb
+      paid: false
+      reasoning: >-
+        Free self-paced courses on modern observability, cardinality, and
+        distributed tracing fundamentals.
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

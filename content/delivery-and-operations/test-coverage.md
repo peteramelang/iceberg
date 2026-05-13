@@ -44,54 +44,38 @@ resources:
       url: 'https://martinfowler.com/bliki/TestPyramid.html'
       kind: canonical-doc
       reasoning: ''
-      publisher: Martin Fowler
-      source: ai-researcher
     - title: Practical Test Pyramid
       url: 'https://martinfowler.com/articles/practical-test-pyramid.html'
       kind: canonical-doc
       reasoning: ''
-      publisher: Martin Fowler
-      source: ai-researcher
     - title: Write Tests. Not Too Many. Mostly Integration.
       url: 'https://kentcdodds.com/blog/write-tests'
       kind: engineering-blog
       reasoning: ''
-      publisher: Kentcdodds
-      source: ai-researcher
   services:
     - url: 'https://jestjs.io'
       name: 'https://jestjs.io'
       category: platform
       reasoning: ''
-      vendor: Jest
-      source: ai-researcher
     - url: 'https://vitest.dev'
       name: 'https://vitest.dev'
       category: platform
       reasoning: ''
-      vendor: Vitest
-      source: ai-researcher
     - url: 'https://testing-library.com'
       name: 'https://testing-library.com'
       category: platform
       reasoning: ''
-      vendor: Testing Library
-      source: ai-researcher
     - url: 'https://playwright.dev'
       name: 'https://playwright.dev'
       category: platform
       reasoning: ''
-      vendor: Microsoft (Playwright)
-      source: ai-researcher
     - url: 'https://www.cypress.io'
       name: 'https://www.cypress.io'
       category: platform
       reasoning: ''
-      vendor: Cypress
-      source: ai-researcher
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

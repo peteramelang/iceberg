@@ -20,42 +20,34 @@ resources:
       title: Escalation Policies for Effective Incident Management
       kind: tutorial
       reasoning: (no reasoning captured)
-      publisher: Atlassian
-      source: ai-researcher
   services:
     - name: PagerDuty Incident Response Documentation
       url: 'https://response.pagerduty.com'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: PagerDuty
-      source: ai-researcher
+    - name: incident.io Blog - Escalation Patterns
+      url: 'https://incident.io/blog'
+      category: platform
+      reasoning: (no reasoning captured)
     - name: PagerDuty Platform
       url: 'https://www.pagerduty.com'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: PagerDuty
-      source: ai-researcher
     - name: incident.io Platform
       url: 'https://incident.io'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: incident.io
-      source: ai-researcher
     - name: Atlassian Opsgenie (Jira Service Management)
       url: 'https://www.atlassian.com/software/opsgenie'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: Atlassian
-      source: ai-researcher
     - name: Atlassian Incident Management
       url: 'https://www.atlassian.com/incident-management'
       category: platform
       reasoning: (no reasoning captured)
-      vendor: Atlassian
-      source: ai-researcher
   courses: []
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

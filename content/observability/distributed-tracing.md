@@ -44,7 +44,6 @@ resources:
       reasoning: >-
         Comprehensive beginner-friendly overview of Jaeger distributed tracing
         with practical examples
-      source: ai-researcher
     long: null
   articles:
     - url: 'https://opentelemetry.io/docs/concepts/signals/traces/'
@@ -53,8 +52,6 @@ resources:
       reasoning: >-
         Canonical OpenTelemetry documentation on trace concepts, spans, context
         propagation, and signal architecture
-      publisher: OpenTelemetry (CNCF)
-      source: ai-researcher
     - url: >-
         https://research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure/
       title: 'Dapper, a Large-Scale Distributed Systems Tracing Infrastructure'
@@ -62,32 +59,24 @@ resources:
       reasoning: >-
         Seminal Google paper describing design, deployment, and lessons from
         Dapper, the foundational distributed tracing system
-      publisher: Google Research
-      source: ai-researcher
     - url: 'https://www.honeycomb.io/blog/'
       title: Honeycomb Blog - Observability and Tracing Articles
       kind: engineering-blog
       reasoning: >-
         Recent articles on distributed tracing, OpenTelemetry semantic
         conventions, and observability best practices
-      publisher: Honeycomb
-      source: ai-researcher
     - url: 'https://betterstack.com/community/guides/observability/jaeger-guide/'
       title: A Practical Guide to Distributed Tracing with Jaeger
       kind: tutorial
       reasoning: >-
         Hands-on guide covering Jaeger setup, instrumentation, and practical
         usage patterns
-      publisher: Better Stack
-      source: ai-researcher
     - url: 'https://signoz.io/blog/opentelemetry-tracing/'
       title: Complete Guide to OpenTelemetry Tracing (with Code Examples)
       kind: engineering-blog
       reasoning: >-
         Technical guide with code examples for implementing OpenTelemetry
         tracing in applications
-      publisher: Signoz
-      source: ai-researcher
   services:
     - name: OpenTelemetry
       url: 'https://opentelemetry.io'
@@ -95,41 +84,41 @@ resources:
       reasoning: >-
         Vendor-neutral open-source observability framework for collecting and
         exporting trace data
-      vendor: OpenTelemetry (CNCF)
-      source: ai-researcher
     - name: Jaeger
       url: 'https://www.jaegertracing.io'
       category: backend
       reasoning: >-
         Open-source, cloud-native distributed tracing platform for monitoring
         microservices architectures
-      vendor: Jaeger (CNCF)
-      source: ai-researcher
     - name: Zipkin
       url: 'https://zipkin.io'
       category: backend
       reasoning: >-
         Open-source distributed tracing system for collecting and visualizing
         trace data across services
-      source: ai-researcher
     - name: Grafana Tempo
       url: 'https://grafana.com/oss/tempo/'
       category: backend
       reasoning: >-
         Scalable, cost-efficient open-source distributed tracing backend using
         object storage
-      vendor: Grafana Labs
-      source: ai-researcher
     - name: Honeycomb
       url: 'https://www.honeycomb.io'
       category: platform
       reasoning: >-
         Commercial AI-ready observability platform with unified tracing, logs,
         and metrics
-      source: ai-researcher
-  courses: []
+  courses:
+    - url: >-
+        https://www.linkedin.com/learning/devops-foundations-distributed-tracing/
+      title: 'DevOps Foundations: Distributed Tracing'
+      provider: LinkedIn Learning
+      paid: true
+      reasoning: >-
+        Comprehensive course covering distributed tracing fundamentals and
+        implementation strategies
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true

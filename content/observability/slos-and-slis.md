@@ -50,7 +50,6 @@ resources:
       reasoning: >-
         Quick, current 2025 explainer covering the relationship between SLAs,
         SLOs, and SLIs with practical context.
-      source: ai-researcher
     long:
       url: 'https://www.youtube.com/watch?v=uYC2kcndtVs'
       title: How to get started with SLI/SLO with Steve McGhee
@@ -60,7 +59,6 @@ resources:
       reasoning: >-
         In-depth walkthrough from an SRE expert on implementing SLIs and SLOs in
         practice.
-      source: ai-researcher
   articles:
     - url: 'https://sre.google/sre-book/service-level-objectives/'
       title: 'Defining SLO: Service Level Objective Meaning'
@@ -68,24 +66,18 @@ resources:
       reasoning: >-
         Canonical Google SRE book chapter on SLOs, foundational reference for
         the field.
-      publisher: Google SRE
-      source: ai-researcher
     - url: 'https://sre.google/workbook/implementing-slos/'
       title: Implementing Service Level Objectives
       kind: tutorial
       reasoning: >-
         Google SRE workbook guidance on practical implementation of SLOs with
         concrete examples.
-      publisher: Google SRE
-      source: ai-researcher
     - url: 'https://sre.google/workbook/error-budget-policy/'
       title: Error Budget Policy for Service Reliability
       kind: tutorial
       reasoning: >-
         Guidance on setting error budget policies that drive data-driven
         reliability decisions.
-      publisher: Google SRE
-      source: ai-researcher
     - url: >-
         https://www.nobl9.com/resources/a-complete-guide-to-error-budgets-setting-up-slos-slis-and-slas-to-maintain-reliability
       title: >-
@@ -95,16 +87,12 @@ resources:
       reasoning: >-
         Comprehensive guide covering the interconnection between error budgets,
         SLOs, SLIs, and SLAs.
-      publisher: Nobl9
-      source: ai-researcher
     - url: 'https://www.datadoghq.com/blog/establishing-service-level-objectives/'
       title: 'SLOs: How to Establish and Define Service Level Objectives'
       kind: engineering-blog
       reasoning: >-
         Practical guidance from Datadog on designing and establishing SLOs in
         production environments.
-      publisher: Datadog
-      source: ai-researcher
   services:
     - name: Nobl9
       url: 'https://www.nobl9.com'
@@ -112,41 +100,40 @@ resources:
       reasoning: >-
         Purpose-built platform for defining, tracking, and managing SLOs with
         composite SLO support and error budget alerting.
-      source: ai-researcher
     - name: Datadog Service Level Objectives
       url: 'https://www.datadoghq.com/product/service-level-objectives/'
       category: Observability-SLO-Module
       reasoning: >-
         Integrated SLO monitoring within Datadog's observability platform with
         multiple SLO types and error budget tracking.
-      vendor: Datadog
-      source: ai-researcher
     - name: Grafana SLO
       url: 'https://grafana.com/products/cloud/slo/'
       category: Observability-SLO-Module
       reasoning: >-
         Grafana Cloud SLO service enabling creation, management, and monitoring
         of SLOs with burn rate alerting.
-      vendor: Grafana Labs
-      source: ai-researcher
     - name: Google Cloud SRE
       url: 'https://sre.google'
       category: Educational-Framework
       reasoning: >-
         Google's Site Reliability Engineering site hosting foundational SLO
         resources, the SRE book, workbooks, and workshops.
-      vendor: Google SRE
-      source: ai-researcher
     - name: Pingdom
       url: 'https://www.pingdom.com'
       category: Uptime-Monitoring
       reasoning: >-
         Synthetic monitoring service useful for establishing SLIs around
         availability and performance.
-      source: ai-researcher
-  courses: []
+  courses:
+    - url: 'https://www.coursera.org/learn/measuring-managing-reliability'
+      title: Measuring and Managing Reliability Specialization
+      provider: Coursera (Google Cloud)
+      paid: true
+      reasoning: >-
+        Comprehensive specialization covering SLIs, SLOs, error budgets, and
+        reliability practices from Google.
 provenance:
-  researchedAt: '2026-05-13T22:45:46.767Z'
+  researchedAt: '2026-05-13T23:57:18.043Z'
   pipelineVersion: 1
   rounds: 1
   stabilized: true
