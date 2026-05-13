@@ -5,6 +5,10 @@ import { ResourceRow } from "../components/domain/ResourceRow.js";
 import { ConnectionSidebar } from "../components/domain/ConnectionSidebar.js";
 import { NotesField } from "../components/interactive/NotesField.js";
 import { MarkCompleteButton } from "../components/interactive/MarkCompleteButton.js";
+import { Narrative } from "../components/domain/Narrative.js";
+import { Pitfalls } from "../components/domain/Pitfalls.js";
+import { CodeExamples } from "../components/domain/CodeExamples.js";
+import { DifficultyBadge } from "../components/domain/DifficultyBadge.js";
 import { getTopic, taxonomy } from "../content/index.js";
 
 export function Topic() {
@@ -20,9 +24,24 @@ export function Topic() {
         <div>
           <Section>
             <Link to={`/phase/${fm.phase}`} className="text-caption-md text-mute no-underline">&lt;&lt; {phase?.title}</Link>
-            <h1 className="text-display-xl mt-md">{fm.title}</h1>
+            <div className="flex items-baseline gap-md mt-md flex-wrap">
+              <h1 className="text-display-xl">{fm.title}</h1>
+              <DifficultyBadge difficulty={fm.difficulty} hours={fm.estimatedHours} />
+            </div>
             <p className="text-body mt-lg whitespace-pre-line">{fm.definition}</p>
             <div className="mt-xl"><MarkCompleteButton slug={fm.slug} /></div>
+          </Section>
+
+          <Section label="In Depth">
+            <Narrative text={fm.narrative} />
+          </Section>
+
+          <Section label="Common Pitfalls">
+            <Pitfalls items={fm.pitfalls} />
+          </Section>
+
+          <Section label="Code">
+            <CodeExamples items={fm.codeExamples} />
           </Section>
 
           {fm.resources.videos.short && (
