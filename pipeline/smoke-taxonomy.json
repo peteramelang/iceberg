@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "phases": [
+    {
+      "slug": "foundations",
+      "title": "Foundations",
+      "order": 1,
+      "description": "What every production app needs from day one.",
+      "topics": ["authentication"]
+    },
+    {
+      "slug": "reliability",
+      "title": "Reliability",
+      "order": 2,
+      "description": "Keeping the app up and answering questions about what it did.",
+      "topics": ["logging"]
+    }
+  ],
+  "topics": {
+    "authentication": {
+      "slug": "authentication",
+      "title": "Authentication",
+      "phase": "foundations",
+      "order": 1,
+      "summary": "Verifying who a user is — passwords, sessions, tokens, SSO, MFA.",
+      "prerequisites": [],
+      "tags": ["security", "identity"],
+      "addedByStage0": false
+    },
+    "logging": {
+      "slug": "logging",
+      "title": "Logging",
+      "phase": "reliability",
+      "order": 1,
+      "summary": "Recording what your application did, so you can answer questions about it later.",
+      "prerequisites": [],
+      "tags": ["observability"],
+      "addedByStage0": false
+    }
+  }
+}
