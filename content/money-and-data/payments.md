@@ -236,7 +236,7 @@ codeExamples:
     title: (pending)
     code: // pending code example with at least 20 chars of real code
     reasoning: pending
-difficulty: intermediate
-estimatedHours: 4
+difficulty: advanced
+estimatedHours: 12
 ---
 <!-- user notes -->
