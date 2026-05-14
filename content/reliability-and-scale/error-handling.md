@@ -349,5 +349,23 @@ codeExamples:
       operators, clear signal for users.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  Distinguish between temporary failures (retry them) and permanent ones (fail
+  fast), log rich context, and design systems to degrade gracefully instead of
+  crashing completely.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=RfPNuaj5Ax0'
+  title: Top 5 Microservices Resilience Patterns
+  author: ByteMonk
+  durationSeconds: 408
+  reasoning: >-
+    ByteMonk's 6:48 video covers circuit breaker, retry with exponential
+    backoff, fallback, bulkhead, and timeout patterns—the exact mechanisms the
+    error-handling topic covers for containing and recovering from failures.
+    Directly addresses cascading failures, transient vs. permanent error
+    distinctions, and graceful degradation. High quality channel with 15k+
+    views, clear animation-based explainer, no tutorial bloat.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.135Z'
 ---
 <!-- user notes -->

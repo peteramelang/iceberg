@@ -30,13 +30,21 @@ for (const path of files) {
     skipped++;
     continue;
   }
-  const raw = JSON.parse(readFileSync(resultPath, "utf8"));
+  let raw: { narrative?: string };
+  try {
+    raw = JSON.parse(readFileSync(resultPath, "utf8"));
+  } catch (e) {
+    console.warn(`SKIP ${fm.slug}: invalid JSON in result - ${String(e).slice(0, 120)}`);
+    skipped++;
+    continue;
+  }
   if (typeof raw?.narrative !== "string" || raw.narrative.length < 400) {
     console.warn(`SKIP ${fm.slug}: narrative missing or too short (${raw?.narrative?.length ?? 0} chars)`);
     skipped++;
     continue;
   }
   fm.narrative = raw.narrative;
+  fm.lastUpdatedAt = new Date().toISOString();
   writeTopicFile(path, fm, body);
   applied++;
 }

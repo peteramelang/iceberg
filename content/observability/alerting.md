@@ -280,5 +280,11 @@ codeExamples:
       simultaneous notifications that overwhelm the on-call engineer.
 difficulty: intermediate
 estimatedHours: 6
+tldr: >-
+  Automatically notify engineers when the app breaks, before customers notice.
+  Too many false alarms and they ignore them; too few and you miss real
+  problems.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.126Z'
 ---
 <!-- user notes -->

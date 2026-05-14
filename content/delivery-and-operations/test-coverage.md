@@ -249,5 +249,21 @@ codeExamples:
       failures, and inventory race conditions.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  Test code at layers: small unit tests, real integration tests, then critical
+  user workflows end-to-end. Catches bugs before customers do.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=u6QfIXgjwGQ'
+  title: Software Testing Explained in 100 Seconds
+  author: Fireship
+  durationSeconds: 136
+  reasoning: >-
+    Fireship strong-channel match. Covers the full test pyramid — unit,
+    integration, e2e, plus performance and smoke testing — in a tight 2:16. The
+    100-second format explains all layers and their purpose, directly matching
+    the topic's emphasis on layered test strategy. Best available short
+    explainer on test coverage concepts from a preferred channel.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.092Z'
 ---
 <!-- user notes -->

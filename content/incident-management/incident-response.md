@@ -322,5 +322,11 @@ codeExamples:
       captured in real time rather than reconstructed from memory.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  When the system goes down, follow a practiced process with clear roles so you
+  fix it fast without confusion—and learn from each incident to prevent the next
+  one.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.108Z'
 ---
 <!-- user notes -->

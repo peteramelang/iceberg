@@ -315,5 +315,11 @@ codeExamples:
       DLQ and re-enqueuing to the source after a fix is deployed.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  When a work message fails repeatedly, send it to a holding area for inspection
+  instead of losing it or blocking the system—then investigate and replay it
+  after fixing the problem.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.134Z'
 ---
 <!-- user notes -->

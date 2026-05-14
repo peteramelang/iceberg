@@ -4,6 +4,7 @@
     {
       "slug": "first-production-deploy",
       "title": "First Production Deploy",
+      "tldr": "Get your app ready for real users—secure login, safe secret storage, tested releases, and ways to see what's happening when things go wrong.",
       "description": "The critical foundation a solo founder needs before real traffic hits: secure identity, safe secrets, a tested deployment pipeline, and basic visibility into what is happening in production.",
       "audience": "Solo founder shipping their first real product",
       "estimatedHours": 48,
@@ -18,11 +19,13 @@
         "ci-cd",
         "schema-migrations",
         "rollbacks"
-      ]
+      ],
+      "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
     },
     {
       "slug": "first-real-users",
       "title": "First Real Users",
+      "tldr": "When customers pay you money, protect it and their information with careful payment setup, strict access rules, and alerts for problems.",
       "description": "Handle real money, real identity, and real data correctly when paying customers arrive: add payments, lock down access, enforce data rules, and build enough observability to know when things break.",
       "audience": "Early-stage team handling money, identity, and data integrity",
       "estimatedHours": 68,
@@ -39,11 +42,13 @@
         "instrumentation",
         "alerting",
         "rate-limiting"
-      ]
+      ],
+      "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
     },
     {
       "slug": "ops-maturity",
       "title": "Ops Maturity",
+      "tldr": "Learn to detect outages fast, fix them consistently, and improve from each one without exhausting your team.",
       "description": "Build the incident-response muscle and on-call discipline a growing team needs to detect problems faster, resolve them consistently, and learn from every outage without burning people out.",
       "audience": "Growing team building incident response and on-call discipline",
       "estimatedHours": 52,
@@ -58,11 +63,13 @@
         "disaster-recovery",
         "feature-flags",
         "documentation"
-      ]
+      ],
+      "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
     },
     {
       "slug": "going-multi-region",
       "title": "Going Multi-Region",
+      "tldr": "Serve customers worldwide faster and survive cloud outages by running your system across multiple geographic regions.",
       "description": "Extend a production system across geographic regions to reduce latency for global users and survive regional cloud outages, covering the data, networking, and operational prerequisites.",
       "audience": "Scaling product with latency or data residency requirements",
       "estimatedHours": 65,
@@ -77,11 +84,13 @@
         "latency-optimization",
         "multi-region-support",
         "disaster-recovery"
-      ]
+      ],
+      "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
     },
     {
       "slug": "first-sre-hire",
       "title": "First SRE Hire",
+      "tldr": "Complete onboarding manual for your first reliability engineer covering monitoring, incident response, deployment, and team rotations.",
       "description": "A structured onboarding curriculum for a new platform or site-reliability engineer covering the reliability, delivery, and incident-management layers they will own from day one.",
       "audience": "Incoming platform engineer or first SRE hire",
       "estimatedHours": 58,
@@ -99,11 +108,13 @@
         "load-balancing",
         "cloud-costs",
         "documentation"
-      ]
+      ],
+      "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
     },
     {
       "slug": "subscription-business-foundations",
       "title": "Subscription Business Foundations",
+      "tldr": "Build a recurring-payment business correctly—handling billing states, churn, refunds, and data regulations that come with customer money.",
       "description": "Everything a product team needs to model a subscription correctly: payment processing, state machines, churn prevention, and the compliance obligations that come with storing financial data.",
       "audience": "SaaS team launching or hardening a subscription product",
       "estimatedHours": 69,
@@ -120,11 +131,13 @@
         "retention",
         "churn-control",
         "gdpr-ccpa"
-      ]
+      ],
+      "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
     },
     {
       "slug": "async-reliability",
       "title": "Async & Reliability Patterns",
+      "tldr": "Design background job systems that keep working even when parts fail—queuing, retries, caching, and scaling without rewriting everything.",
       "description": "Design asynchronous processing pipelines that survive failures gracefully: queue work correctly, handle poison messages, cache at the right layer, and scale horizontally without rewriting.",
       "audience": "Backend engineer building reliable async and queue-based systems",
       "estimatedHours": 52,
@@ -140,7 +153,119 @@
         "logging",
         "instrumentation",
         "alerting"
-      ]
+      ],
+      "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
+    },
+    {
+      "slug": "ai-first-web-developer",
+      "title": "AI-First Web Developer",
+      "tldr": "Learn to ship full-stack web apps in 2026 using AI coding tools as your primary development accelerator — from prompting to agents to cost control.",
+      "description": "Teaches developers how to build and deploy production-quality full-stack applications by harnessing AI coding tools effectively. Covers prompting, context engineering, agent loops, safety, and supporting frontend/backend skills needed to ship real products.",
+      "audience": "Developer new to AI-assisted coding who wants to ship full-stack apps",
+      "estimatedHours": 28,
+      "topics": [
+        "local-dev-environment",
+        "prompting-for-code",
+        "context-engineering",
+        "hallucination-mitigation",
+        "agent-loops",
+        "ai-code-review",
+        "ai-security-and-pii",
+        "ai-coding-cost-management",
+        "server-rendering",
+        "type-safe-orms",
+        "authentication",
+        "error-handling"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "modern-frontend-foundations",
+      "title": "Modern Frontend Foundations",
+      "tldr": "Get a backend developer up to speed on modern web frontend in 2026 — bundlers, rendering strategies, hydration, type-safe APIs, state, performance, and design systems.",
+      "description": "Closes the knowledge gap for backend developers who need to understand how modern frontends are built and delivered. Covers the rendering, bundling, performance, and component-system concepts that have shifted dramatically since 2020.",
+      "audience": "Backend developer getting current on modern web frontend",
+      "estimatedHours": 20,
+      "topics": [
+        "module-bundlers",
+        "server-rendering",
+        "hydration-and-islands",
+        "type-safe-api-calls",
+        "state-management-modern",
+        "image-and-media-pipelines",
+        "web-vitals",
+        "design-systems"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "modern-backend-foundations",
+      "title": "Modern Backend Foundations",
+      "tldr": "Bring a frontend developer up to speed on modern backend in 2026 — type-safe databases, background jobs, webhooks, file uploads, realtime, edge runtimes, and search.",
+      "description": "Equips frontend developers with the backend fundamentals they need to build production-ready services in 2026. Covers the data, async, and platform topics that underpin any full-stack app, grounded in production-readiness basics.",
+      "audience": "Frontend developer getting current on modern backend",
+      "estimatedHours": 25,
+      "topics": [
+        "secrets-management",
+        "error-handling",
+        "logging",
+        "type-safe-orms",
+        "schema-migrations",
+        "background-jobs",
+        "webhooks-as-platform",
+        "file-uploads-and-streaming",
+        "realtime-protocols",
+        "edge-runtimes",
+        "search-and-vector-store"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "ai-coding-tools-operator",
+      "title": "AI Coding Tools Operator",
+      "tldr": "For senior developers integrating AI into their team's workflow — how to prompt, review, evaluate, and govern AI-generated code without losing quality or control.",
+      "description": "Helps experienced engineers set up safe, effective AI-assisted workflows for their teams. Covers prompting patterns, context engineering, code review with AI, evals, MCP tooling, security, licensing, and the craft practices that keep quality high.",
+      "audience": "Senior developer integrating AI tools into team workflow",
+      "estimatedHours": 17,
+      "topics": [
+        "prompting-for-code",
+        "context-engineering",
+        "ai-code-review",
+        "hallucination-mitigation",
+        "ai-security-and-pii",
+        "ai-attribution-and-licensing",
+        "mcp-and-tooling",
+        "ai-evals",
+        "git-workflows",
+        "code-review-craft"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "greenfield-solo-builder",
+      "title": "Greenfield Solo Builder",
+      "tldr": "Ship your first AI-assisted product end-to-end: from local dev setup and database design through auth, payments, CI/CD, and the performance basics that keep users coming back.",
+      "description": "A comprehensive end-to-end path for indie hackers and solo founders building their first production product with AI assistance. Covers every layer from environment setup and prompting through data, auth, payments, delivery, and user-facing performance.",
+      "audience": "Indie hacker or solo founder shipping a first AI-assisted product",
+      "estimatedHours": 35,
+      "topics": [
+        "local-dev-environment",
+        "prompting-for-code",
+        "git-workflows",
+        "secrets-management",
+        "type-safe-orms",
+        "data-integrity",
+        "schema-migrations",
+        "authentication",
+        "server-rendering",
+        "web-vitals",
+        "test-coverage",
+        "environments",
+        "ci-cd",
+        "payments",
+        "error-handling"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
     }
   ]
 }

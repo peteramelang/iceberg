@@ -324,5 +324,21 @@ codeExamples:
       highest-leverage caching layer for most web APIs.
 difficulty: intermediate
 estimatedHours: 8
+tldr: >-
+  Store frequently used data closer to users to make apps faster and cut
+  database load. The trade-off: stale data until you refresh it.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=dGAgxozNWFE'
+  title: Cache Systems Every Developer Should Know
+  author: ByteByteGo
+  durationSeconds: 348
+  reasoning: >-
+    ByteByteGo walks through all caching layers — client-side, CDN, load
+    balancer, application (Redis/Memcached), and database — in 5:48. Covers the
+    exact multi-layer caching strategy described in the topic definition.
+    ByteByteGo is the premier system-design explainer channel; this is one of
+    their most-referenced caching videos.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.133Z'
 ---
 <!-- user notes -->

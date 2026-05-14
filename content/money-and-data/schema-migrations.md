@@ -311,5 +311,21 @@ codeExamples:
       discipline before they accumulate ad-hoc SQL files.
 difficulty: intermediate
 estimatedHours: 6
+tldr: >-
+  Change database structure safely while live. Add new columns, migrate data,
+  then remove old ones across separate deployments to avoid downtime.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=cw5K2O4AHJc'
+  title: How do software projects achieve zero downtime database migrations?
+  author: Web Dev Cody
+  durationSeconds: 426
+  reasoning: >-
+    Directly covers the expand-contract pattern for zero-downtime schema
+    migrations — adding new columns, running background backfills, keeping old
+    and new structures in parallel, then dropping the old one. Matches the core
+    narrative of the topic exactly. 7:06 duration is well within range. No
+    shorter preferred-channel video on this specific topic was found.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.124Z'
 ---
 <!-- user notes -->

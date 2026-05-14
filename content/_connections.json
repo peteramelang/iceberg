@@ -1059,6 +1059,916 @@
       "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
     },
     {
+      "from": "prompting-for-code",
+      "to": "context-engineering",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "agent-loops",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "ai-code-review",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "mcp-and-tooling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "ai-evals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "hallucination-mitigation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "ai-security-and-pii",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "agent-loops",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "ai-code-review",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "mcp-and-tooling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "ai-evals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "hallucination-mitigation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "ai-security-and-pii",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "context-engineering",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "agent-loops",
+      "to": "ai-code-review",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "agent-loops",
+      "to": "mcp-and-tooling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "agent-loops",
+      "to": "ai-evals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "agent-loops",
+      "to": "hallucination-mitigation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "agent-loops",
+      "to": "ai-security-and-pii",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "agent-loops",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "agent-loops",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-code-review",
+      "to": "mcp-and-tooling",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-code-review",
+      "to": "ai-evals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-code-review",
+      "to": "hallucination-mitigation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-code-review",
+      "to": "ai-security-and-pii",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-code-review",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-code-review",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "mcp-and-tooling",
+      "to": "ai-evals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "mcp-and-tooling",
+      "to": "hallucination-mitigation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "mcp-and-tooling",
+      "to": "ai-security-and-pii",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "mcp-and-tooling",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "mcp-and-tooling",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-evals",
+      "to": "hallucination-mitigation",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-evals",
+      "to": "ai-security-and-pii",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-evals",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-evals",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hallucination-mitigation",
+      "to": "ai-security-and-pii",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hallucination-mitigation",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hallucination-mitigation",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-security-and-pii",
+      "to": "ai-coding-cost-management",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-security-and-pii",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "ai-coding-cost-management",
+      "to": "ai-attribution-and-licensing",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "module-bundlers",
+      "to": "server-rendering",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "module-bundlers",
+      "to": "hydration-and-islands",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "module-bundlers",
+      "to": "type-safe-api-calls",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "module-bundlers",
+      "to": "state-management-modern",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "module-bundlers",
+      "to": "image-and-media-pipelines",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "module-bundlers",
+      "to": "web-vitals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "module-bundlers",
+      "to": "design-systems",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "server-rendering",
+      "to": "hydration-and-islands",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "server-rendering",
+      "to": "type-safe-api-calls",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "server-rendering",
+      "to": "state-management-modern",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "server-rendering",
+      "to": "image-and-media-pipelines",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "server-rendering",
+      "to": "web-vitals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "server-rendering",
+      "to": "design-systems",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hydration-and-islands",
+      "to": "type-safe-api-calls",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hydration-and-islands",
+      "to": "state-management-modern",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hydration-and-islands",
+      "to": "image-and-media-pipelines",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hydration-and-islands",
+      "to": "web-vitals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "hydration-and-islands",
+      "to": "design-systems",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-api-calls",
+      "to": "state-management-modern",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-api-calls",
+      "to": "image-and-media-pipelines",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-api-calls",
+      "to": "web-vitals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-api-calls",
+      "to": "design-systems",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "state-management-modern",
+      "to": "image-and-media-pipelines",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "state-management-modern",
+      "to": "web-vitals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "state-management-modern",
+      "to": "design-systems",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "image-and-media-pipelines",
+      "to": "web-vitals",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "image-and-media-pipelines",
+      "to": "design-systems",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "web-vitals",
+      "to": "design-systems",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "dev-containers",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "type-safe-orms",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "edge-runtimes",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "realtime-protocols",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "background-jobs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "search-and-vector-store",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "file-uploads-and-streaming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "monorepos",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dev-containers",
+      "to": "type-safe-orms",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dev-containers",
+      "to": "edge-runtimes",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dev-containers",
+      "to": "realtime-protocols",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dev-containers",
+      "to": "background-jobs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dev-containers",
+      "to": "search-and-vector-store",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dev-containers",
+      "to": "file-uploads-and-streaming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "dev-containers",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-orms",
+      "to": "edge-runtimes",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-orms",
+      "to": "realtime-protocols",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-orms",
+      "to": "background-jobs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-orms",
+      "to": "search-and-vector-store",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-orms",
+      "to": "file-uploads-and-streaming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "type-safe-orms",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "edge-runtimes",
+      "to": "realtime-protocols",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "edge-runtimes",
+      "to": "background-jobs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "edge-runtimes",
+      "to": "search-and-vector-store",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "edge-runtimes",
+      "to": "file-uploads-and-streaming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "edge-runtimes",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "realtime-protocols",
+      "to": "background-jobs",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "realtime-protocols",
+      "to": "search-and-vector-store",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "realtime-protocols",
+      "to": "file-uploads-and-streaming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "realtime-protocols",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "background-jobs",
+      "to": "search-and-vector-store",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "background-jobs",
+      "to": "file-uploads-and-streaming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "background-jobs",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "search-and-vector-store",
+      "to": "file-uploads-and-streaming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "search-and-vector-store",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "file-uploads-and-streaming",
+      "to": "webhooks-as-platform",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "local-dev-environment",
+      "to": "debugging-mindset",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "local-dev-environment",
+      "to": "code-review-craft",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "local-dev-environment",
+      "to": "git-workflows",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "local-dev-environment",
+      "to": "documentation-driven-development",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "local-dev-environment",
+      "to": "pair-and-mob-programming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "local-dev-environment",
+      "to": "sustainable-pace",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "debugging-mindset",
+      "to": "code-review-craft",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "debugging-mindset",
+      "to": "git-workflows",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "debugging-mindset",
+      "to": "documentation-driven-development",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "debugging-mindset",
+      "to": "pair-and-mob-programming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "debugging-mindset",
+      "to": "sustainable-pace",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "code-review-craft",
+      "to": "git-workflows",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "code-review-craft",
+      "to": "documentation-driven-development",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "code-review-craft",
+      "to": "pair-and-mob-programming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "code-review-craft",
+      "to": "sustainable-pace",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "git-workflows",
+      "to": "documentation-driven-development",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "git-workflows",
+      "to": "pair-and-mob-programming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "git-workflows",
+      "to": "sustainable-pace",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "documentation-driven-development",
+      "to": "pair-and-mob-programming",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "documentation-driven-development",
+      "to": "sustainable-pace",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
+      "from": "pair-and-mob-programming",
+      "to": "sustainable-pace",
+      "type": "related",
+      "weight": 0.4,
+      "reasoning": "Both topics belong to the same learning phase and are commonly studied together."
+    },
+    {
       "from": "authentication",
       "to": "access-control",
       "type": "pairs-with",
@@ -1071,13 +1981,6 @@
       "type": "often-confused-with",
       "weight": 0.8,
       "reasoning": "Beginners frequently use the term 'authentication' when they mean 'authorization' and vice versa."
-    },
-    {
-      "from": "idempotency",
-      "to": "payments",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "Idempotency keys are foundational to safe payment retries."
     },
     {
       "from": "alerting",
@@ -1094,13 +1997,6 @@
       "reasoning": "Traces are the primary tool for identifying latency hotspots."
     },
     {
-      "from": "feature-flags",
-      "to": "ab-testing",
-      "type": "prerequisite",
-      "weight": 0.85,
-      "reasoning": "A/B testing relies on feature-flag-style targeting infrastructure."
-    },
-    {
       "from": "schema-migrations",
       "to": "rollbacks",
       "type": "pairs-with",
@@ -1108,18 +2004,200 @@
       "reasoning": "Migration reversibility is a precondition for safe rollbacks."
     },
     {
-      "from": "message-queues",
-      "to": "dead-letter-queues",
-      "type": "prerequisite",
-      "weight": 0.95,
-      "reasoning": "DLQs are a feature of the queue infrastructure they protect."
-    },
-    {
       "from": "caching",
       "to": "scalability",
       "type": "pairs-with",
       "weight": 0.7,
       "reasoning": "Caching is one of the most leveraged techniques for scaling read paths."
+    },
+    {
+      "from": "prompting-for-code",
+      "to": "context-engineering",
+      "type": "pairs-with",
+      "weight": 0.85,
+      "reasoning": "Prompting and context-curation are two halves of the same skill."
+    },
+    {
+      "from": "context-engineering",
+      "to": "hallucination-mitigation",
+      "type": "pairs-with",
+      "weight": 0.85,
+      "reasoning": "Good context is the strongest hallucination defense."
+    },
+    {
+      "from": "agent-loops",
+      "to": "ai-code-review",
+      "type": "pairs-with",
+      "weight": 0.8,
+      "reasoning": "Agent loops produce output that needs review; review IS the loop's safety net."
+    },
+    {
+      "from": "ai-evals",
+      "to": "hallucination-mitigation",
+      "type": "pairs-with",
+      "weight": 0.8,
+      "reasoning": "Evals are how you measure whether mitigation is working."
+    },
+    {
+      "from": "mcp-and-tooling",
+      "to": "agent-loops",
+      "type": "pairs-with",
+      "weight": 0.75,
+      "reasoning": "MCP gives agents the tools they need to act in their loop."
+    },
+    {
+      "from": "ai-security-and-pii",
+      "to": "secrets-management",
+      "type": "related",
+      "weight": 0.7,
+      "reasoning": "Both topics concern what you must not let leave the perimeter."
+    },
+    {
+      "from": "server-rendering",
+      "to": "hydration-and-islands",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "Hydration only makes sense once you understand server rendering."
+    },
+    {
+      "from": "web-vitals",
+      "to": "image-and-media-pipelines",
+      "type": "pairs-with",
+      "weight": 0.85,
+      "reasoning": "Images and media are typically the biggest LCP lever."
+    },
+    {
+      "from": "web-vitals",
+      "to": "latency-optimization",
+      "type": "related",
+      "weight": 0.7,
+      "reasoning": "Web Vitals measure end-user latency outcomes."
+    },
+    {
+      "from": "state-management-modern",
+      "to": "type-safe-api-calls",
+      "type": "pairs-with",
+      "weight": 0.65,
+      "reasoning": "Less client state usually means more reliance on the API contract."
+    },
+    {
+      "from": "design-systems",
+      "to": "documentation-driven-development",
+      "type": "related",
+      "weight": 0.6,
+      "reasoning": "Design systems are documentation in code form."
+    },
+    {
+      "from": "dev-containers",
+      "to": "local-dev-environment",
+      "type": "pairs-with",
+      "weight": 0.85,
+      "reasoning": "Dev containers are one canonical implementation of a reproducible local environment."
+    },
+    {
+      "from": "type-safe-orms",
+      "to": "schema-migrations",
+      "type": "pairs-with",
+      "weight": 0.9,
+      "reasoning": "Migrations and the ORM model define the same shape from two sides."
+    },
+    {
+      "from": "background-jobs",
+      "to": "message-queues",
+      "type": "related",
+      "weight": 0.75,
+      "reasoning": "Background jobs usually run on top of a queue."
+    },
+    {
+      "from": "background-jobs",
+      "to": "dead-letter-queues",
+      "type": "related",
+      "weight": 0.7,
+      "reasoning": "Job failures land in DLQs."
+    },
+    {
+      "from": "webhooks-as-platform",
+      "to": "idempotency",
+      "type": "prerequisite",
+      "weight": 0.9,
+      "reasoning": "Webhook receivers must be idempotent — they will see duplicates."
+    },
+    {
+      "from": "webhooks-as-platform",
+      "to": "background-jobs",
+      "type": "pairs-with",
+      "weight": 0.75,
+      "reasoning": "Webhook delivery is usually a background-job concern."
+    },
+    {
+      "from": "realtime-protocols",
+      "to": "scalability",
+      "type": "related",
+      "weight": 0.6,
+      "reasoning": "Realtime is where scaling assumptions break first."
+    },
+    {
+      "from": "search-and-vector-store",
+      "to": "context-engineering",
+      "type": "pairs-with",
+      "weight": 0.7,
+      "reasoning": "Vector stores are the core retrieval primitive for context engineering."
+    },
+    {
+      "from": "edge-runtimes",
+      "to": "latency-optimization",
+      "type": "related",
+      "weight": 0.65,
+      "reasoning": "Edge placement is one of the most impactful latency wins."
+    },
+    {
+      "from": "file-uploads-and-streaming",
+      "to": "image-and-media-pipelines",
+      "type": "related",
+      "weight": 0.7,
+      "reasoning": "Uploads feed pipelines; pipelines serve uploads."
+    },
+    {
+      "from": "monorepos",
+      "to": "ci-cd",
+      "type": "related",
+      "weight": 0.7,
+      "reasoning": "Monorepo CI requires special pipeline ergonomics."
+    },
+    {
+      "from": "code-review-craft",
+      "to": "ai-code-review",
+      "type": "pairs-with",
+      "weight": 0.7,
+      "reasoning": "AI review is an extension of human review craft."
+    },
+    {
+      "from": "debugging-mindset",
+      "to": "instrumentation",
+      "type": "pairs-with",
+      "weight": 0.75,
+      "reasoning": "Good instrumentation makes the debugging mindset effective."
+    },
+    {
+      "from": "git-workflows",
+      "to": "ci-cd",
+      "type": "pairs-with",
+      "weight": 0.7,
+      "reasoning": "CI workflows are shaped by your branching strategy."
+    },
+    {
+      "from": "sustainable-pace",
+      "to": "on-call-rotations",
+      "type": "pairs-with",
+      "weight": 0.8,
+      "reasoning": "On-call rotation design is a primary lever for sustainable pace."
+    },
+    {
+      "from": "documentation-driven-development",
+      "to": "documentation",
+      "type": "pairs-with",
+      "weight": 0.85,
+      "reasoning": "Documentation-driven development is one application of the broader documentation discipline."
     }
   ]
 }

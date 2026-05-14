@@ -12,11 +12,12 @@
       "minItems": 5,
       "items": {
         "type": "object",
-        "required": ["slug", "title", "description", "audience", "estimatedHours", "topics"],
+        "required": ["slug", "title", "tldr", "description", "audience", "estimatedHours", "topics", "lastUpdatedAt"],
         "additionalProperties": false,
         "properties": {
           "slug": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
           "title": { "type": "string", "minLength": 1 },
+          "tldr": { "type": "string", "minLength": 40, "maxLength": 320 },
           "description": { "type": "string", "minLength": 40 },
           "audience": { "type": "string", "minLength": 1 },
           "estimatedHours": { "type": "number", "minimum": 1 },
@@ -25,7 +26,8 @@
             "minItems": 4,
             "maxItems": 15,
             "items": { "type": "string" }
-          }
+          },
+          "lastUpdatedAt": { "type": "string", "format": "date-time" }
         }
       }
     }

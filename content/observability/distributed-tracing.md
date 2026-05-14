@@ -308,5 +308,23 @@ codeExamples:
       cross-service latency.
 difficulty: intermediate
 estimatedHours: 8
+tldr: >-
+  Follow a request through your entire system to see which service is slow or
+  broken by attaching a tracking ID and recording each step, turning guesswork
+  into fact.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=hLvwoow3XTk'
+  title: 'OpenTelemetry: Simplifying Hybrid Cloud Monitoring'
+  author: IBM Technology
+  durationSeconds: 340
+  reasoning: >-
+    IBM Technology's 5:40 explainer covers OpenTelemetry's core concepts—traces,
+    metrics, logs—and how context propagation works across service boundaries.
+    OpenTelemetry is now the de-facto instrumentation standard for distributed
+    tracing, so this directly maps to the topic's focus on trace context
+    propagation and vendor-neutral instrumentation. Strong preferred source,
+    correct duration, no tutorial bloat.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.129Z'
 ---
 <!-- user notes -->

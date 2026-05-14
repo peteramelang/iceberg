@@ -223,5 +223,11 @@ codeExamples:
       than coordinating.
 difficulty: beginner
 estimatedHours: 2
+tldr: >-
+  Define who to contact at each crisis level so on-call engineers know
+  immediately—no guessing, no delays during a 3am outage, just predetermined
+  decisions.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.107Z'
 ---
 <!-- user notes -->

@@ -232,5 +232,11 @@ codeExamples:
       where docs are scattered across multiple wikis and drives.
 difficulty: beginner
 estimatedHours: 2
+tldr: >-
+  Write accurate runbooks, decision records, and onboarding guides so knowledge
+  survives when people leave and on-call engineers can fix things at 3am without
+  guessing.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.100Z'
 ---
 <!-- user notes -->

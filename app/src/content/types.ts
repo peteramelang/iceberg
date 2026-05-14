@@ -62,18 +62,31 @@ export const CodeExampleSchema = z.object({
 });
 export type CodeExample = z.infer<typeof CodeExampleSchema>;
 
+export const ShortExplainerVideoSchema = z.object({
+  url: z.string().url(),
+  title: z.string().min(1),
+  author: z.string().min(1),
+  durationSeconds: z.number().int().min(15).max(600),
+  reasoning: z.string().min(1),
+  source: z.enum(["ai-researcher", "human-curator"]).optional()
+});
+export type ShortExplainerVideo = z.infer<typeof ShortExplainerVideoSchema>;
+
 export const TopicFrontmatterSchema = z.object({
   slug: z.string(),
   title: z.string(),
   phase: z.string(),
   order: z.number().int(),
   summary: z.string(),
+  tldr: z.string().min(40).max(320),
   definition: z.string(),
+  shortExplainerVideo: ShortExplainerVideoSchema.nullable().optional(),
   narrative: z.string().min(400),
   pitfalls: z.array(PitfallSchema).min(3).max(8),
   codeExamples: z.array(CodeExampleSchema).min(1).max(3),
   difficulty: z.enum(["beginner","intermediate","advanced"]),
   estimatedHours: z.number().min(0.5).max(40),
+  lastUpdatedAt: z.string(),
   needsManualPick: z.boolean(),
   resources: z.object({
     videos: z.object({ short: VideoResourceSchema.nullable(), long: VideoResourceSchema.nullable() }),
@@ -124,10 +137,12 @@ export type Taxonomy = z.infer<typeof TaxonomySchema>;
 export const PathSchema = z.object({
   slug: z.string(),
   title: z.string(),
+  tldr: z.string().min(40).max(320),
   description: z.string().min(40),
   audience: z.string(),
   estimatedHours: z.number().min(1),
-  topics: z.array(z.string()).min(4).max(15)
+  topics: z.array(z.string()).min(4).max(15),
+  lastUpdatedAt: z.string()
 });
 export type LearningPath = z.infer<typeof PathSchema>;
 

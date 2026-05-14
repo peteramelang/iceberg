@@ -208,5 +208,22 @@ codeExamples:
       dependencies current and avoiding surprise breaking changes.
 difficulty: beginner
 estimatedHours: 3
+tldr: >-
+  Lock your third-party code versions, scan for vulnerabilities automatically,
+  and update regularly to avoid security breaches and license problems.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=Mh8yZu01DI8'
+  title: What is Dependabot?
+  author: GitHub
+  durationSeconds: 59
+  reasoning: >-
+    GitHub's 59-second explainer introduces Dependabot and automated dependency
+    vulnerability scanning—the core practical mechanism for dependency
+    management's supply-chain risk concern. Vendor 'how it works' from the
+    canonical source for the tool. Covers lock files and automated patching
+    implicitly by showing what the tool does. Tight, within duration bounds, no
+    tutorial bloat.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.099Z'
 ---
 <!-- user notes -->

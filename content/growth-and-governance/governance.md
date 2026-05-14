@@ -372,5 +372,11 @@ codeExamples:
       than relying on a one-time human review.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  Set up automated rules to enforce security and compliance across your
+  systems—so policy violations get caught automatically, not by accident during
+  an audit.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.101Z'
 ---
 <!-- user notes -->

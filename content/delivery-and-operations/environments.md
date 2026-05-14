@@ -332,5 +332,11 @@ codeExamples:
       another team's in-progress changes.
 difficulty: intermediate
 estimatedHours: 4
+tldr: >-
+  Use separate development, test, and production systems with isolated data so
+  bugs get caught before reaching real users and staging actually resembles
+  production.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.085Z'
 ---
 <!-- user notes -->

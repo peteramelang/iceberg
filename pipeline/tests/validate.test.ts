@@ -65,7 +65,19 @@ describe("validateTopicFrontmatter", () => {
       phase: "foundations",
       order: 1,
       summary: "x",
+      tldr: "Plain language summary for non-tech readers about authentication basics.",
       definition: "x",
+      shortExplainerVideo: null,
+      narrative: "x".repeat(500),
+      pitfalls: [
+        { title: "p1", explanation: "x".repeat(50) },
+        { title: "p2", explanation: "x".repeat(50) },
+        { title: "p3", explanation: "x".repeat(50) }
+      ],
+      codeExamples: [{ language: "typescript", title: "ex", code: "const x = 'hello world';", reasoning: "demo" }],
+      difficulty: "intermediate",
+      estimatedHours: 4,
+      lastUpdatedAt: "2026-05-15T00:00:00Z",
       needsManualPick: false,
       resources: {
         videos: { short: null, long: null },

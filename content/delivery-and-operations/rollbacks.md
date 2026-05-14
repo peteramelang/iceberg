@@ -300,5 +300,21 @@ codeExamples:
       locks.
 difficulty: intermediate
 estimatedHours: 6
+tldr: >-
+  Prepare to quickly undo a bad software release without losing data. Keep a
+  backup production environment ready so you can switch traffic back instantly.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=AWVTKBUnoIg'
+  title: Top 5 Most-Used Deployment Strategies
+  author: ByteByteGo
+  durationSeconds: 600
+  reasoning: >-
+    Covers blue-green, canary, rolling, and feature-flag deployment strategies —
+    exactly the mechanisms underlying safe rollbacks. ByteByteGo strong-channel
+    match. No shorter video from a preferred channel specifically about rollback
+    safety exists; this is the canonical short explainer covering the deployment
+    patterns that enable zero-downtime rollbacks.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.090Z'
 ---
 <!-- user notes -->

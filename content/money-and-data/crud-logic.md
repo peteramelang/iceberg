@@ -299,5 +299,11 @@ codeExamples:
       the audit trail is what makes deletion recoverable and auditable.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  Handle data creation, reading, updates, and deletion safely. Soft delete to
+  preserve history, prevent concurrent edits from overwriting each other, and
+  make bulk operations retryable.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.120Z'
 ---
 <!-- user notes -->

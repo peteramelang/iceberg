@@ -190,5 +190,11 @@ codeExamples:
       accessed.
 difficulty: intermediate
 estimatedHours: 4
+tldr: >-
+  Decide how long to keep different types of data (user logs 30 days, financial
+  records 7 years) and automate deletion to manage costs and comply with privacy
+  laws.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.105Z'
 ---
 <!-- user notes -->

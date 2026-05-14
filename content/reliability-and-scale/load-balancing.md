@@ -295,5 +295,20 @@ codeExamples:
       on failure — that prevent user-visible errors during instance churn.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  Route incoming traffic across multiple servers so no single one becomes a
+  failure point, and you can scale up or deploy without downtime.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=dBmxNsS3BGE'
+  title: Top 6 Load Balancing Algorithms Every Developer Should Know
+  author: ByteByteGo
+  durationSeconds: 318
+  reasoning: >-
+    ByteByteGo preferred channel. Covers the core load balancing algorithms
+    (round robin, sticky sessions, weighted, IP hash, least connections, least
+    time) with clear visual explanations. Directly matches the topic including
+    L4/L7 concepts and distribution strategies. 5m 18s — well within limit.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.138Z'
 ---
 <!-- user notes -->

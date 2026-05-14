@@ -253,5 +253,20 @@ codeExamples:
       headers that let clients back off gracefully.
 difficulty: intermediate
 estimatedHours: 4
+tldr: >-
+  Cap how many requests each user can make per minute so one bad actor or
+  misbehaving client can't overwhelm your entire service.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=YXkOdWBwqaA'
+  title: 'Rate Limiter System Design: Token Bucket, Leaky Bucket, Scaling'
+  author: ByteByteGo
+  durationSeconds: 466
+  reasoning: >-
+    ByteByteGo preferred channel. Covers token bucket and leaky bucket
+    algorithms, rate limiter design, and scaling considerations — directly
+    matching the iceberg content on rate limiting algorithms, per-client limits,
+    and 429 responses. 7m 46s — within the 600-second limit.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.146Z'
 ---
 <!-- user notes -->

@@ -281,5 +281,24 @@ codeExamples:
       operations where READ COMMITTED would allow a double-spend race.
 difficulty: intermediate
 estimatedHours: 5
+tldr: >-
+  Prevent bad data from entering your system by enforcing rules at the database
+  level (like preventing orphaned records) and wrapping critical operations in
+  transactions.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=GAe5oB742dw'
+  title: ACID Properties in Databases With Examples
+  author: ByteByteGo
+  durationSeconds: 297
+  reasoning: >-
+    ByteByteGo's 4:57 explainer covers all four ACID properties (Atomicity,
+    Consistency, Isolation, Durability) with banking examples, directly
+    illustrating the transaction and isolation-level mechanics that underpin
+    data integrity. It explains how isolation levels prevent concurrent-access
+    anomalies, which maps directly to the topic's core concern about READ
+    COMMITTED vs REPEATABLE READ. Strong source, correct duration, high view
+    count.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.121Z'
 ---
 <!-- user notes -->

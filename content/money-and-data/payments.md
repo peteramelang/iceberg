@@ -322,5 +322,19 @@ codeExamples:
       bugs.
 difficulty: advanced
 estimatedHours: 12
+tldr: >-
+  Wire up a payment processor securely so you can charge users reliably without
+  storing their card numbers or accidentally double-charging them.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=7edR32QVp_A'
+  title: Get Paid with Stripe in 100 Seconds
+  author: Fireship
+  durationSeconds: 130
+  reasoning: >-
+    Fireship preferred channel. Covers Stripe integration fundamentals — payment
+    intents, webhooks, and the core Stripe API concepts — directly matching the
+    iceberg payments content. Classic Fireship 100-second format at 2m 10s.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.123Z'
 ---
 <!-- user notes -->

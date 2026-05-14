@@ -264,5 +264,22 @@ codeExamples:
       avoids leaking whether a resource exists.
 difficulty: intermediate
 estimatedHours: 8
+tldr: >-
+  Enforce who can do what in your app. Admin sees everything, viewer sees
+  limited data, and unauthorized users see nothing. The difference between a
+  safe app and a breach.
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=rvZ35YW4t5k'
+  title: Role-based access control (RBAC) vs. Attribute-based access control (ABAC)
+  author: IBM Technology
+  durationSeconds: 459
+  reasoning: >-
+    IBM Distinguished Engineer Jeff Crume explains RBAC and ABAC in depth —
+    exactly the two dominant access control models covered in the topic. IBM
+    Technology is a top-tier authoritative source. 7:39 runtime fits the
+    short-explainer window and covers the core RBAC/ABAC tradeoff that
+    practitioners need to understand.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.142Z'
 ---
 <!-- user notes -->

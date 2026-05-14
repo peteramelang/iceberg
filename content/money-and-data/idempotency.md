@@ -300,5 +300,10 @@ codeExamples:
       execution without application-level locking.
 difficulty: intermediate
 estimatedHours: 4
+tldr: >-
+  Design operations to handle retries safely by tracking each request with a
+  unique ID—so retrying a failed payment or email never creates duplicates.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.122Z'
 ---
 <!-- user notes -->

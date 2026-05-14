@@ -267,5 +267,10 @@ codeExamples:
       highest ROI, and this shows the logic purely.
 difficulty: intermediate
 estimatedHours: 4
+tldr: >-
+  Whether users come back tells you if your product works. Use data to
+  understand which types of customers stay engaged and fix what's broken.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:44:38.103Z'
 ---
 <!-- user notes -->
