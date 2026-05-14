@@ -11,6 +11,7 @@ import { ResourceRow } from "../components/domain/ResourceRow.js";
 import { ConnectionSection } from "../components/domain/ConnectionGroup.js";
 import { ConnectionMap } from "../components/domain/ConnectionMap.js";
 import { ProgressRing } from "../components/domain/ProgressRing.js";
+import { ResourceChecklist } from "../components/domain/ResourceChecklist.js";
 import { MarkCompleteButton } from "../components/interactive/MarkCompleteButton.js";
 import { BookmarkButton } from "../components/interactive/BookmarkButton.js";
 import { NotesField } from "../components/interactive/NotesField.js";
@@ -244,6 +245,7 @@ export function Topic() {
               <div className="text-caption text-text-mute">Mark complete when all are done</div>
             </div>
           </div>
+          <ResourceChecklist fm={fm} />
           <div className="mt-md flex flex-wrap gap-sm">
             <MarkCompleteButton slug={fm.slug} />
             <BookmarkButton slug={fm.slug} />
