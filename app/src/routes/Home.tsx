@@ -96,6 +96,18 @@ export function Home() {
           />
         )}
 
+        {paths.length > 0 && (
+          <section className="mt-xl">
+            <header className="flex items-baseline gap-md mb-md">
+              <h2 className="text-label text-text-mute uppercase m-0">Learning paths</h2>
+              <span className="text-caption text-text-dim">{paths.length} · curated sequences</span>
+            </header>
+            <div className="flex gap-md overflow-x-auto scrollbar-thin pb-sm">
+              {paths.map(p => <PathCard key={p.slug} path={p} fixed />)}
+            </div>
+          </section>
+        )}
+
         {recommended.length > 0 && (
           <section className="mt-xl">
             <header className="flex items-baseline gap-md mb-md">
@@ -118,14 +130,16 @@ export function Home() {
           </section>
         )}
 
-        {paths.length > 0 && (
+        {phases.length > 0 && (
           <section className="mt-xl">
             <header className="flex items-baseline gap-md mb-md">
-              <h2 className="text-label text-text-mute uppercase m-0">Learning paths</h2>
-              <span className="text-caption text-text-dim">{paths.length} · curated sequences</span>
+              <h2 className="text-label text-text-mute uppercase m-0">All phases</h2>
+              <span className="text-caption text-text-dim">{phases.length}</span>
             </header>
-            <div className="flex gap-md overflow-x-auto scrollbar-thin pb-sm">
-              {paths.map(p => <PathCard key={p.slug} path={p} fixed />)}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-md">
+              {phases.map((p, i) => (
+                <PhaseTile key={p.slug} index={i + 1} slug={p.slug} title={p.title} topicSlugs={p.topics} />
+              ))}
             </div>
           </section>
         )}
@@ -137,20 +151,6 @@ export function Home() {
             </header>
             <div>
               {activity.map((e, i) => <ActivityRow key={`${e.at}-${i}`} entry={e} />)}
-            </div>
-          </section>
-        )}
-
-        {phases.length > 0 && (
-          <section className="mt-xl">
-            <header className="flex items-baseline gap-md mb-md">
-              <h2 className="text-label text-text-mute uppercase m-0">All phases</h2>
-              <span className="text-caption text-text-dim">{phases.length}</span>
-            </header>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-md">
-              {phases.map((p, i) => (
-                <PhaseTile key={p.slug} index={i + 1} slug={p.slug} title={p.title} topicSlugs={p.topics} />
-              ))}
             </div>
           </section>
         )}
