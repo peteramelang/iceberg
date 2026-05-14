@@ -1,13 +1,23 @@
-import { useNotes } from "../../hooks/useNotes.js";
+import { useEffect, useState } from "react";
+import { notesStore } from "../../stores/index.js";
 
 export function NotesField({ slug }: { slug: string }) {
-  const { body, set } = useNotes(slug);
+  const [value, setValue] = useState("");
+  useEffect(() => { setValue(notesStore.get(slug) ?? ""); }, [slug]);
+
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const v = e.target.value;
+    setValue(v);
+    notesStore.set(slug, v);
+  };
+
   return (
     <textarea
-      value={body}
-      onChange={e => set(e.target.value)}
-      placeholder="your notes…"
-      className="w-full min-h-[160px] p-md bg-surface-soft text-ink rounded-sm border border-hairline focus:border-ink outline-none font-mono"
+      value={value}
+      onChange={onChange}
+      placeholder="Add notes for this topic… (markdown supported)"
+      className="w-full min-h-[120px] bg-panel border border-border-soft rounded p-md text-body text-text placeholder:text-text-dim focus:outline-none focus:border-accent"
+      aria-label={`Notes for ${slug}`}
     />
   );
 }

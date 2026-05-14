@@ -1,10 +1,27 @@
-import { useBookmark } from "../../hooks/useBookmark.js";
+import { bookmarkStore, activityStore } from "../../stores/index.js";
+import { useStoreSubscription } from "../../hooks/useStoreSubscription.js";
+import { getTopic } from "../../content/index.js";
 
-export function BookmarkButton({ topic, resource }: { topic: string; resource?: string }) {
-  const { isBookmarked, toggle } = useBookmark(topic, resource);
+export function BookmarkButton({ slug }: { slug: string }) {
+  useStoreSubscription(l => bookmarkStore.subscribe(l), () => Date.now());
+  const on = bookmarkStore.isBookmarked(slug);
+  const onClick = () => {
+    bookmarkStore.toggle(slug);
+    const fm = getTopic(slug)?.frontmatter;
+    if (fm) activityStore.append({ type: on ? "unbookmarked" : "bookmarked", topicSlug: slug, topicTitle: fm.title });
+  };
   return (
-    <button type="button" onClick={toggle} className="font-mono select-none">
-      [{isBookmarked ? "*" : " "}]
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={on}
+      className={[
+        "inline-flex items-center gap-sm px-md py-sm rounded-sm border",
+        on ? "bg-panel-2 border-accent text-accent" : "bg-panel border-border text-text-mute hover:text-text hover:border-text-dim"
+      ].join(" ")}
+    >
+      <span>{on ? "★" : "☆"}</span>
+      {on ? "Bookmarked" : "Bookmark"}
     </button>
   );
 }

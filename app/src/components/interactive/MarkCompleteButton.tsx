@@ -1,12 +1,30 @@
-import { progressStore } from "../../stores/index.js";
-import { useTopicProgress } from "../../hooks/useTopicProgress.js";
+import { progressStore, activityStore } from "../../stores/index.js";
+import { useStoreSubscription } from "../../hooks/useStoreSubscription.js";
+import { getTopic } from "../../content/index.js";
 
 export function MarkCompleteButton({ slug }: { slug: string }) {
-  const p = useTopicProgress(slug);
-  const onClick = () => p.completed ? progressStore.unmarkTopicComplete(slug) : progressStore.markTopicComplete(slug);
+  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  const done = progressStore.getTopicProgress(slug).completed;
+  const onClick = () => {
+    if (done) {
+      progressStore.unmarkTopicComplete(slug);
+      return;
+    }
+    progressStore.markTopicComplete(slug);
+    const fm = getTopic(slug)?.frontmatter;
+    if (fm) activityStore.append({ type: "completed", topicSlug: slug, topicTitle: fm.title });
+  };
   return (
-    <button type="button" onClick={onClick} className="px-lg py-xs rounded-sm bg-ink text-canvas">
-      {p.completed ? "[x] mark incomplete" : "[ ] mark complete"}
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={done}
+      className={[
+        "inline-flex items-center gap-sm px-md py-sm rounded-sm font-medium",
+        done ? "bg-green text-white" : "bg-accent text-white hover:bg-accent-hover"
+      ].join(" ")}
+    >
+      {done ? "✓ Completed" : "Mark complete"}
     </button>
   );
 }
