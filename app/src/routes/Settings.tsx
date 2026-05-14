@@ -143,6 +143,7 @@ export function Settings() {
           <p className="text-body text-text-mute mb-sm">iceberg — a guided curriculum for production-readiness.</p>
           <ul className="text-caption text-text-mute flex flex-col gap-xs">
             <li>Version <span className="font-mono tabular-nums">{__APP_VERSION__}</span></li>
+            <li><a href="/about" className="text-accent hover:underline">Why iceberg exists</a></li>
             <li><a href="/whats-new" className="text-accent hover:underline">What's new</a></li>
             <li><a href="/credits" className="text-accent hover:underline">Credits</a></li>
             <li><a href="https://github.com/peteramelang/iceberg" target="_blank" rel="noreferrer noopener" className="text-accent hover:underline">Repository ↗</a></li>

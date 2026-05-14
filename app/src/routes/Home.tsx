@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { ResumeHero } from "../components/domain/ResumeHero.js";
-import { IcebergIntro } from "../components/domain/IcebergIntro.js";
 import { PathCard } from "../components/domain/PathCard.js";
 import { PhaseTile } from "../components/domain/PhaseTile.js";
 import { ActivityRow } from "../components/domain/ActivityRow.js";
@@ -67,15 +66,22 @@ export function Home() {
 
   const phases = phasesSorted;
 
-  // Show the intro panel only on first visit — once a user has any progress
-  // it just steals scroll real estate from the Continue hero.
-  const isFirstVisit = overall.completedTopics === 0 && done === 0 && partial === 0;
-
   return (
     <div className="p-xl">
       <Head title="iceberg — production-readiness curriculum" />
       <MainColumn maxWidth="max-w-[1040px]">
-        {isFirstVisit && <IcebergIntro />}
+        <section className="mb-xl">
+          <div className="text-label text-text-mute uppercase mb-sm">iceberg</div>
+          <h1 className="text-display-lg m-0 mb-sm">
+            The depth between an MVP and a production system.
+          </h1>
+          <p className="text-body text-text-mute max-w-[640px]">
+            What ships in a demo is the visible tip — UI, the happy path, a working auth flow.
+            Everything that keeps it running in front of real users — payments, observability,
+            rollbacks, compliance — is the depth below.{" "}
+            <Link to="/about" className="text-accent hover:text-accent-hover">Read why iceberg exists →</Link>
+          </p>
+        </section>
         {resumeTopic && (
           <ResumeHero
             topic={resumeTopic}

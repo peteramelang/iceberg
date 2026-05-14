@@ -9,6 +9,7 @@ import { Paths } from "./routes/Paths.js";
 import { Path } from "./routes/Path.js";
 import { WhatsNew } from "./routes/WhatsNew.js";
 import { Credits } from "./routes/Credits.js";
+import { About } from "./routes/About.js";
 
 // Route-level code splitting for the two heaviest routes:
 // - Graph pulls in @xyflow/react + its stylesheet (~200 KB).
@@ -36,6 +37,7 @@ export function App() {
           <Route path="/graph" element={<Graph />} />
           <Route path="/whats-new" element={<WhatsNew />} />
           <Route path="/credits" element={<Credits />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Suspense>
     </Shell>

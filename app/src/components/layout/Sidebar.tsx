@@ -73,6 +73,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         <SidebarItem to="/paths" label="Paths" onNavigate={onNavigate} icon="⇢" />
         <SidebarItem to="/whats-new" label="What's new" onNavigate={onNavigate} icon="✦" />
         <SidebarItem to="/graph" label="Graph" onNavigate={onNavigate} icon="⟁" />
+        <SidebarItem to="/about" label="About" onNavigate={onNavigate} icon="ⓘ" />
         <SidebarItem to="/settings" label="Settings" onNavigate={onNavigate} icon="⚙" />
       </nav>
 
