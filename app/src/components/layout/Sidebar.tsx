@@ -1,21 +1,11 @@
 import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { taxonomy, topics } from "../../content/index.js";
+import { getTopic, taxonomy } from "../../content/index.js";
+import { phasesSorted, resourceTotalFor } from "../../content/derived.js";
 import { progressStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 import { ProgressMarker } from "../domain/ProgressMarker.js";
-
-function totalResourcesFor(slug: string): number {
-  const t = topics.find(x => x.frontmatter.slug === slug);
-  if (!t) return 0;
-  const fm = t.frontmatter;
-  return (fm.resources.videos.short ? 1 : 0)
-    + (fm.resources.videos.long ? 1 : 0)
-    + fm.resources.articles.length
-    + fm.resources.services.length
-    + fm.resources.courses.length;
-}
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   useStoreTick(l => progressStore.subscribe(l));
@@ -31,7 +21,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const currentPhase = useMemo(() => {
     if (currentPhaseFromPath) return currentPhaseFromPath;
     if (currentTopicSlug) {
-      const t = topics.find(x => x.frontmatter.slug === currentTopicSlug);
+      const t = getTopic(currentTopicSlug);
       return t?.frontmatter.phase ?? null;
     }
     return null;
@@ -45,7 +35,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   });
 
   if (!taxonomy) return null;
-  const phases = [...taxonomy.phases].sort((a, b) => a.order - b.order);
+  const phases = phasesSorted;
 
   return (
     <aside className="w-[260px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin">
@@ -110,11 +100,11 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 function SidebarTopicRow({
   slug, active, onNavigate
 }: { slug: string; active: boolean; onNavigate?: () => void }) {
-  const t = topics.find(x => x.frontmatter.slug === slug)?.frontmatter;
+  const t = getTopic(slug)?.frontmatter;
   const pulse = useCompletionPulse(slug);
   if (!t) return null;
   const prog = progressStore.getTopicProgress(slug);
-  const total = totalResourcesFor(slug);
+  const total = resourceTotalFor(slug);
   const checked = Object.values(prog.resources).filter(Boolean).length;
   const state: "empty" | "partial" | "done" = prog.completed ? "done" : checked > 0 ? "partial" : "empty";
   const pct = total > 0 ? Math.round((checked / total) * 100) : 0;

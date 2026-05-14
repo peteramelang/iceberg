@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import type { TopicFrontmatter } from "../../content/types.js";
-import { taxonomy } from "../../content/index.js";
+import { getPhase } from "../../content/index.js";
 import { ProgressRing } from "./ProgressRing.js";
 
 export function ResumeHero({
@@ -24,7 +24,7 @@ export function ResumeHero({
   partial: number;
   untouched: number;
 }) {
-  const phaseTitle = taxonomy?.phases.find(p => p.slug === topic.phase)?.title ?? topic.phase;
+  const phaseTitle = getPhase(topic.phase)?.title ?? topic.phase;
   const resumeWidth = resourceTotalCount === 0 ? 0 : Math.round((resourceCheckedCount / resourceTotalCount) * 100);
   return (
     <section

@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import { taxonomy, topics, connections, paths } from "../content/index.js";
+import { getPhase, taxonomy, topics, connections, paths } from "../content/index.js";
 
 export type SearchKind = "topic" | "phase" | "resource" | "connection" | "path";
 
@@ -35,13 +35,13 @@ function buildIndex(): SearchItem[] {
       kind: "topic",
       id: `topic:${fm.slug}`,
       title: fm.title,
-      subtitle: taxonomy?.phases.find(p => p.slug === fm.phase)?.title ?? fm.phase,
+      subtitle: getPhase(fm.phase)?.title ?? fm.phase,
       text: `${fm.title} ${fm.summary} ${fm.definition} ${fm.slug}`,
       href: `/topic/${fm.slug}`,
       badge: fm.difficulty
     });
 
-    const phaseTitle = taxonomy?.phases.find(p => p.slug === fm.phase)?.title ?? fm.phase;
+    const phaseTitle = getPhase(fm.phase)?.title ?? fm.phase;
     if (fm.resources.videos.short) {
       const v = fm.resources.videos.short;
       items.push({

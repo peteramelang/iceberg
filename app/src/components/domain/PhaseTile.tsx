@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { topics } from "../../content/index.js";
+import { resourceTotalFor } from "../../content/derived.js";
 import { progressStore } from "../../stores/index.js";
 
 export function PhaseTile({
@@ -8,16 +8,7 @@ export function PhaseTile({
   let totalRes = 0;
   let checkedRes = 0;
   for (const ts of topicSlugs) {
-    const t = topics.find(x => x.frontmatter.slug === ts);
-    if (!t) continue;
-    const fm = t.frontmatter;
-    const trCount =
-      (fm.resources.videos.short ? 1 : 0)
-      + (fm.resources.videos.long ? 1 : 0)
-      + fm.resources.articles.length
-      + fm.resources.services.length
-      + fm.resources.courses.length;
-    totalRes += trCount;
+    totalRes += resourceTotalFor(ts);
     const prog = progressStore.getTopicProgress(ts);
     checkedRes += Object.values(prog.resources).filter(Boolean).length;
   }

@@ -4,20 +4,10 @@ import { RightRail, RailCard } from "../components/layout/RightRail.js";
 import { TopicCard } from "../components/domain/TopicCard.js";
 import { ProgressRing } from "../components/domain/ProgressRing.js";
 import { getPathBySlug } from "../utils/pathHelpers.js";
-import { topics } from "../content/index.js";
+import { getTopic } from "../content/index.js";
+import { resourceTotalFor } from "../content/derived.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
-
-function totalRes(slug: string): number {
-  const t = topics.find(x => x.frontmatter.slug === slug);
-  if (!t) return 0;
-  const fm = t.frontmatter;
-  return (fm.resources.videos.short ? 1 : 0)
-    + (fm.resources.videos.long ? 1 : 0)
-    + fm.resources.articles.length
-    + fm.resources.services.length
-    + fm.resources.courses.length;
-}
 
 export function Path() {
   useStoreTick(l => progressStore.subscribe(l));
@@ -27,14 +17,14 @@ export function Path() {
 
   let total = 0, checked = 0, completedTopics = 0;
   for (const ts of p.topics) {
-    total += totalRes(ts);
+    total += resourceTotalFor(ts);
     const prog = progressStore.getTopicProgress(ts);
     checked += Object.values(prog.resources).filter(Boolean).length;
     if (prog.completed) completedTopics++;
   }
   const pct = total === 0 ? 0 : Math.round((checked / total) * 100);
   const nextSlug = p.topics.find(ts => !progressStore.getTopicProgress(ts).completed) ?? null;
-  const nextTitle = nextSlug ? topics.find(t => t.frontmatter.slug === nextSlug)?.frontmatter.title : null;
+  const nextTitle = nextSlug ? getTopic(nextSlug)?.frontmatter.title : null;
 
   return (
     <div className="p-xl flex flex-col lg:flex-row gap-xl">
@@ -51,9 +41,9 @@ export function Path() {
           </header>
           <div>
             {p.topics.map((slug, i) => {
-              const fm = topics.find(t => t.frontmatter.slug === slug)?.frontmatter;
+              const fm = getTopic(slug)?.frontmatter;
               if (!fm) return null;
-              return <TopicCard key={slug} fm={fm} index={i + 1} totalResources={totalRes(slug)} />;
+              return <TopicCard key={slug} fm={fm} index={i + 1} totalResources={resourceTotalFor(slug)} />;
             })}
           </div>
         </section>

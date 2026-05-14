@@ -3,18 +3,8 @@ import { MainColumn } from "../components/layout/MainColumn.js";
 import { TopicCard } from "../components/domain/TopicCard.js";
 import { bookmarkStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
-import { taxonomy, topics } from "../content/index.js";
-
-function totalRes(slug: string): number {
-  const t = topics.find(x => x.frontmatter.slug === slug);
-  if (!t) return 0;
-  const fm = t.frontmatter;
-  return (fm.resources.videos.short ? 1 : 0)
-    + (fm.resources.videos.long ? 1 : 0)
-    + fm.resources.articles.length
-    + fm.resources.services.length
-    + fm.resources.courses.length;
-}
+import { getTopic, taxonomy } from "../content/index.js";
+import { resourceTotalFor } from "../content/derived.js";
 
 export function Bookmarks() {
   useStoreTick(l => bookmarkStore.subscribe(l));
@@ -57,9 +47,9 @@ export function Bookmarks() {
               {!isCollapsed && (
                 <div>
                   {slugs.map(slug => {
-                    const fm = topics.find(t => t.frontmatter.slug === slug)?.frontmatter;
+                    const fm = getTopic(slug)?.frontmatter;
                     if (!fm) return null;
-                    return <TopicCard key={slug} fm={fm} totalResources={totalRes(slug)} />;
+                    return <TopicCard key={slug} fm={fm} totalResources={resourceTotalFor(slug)} />;
                   })}
                 </div>
               )}

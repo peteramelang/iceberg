@@ -4,29 +4,35 @@ import { ResumeHero } from "../components/domain/ResumeHero.js";
 import { PathCard } from "../components/domain/PathCard.js";
 import { PhaseTile } from "../components/domain/PhaseTile.js";
 import { ActivityRow } from "../components/domain/ActivityRow.js";
-import { taxonomy, topics, connections, paths } from "../content/index.js";
+import { getPhase, getTopic, topics, connections, paths } from "../content/index.js";
+import { phasesSorted, totalResourcesPerTopic } from "../content/derived.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { useActivity } from "../hooks/useActivity.js";
 
-function totalResourcesFor(slug: string): number {
-  const t = topics.find(x => x.frontmatter.slug === slug);
-  if (!t) return 0;
-  const fm = t.frontmatter;
-  return (fm.resources.videos.short ? 1 : 0)
-    + (fm.resources.videos.long ? 1 : 0)
-    + fm.resources.articles.length
-    + fm.resources.services.length
-    + fm.resources.courses.length;
-}
+// Topics whose slug is the target of no prerequisite edge — module-level
+// because it's pure-function of static content.
+const PREREQ_FREE_TOPICS = (() => {
+  const targets = new Set<string>();
+  for (const e of connections) if (e.type === "prerequisite") targets.add(e.to);
+  return topics.filter(t => !targets.has(t.frontmatter.slug));
+})();
+
+// Prereq-by-target index: which topics must be done before each topic.
+const PREREQS_BY_TARGET: Record<string, string[]> = (() => {
+  const out: Record<string, string[]> = {};
+  for (const e of connections) {
+    if (e.type !== "prerequisite") continue;
+    (out[e.to] ??= []).push(e.from);
+  }
+  return out;
+})();
 
 export function Home() {
   useStoreTick(l => progressStore.subscribe(l));
   const activity = useActivity(5);
 
-  const totalRes: Record<string, number> = {};
-  for (const t of topics) totalRes[t.frontmatter.slug] = totalResourcesFor(t.frontmatter.slug);
-  const overall = progressStore.getOverallProgress(totalRes);
+  const overall = progressStore.getOverallProgress(totalResourcesPerTopic);
   const lastSlug = progressStore.getLastTouchedTopic();
 
   let done = 0, partial = 0, untouched = 0;
@@ -37,35 +43,27 @@ export function Home() {
     if (checked > 0) partial++; else untouched++;
   }
 
-  // Resume target: last touched, else first topic with no prerequisites unblocked, else first topic overall.
+  // Resume target: last touched, else first prereq-free topic, else first topic.
   const resumeTopic = (() => {
     if (lastSlug) {
-      const fm = topics.find(t => t.frontmatter.slug === lastSlug)?.frontmatter;
+      const fm = getTopic(lastSlug)?.frontmatter;
       if (fm) return fm;
     }
-    const allPrereqs = new Set<string>();
-    for (const e of connections) if (e.type === "prerequisite") allPrereqs.add(e.to);
-    const first = topics.find(t => !allPrereqs.has(t.frontmatter.slug));
-    return first?.frontmatter ?? topics[0]?.frontmatter ?? null;
+    return PREREQ_FREE_TOPICS[0]?.frontmatter ?? topics[0]?.frontmatter ?? null;
   })();
 
   // Recommended: next 3 topics whose direct prereqs are all done.
   const completedSet = new Set<string>();
   for (const t of topics) if (progressStore.getTopicProgress(t.frontmatter.slug).completed) completedSet.add(t.frontmatter.slug);
-  const prereqsBy: Record<string, string[]> = {};
-  for (const e of connections) {
-    if (e.type !== "prerequisite") continue;
-    (prereqsBy[e.to] ??= []).push(e.from);
-  }
   const recommended = topics
     .filter(t => !completedSet.has(t.frontmatter.slug))
     .filter(t => {
-      const pres = prereqsBy[t.frontmatter.slug] ?? [];
+      const pres = PREREQS_BY_TARGET[t.frontmatter.slug] ?? [];
       return pres.every(p => completedSet.has(p));
     })
     .slice(0, 3);
 
-  const phases = taxonomy ? [...taxonomy.phases].sort((a, b) => a.order - b.order) : [];
+  const phases = phasesSorted;
 
   return (
     <div className="p-xl">
@@ -74,7 +72,7 @@ export function Home() {
           <ResumeHero
             topic={resumeTopic}
             resourceCheckedCount={Object.values(progressStore.getTopicProgress(resumeTopic.slug).resources).filter(Boolean).length}
-            resourceTotalCount={totalRes[resumeTopic.slug] ?? 0}
+            resourceTotalCount={totalResourcesPerTopic[resumeTopic.slug] ?? 0}
             overallPct={overall.totalTopics === 0 ? 0 : Math.round((overall.completedTopics / overall.totalTopics) * 100)}
             overallCompleted={overall.completedTopics}
             overallTotal={overall.totalTopics}
@@ -97,7 +95,7 @@ export function Home() {
                   to={`/topic/${t.frontmatter.slug}`}
                   className="block bg-panel border border-border-soft rounded p-lg hover:bg-panel-2 hover:border-border"
                 >
-                  <div className="text-[11px] uppercase tracking-[0.08em] text-text-dim mb-sm">{taxonomy?.phases.find(p => p.slug === t.frontmatter.phase)?.title}</div>
+                  <div className="text-[11px] uppercase tracking-[0.08em] text-text-dim mb-sm">{getPhase(t.frontmatter.phase)?.title}</div>
                   <div className="text-body-strong text-[15px] text-text mb-xs">{t.frontmatter.title}</div>
                   <div className="text-body text-text-mute leading-[1.5]">{t.frontmatter.summary}</div>
                 </Link>

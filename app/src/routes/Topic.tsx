@@ -14,7 +14,7 @@ import { ProgressRing } from "../components/domain/ProgressRing.js";
 import { MarkCompleteButton } from "../components/interactive/MarkCompleteButton.js";
 import { BookmarkButton } from "../components/interactive/BookmarkButton.js";
 import { NotesField } from "../components/interactive/NotesField.js";
-import { getTopic, taxonomy } from "../content/index.js";
+import { getPhase, getTopic, taxonomy } from "../content/index.js";
 import { getPathBySlug } from "../utils/pathHelpers.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
@@ -76,7 +76,7 @@ export function Topic() {
 
   if (!entry || !fm || !taxonomy) return <div className="p-xl text-text-mute">Topic not found.</div>;
 
-  const phase = taxonomy.phases.find(p => p.slug === fm.phase);
+  const phase = getPhase(fm.phase);
   const phaseIndex = phase ? phase.topics.indexOf(fm.slug) + 1 : 0;
   const prog = progressStore.getTopicProgress(fm.slug);
   const total = resourceTotal(fm);

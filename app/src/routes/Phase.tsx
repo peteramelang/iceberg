@@ -3,29 +3,19 @@ import { MainColumn } from "../components/layout/MainColumn.js";
 import { RightRail, RailCard } from "../components/layout/RightRail.js";
 import { TopicCard } from "../components/domain/TopicCard.js";
 import { ProgressRing } from "../components/domain/ProgressRing.js";
-import { taxonomy, topics, connections } from "../content/index.js";
+import { getPhase, getTopic, taxonomy, connections } from "../content/index.js";
+import { phasesSorted, resourceTotalFor } from "../content/derived.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
-
-function resourceTotalFor(slug: string): number {
-  const t = topics.find(x => x.frontmatter.slug === slug);
-  if (!t) return 0;
-  const fm = t.frontmatter;
-  return (fm.resources.videos.short ? 1 : 0)
-    + (fm.resources.videos.long ? 1 : 0)
-    + fm.resources.articles.length
-    + fm.resources.services.length
-    + fm.resources.courses.length;
-}
 
 export function Phase() {
   useStoreTick(l => progressStore.subscribe(l));
   const { phaseSlug } = useParams();
-  const phase = taxonomy?.phases.find(p => p.slug === phaseSlug);
+  const phase = phaseSlug ? getPhase(phaseSlug) : undefined;
   if (!phase || !taxonomy) {
     return <div className="p-xl text-text-mute">Phase not found.</div>;
   }
-  const phaseIndex = [...taxonomy.phases].sort((a, b) => a.order - b.order).findIndex(p => p.slug === phase.slug) + 1;
+  const phaseIndex = phasesSorted.findIndex(p => p.slug === phase.slug) + 1;
 
   let totalRes = 0, checkedRes = 0, completed = 0;
   for (const ts of phase.topics) {
@@ -37,7 +27,7 @@ export function Phase() {
   const pct = totalRes === 0 ? 0 : Math.round((checkedRes / totalRes) * 100);
 
   const nextSlug = phase.topics.find(ts => !progressStore.getTopicProgress(ts).completed) ?? null;
-  const nextTitle = nextSlug ? topics.find(x => x.frontmatter.slug === nextSlug)?.frontmatter.title : null;
+  const nextTitle = nextSlug ? getTopic(nextSlug)?.frontmatter.title : null;
 
   // Prereq phases: phases containing topics that any topic in this phase depends on.
   const inThisPhase = new Set(phase.topics);
@@ -46,11 +36,11 @@ export function Phase() {
   for (const e of connections) {
     if (e.type !== "prerequisite") continue;
     if (inThisPhase.has(e.to) && !inThisPhase.has(e.from)) {
-      const ph = topics.find(t => t.frontmatter.slug === e.from)?.frontmatter.phase;
+      const ph = getTopic(e.from)?.frontmatter.phase;
       if (ph) prereqPhases.add(ph);
     }
     if (inThisPhase.has(e.from) && !inThisPhase.has(e.to)) {
-      const ph = topics.find(t => t.frontmatter.slug === e.to)?.frontmatter.phase;
+      const ph = getTopic(e.to)?.frontmatter.phase;
       if (ph) leadsInto.add(ph);
     }
   }
@@ -79,7 +69,7 @@ export function Phase() {
           </header>
           <div>
             {phase.topics.map((slug, i) => {
-              const fm = topics.find(x => x.frontmatter.slug === slug)?.frontmatter;
+              const fm = getTopic(slug)?.frontmatter;
               if (!fm) return null;
               return <TopicCard key={slug} fm={fm} index={i + 1} totalResources={resourceTotalFor(slug)} />;
             })}
@@ -111,7 +101,7 @@ export function Phase() {
           ) : (
             <div>
               {[...prereqPhases].map(slug => {
-                const p = taxonomy!.phases.find(ph => ph.slug === slug);
+                const p = getPhase(slug);
                 if (!p) return null;
                 return <Link key={slug} to={`/phase/${slug}`} className="block py-xs border-t border-border-soft first:border-t-0 text-text-mute hover:text-text">← {p.title}</Link>;
               })}
@@ -125,7 +115,7 @@ export function Phase() {
           ) : (
             <div>
               {[...leadsInto].map(slug => {
-                const p = taxonomy!.phases.find(ph => ph.slug === slug);
+                const p = getPhase(slug);
                 if (!p) return null;
                 return <Link key={slug} to={`/phase/${slug}`} className="block py-xs border-t border-border-soft first:border-t-0 text-text-mute hover:text-text">→ {p.title}</Link>;
               })}
