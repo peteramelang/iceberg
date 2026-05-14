@@ -280,7 +280,19 @@ estimatedHours: 5
 tldr: >-
   Track where cloud money is going and shut down wasteful things. Oversized
   servers, always-on test environments, and forgotten resources are pure loss.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.894Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=N6lYcXjd4pg'
+  title: 'How to Burn Money in the Cloud // Avoid AWS, GCP, Azure Cost Disasters'
+  author: Fireship
+  durationSeconds: 540
+  reasoning: >-
+    Fireship tells the story of a startup's $72K cloud bill in 2 hours on Google
+    Cloud, then walks through the specific resource types and misconfiguration
+    patterns that cause runaway costs on AWS, GCP, and Azure. Directly addresses
+    the bill-shock and cost-attribution failure modes described in the topic.
+    Fireship is authoritative; this is the canonical short-form cloud cost
+    explainer with real monetary stakes.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.565Z'
 ---
 <!-- user notes -->

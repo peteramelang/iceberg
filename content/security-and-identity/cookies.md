@@ -272,7 +272,19 @@ estimatedHours: 4
 tldr: >-
   Keep cookies secure with the right settings so they do not get stolen. Ask
   permission before tracking users with them.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.913Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=LHSSY8QNvew'
+  title: Follow the Cookie Trail - Computerphile
+  author: Computerphile
+  durationSeconds: 510
+  reasoning: >-
+    Computerphile's Dr. Mike Pound explains exactly how HTTP cookies work —
+    their structure, how browsers set and send them, and the security
+    implications. Directly covers the technical security side (HttpOnly, Secure,
+    SameSite behavior) of the topic. Computerphile is a top authoritative source
+    for computer science fundamentals; this is the canonical academic-quality
+    explainer on HTTP cookies.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.579Z'
 ---
 <!-- user notes -->

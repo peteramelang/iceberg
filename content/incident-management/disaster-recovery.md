@@ -251,7 +251,19 @@ tldr: >-
   Set realistic recovery targets (data loss tolerance and downtime tolerance),
   run regular restore drills, and maintain accessible runbooks so you can
   actually recover when disaster strikes.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.878Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=07EHsPuKXc0'
+  title: 'Disaster Recovery vs. Backup: What''s the difference?'
+  author: IBM Technology
+  durationSeconds: 572
+  reasoning: >-
+    IBM Technology's 9:32 video draws a clear distinction between backup and
+    disaster recovery, covering replication topologies, region failure
+    scenarios, streaming vs. snapshot approaches, and recovery trade-offs.
+    Directly matches the topic's focus on RPO/RTO targets, backup procedures,
+    and recovery strategy. Strong preferred source, authoritative and
+    non-tutorial. Within the 600-second limit.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.546Z'
 ---
 <!-- user notes -->

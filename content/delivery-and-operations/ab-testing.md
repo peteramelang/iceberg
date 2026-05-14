@@ -239,6 +239,6 @@ tldr: >-
   Test product changes on different user groups to prove what actually works,
   not just guess. Prevents confident mistakes.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.847Z'
+lastUpdatedAt: '2026-05-14T12:27:20.517Z'
 ---
 <!-- user notes -->

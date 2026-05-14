@@ -308,7 +308,19 @@ estimatedHours: 16
 tldr: >-
   Get the money math right. Invoices, refunds, credits, and retries for failed
   payments all need to match what customers are actually charged.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.883Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=7edR32QVp_A'
+  title: Get Paid with Stripe in 100 Seconds
+  author: Fireship
+  durationSeconds: 130
+  reasoning: >-
+    Fireship covers Stripe's payment API — the dominant billing infrastructure
+    layer — in 130 seconds: how charges, subscriptions, and webhooks work. This
+    matches billing-logic's focus on payment processor integration, subscription
+    flows, and reconciliation. Fireship is authoritative and the Stripe API
+    overview is precisely what a developer needs before implementing billing
+    logic.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.556Z'
 ---
 <!-- user notes -->

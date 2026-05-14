@@ -345,7 +345,17 @@ estimatedHours: 14
 tldr: >-
   Design systems to handle 10x more traffic without rebuilding everything. The
   database is usually the bottleneck; smart caching multiplies capacity.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.909Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=EWS_CIxttVw'
+  title: Scalability Simply Explained in 10 Minutes
+  author: ByteByteGo
+  durationSeconds: 560
+  reasoning: >-
+    ByteByteGo strong-channel match. Covers horizontal vs vertical scaling,
+    bottlenecks (database ceiling, connection pooling), caching, and async
+    processing — the exact 80/20 of scalability described in the topic
+    narrative. 9:20 duration fits within the 600-second ceiling.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.575Z'
 ---
 <!-- user notes -->

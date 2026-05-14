@@ -286,6 +286,6 @@ tldr: >-
   Let your API change without breaking existing customers. Old clients keep
   working while new ones get the latest version.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.852Z'
+lastUpdatedAt: '2026-05-14T12:27:20.521Z'
 ---
 <!-- user notes -->

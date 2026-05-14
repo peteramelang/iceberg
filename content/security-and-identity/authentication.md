@@ -296,7 +296,18 @@ estimatedHours: 6
 tldr: >-
   Verify users are really who they claim to be. Do this right and your login is
   secure; do it wrong and sessions get stolen.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.911Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=UBUNrFtufWo'
+  title: Session vs Token Authentication in 100 Seconds
+  author: Fireship
+  durationSeconds: 138
+  reasoning: >-
+    Fireship covers the two dominant authentication patterns — session cookies
+    vs stateless tokens (JWT) — in exactly 138 seconds. Directly hits the
+    topic's core concepts: how sessions and tokens work, when to use each, and
+    the tradeoffs. Fireship is a top-tier authoritative source for concise
+    developer explainers.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.578Z'
 ---
 <!-- user notes -->

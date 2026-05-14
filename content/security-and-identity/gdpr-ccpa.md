@@ -343,7 +343,19 @@ tldr: >-
   Let users see their data, delete it, and correct it—and know where all their
   personal information lives so you can actually fulfill those requests within
   30-45 days.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.914Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=1BDYR-WxwY8'
+  title: What Google Cloud customers need to know about the EU's GDPR
+  author: Google Cloud
+  durationSeconds: 501
+  reasoning: >-
+    Google Cloud's 8:21 explainer covers what GDPR requires of organizations
+    processing EU personal data, the obligations it creates, and how cloud
+    infrastructure intersects with compliance. From a preferred source (Google
+    Cloud Tech channel), technically oriented, and addresses the engineering
+    implications of data privacy obligations. Best available option from a
+    strong source within the duration limit; no vendor consent-management bias.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.580Z'
 ---
 <!-- user notes -->

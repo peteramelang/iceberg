@@ -285,7 +285,20 @@ tldr: >-
   Prevent bad data from entering your system by enforcing rules at the database
   level (like preventing orphaned records) and wrapping critical operations in
   transactions.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.886Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=GAe5oB742dw'
+  title: ACID Properties in Databases With Examples
+  author: ByteByteGo
+  durationSeconds: 297
+  reasoning: >-
+    ByteByteGo's 4:57 explainer covers all four ACID properties (Atomicity,
+    Consistency, Isolation, Durability) with banking examples, directly
+    illustrating the transaction and isolation-level mechanics that underpin
+    data integrity. It explains how isolation levels prevent concurrent-access
+    anomalies, which maps directly to the topic's core concern about READ
+    COMMITTED vs REPEATABLE READ. Strong source, correct duration, high view
+    count.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.559Z'
 ---
 <!-- user notes -->

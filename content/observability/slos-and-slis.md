@@ -364,7 +364,17 @@ estimatedHours: 5
 tldr: >-
   Set realistic uptime targets and measure actual performance against them. Use
   a reliability budget to balance shipping features with stability.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.899Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=E3ReKuJ8ewA'
+  title: The Art of SLOs (Service Level Objectives)
+  author: Google Cloud Tech
+  durationSeconds: 241
+  reasoning: >-
+    Google Cloud Tech is a preferred strong channel. Covers SLIs, SLOs, error
+    budgets, and reliability targets — exactly the topic content. 4:01 is a
+    tight, focused DevByte-style video from the team that literally invented
+    SRE. Best possible source for this topic.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.568Z'
 ---
 <!-- user notes -->

@@ -292,7 +292,19 @@ estimatedHours: 4
 tldr: >-
   Keep API keys and passwords in a secure vault, not in code or files. Rotate
   them automatically and know who accessed them when.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.916Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=nG8fCdWkLzc'
+  title: HashiCorp Vault Explained in 180 seconds
+  author: Cybr
+  durationSeconds: 219
+  reasoning: >-
+    Covers secrets vault fundamentals: centralized secret storage, dynamic
+    credentials, supported auth methods, and rotation — aligning with the
+    topic's core message of getting secrets out of code and into a vault. 3:39
+    duration is tight and on-point. Cybr is a credible security education
+    channel. No preferred-channel video (IBM Technology, Fireship, etc.) on
+    secrets management under 10 min was found to be more specific.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.582Z'
 ---
 <!-- user notes -->

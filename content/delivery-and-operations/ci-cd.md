@@ -275,7 +275,18 @@ estimatedHours: 6
 tldr: >-
   Automate shipping code so tests run and deployment happens without manual
   steps. Catches bugs fast and makes changes safer.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.855Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=scEDHsr3APg'
+  title: DevOps CI/CD Explained in 100 Seconds
+  author: Fireship
+  durationSeconds: 115
+  reasoning: >-
+    Fireship covers CI/CD in 115 seconds: what continuous integration and
+    continuous delivery mean, how pipelines work, and why automated testing
+    gates deployments. Perfectly aligned with the topic definition. The
+    definitive short-form explainer on CI/CD from the most authoritative
+    concise-explainer channel for developers.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.523Z'
 ---
 <!-- user notes -->

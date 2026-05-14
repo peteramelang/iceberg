@@ -321,7 +321,18 @@ tldr: >-
   Launch incomplete features safely by leaving them off by default, gradually
   roll out to users, and instantly disable broken features without deploying new
   code.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.861Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=AJa2B-twtG4'
+  title: What are Feature Flags?
+  author: IBM Technology
+  durationSeconds: 400
+  reasoning: >-
+    IBM Technology's 6:40 explainer covers what feature flags are, how they
+    decouple deployment from release, and shows a code example. Directly maps to
+    the topic's core use cases: release toggles, trunk-based development, and
+    runtime behavior control. Strong preferred source, concise, no tutorial
+    bloat, 69k+ views.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:27:20.529Z'
 ---
 <!-- user notes -->
