@@ -10,12 +10,22 @@ const NODE_R = 22;
 
 type Slot = { x: number; y: number };
 
-const TYPE_BUCKET: Record<EdgeType, { angleStart: number; angleEnd: number }> = {
-  "prerequisite": { angleStart: 200, angleEnd: 250 },
-  "pairs-with":   { angleStart: 290, angleEnd: 340 },
-  "related":      { angleStart: 100, angleEnd: 160 },
-  "often-confused-with": { angleStart: 60, angleEnd: 90 }
+// Preferred center of each type's arc (degrees, SVG convention: 0 = right, 90 = down).
+// Order around the circle: related top-left, often-confused top-right, pairs-with
+// bottom-right, prerequisite bottom-left. Types are placed in EDGE_ORDER, walking
+// clockwise from "related" to keep prereqs in the lower-left ("foundation") quadrant.
+const TYPE_PREFERRED_CENTER: Record<EdgeType, number> = {
+  "related": 135,
+  "often-confused-with": 45,
+  "pairs-with": 315,
+  "prerequisite": 225
 };
+
+const TYPE_ARC_ORDER: EdgeType[] = ["related", "often-confused-with", "pairs-with", "prerequisite"];
+const RADIUS = 95;
+// 2 * asin(NODE_R / RADIUS) is the minimum angular gap to avoid node overlap.
+// With NODE_R=22 and RADIUS=95, that's ~26.7°; round up for breathing room.
+const MIN_ARC_PER_NODE_DEG = 28;
 
 function layout(items: RelatedConnection[]): Map<RelatedConnection, Slot> {
   const out = new Map<RelatedConnection, Slot>();
@@ -23,15 +33,23 @@ function layout(items: RelatedConnection[]): Map<RelatedConnection, Slot> {
     "prerequisite": [], "pairs-with": [], "related": [], "often-confused-with": []
   };
   for (const it of items) byType[it.type].push(it);
-  for (const type of Object.keys(byType) as EdgeType[]) {
+
+  // Each type claims an arc proportional to its node count (min one slot) centered
+  // on its preferred quadrant. When one type dominates (e.g. api-versioning has 7
+  // related, 0 others) its arc spills past 90° into adjacent quadrants — which is
+  // safe because those quadrants are empty. Cross-type collisions only become
+  // possible when both adjacent types are heavily populated AND the central type
+  // has >3 nodes; with a 8-node cap and 4 types that's not reachable.
+  for (const type of TYPE_ARC_ORDER) {
     const list = byType[type];
-    const { angleStart, angleEnd } = TYPE_BUCKET[type];
+    if (list.length === 0) continue;
+    const arcWidth = list.length === 1 ? 0 : (list.length - 1) * MIN_ARC_PER_NODE_DEG;
+    const center = TYPE_PREFERRED_CENTER[type];
+    const start = center - arcWidth / 2;
     list.forEach((it, idx) => {
-      const t = list.length === 1 ? 0.5 : idx / (list.length - 1);
-      const deg = angleStart + t * (angleEnd - angleStart);
+      const deg = list.length === 1 ? center : start + idx * MIN_ARC_PER_NODE_DEG;
       const rad = (deg * Math.PI) / 180;
-      const radius = 95;
-      out.set(it, { x: CX + Math.cos(rad) * radius, y: CY + Math.sin(rad) * radius });
+      out.set(it, { x: CX + Math.cos(rad) * RADIUS, y: CY + Math.sin(rad) * RADIUS });
     });
   }
   return out;
