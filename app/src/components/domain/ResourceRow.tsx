@@ -1,6 +1,5 @@
 import { progressStore, activityStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
-import { InfoDot } from "../interactive/InfoDot.js";
 
 type ResourceKind = "Video" | "Article" | "Service" | "Course";
 
@@ -82,9 +81,7 @@ export function ResourceRow({
           <div className="text-caption text-text-mute mt-xs truncate">{meta}</div>
         </a>
         {reasoning && (
-          <div className="mt-xs">
-            <InfoDot reasoning={reasoning} label={`Why "${title}" was picked`} />
-          </div>
+          <div className="text-caption text-text-mute italic mt-xs">{reasoning}</div>
         )}
       </div>
       {secondaryMeta && <div className="text-caption text-text-dim tabular-nums">{secondaryMeta}</div>}

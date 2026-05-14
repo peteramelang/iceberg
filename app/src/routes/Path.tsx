@@ -41,7 +41,7 @@ export function Path() {
           <div className="text-label text-text-mute uppercase mb-sm">{p.audience} · ~{p.estimatedHours}h · {p.topics.length} topics · Updated {formatUpdated(p.lastUpdatedAt)}</div>
           <h1 className="text-display-xl m-0 mb-md">{p.title}</h1>
           <div className="bg-panel-2 border border-border-soft rounded p-lg mb-md">
-            <p className="text-title text-text leading-[1.55] m-0">{p.tldr}</p>
+            <p className="text-[15px] leading-[1.6] text-text m-0">{p.tldr}</p>
           </div>
           <p className="text-body text-text-mute max-w-[720px]">{p.description}</p>
         </header>
