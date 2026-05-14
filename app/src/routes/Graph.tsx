@@ -4,7 +4,7 @@ import { ReactFlow, Background, Controls, type Edge, type Node } from "@xyflow/r
 import "@xyflow/react/dist/style.css";
 import { Head } from "../components/layout/Head.js";
 import { topics, connections, taxonomy } from "../content/index.js";
-import { topicBySlug } from "../content/derived.js";
+import { topicBySlug, phasesSorted, resourceTotalFor } from "../content/derived.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { useResolvedTheme } from "../hooks/useResolvedTheme.js";
@@ -31,9 +31,8 @@ const EDGE_COLOR_LIGHT: Record<EdgeType, string> = {
 function layoutNodes(): Map<string, { x: number; y: number }> {
   if (!taxonomy) return new Map();
   const out = new Map<string, { x: number; y: number }>();
-  const phases = [...taxonomy.phases].sort((a, b) => a.order - b.order);
-  phases.forEach((phase, pi) => {
-    const angle = (pi / phases.length) * Math.PI * 2;
+  phasesSorted.forEach((phase, pi) => {
+    const angle = (pi / phasesSorted.length) * Math.PI * 2;
     const ringR = 360;
     const cx = Math.cos(angle) * ringR;
     const cy = Math.sin(angle) * ringR;
@@ -174,16 +173,14 @@ export function Graph() {
           <DifficultyBadge difficulty={sel.difficulty} hours={sel.estimatedHours} size="sm" />
           <p className="text-body text-text-mute mt-md leading-[1.5]">{sel.summary}</p>
           <div className="mt-md">
-            <ProgressRing value={
-              (Object.values(progressStore.getTopicProgress(sel.slug).resources).filter(Boolean).length)
-              / Math.max(1,
-                (sel.resources.videos.short ? 1 : 0)
-                + (sel.resources.videos.long ? 1 : 0)
-                + sel.resources.articles.length
-                + sel.resources.services.length
-                + sel.resources.courses.length
-              )
-            } size={48} thickness={4}><span className="text-caption">%</span></ProgressRing>
+            <ProgressRing
+              value={
+                Object.values(progressStore.getTopicProgress(sel.slug).resources).filter(Boolean).length
+                / Math.max(1, resourceTotalFor(sel.slug))
+              }
+              size={48}
+              thickness={4}
+            ><span className="text-caption">%</span></ProgressRing>
           </div>
           <Link to={`/topic/${sel.slug}`} className="mt-md inline-flex items-center gap-sm bg-accent text-white px-md py-sm rounded-sm font-medium hover:bg-accent-hover">
             Go to topic →

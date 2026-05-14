@@ -17,35 +17,51 @@ import { MarkCompleteButton } from "../components/interactive/MarkCompleteButton
 import { BookmarkButton } from "../components/interactive/BookmarkButton.js";
 import { NotesField } from "../components/interactive/NotesField.js";
 import { getPhase, getTopic, taxonomy } from "../content/index.js";
+import { resourceTotalFor } from "../content/derived.js";
 import { getPathBySlug } from "../utils/pathHelpers.js";
+import type { LearningPath, TopicFrontmatter } from "../content/types.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { useCompletionPulse } from "../hooks/useCompletionPulse.js";
 import { connectionsForTopic } from "../utils/connectionHelpers.js";
 
-function resourceTotal(fm: import("../content/types.js").TopicFrontmatter): number {
-  return (fm.resources.videos.short ? 1 : 0)
-    + (fm.resources.videos.long ? 1 : 0)
-    + fm.resources.articles.length
-    + fm.resources.services.length
-    + fm.resources.courses.length;
-}
-
+// Route wrapper: resolves the topic and the optional ?from-path= context,
+// handles not-found, then renders TopicView. No hooks here — they all live
+// inside TopicView where the frontmatter is guaranteed-defined. Splitting
+// like this keeps the route bullet-proof against the Rules-of-Hooks
+// regression that "move the early-return earlier" would otherwise cause.
 export function Topic() {
-  useStoreTick(l => progressStore.subscribe(l));
   const { topicSlug } = useParams();
   const [searchParams] = useSearchParams();
   const entry = topicSlug ? getTopic(topicSlug) : undefined;
-  const fm = entry?.frontmatter;
-  const slug = fm?.slug ?? "";
+  if (!entry || !taxonomy) return <div className="p-xl text-text-mute">Topic not found.</div>;
 
-  // Path context: when the user arrived from a path's "Start →" link, the
-  // ?from-path= query param identifies which path they're walking. We render
-  // an additional eyebrow line and a "next in path" suggestion at the bottom.
   const fromPathSlug = searchParams.get("from-path");
   const fromPath = fromPathSlug ? getPathBySlug(fromPathSlug) : undefined;
+
+  // Key on slug so navigation between topics fully remounts TopicView.
+  // That resets any per-topic local UI state (e.g. JumpNav's section
+  // observer) cleanly without us having to thread slug into every dep
+  // array inside.
+  return (
+    <TopicView
+      key={entry.frontmatter.slug}
+      fm={entry.frontmatter}
+      fromPath={fromPath}
+    />
+  );
+}
+
+interface TopicViewProps {
+  fm: TopicFrontmatter;
+  fromPath: LearningPath | undefined;
+}
+
+function TopicView({ fm, fromPath }: TopicViewProps) {
+  useStoreTick(l => progressStore.subscribe(l));
+
   const nextInPath = useMemo(() => {
-    if (!fromPath || !fm) return null;
+    if (!fromPath) return null;
     const idx = fromPath.topics.indexOf(fm.slug);
     if (idx < 0 || idx === fromPath.topics.length - 1) return null;
     const nextSlug = fromPath.topics[idx + 1];
@@ -53,13 +69,12 @@ export function Topic() {
     const nextTopic = getTopic(nextSlug);
     if (!nextTopic) return null;
     return { slug: nextSlug, title: nextTopic.frontmatter.title, position: idx + 2, total: fromPath.topics.length };
-  }, [fromPath, fm]);
+  }, [fromPath, fm.slug]);
 
-  const pulse = useCompletionPulse(slug);
-  const allConn = useMemo(() => (fm ? connectionsForTopic(fm.slug) : []), [fm]);
+  const pulse = useCompletionPulse(fm.slug);
+  const allConn = useMemo(() => connectionsForTopic(fm.slug), [fm.slug]);
 
   const pills = useMemo<JumpPill[]>(() => {
-    if (!fm) return [];
     const out: JumpPill[] = [
       { id: "definition", label: "Definition" },
       { id: "in-depth",   label: "In Depth" },
@@ -76,12 +91,10 @@ export function Topic() {
     return out;
   }, [fm, allConn]);
 
-  if (!entry || !fm || !taxonomy) return <div className="p-xl text-text-mute">Topic not found.</div>;
-
   const phase = getPhase(fm.phase);
   const phaseIndex = phase ? phase.topics.indexOf(fm.slug) + 1 : 0;
   const prog = progressStore.getTopicProgress(fm.slug);
-  const total = resourceTotal(fm);
+  const total = resourceTotalFor(fm.slug);
   const checked = Object.values(prog.resources).filter(Boolean).length;
 
   return (

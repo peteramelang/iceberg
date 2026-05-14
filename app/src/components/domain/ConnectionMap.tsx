@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { connectionsForTopic, topByWeight, EDGE_TOKEN, EDGE_LABEL, type EdgeType, type RelatedConnection } from "../../utils/connectionHelpers.js";
 import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 
@@ -119,13 +119,27 @@ export function ConnectionMap({ topicSlug, topicTitle }: { topicSlug: string; to
 function ConnectionNode({ c, x, y }: { c: RelatedConnection; x: number; y: number }) {
   const color = EDGE_TOKEN[c.type];
   const pulse = useCompletionPulse(c.otherSlug);
+  const navigate = useNavigate();
+  const href = `/topic/${c.otherSlug}`;
+  const go = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    navigate(href);
+  };
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") go(e);
+  };
   return (
-    <g className={pulse ? "pulse-stroke" : undefined}>
-      <a href={`/topic/${c.otherSlug}`} aria-label={`${c.otherTitle} — ${EDGE_LABEL[c.type]}`}>
-        <circle cx={x} cy={y} r={NODE_R} fill="var(--panel-2)" stroke={color} strokeWidth={pulse ? 2 : 1} />
-        <text x={x} y={y - 2} textAnchor="middle" fill={color} fontSize="8.5">{EDGE_LABEL[c.type].split(" ")[0]?.toLowerCase()}</text>
-        <text x={x} y={y + 9} textAnchor="middle" fill="var(--text)" fontSize="9.5">{truncate(c.otherTitle, 11)}</text>
-      </a>
+    <g
+      className={`cursor-pointer outline-none ${pulse ? "pulse-stroke" : ""}`}
+      role="link"
+      tabIndex={0}
+      aria-label={`${c.otherTitle} — ${EDGE_LABEL[c.type]}`}
+      onClick={go}
+      onKeyDown={onKey}
+    >
+      <circle cx={x} cy={y} r={NODE_R} fill="var(--panel-2)" stroke={color} strokeWidth={pulse ? 2 : 1} />
+      <text x={x} y={y - 2} textAnchor="middle" fill={color} fontSize="8.5">{EDGE_LABEL[c.type].split(" ")[0]?.toLowerCase()}</text>
+      <text x={x} y={y + 9} textAnchor="middle" fill="var(--text)" fontSize="9.5">{truncate(c.otherTitle, 11)}</text>
     </g>
   );
 }
