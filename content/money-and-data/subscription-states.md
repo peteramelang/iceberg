@@ -290,5 +290,10 @@ codeExamples:
       control across a codebase.
 difficulty: intermediate
 estimatedHours: 7
+tldr: >-
+  Pending tldr — short, plain-language summary for a non-technical reader or
+  quick skim. Replace before publishing.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:08:53.920Z'
 ---
 <!-- user notes -->

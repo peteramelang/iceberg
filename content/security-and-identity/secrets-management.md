@@ -289,5 +289,10 @@ codeExamples:
       incident forces you to.
 difficulty: intermediate
 estimatedHours: 4
+tldr: >-
+  Pending tldr — short, plain-language summary for a non-technical reader or
+  quick skim. Replace before publishing.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:08:53.920Z'
 ---
 <!-- user notes -->

@@ -305,5 +305,10 @@ codeExamples:
       bugs that silently corrupt billing totals.
 difficulty: advanced
 estimatedHours: 16
+tldr: >-
+  Pending tldr — short, plain-language summary for a non-technical reader or
+  quick skim. Replace before publishing.
+shortExplainerVideo: null
+lastUpdatedAt: '2026-05-14T12:08:53.920Z'
 ---
 <!-- user notes -->
