@@ -327,6 +327,6 @@ tldr: >-
   fix it fast without confusion—and learn from each incident to prevent the next
   one.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:31:47.568Z'
+lastUpdatedAt: '2026-05-14T12:44:38.108Z'
 ---
 <!-- user notes -->

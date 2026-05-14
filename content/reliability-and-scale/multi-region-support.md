@@ -296,6 +296,6 @@ tldr: >-
   Run your system in multiple geographic locations so global users get fast
   responses and you survive when a data center goes down.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:31:47.612Z'
+lastUpdatedAt: '2026-05-14T12:44:38.140Z'
 ---
 <!-- user notes -->

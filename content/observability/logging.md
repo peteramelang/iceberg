@@ -338,7 +338,19 @@ estimatedHours: 3
 tldr: >-
   Record structured logs so you can reconstruct exactly what your system did
   when investigating problems—no guessing, just query the timeline.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:31:47.601Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=9XJtEzmzG3g'
+  title: Stripe's Smarter Approach to Structured Logging - Canonical Log Lines
+  author: Asli Engineering (Arpit Bhayani)
+  durationSeconds: 431
+  reasoning: >-
+    Covers structured logging and canonical log lines — a real production
+    pattern from Stripe that directly matches the iceberg content on structured
+    logging, correlation IDs, and centralized log aggregation. Arpit Bhayani is
+    a respected independent technical educator. No ByteByteGo or Fireship video
+    on this specific topic under 10 min was found; this is the strongest
+    specific match at 7m 11s.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.131Z'
 ---
 <!-- user notes -->

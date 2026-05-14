@@ -305,6 +305,6 @@ shortExplainerVideo:
     channel. No preferred-channel video (IBM Technology, Fireship, etc.) on
     secrets management under 10 min was found to be more specific.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.502Z'
+lastUpdatedAt: '2026-05-14T12:44:38.147Z'
 ---
 <!-- user notes -->

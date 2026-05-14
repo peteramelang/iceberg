@@ -315,6 +315,6 @@ shortExplainerVideo:
     safety exists; this is the canonical short explainer covering the deployment
     patterns that enable zero-downtime rollbacks.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.408Z'
+lastUpdatedAt: '2026-05-14T12:44:38.090Z'
 ---
 <!-- user notes -->

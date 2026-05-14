@@ -310,7 +310,17 @@ estimatedHours: 8
 tldr: >-
   Find which part of your system is actually slow by measuring everything, then
   fix the biggest bottleneck—usually a database query or external service call.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:31:47.608Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=FqR5vESuKe0'
+  title: 'Latency Numbers Programmer Should Know: Crash Course System Design #1'
+  author: ByteByteGo
+  durationSeconds: 381
+  reasoning: >-
+    ByteByteGo preferred channel. Covers the fundamental latency numbers across
+    the stack (L1/L2 cache, RAM, SSD, network, disk) that underpin all latency
+    optimization work — directly tied to the iceberg content on understanding
+    where time goes before optimizing. 6m 21s — well within limit.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.136Z'
 ---
 <!-- user notes -->

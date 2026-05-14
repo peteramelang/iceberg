@@ -347,7 +347,17 @@ estimatedHours: 6
 tldr: >-
   Record metrics and event traces throughout your code so you can see what's
   happening in production and diagnose problems in minutes instead of hours.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:31:47.599Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=hLvwoow3XTk'
+  title: 'OpenTelemetry: Simplifying Hybrid Cloud Monitoring'
+  author: IBM Technology
+  durationSeconds: 339
+  reasoning: >-
+    IBM Technology preferred channel. Covers OpenTelemetry — the standard
+    instrumentation framework for metrics, traces, and logs — directly matching
+    the iceberg content on instrumentation, counters, histograms, and spans. 5m
+    39s — well within limit.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.130Z'
 ---
 <!-- user notes -->

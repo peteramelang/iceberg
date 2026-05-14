@@ -325,6 +325,6 @@ shortExplainerVideo:
     propagation and vendor-neutral instrumentation. Strong preferred source,
     correct duration, no tutorial bloat.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.467Z'
+lastUpdatedAt: '2026-05-14T12:44:38.129Z'
 ---
 <!-- user notes -->

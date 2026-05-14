@@ -404,7 +404,18 @@ estimatedHours: 6
 tldr: >-
   Offload slow work to a background queue so your API stays fast—emails, video
   processing, and indexes don't make users wait.
-shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:31:47.610Z'
+shortExplainerVideo:
+  url: 'https://www.youtube.com/watch?v=x4k1XEjNzYQ'
+  title: Kafka vs. RabbitMQ vs. Messaging Middleware vs. Pulsar
+  author: ByteByteGo
+  durationSeconds: 270
+  reasoning: >-
+    ByteByteGo preferred channel. Compares the major message queue architectures
+    (Kafka, RabbitMQ, Pulsar, traditional middleware) with clear visual
+    explanations of when to use each — directly matching the iceberg content on
+    async job queues, at-least-once delivery, and Kafka vs SQS. 4m 30s — well
+    within limit.
+  source: ai-researcher
+lastUpdatedAt: '2026-05-14T12:44:38.139Z'
 ---
 <!-- user notes -->

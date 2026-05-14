@@ -280,6 +280,6 @@ shortExplainerVideo:
     short-explainer window and covers the core RBAC/ABAC tradeoff that
     practitioners need to understand.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.485Z'
+lastUpdatedAt: '2026-05-14T12:44:38.142Z'
 ---
 <!-- user notes -->

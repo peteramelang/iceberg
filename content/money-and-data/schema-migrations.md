@@ -326,6 +326,6 @@ shortExplainerVideo:
     narrative of the topic exactly. 7:06 duration is well within range. No
     shorter preferred-channel video on this specific topic was found.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.456Z'
+lastUpdatedAt: '2026-05-14T12:44:38.124Z'
 ---
 <!-- user notes -->

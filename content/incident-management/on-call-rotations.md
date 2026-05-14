@@ -213,6 +213,6 @@ tldr: >-
   Rotate engineers on production duty and automate fixes so on-call doesn't mean
   staying awake all night—the system should self-heal, not require heroes.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:31:47.569Z'
+lastUpdatedAt: '2026-05-14T12:44:38.109Z'
 ---
 <!-- user notes -->

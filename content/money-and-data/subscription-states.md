@@ -294,6 +294,6 @@ tldr: >-
   Model customer subscriptions through states: trial, active, late payment,
   paused, canceled. Control feature access based on each state.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:33:14.458Z'
+lastUpdatedAt: '2026-05-14T12:44:38.125Z'
 ---
 <!-- user notes -->

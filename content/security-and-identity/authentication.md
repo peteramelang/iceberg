@@ -308,6 +308,6 @@ shortExplainerVideo:
     the tradeoffs. Fireship is a top-tier authoritative source for concise
     developer explainers.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.490Z'
+lastUpdatedAt: '2026-05-14T12:44:38.143Z'
 ---
 <!-- user notes -->

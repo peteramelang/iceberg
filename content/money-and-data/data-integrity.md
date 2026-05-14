@@ -299,6 +299,6 @@ shortExplainerVideo:
     COMMITTED vs REPEATABLE READ. Strong source, correct duration, high view
     count.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.451Z'
+lastUpdatedAt: '2026-05-14T12:44:38.121Z'
 ---
 <!-- user notes -->

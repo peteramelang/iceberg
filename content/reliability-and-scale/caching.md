@@ -339,6 +339,6 @@ shortExplainerVideo:
     ByteByteGo is the premier system-design explainer channel; this is one of
     their most-referenced caching videos.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.471Z'
+lastUpdatedAt: '2026-05-14T12:44:38.133Z'
 ---
 <!-- user notes -->

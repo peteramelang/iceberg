@@ -356,6 +356,6 @@ shortExplainerVideo:
     implications of data privacy obligations. Best available option from a
     strong source within the duration limit; no vendor consent-management bias.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:33:14.497Z'
+lastUpdatedAt: '2026-05-14T12:44:38.145Z'
 ---
 <!-- user notes -->

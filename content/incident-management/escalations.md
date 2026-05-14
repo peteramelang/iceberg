@@ -228,6 +228,6 @@ tldr: >-
   immediately—no guessing, no delays during a 3am outage, just predetermined
   decisions.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:33:14.435Z'
+lastUpdatedAt: '2026-05-14T12:44:38.107Z'
 ---
 <!-- user notes -->
