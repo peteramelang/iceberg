@@ -50,9 +50,9 @@ export function Settings() {
 
   const onClearAll = () => {
     if (!confirm("Clear all local progress, bookmarks, notes, and activity? This cannot be undone.")) return;
-    localStorage.removeItem("iceberg.progress");
-    localStorage.removeItem("iceberg.bookmarks");
-    localStorage.removeItem("iceberg.notes");
+    progressStore.importData({}, "replace");
+    bookmarkStore.importData([], "replace");
+    notesStore.importData({}, "replace");
     activityStore.clear();
     location.reload();
   };

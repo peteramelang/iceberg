@@ -34,10 +34,8 @@ export function Topic() {
   const { topicSlug } = useParams();
   const [searchParams] = useSearchParams();
   const entry = topicSlug ? getTopic(topicSlug) : undefined;
-  if (!entry || !taxonomy) return <div className="p-xl text-text-mute">Topic not found.</div>;
-  const fm = entry.frontmatter;
-  const phase = taxonomy.phases.find(p => p.slug === fm.phase);
-  const phaseIndex = phase ? phase.topics.indexOf(fm.slug) + 1 : 0;
+  const fm = entry?.frontmatter;
+  const slug = fm?.slug ?? "";
 
   // Path context: when the user arrived from a path's "Start →" link, the
   // ?from-path= query param identifies which path they're walking. We render
@@ -45,7 +43,7 @@ export function Topic() {
   const fromPathSlug = searchParams.get("from-path");
   const fromPath = fromPathSlug ? getPathBySlug(fromPathSlug) : undefined;
   const nextInPath = useMemo(() => {
-    if (!fromPath) return null;
+    if (!fromPath || !fm) return null;
     const idx = fromPath.topics.indexOf(fm.slug);
     if (idx < 0 || idx === fromPath.topics.length - 1) return null;
     const nextSlug = fromPath.topics[idx + 1];
@@ -53,16 +51,13 @@ export function Topic() {
     const nextTopic = getTopic(nextSlug);
     if (!nextTopic) return null;
     return { slug: nextSlug, title: nextTopic.frontmatter.title, position: idx + 2, total: fromPath.topics.length };
-  }, [fromPath, fm.slug]);
+  }, [fromPath, fm]);
 
-  const prog = progressStore.getTopicProgress(fm.slug);
-  const total = resourceTotal(fm);
-  const checked = Object.values(prog.resources).filter(Boolean).length;
-  const pulse = useCompletionPulse(fm.slug);
-
-  const allConn = useMemo(() => connectionsForTopic(fm.slug), [fm.slug]);
+  const pulse = useCompletionPulse(slug);
+  const allConn = useMemo(() => (fm ? connectionsForTopic(fm.slug) : []), [fm]);
 
   const pills = useMemo<JumpPill[]>(() => {
+    if (!fm) return [];
     const out: JumpPill[] = [
       { id: "definition", label: "Definition" },
       { id: "in-depth",   label: "In Depth" },
@@ -78,6 +73,14 @@ export function Topic() {
     out.push({ id: "notes", label: "Notes" });
     return out;
   }, [fm, allConn]);
+
+  if (!entry || !fm || !taxonomy) return <div className="p-xl text-text-mute">Topic not found.</div>;
+
+  const phase = taxonomy.phases.find(p => p.slug === fm.phase);
+  const phaseIndex = phase ? phase.topics.indexOf(fm.slug) + 1 : 0;
+  const prog = progressStore.getTopicProgress(fm.slug);
+  const total = resourceTotal(fm);
+  const checked = Object.values(prog.resources).filter(Boolean).length;
 
   return (
     <div className="p-xl flex flex-col lg:flex-row gap-xl">

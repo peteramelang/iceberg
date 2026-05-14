@@ -2,29 +2,15 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Sidebar } from "./Sidebar.js";
 import { Topbar } from "./Topbar.js";
 import { SearchPalette } from "../interactive/SearchPalette.js";
-import { taxonomy, topics } from "../../content/index.js";
-import { progressStore } from "../../stores/index.js";
-import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 
 export function Shell({ children }: { children: ReactNode }) {
-  useStoreTick(l => progressStore.subscribe(l));
   const [drawer, setDrawer] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const totalResourcesPerTopic: Record<string, number> = {};
-  for (const t of topics) {
-    const fm = t.frontmatter;
-    totalResourcesPerTopic[fm.slug] =
-      (fm.resources.videos.short ? 1 : 0)
-      + (fm.resources.videos.long ? 1 : 0)
-      + fm.resources.articles.length
-      + fm.resources.services.length
-      + fm.resources.courses.length;
-  }
-  const overall = progressStore.getOverallProgress(totalResourcesPerTopic);
-
   const openSearch = useCallback(() => setSearchOpen(true), []);
   const closeDrawer = useCallback(() => setDrawer(false), []);
+  const openDrawer = useCallback(() => setDrawer(true), []);
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
 
   useEffect(() => {
     const onOpen = () => setSearchOpen(true);
@@ -48,15 +34,10 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       )}
       <div className="flex-1 min-w-0 flex flex-col">
-        <Topbar
-          topicsCompleted={overall.completedTopics}
-          topicsTotal={taxonomy?.phases.reduce((acc, p) => acc + p.topics.length, 0) ?? 0}
-          onOpenSearch={openSearch}
-          onToggleSidebar={() => setDrawer(true)}
-        />
+        <Topbar onOpenSearch={openSearch} onToggleSidebar={openDrawer} />
         <main id="main" className="flex-1 min-w-0">{children}</main>
       </div>
-      <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <SearchPalette open={searchOpen} onClose={closeSearch} />
     </div>
   );
 }
