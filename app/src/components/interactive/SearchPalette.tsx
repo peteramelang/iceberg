@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { taxonomy } from "../../content/index.js";
+import { search } from "../../utils/fuzzyIndex.js";
 
 export function SearchPalette() {
   const [open, setOpen] = useState(false);
@@ -19,13 +19,7 @@ export function SearchPalette() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const matches = useMemo(() => {
-    if (!taxonomy || !query) return [];
-    const q = query.toLowerCase();
-    return Object.values(taxonomy.topics)
-      .filter(t => t.title.toLowerCase().includes(q) || t.summary.toLowerCase().includes(q))
-      .slice(0, 8);
-  }, [query]);
+  const matches = useMemo(() => search(query, 8), [query]);
 
   if (!open) return null;
 
