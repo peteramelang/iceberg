@@ -304,6 +304,6 @@ tldr: >-
   Design operations to handle retries safely by tracking each request with a
   unique ID—so retrying a failed payment or email never creates duplicates.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.887Z'
+lastUpdatedAt: '2026-05-14T12:31:47.590Z'
 ---
 <!-- user notes -->

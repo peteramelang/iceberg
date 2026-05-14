@@ -237,6 +237,6 @@ tldr: >-
   survives when people leave and on-call engineers can fix things at 3am without
   guessing.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:27:20.542Z'
+lastUpdatedAt: '2026-05-14T12:33:14.420Z'
 ---
 <!-- user notes -->

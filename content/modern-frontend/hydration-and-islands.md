@@ -7,8 +7,9 @@ summary: >-
   Why hydration is slow, how partial hydration and islands (Astro, Qwik, Marko)
   reduce JS shipped to the browser.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Server renders HTML; JavaScript makes it interactive. Islands architecture
+  renders only interactive pieces on the server, avoiding waterfall delays on
+  load.
 definition: >-
   Hydration is the process by which a JavaScript framework re-runs on the client
   to attach event listeners to server-rendered HTML, turning static markup into
@@ -42,29 +43,140 @@ definition: >-
   rendering strategy in any modern frontend project.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The hydration problem is fundamentally a billing problem. When your SSR
+  framework generates 40 KB of HTML on the server and then forces the browser to
+  download, parse, and re-execute 400 KB of JavaScript before the page responds
+  to a click, you are charging users twice: once for the server render and once
+  for the full client re-render. For most of that JS bundle, the work is pure
+  overhead—reestablishing facts the server already knew, attaching event
+  listeners to elements that have no events, rebuilding component state that
+  will never change. Islands architecture is the recognition that this bill can
+  be itemized and paid only where interactivity actually exists.
+
+
+  The 80/20 here is understanding which parts of your page are genuinely
+  interactive versus which parts just happen to be rendered by a JavaScript
+  framework. In the average marketing site or e-commerce product listing, the
+  ratio is stark: a hero section, a navigation with a mobile menu toggle, maybe
+  an image carousel, and the rest is static content. Shipping the full React
+  runtime and component tree to hydrate a paragraph of text is waste. Astro's
+  `client:visible` directive is a clean expression of the right mental model—pay
+  the hydration cost only when the user is actually about to see and interact
+  with the component, not before.
+
+
+  The failure modes are worth knowing before you adopt any of these approaches.
+  Astro's island model is simple but requires you to think carefully about state
+  sharing between islands—since each island is independent, crossing island
+  boundaries with shared state requires a store like nanostores rather than
+  normal React context. Qwik's resumability model sounds like magic but has real
+  constraints: it requires that component state be serializable to HTML, which
+  means closures and class instances that cannot be JSON-serialized require
+  careful handling. The compiler-based approaches (Marko, Million.js) reduce the
+  annotation burden but introduce a build-time dependency that makes debugging
+  harder—the code that runs in the browser may not match what you wrote.
+
+
+  Mentally, the right frame for hydration decisions is distinguishing between
+  the tree of components and the tree of interactive boundaries. Frameworks that
+  conflate the two force you to hydrate the whole tree. Frameworks that separate
+  them let you hydrate only the interactive boundaries. Once you see it that
+  way, you can apply the insight even in React: React 18's selective hydration,
+  Suspense, and `startTransition` are partial answers to the same problem within
+  the React ecosystem, giving you priority-ordered hydration without leaving
+  React entirely.
+
+
+  For production decisions: islands architecture is compelling primarily for
+  content-heavy sites where server HTML is the main product and interactivity is
+  sprinkled on. For highly interactive applications—dashboards, collaborative
+  editors, real-time feeds—the JS cost of full hydration is unavoidable because
+  the entire page is interactive surface. Picking the wrong model for your
+  content type is common and expensive: teams building SPAs with Astro fight the
+  framework constantly, while teams building marketing sites with full SPA
+  frameworks ship unnecessary weight. The frame is not 'which framework is
+  faster' but 'what percentage of my page actually needs JavaScript to run.'
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Hydrating the whole page when most of it is static
+    explanation: >-
+      The default SSR setup in many React frameworks ships and executes
+      JavaScript for every component on the page, even those with no
+      interactivity. This inflates Time to Interactive with zero user benefit —
+      identify static subtrees and exclude them from client JS.
+  - title: Hydration mismatch errors silent in production
+    explanation: >-
+      When server-rendered HTML doesn't match the client render, React
+      suppresses the error in production and falls back to a full client
+      re-render, defeating the SSR benefit and sometimes causing layout flashes.
+      Mismatches from Date.now(), random IDs, or user-agent checks must be
+      addressed, not ignored.
+  - title: Eagerly hydrating islands that are offscreen
+    explanation: >-
+      Hydrating an island on page load even when it is far below the fold wastes
+      the user's initial JS budget on content they may never see. Use
+      `client:visible` or intersection-observer-based lazy hydration to defer
+      cost until the island is needed.
+  - title: Sharing mutable state across island boundaries
+    explanation: >-
+      Islands that need to communicate typically resort to global stores or
+      event buses, recreating a mini-SPA architecture that undermines the
+      performance benefits of islands. Design islands to be stateless or
+      self-contained; extract shared state into URL params or server-side
+      session.
+  - title: Resumability misconceived as a drop-in replacement for hydration
+    explanation: >-
+      Qwik's resumability model requires authoring components differently from
+      React — event handlers must be serializable, no closure capture of
+      non-serializable values. Adopting a resumability framework without
+      understanding its constraints leads to subtle runtime errors and degraded
+      performance.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: 'Astro Island with client:visible Directive'
+    code: >-
+      ---
+
+      // src/pages/product.astro
+
+      // Static page with ONE interactive island — carousel only hydrates when
+      visible.
+
+      import ProductCarousel from "../components/ProductCarousel.tsx";
+
+      import ReviewList from "../components/ReviewList.astro"; // static, zero
+      JS
+
+
+      const product = await fetch(`/api/products/42`).then(r => r.json());
+
+      ---
+
+
+      <html lang="en">
+        <head><title>{product.name}</title></head>
+        <body>
+          <h1>{product.name}</h1>
+          <p>{product.description}</p>
+
+          <!-- This island ships ~4 KB of React, hydrated only when scrolled into view -->
+          <ProductCarousel
+            client:visible
+            images={product.images}
+          />
+
+          <!-- ReviewList is a plain .astro component: renders to HTML, ships 0 bytes of JS -->
+          <ReviewList reviews={product.reviews} />
+
+          <footer>© 2026 Acme</footer>
+        </body>
+      </html>
+    reasoning: >-
+      Shows the islands pattern concretely: one interactive React component with
+      client:visible, all other components as zero-JS Astro components — making
+      the JS/static boundary explicit.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.529Z'
+estimatedHours: 6
+lastUpdatedAt: '2026-05-14T12:31:47.579Z'
 needsManualPick: false
 resources:
   videos:

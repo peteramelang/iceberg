@@ -7,8 +7,9 @@ summary: >-
   Model Context Protocol and the broader pattern of giving AI tools structured
   access to filesystems, databases, browsers, and your own systems.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Open protocol for letting AI models access filesystems, databases, and APIs
+  safely. Standardizes how AI gets structured data without baking tools into
+  each product.
 definition: >-
   The Model Context Protocol (MCP) is an open standard introduced by Anthropic
   in 2024 for giving AI models structured, secure access to external tools and
@@ -43,29 +44,149 @@ definition: >-
   functionality.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The fundamental limitation of a language model operating alone is that it can
+  only reason about what it was trained on or what you've pasted into the
+  context window. It doesn't know what your production database schema actually
+  looks like right now, what the current API response from your upstream service
+  contains, or whether the function you're asking about was renamed last week.
+  MCP — the Model Context Protocol — is the standardization layer that solves
+  this: instead of every AI tool implementing ad-hoc integrations with every
+  external system, there's a protocol that any AI client can speak and any
+  external system can implement. The practical consequence is that an AI coding
+  assistant with the right MCP servers configured can read your actual database
+  schema, check the current state of your Jira board, and run your test suite,
+  rather than reasoning from memory about how it thinks those things probably
+  look.
+
+
+  The 80/20 for most teams is to pick the two or three MCP servers that connect
+  AI tools to the systems engineers actually look at during development — your
+  version control, your documentation, maybe your database — and configure those
+  before reaching for anything exotic. The compounding value comes from the
+  model being able to answer questions grounded in actual system state rather
+  than inferred state. When an AI coding assistant can read the current
+  TypeScript types from your repository rather than guessing at them, or query
+  the production schema rather than working from a six-month-old mental model,
+  the quality of its suggestions improves substantially for exactly the tasks
+  where accurate information matters most.
+
+
+  The dominant failure mode is treating MCP tool access as an additive
+  capability without thinking through the security implications. Every server
+  you connect expands what an AI agent operating autonomously can do — read
+  files, query databases, submit issues, push commits. A poorly scoped tool in
+  the hands of an agent that's been prompt-injected is a different risk than the
+  same tool in the hands of a human making deliberate choices. The design
+  principles that matter are least-privilege (tools should expose only the
+  access the AI actually needs, not everything available), explicit confirmation
+  for irreversible actions (deleting records, pushing to main), and audit
+  logging for every tool call so you can reconstruct what an agent did. These
+  aren't theoretical concerns — as agent loops become more common, the surface
+  area for unintended tool use grows proportionally.
+
+
+  For developers building custom MCP servers, the craft is in the schema design.
+  A well-designed tool schema describes what the tool does precisely enough that
+  the AI calls it correctly on the first attempt, with inputs that match exactly
+  what the underlying system expects. A poorly designed schema produces a model
+  that guesses at parameter values, combines tool calls in ways you didn't
+  anticipate, or fails silently when the contract isn't met. Narrow, well-named,
+  idempotent tools are the target; generic, overloaded, or side-effectful tools
+  cause problems that are hard to debug because the failure is distributed
+  across model reasoning and tool behavior.
+
+
+  In the ecosystem, MCP represents a bet on composability: that the right
+  architecture for AI-integrated systems is modular, protocol-defined
+  connections rather than monolithic, model-specific integrations. That bet
+  looks increasingly correct. The community has built MCP servers for hundreds
+  of systems, and the major AI coding tools — Claude Code, Cursor, Cline, Zed —
+  all support the protocol. Teams that invest in configuring and in some cases
+  building their own MCP servers are effectively investing in infrastructure
+  that works across tools and will continue to work as the model landscape
+  changes. That's the kind of leverage that pays off over time.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Granting MCP servers overly broad permissions
+    explanation: >-
+      An MCP server with write access to the entire filesystem or database gives
+      a compromised or misbehaving agent the ability to cause irreversible
+      damage. Scope each MCP server to the minimum permissions its tools require
+      and require explicit confirmation for destructive actions.
+  - title: No logging or audit trail for tool calls
+    explanation: >-
+      When an agent makes dozens of tool calls autonomously, it is nearly
+      impossible to debug a bad outcome without a complete log of every call and
+      its result. Treat every MCP tool call as a billable, auditable operation
+      and log it with full input/output.
+  - title: Tool schemas too vague for reliable agent use
+    explanation: >-
+      An MCP tool described only as 'run a query' gives the agent too much
+      latitude and leads to unpredictable behavior. Narrow schemas with typed
+      inputs, explicit constraints on accepted values, and clear error shapes
+      produce agents that use tools correctly on the first attempt.
+  - title: Trusting community MCP servers without security review
+    explanation: >-
+      A third-party MCP server that connects to your filesystem, database, or
+      APIs is as trusted as any dependency you add — it runs in your environment
+      and can exfiltrate data or execute arbitrary code. Audit community servers
+      before use or prefer running your own.
+  - title: Mixing untrusted-input tools with privileged-action tools in one agent
+    explanation: >-
+      An agent that can both read external web pages and execute shell commands
+      is vulnerable to prompt injection that triggers arbitrary code execution.
+      Separate the model that processes untrusted input from the model that
+      takes privileged actions.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Minimal MCP Server with One Tool
+    code: >-
+      import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
+      import { StdioServerTransport } from
+      "@modelcontextprotocol/sdk/server/stdio.js";
+
+      import { z } from "zod";
+
+      import { execSync } from "node:child_process";
+
+
+      const server = new McpServer({
+        name: "dev-tools",
+        version: "1.0.0"
+      });
+
+
+      // Expose a single safe, idempotent tool: run the test suite
+
+      server.tool(
+        "run_tests",
+        "Run the project test suite and return the output.",
+        {
+          filter: z.string().optional().describe("Optional test name filter")
+        },
+        async ({ filter }) => {
+          try {
+            const cmd = filter ? `pnpm test --grep "${filter}"` : "pnpm test";
+            const output = execSync(cmd, { encoding: "utf8", timeout: 60_000 });
+            return { content: [{ type: "text", text: output }] };
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
+            return { content: [{ type: "text", text: `Tests failed:\n${msg}` }], isError: true };
+          }
+        }
+      );
+
+
+      const transport = new StdioServerTransport();
+
+      await server.connect(transport);
+    reasoning: >-
+      A complete, runnable MCP server exposing one safe idempotent tool — the
+      minimal template for adding custom tools to any MCP-compatible AI coding
+      environment.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.499Z'
+estimatedHours: 6
+lastUpdatedAt: '2026-05-14T12:31:47.535Z'
 needsManualPick: false
 resources:
   videos:

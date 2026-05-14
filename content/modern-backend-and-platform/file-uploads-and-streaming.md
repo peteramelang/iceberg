@@ -7,8 +7,8 @@ summary: >-
   Multipart uploads, signed URLs, resumable uploads, virus scanning, and
   on-the-fly image transforms.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Generate signed URLs and let browsers upload directly to object storage.
+  Avoids bottlenecks and memory pressure on your application server.
 definition: >-
   File uploads involve moving binary data—images, videos, documents,
   archives—from a client to durable storage. The naive approach of routing files
@@ -37,29 +37,148 @@ definition: >-
   workflows that accept a raw upload and produce HLS manifests automatically.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Routing file uploads through your application server is one of those decisions
+  that feels fine until your app gains real users. A 50MB PDF upload ties up a
+  Node.js worker thread for seconds; a hundred concurrent uploads exhaust your
+  connection pool; a user on a flaky mobile connection retries from byte zero
+  and burns their data plan while your server re-receives the entire payload.
+  The production architecture is well-established: generate a short-lived signed
+  URL server-side, hand it to the client, and have the client upload directly to
+  object storage. Your application server is completely out of the hot path of
+  the transfer itself. The client gets a direct connection to S3 or R2's global
+  infrastructure, your server stays responsive, and your egress costs drop to
+  nearly zero on uploads.
+
+
+  The 80/20 for most applications is direct-to-storage uploads with signed PUT
+  URLs for files under 100MB, multipart uploads for anything larger, and an
+  S3-compatible object store (S3, R2, or GCS) as the storage layer. The
+  multipart upload API is more involved — you initiate the upload to get an
+  upload ID, presign each part URL, upload the parts in parallel from the
+  client, then complete the upload with a list of ETags — but virtually every
+  major object storage SDK handles this pattern, and libraries like Uppy
+  abstract it entirely for the browser. The operational win is that you can
+  resume after a dropped connection from any chunk boundary rather than
+  restarting from byte zero.
+
+
+  The failure modes in file upload systems cluster in a few specific spots. The
+  most common is the upload-to-processing gap: the file lands in storage, but
+  the record in your database that tracks file state never updates to "ready"
+  because the webhook or callback that triggers processing was dropped or the
+  processing job failed silently. Users see a loading spinner forever or a
+  generic error. The fix is to treat the file's state machine explicitly —
+  pending, uploaded, processing, ready, failed — and make every transition
+  durable and observable. The second failure mode is skipping content
+  verification: a malicious client can PUT a valid presigned URL but change the
+  Content-Type header, upload malware disguised as an image, or upload files far
+  exceeding your intended size limit. Validate file type server-side using magic
+  bytes after upload, not the MIME type the client reports, and set
+  Content-Length-Range conditions in your presign policy.
+
+
+  Virus scanning sits awkwardly in this picture because it inherently adds
+  latency between upload and availability. The practical pattern is to land the
+  file in a "quarantine" prefix in object storage, trigger an async scan via a
+  job queue, and only move the file to the public prefix on a clean result. For
+  applications where user-generated files are visible to other users — a
+  document sharing app, a community platform — skipping this step is a security
+  decision, not a performance optimization. ClamAV is free and integrable but
+  requires infrastructure; commercial APIs like Cloudmersive or the VirusTotal
+  API are lower-friction for early-stage products.
+
+
+  The broader ecosystem reflects the complexity of the problem. Cloudinary and
+  Imgix are not just storage — they are on-the-fly image transform pipelines
+  that eliminate the need to store pre-resized variants at all; you store the
+  original and let the CDN handle every crop, format, and quality variant on
+  demand. Mux and Cloudflare Stream do the equivalent for video: accept a raw
+  upload, transcode to adaptive bitrate HLS, and serve via a globally
+  distributed player infrastructure. Reaching for these services is not
+  laziness; transcoding and adaptive streaming are genuinely hard problems, and
+  the cost of building and operating them in-house for a small team is orders of
+  magnitude higher than the service fees.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Routing uploads through the application server
+    explanation: >-
+      When file bytes flow through your app server before reaching storage,
+      large uploads consume server memory, block request handlers, and create a
+      single failure point. Generate a signed URL server-side and have clients
+      upload directly to object storage.
+  - title: No size or type validation before accepting uploads
+    explanation: >-
+      Accepting files without validating MIME type and size on the server — not
+      just client-side — allows oversized payloads and unexpected file types to
+      reach storage and downstream processors. Enforce hard server-side limits
+      and allowlisted content types.
+  - title: Files accessible before virus scan completes
+    explanation: >-
+      Making an uploaded file immediately accessible creates a window where
+      malicious files can be downloaded by other users or executed by downstream
+      processors. Gate file visibility on a completed scan result before
+      updating its status to accessible.
+  - title: No resumable upload for large files
+    explanation: >-
+      A 500 MB video upload that fails at 95% completion forces the user to
+      restart from zero, which in practice means they give up. The tus protocol
+      and multipart S3 uploads both provide byte-range resumption — use them for
+      anything over a few hundred MB.
+  - title: Storing original filename from user input as filesystem path
+    explanation: >-
+      Using the user-supplied filename as the storage key allows path traversal
+      and key collisions. Generate a UUID-based storage key server-side and
+      store the original filename as metadata separate from the storage path.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Multipart S3 Upload with Progress Tracking
+    code: |-
+      import { S3Client, CreateMultipartUploadCommand,
+               UploadPartCommand, CompleteMultipartUploadCommand } from "@aws-sdk/client-s3";
+
+      const s3 = new S3Client({ region: process.env.AWS_REGION! });
+      const BUCKET = process.env.UPLOAD_BUCKET!;
+      const PART_SIZE = 10 * 1024 * 1024; // 10 MB per part
+
+      export async function multipartUpload(
+        key: string,
+        buffer: Buffer,
+        onProgress?: (pct: number) => void
+      ): Promise<string> {
+        const { UploadId } = await s3.send(new CreateMultipartUploadCommand({ Bucket: BUCKET, Key: key }));
+
+        const parts: { ETag: string; PartNumber: number }[] = [];
+        const totalParts = Math.ceil(buffer.length / PART_SIZE);
+
+        for (let i = 0; i < totalParts; i++) {
+          const start = i * PART_SIZE;
+          const chunk = buffer.subarray(start, start + PART_SIZE);
+
+          const { ETag } = await s3.send(new UploadPartCommand({
+            Bucket: BUCKET,
+            Key: key,
+            UploadId,
+            PartNumber: i + 1,
+            Body: chunk
+          }));
+
+          parts.push({ ETag: ETag!, PartNumber: i + 1 });
+          onProgress?.(Math.round(((i + 1) / totalParts) * 100));
+        }
+
+        await s3.send(new CompleteMultipartUploadCommand({
+          Bucket: BUCKET, Key: key, UploadId,
+          MultipartUpload: { Parts: parts }
+        }));
+
+        return `s3://${BUCKET}/${key}`;
+      }
+    reasoning: >-
+      A complete multipart S3 upload implementation with progress callback —
+      showing the three-phase protocol (create, upload parts, complete) that
+      handles large files and enables resumable transfers.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.523Z'
+estimatedHours: 6
+lastUpdatedAt: '2026-05-14T12:31:47.573Z'
 needsManualPick: false
 resources:
   videos:

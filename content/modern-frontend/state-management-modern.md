@@ -7,8 +7,9 @@ summary: >-
   Zustand, Jotai, Redux Toolkit, signals — and why less client state usually
   beats a better state library.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Most state problems are really data-fetching problems. Use React Query or SWR
+  for server state, local state in components, and Context only for
+  cross-cutting concerns.
 definition: >-
   State management is the discipline of deciding where application data lives,
   who can change it, and how those changes propagate to the UI. In the React
@@ -45,29 +46,143 @@ definition: >-
   state, RTK for large teams with strict update semantics.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The most important state management decision you can make is not which library
+  to use—it is recognizing which category your state belongs to, because most
+  state belongs in categories that have purpose-built solutions that are not
+  general state libraries. Server cache state (data fetched from an API that can
+  go stale) belongs in TanStack Query or SWR. URL state (filters, pagination,
+  modal open/closed) belongs in the router. Form state belongs in React Hook
+  Form or the platform form element. Local UI state (hover, focus, collapse)
+  belongs in `useState` in the component that owns it. What remains after you
+  have assigned state to its rightful home is usually small enough to fit in one
+  Zustand store with room to spare. Teams that reach for Redux before doing this
+  categorization end up storing server responses in Redux and writing custom
+  cache invalidation logic that React Query would have handled with three lines.
+
+
+  The pendulum swing away from Redux is real but not because Redux was wrong—it
+  is because Redux was being used to solve problems it was not designed for.
+  Redux is excellent for complex, event-driven state with many possible
+  transitions where you need an audit trail and deterministic replay. It is
+  overkill for 'I have a list of users from an API and I need to show them in a
+  table.' Redux Toolkit rehabilitated the library for teams that genuinely need
+  it by eliminating the boilerplate and adding RTK Query for async data, but the
+  boilerplate reduction does not change the fundamental question of whether your
+  state is actually complex enough to warrant a reducer.
+
+
+  Zustand's mental model is worth understanding because it represents a
+  different philosophy: state as a module-level closure rather than a
+  framework-owned singleton. A Zustand store is a JavaScript object with an
+  updater function; you access it via a hook that subscribes to specific slices
+  to prevent unnecessary re-renders. There is no context provider, no action
+  type constant, no selector memoization boilerplate. The entire store and its
+  actions can fit in twenty lines. This makes Zustand the right tool for shared
+  client state that is genuinely global—user authentication status, theme
+  preference, shopping cart contents—without the overhead of Redux or the
+  re-render pitfalls of React Context.
+
+
+  Signals represent the furthest departure from the React mental model and are
+  worth understanding as a distinct concept even if you never leave React. In a
+  signals-based system, reactive values notify their dependents directly when
+  they change, bypassing virtual DOM reconciliation entirely. This is why Preact
+  Signals can update a text node in the DOM without re-rendering the component
+  that contains it—the signal is wired directly to the DOM mutation. For
+  high-frequency updates (dragging, live data feeds, collaborative cursors) this
+  is a meaningful performance difference. Angular's switch to signals in v17 and
+  React's exploration of compiler-based reactivity both acknowledge that the
+  hook-based re-render model is not the end state.
+
+
+  The production lesson is that state management problems are usually
+  architecture problems in disguise. When teams find themselves with deeply
+  nested global state, byzantine selector logic, or update bugs that only happen
+  when two actions fire in a specific order, the root cause is almost always
+  that state has been co-located away from the code that owns it. Moving state
+  closer to where it is used—even if that means drilling props two levels—is
+  frequently the right refactor. State management libraries are load-bearing
+  when state genuinely needs to be shared across distant parts of the tree with
+  complex update semantics; for everything else, they add cost without adding
+  value.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Using a global store for server-cache state
+    explanation: >-
+      Manually caching API responses in Redux or Zustand duplicates work that
+      React Query or SWR do better — with deduplication, background refresh, and
+      stale-while-revalidate built in. Server state and client UI state have
+      different semantics and belong in different layers.
+  - title: Storing everything in URL-agnostic state
+    explanation: >-
+      State that should be shareable via URL — filters, pagination, selected
+      items — stored in memory means users can't bookmark or share the current
+      view. URL search params are the right persistence layer for navigable UI
+      state.
+  - title: Context causing the whole tree to re-render
+    explanation: >-
+      React Context re-renders all consumers on every context value change,
+      regardless of which part of the value they use. High-frequency state in
+      Context will degrade performance; split contexts by update frequency or
+      move to Zustand or Jotai for fine-grained subscriptions.
+  - title: Global store holds component-local UI state
+    explanation: >-
+      State like 'is this dropdown open' or 'which tab is selected' placed in a
+      global store makes components impossible to reuse and bloats the store
+      with transient values. Local useState is the right place for state that
+      has no meaning outside a component.
+  - title: No selector memoization leads to excessive re-renders
+    explanation: >-
+      Subscribing to a large Zustand slice or a Redux selector that returns a
+      new object reference on every call causes every subscribed component to
+      re-render even when the relevant data is unchanged. Use shallow comparison
+      or memoized selectors for derived state.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Zustand Store with Typed Actions
+    code: |-
+      import { create } from "zustand";
+
+      interface Notification {
+        id: string;
+        message: string;
+        type: "success" | "error" | "info";
+      }
+
+      interface NotificationStore {
+        notifications: Notification[];
+        add: (msg: string, type: Notification["type"]) => void;
+        dismiss: (id: string) => void;
+      }
+
+      export const useNotifications = create<NotificationStore>((set) => ({
+        notifications: [],
+
+        add: (message, type) => {
+          const id = crypto.randomUUID();
+          set(state => ({
+            notifications: [...state.notifications, { id, message, type }]
+          }));
+          // Auto-dismiss after 4 seconds
+          setTimeout(() => set(state => ({
+            notifications: state.notifications.filter(n => n.id !== id)
+          })), 4000);
+        },
+
+        dismiss: (id) => set(state => ({
+          notifications: state.notifications.filter(n => n.id !== id)
+        }))
+      }));
+
+      // Usage in any component — no Provider needed
+      // const { add } = useNotifications();
+      // add("Saved!", "success");
+    reasoning: >-
+      A complete Zustand store for a real use-case (toast notifications) that
+      shows typed state, typed actions, and the no-Provider advantage over React
+      Context.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.534Z'
+estimatedHours: 6
+lastUpdatedAt: '2026-05-14T12:31:47.583Z'
 needsManualPick: false
 resources:
   videos:

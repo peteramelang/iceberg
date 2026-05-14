@@ -7,8 +7,9 @@ summary: >-
   Autonomous coding agents that plan, edit, run, and verify in a loop. When to
   use them, how to bound them, what oversight they require.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Autonomous AI systems that plan, execute, and learn from results in cycles.
+  Requires bounded iterations, human checkpoints, and guardrails to prevent
+  runaway edits.
 definition: >-
   Agent loops are autonomous AI workflows in which a language model is given a
   goal and a set of tools, then iterates through plan–act–observe cycles until
@@ -38,29 +39,159 @@ definition: >-
   discipline needed for any autonomous process.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Agent loops are the closest thing we currently have to a programmable junior
+  engineer — one that never sleeps, never gets bored, and never refuses to run
+  the tests for the fifteenth time. The reason they matter in production isn't
+  that they eliminate human engineers; it's that they eliminate the
+  context-switching tax on senior engineers. When a well-scoped task can be
+  handed off to an agent — 'port this module to the new API contract and make
+  the test suite green' — a senior can stay in the deep work of architecture
+  while the mechanical parts execute themselves. That leverage is real and
+  growing.
+
+
+  The 80/20 of making agent loops work is the prompt you give them before they
+  start. An agent with a vague goal will either thrash (trying things at random
+  and accreting confusing edits) or overcorrect (producing a dramatic refactor
+  you didn't ask for). The productive frame is to write your agent prompt the
+  way you'd write a handoff to a contractor: define the goal, define what
+  success looks like concretely and testably, define what the agent is not
+  allowed to touch, and define when it should stop and ask rather than guess.
+  Agents with clear stopping conditions produce recoverable work; agents without
+  them produce sprawl.
+
+
+  The dominant failure mode isn't the dramatic rogue-AI scenario — it's the
+  quiet failure where an agent can't make progress, can't detect that it can't
+  make progress, and spends twenty minutes making increasingly desperate edits
+  while the context window fills up with noise. By the time you look back at the
+  terminal, you have a codebase in a half-modified state that's harder to reason
+  about than when you started. This is why hard iteration caps, mandatory
+  test-passing checkpoints, and execution sandboxes aren't optional safety
+  theater — they're the structural constraints that make agent output actually
+  usable.
+
+
+  The mental model that works best here is to think of an agent loop like a CI
+  pipeline, not like a conversation. You set the inputs, you define the
+  acceptance criteria, you let it run, and you review the result. Intervening in
+  the middle of a run is usually more disruptive than letting it finish and then
+  correcting. The agent's inner monologue — the plan-act-observe cycle — is
+  implementation detail. What you care about is: did the output pass the tests,
+  does it match the codebase conventions, and is the diff reviewable? If yes,
+  merge it. If no, figure out whether the prompt was wrong or the task was too
+  ambiguous for an agent, and adjust accordingly.
+
+
+  In the broader AI-assisted development ecosystem, agent loops occupy the long
+  end of the complexity spectrum. They sit above single-turn completions
+  (autocomplete, one-shot generation) and below full orchestration systems with
+  multiple specialized sub-agents. The current sweet spot is well-defined,
+  self-contained tasks with automated success criteria — test suites, type
+  checkers, linters. Tasks requiring business judgment, cross-system
+  coordination, or interpretations of ambiguous requirements still need a human
+  in the loop, and probably will for a while. The teams making the most of agent
+  loops today are the ones disciplined about which tasks belong there and which
+  don't.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: No iteration cap allows infinite loops
+    explanation: >-
+      Agents without a hard stop on loop count will spin indefinitely when they
+      get stuck — burning tokens and sometimes corrupting state. Always set a
+      maximum iteration budget and treat hitting it as a recoverable error, not
+      a success.
+  - title: Ambiguous goals produce thrashing agents
+    explanation: >-
+      An agent given a vague goal like 'improve this code' will make changes,
+      observe ambiguous results, and loop without converging. Define explicit,
+      testable success criteria before handing off to an agent — a test suite
+      pass or a specific file diff.
+  - title: No guardrails on destructive filesystem actions
+    explanation: >-
+      Agents with unrestricted write access can delete or overwrite files they
+      shouldn't touch, especially when backtracking after failed attempts. Scope
+      the writable directories explicitly and run agents in sandboxed
+      environments by default.
+  - title: Context window bloat causes late-loop failures
+    explanation: >-
+      As the conversation grows with each iteration, the agent's context window
+      fills with stale observations and earlier attempts, degrading output
+      quality and eventually hitting token limits. Periodically summarize or
+      prune context rather than letting it accumulate unbounded.
+  - title: Over-trusting agent self-assessment of success
+    explanation: >-
+      Agents often report success based on their own output rather than external
+      verification, such as running the test suite or checking the build. Always
+      verify agent completion with an independent, deterministic check outside
+      the loop.
+  - title: Skipping human checkpoints on major milestones
+    explanation: >-
+      An agent that can go from 'refactor the auth module' to 'deploy to
+      staging' without a human review introduces unacceptable blast radius.
+      Insert mandatory check-in points after steps with irreversible or
+      cross-boundary effects.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Bounded Agent Loop with Tool Calls
+    code: >-
+      import Anthropic from "@anthropic-ai/sdk";
+
+
+      const client = new Anthropic();
+
+
+      async function runAgent(goal: string, maxIterations = 10): Promise<string>
+      {
+        const messages: Anthropic.MessageParam[] = [
+          { role: "user", content: goal }
+        ];
+
+        for (let i = 0; i < maxIterations; i++) {
+          const response = await client.messages.create({
+            model: "claude-opus-4-5",
+            max_tokens: 1024,
+            tools: [
+              {
+                name: "run_tests",
+                description: "Run the test suite and return output",
+                input_schema: { type: "object", properties: {}, required: [] }
+              }
+            ],
+            messages
+          });
+
+          if (response.stop_reason === "end_turn") {
+            const text = response.content.find(b => b.type === "text");
+            return text?.text ?? "done";
+          }
+
+          // Process tool calls
+          const toolUse = response.content.find(b => b.type === "tool_use");
+          if (!toolUse || toolUse.type !== "tool_use") break;
+
+          const toolResult = toolUse.name === "run_tests"
+            ? { output: "All 42 tests passed.", exitCode: 0 }
+            : { error: "Unknown tool" };
+
+          messages.push({ role: "assistant", content: response.content });
+          messages.push({
+            role: "user",
+            content: [{ type: "tool_result", tool_use_id: toolUse.id, content: JSON.stringify(toolResult) }]
+          });
+        }
+
+        throw new Error(`Agent exceeded ${maxIterations} iterations without completing.`);
+      }
+
+
+      runAgent("Verify all tests pass for the auth module.").then(console.log);
+    reasoning: >-
+      Shows a complete bounded agent loop with a hard iteration cap, tool-use
+      cycle, and explicit end detection — the three essential guardrails for
+      production agent code.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.481Z'
+estimatedHours: 8
+lastUpdatedAt: '2026-05-14T12:31:47.516Z'
 needsManualPick: false
 resources:
   videos:

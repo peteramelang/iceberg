@@ -7,8 +7,9 @@ summary: >-
   Use AI as a reviewer and as a reviewee — second-opinion workflows, regression
   checks, and review prompts that catch what tests miss.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Use AI to review code before human reviewers see it, catching bugs and missed
+  tests automatically. Also get AI feedback on your own code to improve quality
+  before shipping.
 definition: >-
   AI code review encompasses two complementary workflows: using AI as a reviewer
   to catch bugs, style issues, and missing tests before human review; and using
@@ -40,29 +41,136 @@ definition: >-
   changes, large diffs, and regressions against known patterns.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Code review is one of those engineering rituals that everyone agrees is
+  valuable and most teams systematically underinvest in. Reviewers get fatigued,
+  PRs pile up, and the pressure to merge accumulates. AI code review doesn't fix
+  the cultural problem, but it does handle the mechanical layer — the null
+  checks, the error path gaps, the places where the implementation quietly
+  diverges from the spec — before a human ever sees the diff. That's the actual
+  value: not replacing human judgment, but arriving at human review with the
+  cheap, high-volume catches already resolved so reviewers can spend their
+  attention on the things that actually require it.
+
+
+  The 80/20 of AI review in practice comes from running it in both directions.
+  Using AI as a reviewer on incoming PRs — automated bots that post inline
+  comments on every push — catches consistency issues and patterns you can
+  enumerate in a prompt. But the direction teams underutilize is running AI
+  review on your own code before you open a PR. Asking 'what would a reviewer
+  push back on here?' before you put your code in front of colleagues is both
+  more effective (you can fix things without the social friction of a review
+  comment) and faster (you compress the cycle). These two directions are
+  complementary, not redundant.
+
+
+  The dominant failure mode is miscalibrated trust, and it cuts both ways. Teams
+  that trust AI review too much stop reading the comments critically, which
+  means the AI's systematic blind spots become the team's blind spots. AI review
+  misses bugs that require business context: it doesn't know that this enum
+  value is only valid in a specific workflow state, or that this API call will
+  fail during the maintenance window your ops team runs on Tuesdays. Teams that
+  trust AI review too little leave the tools running but don't act on the
+  output, which is waste in a different direction. The right posture is to treat
+  AI review output the way you'd treat a linter: act on it by default, override
+  it when you have a reason, never ignore it completely.
+
+
+  The effective mental model is to think of AI review as a first-pass triage
+  layer that operates on enumerable patterns, not a second engineer with full
+  context. It's reliable on things you can write rules about — and increasingly,
+  AI-powered rules are more expressive than regex-based lint — but unreliable on
+  anything requiring end-to-end business understanding. What AI review adds to
+  the ecosystem is coverage and consistency: it reviews every PR with the same
+  thoroughness on commit one as on commit one thousand, which no human reviewer
+  team actually achieves at scale.
+
+
+  In the wider AI-assisted development landscape, AI code review is probably the
+  lowest-friction entry point for teams adopting AI tooling in their workflow.
+  You don't need to change how developers write code; you just add a bot to the
+  PR process. The tooling has matured enough — CodeRabbit, Greptile, GitHub's
+  own Copilot review features — that setup is measured in hours, not weeks.
+  Start there, instrument which comment categories are actionable versus noise,
+  and tune from there. It's the rare AI feature that pays for itself in reviewer
+  time saved within the first month.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Rubber-stamping AI review output without reading it
+    explanation: >-
+      When an AI pre-review bot posts many inline comments, developers often
+      dismiss them in bulk to get back to coding, missing the one comment that
+      flags a real security bug. Treat AI review output as a triage list — scan
+      every comment before dismissing any.
+  - title: AI reviewer misses semantic and business-logic bugs
+    explanation: >-
+      AI reviewers excel at pattern-matching known anti-patterns but cannot
+      reason about whether the code meets the actual product requirement or
+      domain invariant. Human review remains mandatory for anything touching
+      business rules, access control, or cross-service contracts.
+  - title: Generic review prompts produce generic feedback
+    explanation: >-
+      Asking 'review this code' returns surface-level style notes. Asking 'does
+      this handle the case where the user's subscription expires mid-request?'
+      focuses the model on the specific risk. Invest in task-specific review
+      prompts for high-stakes changes.
+  - title: AI-generated code reviewed less skeptically than human code
+    explanation: >-
+      There is a psychological tendency to over-trust AI output because it looks
+      polished and confident. AI code should receive at least the same scrutiny
+      as code from a junior engineer — it can be subtly wrong in exactly the
+      ways that look right on first read.
+  - title: No calibration of AI review noise-to-signal ratio
+    explanation: >-
+      An AI bot that comments on every PR, including trivial nits, trains
+      engineers to ignore it. Tune the review prompt and threshold so only
+      actionable issues are surfaced, or reviewer fatigue will neutralize the
+      benefit.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.489Z'
+    title: AI Pre-Review Pull Request Changes
+    code: |-
+      import Anthropic from "@anthropic-ai/sdk";
+      import { execSync } from "node:child_process";
+
+      const client = new Anthropic();
+
+      async function reviewDiff(baseBranch = "main"): Promise<void> {
+        const diff = execSync(`git diff ${baseBranch}...HEAD`, { encoding: "utf8" });
+
+        if (!diff.trim()) {
+          console.log("No changes to review.");
+          return;
+        }
+
+        const response = await client.messages.create({
+          model: "claude-opus-4-5",
+          max_tokens: 2048,
+          system: [
+            "You are a senior engineer performing a pre-merge code review.",
+            "Focus on: correctness bugs, missing error handling, security issues, and N+1 queries.",
+            "Label each finding: [BLOCKER], [WARNING], or [NIT].",
+            "Skip style nits unless they cause bugs. Be concise."
+          ].join(" "),
+          messages: [
+            {
+              role: "user",
+              content: `Review this diff:\n\n\`\`\`diff\n${diff.slice(0, 8000)}\n\`\`\``
+            }
+          ]
+        });
+
+        const text = response.content.find(b => b.type === "text");
+        console.log("=== AI Pre-Review ===");
+        console.log(text?.text ?? "(no output)");
+      }
+
+      reviewDiff().catch(console.error);
+    reasoning: >-
+      A runnable pre-review script that sends the actual git diff to Claude with
+      a focused review prompt, producing labeled findings before a human
+      reviewer opens the PR.
+difficulty: beginner
+estimatedHours: 3
+lastUpdatedAt: '2026-05-14T12:31:47.525Z'
 needsManualPick: false
 resources:
   videos:

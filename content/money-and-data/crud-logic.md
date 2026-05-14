@@ -304,6 +304,6 @@ tldr: >-
   preserve history, prevent concurrent edits from overwriting each other, and
   make bulk operations retryable.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:27:20.557Z'
+lastUpdatedAt: '2026-05-14T12:33:14.448Z'
 ---
 <!-- user notes -->

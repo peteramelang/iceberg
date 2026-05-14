@@ -7,8 +7,9 @@ summary: >-
   Tokens, primitives, headless UI, shadcn-style copy-in vs npm-distributed — and
   when a design system pays for itself.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Shared collection of components and design tokens ensures UIs stay consistent
+  across projects. Separates tokens, unstyled components, and styled
+  implementations.
 definition: >-
   A design system is a shared collection of reusable UI components, design
   tokens, patterns, and guidelines that teams use to build consistent product
@@ -42,29 +43,165 @@ definition: >-
   maintain component code in the long run.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Design systems earn their keep when the alternative is paying the
+  inconsistency tax repeatedly. That tax shows up as a designer filing a bug
+  because a button in the checkout flow is 2px shorter than the one in the nav,
+  as an engineer writing their fourth custom date-picker in three months, or as
+  an accessibility audit finding that every team independently got keyboard
+  focus wrong in subtly different ways. The real value of a design system is not
+  the component library—it is the decision that has already been made. Every
+  time an engineer reaches for a primary button and it just works, that is a few
+  minutes saved and a consistency argument avoided.
+
+
+  The 80/20 of design systems is tokens first, components second. Design
+  tokens—the named values for color, spacing, radius, typography scale, and
+  motion duration—are what enable a brand refresh without rewriting components.
+  If you have tokens, you can theme. If you have components without tokens, you
+  have a pile of hardcoded values. In practice, getting the token taxonomy right
+  (primitive tokens like `color-blue-500` versus semantic tokens like
+  `color-action-primary`) is far more important than which component library you
+  adopt. Primitive tokens describe values; semantic tokens describe intent.
+  Semantic tokens are what make light and dark mode not a special case.
+
+
+  The failure mode that kills design systems is treating them as infrastructure
+  projects that need to be perfect before shipping. Teams spend six months
+  building a comprehensive system, then discover that the product has moved on,
+  the design constraints changed, or the first real consumer team refuses to
+  adopt it because their needs were not represented. The better path is to
+  extract components from live product code rather than building in a vacuum,
+  and to accept that the first ten components will need refactoring once real
+  usage patterns emerge. A design system that ships three imperfect components
+  is infinitely more valuable than one that never reaches production.
+
+
+  The copy-in versus npm-package tension is real and contextual. npm-distributed
+  libraries like Material UI give you a versioning story and automatic security
+  patches, but they also mean your entire component hierarchy is owned by
+  someone else's API decisions. When you need to deviate—and you will
+  deviate—you end up fighting the library rather than your product. The
+  shadcn/ui approach of copying source into your repo gives you full ownership
+  at the cost of owning upgrades manually. For products with strong design
+  opinions or unusual accessibility requirements, copy-in is often worth it. For
+  teams that just need something that works and will not need heavy
+  customization, a well-chosen npm-distributed library with a robust headless
+  primitive layer underneath is faster to ship and cheaper to maintain.
+
+
+  Where design systems sit in the ecosystem is interesting: they are a forcing
+  function for the frontend platform team. A design system that is not backed by
+  a platform investment—automated visual regression testing, Storybook coverage,
+  changelogs, a migration guide for breaking changes—will rot within a year. The
+  components themselves are not the product. The tooling around keeping them
+  correct, discoverable, and adoptable across teams is the product. That is why
+  most design systems require a dedicated owner or working group rather than
+  being a side project, and why they tend to fail at companies where frontend
+  engineers rotate between product squads without anyone accountable for the
+  shared layer.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Building a design system before you have a design
+    explanation: >-
+      Teams extract a component library from a single product before the design
+      language has stabilized, locking in inconsistencies that every future
+      product inherits. Design systems should codify decisions already proven by
+      real usage, not speculate about future needs.
+  - title: Token layer skipped in favor of hardcoded values
+    explanation: >-
+      Components that hardcode hex values like `#3B82F6` instead of referencing
+      a semantic token like `--color-primary` make rebranding or dark-mode
+      support require touching every component individually. Tokens are the
+      cheapest part of a design system and should come first.
+  - title: Reinventing accessibility instead of using headless primitives
+    explanation: >-
+      Custom dropdowns, modals, and comboboxes built from scratch almost always
+      have keyboard navigation and ARIA bugs that headless libraries like Radix
+      UI have already solved. Build on proven accessible primitives; reserve
+      effort for visual design, not behavior.
+  - title: No process for divergence between design tool and code
+    explanation: >-
+      When the design file and the component library drift apart, engineers
+      implement one thing and designers specify another, and users get the
+      resulting inconsistency. Establish a single source of truth — token files
+      synced to both tools — and a review step that catches drift.
+  - title: Versioned npm package with no migration strategy
+    explanation: >-
+      Publishing a shared component library without a clear semver policy and
+      codemods for breaking changes means every major version forces all
+      consuming apps to do expensive manual migrations simultaneously. Plan the
+      upgrade path before publishing v1.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Token-Driven Button with Variant Props
+    code: >-
+      // Design token layer + typed component — shadcn/Radix pattern
+
+      import * as React from "react";
+
+
+      // Design tokens defined once, referenced everywhere
+
+      const tokens = {
+        color: {
+          primary: "#6366f1",
+          primaryHover: "#4f46e5",
+          danger: "#ef4444",
+          dangerHover: "#dc2626"
+        },
+        radius: { md: "6px" },
+        space: { sm: "8px", md: "12px" }
+      } as const;
+
+
+      type Variant = "primary" | "danger" | "ghost";
+
+      type Size = "sm" | "md";
+
+
+      interface ButtonProps extends
+      React.ButtonHTMLAttributes<HTMLButtonElement> {
+        variant?: Variant;
+        size?: Size;
+      }
+
+
+      const variantStyles: Record<Variant, React.CSSProperties> = {
+        primary: { background: tokens.color.primary, color: "#fff" },
+        danger:  { background: tokens.color.danger,  color: "#fff" },
+        ghost:   { background: "transparent", border: "1px solid #d1d5db" }
+      };
+
+
+      const sizeStyles: Record<Size, React.CSSProperties> = {
+        sm: { padding: `${tokens.space.sm} ${tokens.space.md}`, fontSize: "13px" },
+        md: { padding: `${tokens.space.md} 20px`,              fontSize: "15px" }
+      };
+
+
+      export function Button({ variant = "primary", size = "md", style, ...props
+      }: ButtonProps) {
+        return (
+          <button
+            style={{
+              borderRadius: tokens.radius.md,
+              fontWeight: 500,
+              cursor: "pointer",
+              border: "none",
+              ...variantStyles[variant],
+              ...sizeStyles[size],
+              ...style
+            }}
+            {...props}
+          />
+        );
+      }
+    reasoning: >-
+      Illustrates the token-primitive-component layering: design tokens defined
+      once, variant styles keyed to those tokens, and a typed component that
+      composes them — the core pattern of any design system.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.528Z'
+estimatedHours: 8
+lastUpdatedAt: '2026-05-14T12:31:47.578Z'
 needsManualPick: false
 resources:
   videos:

@@ -333,6 +333,6 @@ shortExplainerVideo:
     runtime behavior control. Strong preferred source, concise, no tutorial
     bloat, 69k+ views.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.529Z'
+lastUpdatedAt: '2026-05-14T12:33:14.401Z'
 ---
 <!-- user notes -->

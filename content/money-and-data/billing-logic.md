@@ -321,6 +321,6 @@ shortExplainerVideo:
     overview is precisely what a developer needs before implementing billing
     logic.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.556Z'
+lastUpdatedAt: '2026-05-14T12:33:14.446Z'
 ---
 <!-- user notes -->

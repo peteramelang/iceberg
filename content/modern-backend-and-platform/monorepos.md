@@ -7,8 +7,9 @@ summary: >-
   Turborepo, Nx, pnpm workspaces — when sharing a repo across packages helps,
   when it hurts, and how to keep CI fast.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Single repository for multiple projects with shared dependencies. Enables
+  atomic commits across boundaries and easy code reuse without publishing
+  packages.
 definition: >-
   A monorepo is a single version-controlled repository that houses multiple
   distinct projects—frontend apps, backend services, shared libraries,
@@ -39,29 +40,136 @@ definition: >-
   with a carefully structured polyrepo.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The decision to adopt a monorepo is really a decision about who pays the cost
+  of coordination. In a polyrepo world, every team moves independently but pays
+  a tax every time a shared contract changes — version bumps, API drift, delayed
+  library updates, and the particular misery of debugging a bug that lives in
+  the intersection of two packages that are deployed at different versions. A
+  monorepo moves that tax to build tooling and CI discipline. You get atomic
+  commits across package boundaries and honest dependency relationships, but you
+  inherit the responsibility of keeping tasks fast as the codebase grows.
+  Neither approach is free.
+
+
+  The 80/20 of getting a monorepo to actually work in JavaScript is picking the
+  right two-layer stack: pnpm workspaces for package management and Turborepo
+  for task orchestration. pnpm's symlink-based node_modules avoids the hoisting
+  bugs that plague npm workspaces and installs dependencies significantly faster
+  at scale. Turborepo reads your package.json dependency graph, understands
+  which packages changed between commits, and runs only the affected tasks —
+  build, test, lint, typecheck — in correct topological order. Its remote cache
+  means a task that was already run with identical inputs anywhere on your team
+  or in CI will complete in under a second instead of minutes. Nx offers more
+  features — code generation, module boundaries enforcement, a visual dependency
+  graph — but the added capability comes with more configuration surface and a
+  steeper migration cost. For most teams starting a new monorepo, Turborepo is
+  the simpler choice.
+
+
+  The failure modes in monorepos are structural rather than operational. The
+  first is implicit coupling: because code sharing is easy, teams reach across
+  package boundaries freely and gradually turn what should be independent
+  packages into one giant implicit module. The packages compile separately but
+  are so deeply intertwined that you cannot deploy one without validating all of
+  them. This defeats the organizational benefit of separating packages in the
+  first place. Nx's module boundary lint rules can enforce that packages only
+  consume each other's declared public API, but the discipline has to be
+  designed in early — it is very hard to retrofit. The second failure mode is CI
+  time creep: without caching, every task runs on every commit, and a monorepo
+  with fifteen packages and a four-minute test suite per package becomes
+  unusable. Remote caching is not optional; it is what makes the model viable.
+
+
+  The mental model that clarifies when a monorepo is the right call is thinking
+  about the frequency of cross-cutting changes. If you routinely find yourself
+  making a change to a shared library and simultaneously updating every consumer
+  of that library, a monorepo makes that operation atomic and validates it in
+  one PR. If your services are truly independent — different teams, different
+  languages, separate deployment lifecycles, minimal shared code — a monorepo
+  adds overhead without the coordination benefit. The inflection point for most
+  product teams is when there are two or more TypeScript packages sharing
+  business logic types or utility libraries, and the version-bumping ceremony
+  across repos becomes a routine time sink.
+
+
+  In the JavaScript ecosystem, the monorepo tooling has matured to the point
+  where the operational risk is low for new projects. Vercel, Nx, and Turborepo
+  have all published extensive guides and starter templates. The Changesets
+  library handles versioning and changelogs for packages that are also published
+  to npm. The remaining friction is human: monorepos require teams to agree on
+  shared lint configs, shared TypeScript settings, and shared CI patterns. That
+  social contract is often harder than the technical setup, and teams that skip
+  it end up with a monorepo that is actually ten polyrepos duct-taped together
+  in one git history.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: CI runs all tasks for every change regardless of affected packages
+    explanation: >-
+      A monorepo without task graph analysis will run tests for every package on
+      every commit, making CI times grow linearly with repo size. Configure the
+      task orchestrator to derive the affected package set from the change diff
+      and only run those tasks.
+  - title: No remote cache means repeated builds waste CI minutes
+    explanation: >-
+      Without shared remote cache, each CI run re-executes tasks whose inputs
+      haven't changed since the last run, duplicating work across PRs and
+      branches. Enable remote caching from the start — the payoff compounds with
+      team size.
+  - title: Implicit cross-package dependencies create hidden coupling
+    explanation: >-
+      When packages import each other without declaring it in package.json, the
+      dependency graph is invisible to the task orchestrator and to other
+      engineers. Enforce declared dependencies via lint rules and let the
+      orchestrator own execution order.
+  - title: Package versioning strategy chosen too late
+    explanation: >-
+      Teams that don't decide on independent versus fixed versioning before
+      their first release end up with a patchwork of semver policies that makes
+      changelogs confusing and automated release tools unreliable. Lock in the
+      strategy before publishing any package.
+  - title: Monorepo adopted for code that has no meaningful sharing
+    explanation: >-
+      Moving unrelated services into a monorepo without shared libraries or
+      frequent cross-cutting changes adds tooling overhead without the
+      coordination benefit. Evaluate whether real sharing exists before
+      migrating; polyrepos have lower baseline friction.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: json
+    title: Turborepo Pipeline with Remote Cache
+    code: |-
+      {
+        "$schema": "https://turbo.build/schema.json",
+        "remoteCache": {
+          "enabled": true
+        },
+        "tasks": {
+          "build": {
+            "dependsOn": ["^build"],
+            "outputs": [".next/**", "dist/**", ".turbo/**"]
+          },
+          "test": {
+            "dependsOn": ["^build"],
+            "outputs": ["coverage/**"]
+          },
+          "lint": {
+            "outputs": []
+          },
+          "type-check": {
+            "dependsOn": ["^build"],
+            "outputs": []
+          },
+          "dev": {
+            "cache": false,
+            "persistent": true
+          }
+        }
+      }
+    reasoning: >-
+      The turbo.json that defines task dependencies and output globs — the two
+      keys to correct caching in a Turborepo monorepo, showing why ^
+      (topological order) matters.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.524Z'
+estimatedHours: 8
+lastUpdatedAt: '2026-05-14T12:31:47.574Z'
 needsManualPick: false
 resources:
   videos:

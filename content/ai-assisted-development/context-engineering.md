@@ -7,8 +7,9 @@ summary: >-
   Curate what an AI tool sees — files, docs, examples, schemas — so it has
   enough signal to be accurate and not so much that it gets confused.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Give AI tools the right files, types, and examples so it produces accurate
+  code. Too much context confuses the model; structure matters as much as
+  volume.
 definition: >-
   Context engineering is the practice of deliberately selecting, structuring,
   and curating the information you give an AI coding tool so it can produce
@@ -41,29 +42,148 @@ definition: >-
   context engineering for coding.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Context engineering is the discipline that separates developers who get
+  reliable results from AI coding tools from those who find them unpredictably
+  useful. The fundamental constraint is that a model can only reason about what
+  it can see — it has no access to your mental model of the codebase, your
+  team's conventions, the architectural decisions made three years ago, or the
+  reasons why the obvious approach won't work in your system. Every time you're
+  frustrated by AI output that's generic, slightly wrong, or stylistically
+  foreign to your codebase, the root cause is almost always a context problem:
+  the model didn't have what it needed to do better.
+
+
+  The 80/20 of context engineering for most coding tasks is selectivity and
+  examples. Selectivity means giving the model the three files that are actually
+  relevant to the task, not the whole project. More context is not automatically
+  better — irrelevant files add noise and push important signal further from the
+  model's attention. Examples means showing the model the pattern you want to
+  follow, not just describing it in the abstract. 'Use our existing error
+  handling pattern' is a weak instruction; including the two functions that
+  embody that pattern and saying 'match this style exactly' is a strong one.
+  These two practices — curating what you include and adding concrete examples —
+  account for the majority of quality improvement available from context tuning.
+
+
+  The dominant failure mode is treating AI tools as oracles that work best when
+  given maximum input. This is the context-stuffing trap: loading an entire
+  codebase, every relevant file, all the documentation, and hoping the model
+  figures out what matters. In practice this degrades output quality because the
+  model's attention is distributed across too much material, and the irrelevant
+  content competes with the relevant. The discipline of asking 'what is the
+  minimum context this model needs to do this task correctly?' produces better
+  results than throwing everything at it and hoping.
+
+
+  For production systems, context engineering extends beyond individual prompts
+  to the persistent layer: CLAUDE.md files, project-level system prompts, and
+  indexed codebase retrievers that ensure every session starts with the right
+  conventions loaded. This is where the investment compounds — conventions
+  written once inform every session, and retrieval systems that index your
+  codebase make it possible to automatically include relevant context rather
+  than requiring developers to remember to add it manually. The teams doing this
+  well have effectively trained their AI tools on their specific codebase
+  conventions, which is a durable advantage.
+
+
+  In the ecosystem, context engineering is the connective tissue between
+  everything else in AI-assisted development. Good evals depend on consistent
+  context to produce meaningful comparisons. Agent loops depend on
+  well-specified context to stay on task. Hallucination mitigation depends on
+  grounding context to replace the model's fuzzy memory with authoritative
+  facts. Every other AI coding practice works better when the context is
+  well-engineered, and worse when it isn't. It's also the practice that's most
+  underrated relative to its impact — prompt phrasing gets more attention, but
+  for coding tasks specifically, what you include is usually more important than
+  how you phrase it.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Sending the whole codebase as context
+    explanation: >-
+      Loading an entire repository into context adds noise that degrades output
+      quality — models struggle to prioritize relevant files when everything is
+      included. Curate the minimal set of files, types, and schemas the model
+      genuinely needs for the specific task.
+  - title: No project-level instruction file for persistent conventions
+    explanation: >-
+      Without a CLAUDE.md or equivalent, every new session starts from scratch
+      and the model defaults to generic conventions rather than your team's
+      patterns. Commit a project-level instruction file that encodes naming,
+      error handling, and testing conventions.
+  - title: Providing examples of what to do but not what to avoid
+    explanation: >-
+      Few-shot examples of the target pattern help, but without negative
+      examples the model may still reproduce the anti-pattern you're trying to
+      eliminate. Include one or two explicit 'do not do this' examples alongside
+      the positive ones.
+  - title: Retrieval returning textually similar but semantically wrong context
+    explanation: >-
+      RAG systems that index by keyword similarity often retrieve files that
+      mention the right terms but don't contain the right logic, giving the
+      model misleading context. Evaluate retrieval quality independently from
+      generation quality — bad retrieval poisons every answer.
+  - title: Stale context that contradicts current codebase state
+    explanation: >-
+      Context prepared at session start may become incorrect after the agent
+      makes edits mid-session, causing the model to reason from an outdated
+      picture. Re-read affected files after significant edits rather than
+      relying on context built at the start.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Assemble Minimal Task Context for AI
+    code: |-
+      import { readFileSync, existsSync } from "node:fs";
+      import Anthropic from "@anthropic-ai/sdk";
+
+      const client = new Anthropic();
+
+      interface TaskContext {
+        goal: string;
+        relevantFiles: string[];  // Only files the AI actually needs
+        projectConventions?: string;
+      }
+
+      async function runWithContext(ctx: TaskContext): Promise<string> {
+        const fileSections = ctx.relevantFiles
+          .filter(f => existsSync(f))
+          .map(f => `### ${f}\n\`\`\`\n${readFileSync(f, "utf8").slice(0, 2000)}\n\`\`\``)
+          .join("\n\n");
+
+        const systemPrompt = [
+          ctx.projectConventions ?? "Follow existing code style.",
+          "Do not modify files not shown. Do not add new dependencies."
+        ].join(" ");
+
+        const userMessage = [
+          `Goal: ${ctx.goal}`,
+          "",
+          "Relevant files:",
+          fileSections
+        ].join("\n");
+
+        const res = await client.messages.create({
+          model: "claude-opus-4-5",
+          max_tokens: 2048,
+          system: systemPrompt,
+          messages: [{ role: "user", content: userMessage }]
+        });
+
+        const block = res.content.find(b => b.type === "text");
+        return block?.text ?? "";
+      }
+
+      const result = await runWithContext({
+        goal: "Add input validation to the createUser function.",
+        relevantFiles: ["src/users/create.ts", "src/lib/errors.ts"],
+        projectConventions: "Use Zod for validation. Return Result<T, AppError>."
+      });
+      console.log(result);
+    reasoning: >-
+      Shows deliberate context curation — passing only the two relevant files
+      plus explicit conventions — rather than dumping the whole codebase into
+      the prompt.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.496Z'
+estimatedHours: 6
+lastUpdatedAt: '2026-05-14T12:31:47.532Z'
 needsManualPick: false
 resources:
   videos:

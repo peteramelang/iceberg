@@ -195,6 +195,6 @@ tldr: >-
   records 7 years) and automate deletion to manage costs and comply with privacy
   laws.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:27:20.545Z'
+lastUpdatedAt: '2026-05-14T12:33:14.428Z'
 ---
 <!-- user notes -->

@@ -7,8 +7,9 @@ summary: >-
   Measure whether AI features (or AI-assisted workflows) actually work — offline
   test sets, online metrics, golden examples, regression catches.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Automated tests that measure AI output quality against defined standards.
+  Build test suites with sample inputs, expected outputs, and judges to track
+  model performance.
 definition: >-
   AI evals are systematic tests that measure whether an AI feature or
   AI-assisted workflow produces outputs that meet defined quality standards —
@@ -42,29 +43,148 @@ definition: >-
   practitioner sources for eval methodology.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Evals are to AI features what automated tests are to application code — the
+  mechanism that lets you change things without flying blind. The reason they
+  matter in production is straightforward: language model behavior is
+  nondeterministic, sensitive to prompt phrasing, and can shift silently when
+  you update a model version or tweak a system prompt. Without an eval suite,
+  you discover that your AI feature got worse the same way you discover
+  application bugs without a test suite: your users tell you, after the damage
+  is done. With evals, you catch regressions before they ship. That's the whole
+  value proposition, and it's substantial.
+
+
+  The 80/20 for most teams is to start with functional correctness and not
+  overthink grading. For AI coding tools specifically, 'does the generated code
+  pass the test suite?' is an eval. 'Does it compile without errors?' is an
+  eval. These are deterministic, fast, and directly meaningful. You don't need a
+  sophisticated model-as-judge to start getting value from evals — you need a
+  set of representative examples, a way to run them automatically, and a result
+  that tells you whether output quality went up or down. Add the fancy grading
+  later, once you've established the habit of running evals at all.
+
+
+  The dominant failure mode is building an eval suite that doesn't represent
+  what users actually encounter. Golden sets assembled from hand-crafted
+  examples tend to be cleaner, simpler, and more uniform than real traffic —
+  which means your evals pass confidently while real users experience failures
+  you never anticipated. The solution is to feed real production queries back
+  into your eval set continuously, with appropriate anonymization. An eval suite
+  that includes a growing sample of actual usage will catch the long-tail cases
+  that crafted examples miss, and it will surface distribution shifts when user
+  behavior changes in ways your original examples didn't anticipate.
+
+
+  The mental model that makes eval culture click is to think of them as
+  regression tests, not performance benchmarks. A benchmark asks 'how good is
+  this system?' — a hard question with a subjective answer. A regression test
+  asks 'did this get worse compared to before?' — a concrete, actionable
+  question. Teams that frame evals as regression detection don't get paralyzed
+  by the difficulty of defining 'good'; they run the evals on every change and
+  investigate when scores drop. The bar isn't absolute quality; it's 'at least
+  as good as yesterday.'
+
+
+  Evals sit in the ecosystem at the intersection of your AI feature development
+  workflow and your CI/CD pipeline. They're most powerful when they run
+  automatically — on every prompt change, every model version bump, every
+  context update. The tooling ecosystem has matured considerably: Braintrust,
+  LangSmith, and open-source frameworks like inspect-ai provide the scaffolding
+  so you're not building eval infrastructure from scratch. The organizational
+  investment is a few weeks of setup and the discipline of growing your golden
+  set over time. The return is the ability to iterate on AI features with the
+  same confidence that a good test suite gives you for application code.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Shipping prompt changes without running any evals
+    explanation: >-
+      Changing a system prompt without a test suite is the AI equivalent of
+      editing application code with no tests — quality regressions are invisible
+      until users complain. Even a small golden set of 20 examples run on every
+      prompt change catches the worst regressions.
+  - title: Golden sets that don't reflect real usage distribution
+    explanation: >-
+      A carefully curated set of easy examples will show high scores while
+      production edge cases fail. Build your eval set from actual production
+      queries, not from examples the model was already good at during
+      development.
+  - title: Using the same model to generate and judge evals
+    explanation: >-
+      When you use the same model to create examples and to grade them, it will
+      score its own outputs highly even when they are wrong. Use a separate,
+      independent judge — a different model, a deterministic check, or human
+      annotation — for grading.
+  - title: Treating eval score as a single number to maximize
+    explanation: >-
+      Teams often chase an aggregate score, unaware that gains on easy examples
+      mask regressions on hard or rare ones. Track score distributions and
+      per-category breakdowns, not just averages.
+  - title: No CI integration means evals run never or manually
+    explanation: >-
+      Evals kept outside the CI pipeline are run infrequently, usually only when
+      someone remembers to, which means regressions accumulate for weeks. Evals
+      must block or at minimum annotate the PR that introduced a regression.
+  - title: Skipping functional correctness in favor of vibe grades
+    explanation: >-
+      Subjective quality scores like 'is this response helpful?' are important
+      but hard to automate and slow to collect. Start with deterministic checks
+      — does the code compile, do tests pass — before layering in model-as-judge
+      for softer qualities.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+  - language: python
+    title: Eval Harness with Model-as-Judge
+    code: |-
+      import anthropic
+      import json
+
+      client = anthropic.Anthropic()
+
+      GOLDEN_SET = [
+          {
+              "input": "Write a Python function that returns the factorial of n.",
+              "criteria": "Uses recursion or iteration, handles n=0, returns int."
+          },
+          {
+              "input": "Write a TypeScript type for a paginated API response.",
+              "criteria": "Generic type, includes data array, total count, and page fields."
+          }
+      ]
+
+      def generate(prompt: str) -> str:
+          res = client.messages.create(
+              model="claude-haiku-4-5",
+              max_tokens=512,
+              messages=[{"role": "user", "content": prompt}]
+          )
+          return res.content[0].text
+
+      def judge(output: str, criteria: str) -> dict:
+          res = client.messages.create(
+              model="claude-opus-4-5",
+              max_tokens=128,
+              system="You are an eval judge. Return JSON: {\"pass\": bool, \"reason\": str}",
+              messages=[{
+                  "role": "user",
+                  "content": f"Criteria: {criteria}\n\nOutput:\n{output}"
+              }]
+          )
+          return json.loads(res.content[0].text)
+
+      passed = 0
+      for example in GOLDEN_SET:
+          output = generate(example["input"])
+          result = judge(output, example["criteria"])
+          status = "PASS" if result["pass"] else "FAIL"
+          if result["pass"]:
+              passed += 1
+          print(f"[{status}] {result['reason']}")
+
+      print(f"\nScore: {passed}/{len(GOLDEN_SET)}")
+    reasoning: >-
+      A minimal but complete eval harness: golden set, a generator under test,
+      and a model-as-judge grader — the three components every AI eval needs.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.493Z'
+estimatedHours: 8
+lastUpdatedAt: '2026-05-14T12:31:47.529Z'
 needsManualPick: false
 resources:
   videos:

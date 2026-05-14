@@ -356,6 +356,6 @@ shortExplainerVideo:
     processing — the exact 80/20 of scalability described in the topic
     narrative. 9:20 duration fits within the 600-second ceiling.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.575Z'
+lastUpdatedAt: '2026-05-14T12:33:14.480Z'
 ---
 <!-- user notes -->

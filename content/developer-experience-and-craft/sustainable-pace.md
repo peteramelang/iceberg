@@ -7,8 +7,8 @@ summary: >-
   Recognizing burnout, on-call recovery, deep-work cycles — the
   engineering-discipline version of mental health.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Protect focused work time, rotate on-call duty, and recognize that sleep debt
+  kills productivity. Teams perform best at consistent speed, not sprints.
 definition: >-
   Sustainable pace is the XP principle that a team should work at a rate it
   could maintain indefinitely — no death marches, no heroics that drain reserves
@@ -41,29 +41,129 @@ definition: >-
   the patience to give thoughtful feedback rather than rubber-stamping).
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Sustainable pace is one of those principles that sounds like a soft concession
+  to human fragility until you understand it as an engineering quality
+  constraint. The argument is not that engineers deserve rest, though they do.
+  The argument is that tired engineers write worse code, make worse decisions,
+  skip the tests and reviews that prevent future incidents, and accumulate
+  technical debt faster than they reduce it. A team grinding through a death
+  march is not going faster — it is spending future velocity to fund an illusion
+  of current velocity, and the bill comes due in the form of regressions,
+  burnout attrition, and a codebase that nobody fully understands anymore.
+
+
+  The 80/20 is two things: protect the focused work block, and design the
+  on-call rotation so it does not drain people. Most of the productivity loss in
+  software teams comes not from engineers who are not working hard enough but
+  from engineers whose deep work is fragmented by meetings, Slack interruptions,
+  and unfocused on-call shifts that eat sleep without providing recovery time.
+  Paul Graham's Maker's Schedule observation — that a single meeting in the
+  middle of the day effectively destroys the afternoon for a developer — is
+  twenty years old and remains as accurate as ever. The fix is structural: move
+  meetings to the edges of the day, protect multi-hour blocks in the calendar
+  explicitly, and treat interruption of those blocks as a cost that requires
+  justification rather than a default.
+
+
+  On-call deserves its own attention because it is the most predictable source
+  of unsustainable pace in production engineering teams. An on-call rotation
+  that pages three times a night is not sustainable by definition — sleep
+  deprivation at that level produces the same cognitive impairment as alcohol
+  intoxication, and the engineers in that rotation are making architectural and
+  code decisions in that state. The right response to a noisy on-call rotation
+  is not resilience training; it is to treat each page as a defect in the system
+  and fix it. Teams that do this consistently drive their alert volume down over
+  time. Teams that treat pages as unavoidable background noise accumulate them.
+
+
+  Burnout in software specifically tends to present differently from the popular
+  image of exhaustion. The clinical definition includes cynicism and
+  depersonalisation — a flattening of investment in work quality — alongside
+  exhaustion, and in engineering these often come before the exhaustion is
+  obvious. An engineer who stops caring whether the tests pass, or who approves
+  PRs without reading them, or who describes their work as pointless and
+  misaligned is showing burnout symptoms that should prompt intervention, not
+  more pressure. Will Larson's framing of burnout as a systems problem — created
+  by specific structural conditions in the work environment, not primarily by
+  individual weakness — is the right level of analysis. The individual cannot
+  will their way out of a structurally unsustainable role.
+
+
+  The connection between sustainable pace and code quality is not incidental —
+  it is mechanistic. Test-driven development requires the cognitive clarity to
+  think about the problem specification before the implementation. Code review
+  craft requires the patience and generosity to give thoughtful feedback rather
+  than rubber-stamp a PR to clear the queue. Architecture decisions made under
+  time pressure consistently show the characteristic marks of fatigue: narrowed
+  consideration of alternatives, underestimation of future maintenance cost, and
+  optimisation for short-term shipping over long-term operability. You cannot
+  have a high-quality engineering culture and an unsustainable pace
+  simultaneously; eventually the pace degrades the culture, and the culture
+  stops enforcing the quality practices that might have slowed the pace.
+
+
+  In the ecosystem of developer craft, sustainable pace is the meta-practice
+  that all the others depend on. Documentation-driven development requires the
+  patience to write before you build. Systematic debugging requires the
+  equanimity to hypothesize before you change. Good code review requires time.
+  None of these practices survive a team under sustained deadline pressure
+  unless the sustainable pace principle is treated as a non-negotiable
+  constraint rather than a nice-to-have aspiration.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Celebrating heroics as cultural asset
+    explanation: >-
+      Teams that celebrate engineers who regularly work nights and weekends
+      normalize unsustainable hours as the standard, masking systemic planning
+      failures. Heroics indicate that estimation, scope, or staffing is broken —
+      the correct response is to fix the process, not to reward the symptom.
+  - title: On-call with no recovery time after pages
+    explanation: >-
+      Engineers who take midnight pages and then attend full days of meetings
+      the next day accumulate sleep debt that degrades judgment and increases
+      error rates over weeks. Build explicit on-call recovery — a late start,
+      reduced meetings, or a comp day — into the on-call policy.
+  - title: Burnout misidentified as motivation or attitude problem
+    explanation: >-
+      Burnout presents as cynicism and detachment rather than visible
+      exhaustion, causing managers to diagnose it as a performance or attitude
+      issue instead of a workload one. The observable symptom is declining care
+      about quality — a signal that requires workload intervention, not
+      performance management.
+  - title: No protected deep-work blocks in team schedule
+    explanation: >-
+      Constant meeting fragmentation prevents the sustained focus that complex
+      engineering requires, creating a situation where engineers work long hours
+      yet accomplish less than they would in shorter, uninterrupted blocks.
+      Protect at least two contiguous focus hours daily for the entire
+      engineering team.
+  - title: Technical debt accumulation accelerates under sustained overwork
+    explanation: >-
+      Tired engineers skip tests, defer refactoring, and write documentation
+      they intend to revisit — compounding the future workload that's already
+      overwhelming. The debt accrued during a crunch period often costs more to
+      repay than the time saved by the crunch.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.515Z'
+  - language: bash
+    title: Deep-Work Block Scheduler with Notification Silencing
+    code: |-
+      #!/bin/bash
+      for day in {1..5}; do
+        for start in "09:00" "14:00"; do
+          uuid=$(uuidgen)
+          event="BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:$uuid\nDTSTART:20260515T${start}00Z\nDTEND:20260515T$(printf '%02d' $((10#${start%:*}+1))):30:00Z\nSUMMARY:Deep Work - No Interrupts\nEND:VEVENT\nEND:VCALENDAR"
+          echo -e "$event" | curl -s -X POST https://calendar-api/events -d @- > /dev/null
+          defaults write com.Slack.Slack SuppressNotifications -bool true 2>/dev/null
+          sleep 5400
+          defaults write com.Slack.Slack SuppressNotifications -bool false 2>/dev/null
+        done
+      done
+    reasoning: >-
+      Protects deep-work cycles by blocking calendar time and muting
+      notifications, preventing context-switching that burns out engineers
+      during high-focus periods.
+difficulty: beginner
+estimatedHours: 2
+lastUpdatedAt: '2026-05-14T12:31:47.557Z'
 needsManualPick: false
 resources:
   videos:

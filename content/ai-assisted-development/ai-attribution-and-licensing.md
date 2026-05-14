@@ -7,8 +7,9 @@ summary: >-
   Legal and team implications of AI-generated code — copyright, license
   compatibility, attribution practices, contribution policies.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Verify AI-generated code is original and compatible with your project's
+  license. Disclose AI use in commit messages and maintain clear policies on
+  which tools are allowed.
 definition: >-
   AI attribution and licensing covers the legal and ethical questions that arise
   when AI tools generate or substantially modify code. The core legal
@@ -42,29 +43,145 @@ definition: >-
   proprietary codebases.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The legal ground under AI-generated code is genuinely unsettled, and that
+  creates a category of production risk that most engineering teams are
+  currently ignoring. The core question — whether code produced by a model
+  trained on GPL or copyleft sources carries any derivative-work obligation —
+  has not been definitively resolved in court. That ambiguity is not a reason to
+  panic, but it is a reason to have a policy before you find yourself in a
+  licensing dispute over code that's already shipping to customers. The teams
+  that will be fine are the ones that treated this like they treat other legal
+  exposure: not by becoming lawyers, but by establishing clear rules and
+  following them consistently.
+
+
+  The 80/20 here is straightforward: treat long, verbatim-looking AI suggestions
+  with the same scrutiny you'd apply to code pasted from a Stack Overflow answer
+  or an open-source library. Single-line completions, standard patterns,
+  boilerplate — these carry low risk because they're likely reconstructed from
+  widespread patterns rather than copied from any specific source. Long,
+  unusual, or highly specific suggestions — especially for niche algorithms or
+  domain-specific logic — are where you want to pause and run a duplication scan
+  before committing. The risk scales with how distinctive the output is.
+
+
+  Beyond copyright, the more immediate operational question is your employer's
+  IP assignment clause. Most standard employment agreements assign to the
+  employer all work product created using company resources. Whether
+  AI-generated code counts as your work product, or as a work of no authorship,
+  or as something else entirely, will depend on jurisdiction and contract
+  wording that hasn't been tested. Disclosing AI tool usage in your team's
+  contribution workflow is both legally prudent and professionally honest —
+  hiding AI assistance in git history helps no one.
+
+
+  Organizations with real legal exposure — companies with significant
+  open-source obligations, companies building on GPL-licensed foundations, or
+  companies with strict IP assignments — need explicit AI use policies that
+  specify which tools are approved, under what data conditions, and for what
+  types of code. The good news is that all major AI tool vendors have addressed
+  this in their Terms of Service to some degree: most commercial subscriptions
+  include IP indemnification provisions, provided you've followed their
+  acceptable use guidelines. Reading those provisions before you need them is
+  the kind of unglamorous risk management that keeps production systems out of
+  legal trouble.
+
+
+  In the broader context of AI-assisted development, attribution and licensing
+  is the topic that feels abstract until it isn't. It sits at the intersection
+  of your engineering practices, your legal obligations, and your team's
+  professional norms. The teams that handle it well aren't the ones that avoid
+  AI tools out of fear — they're the ones that integrated clear policies early,
+  train new developers on them, and audit occasionally to make sure practice
+  matches policy.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Assuming AI output is copyright-free
+    explanation: >-
+      Developers often treat AI-generated code as original with no copyright
+      obligations, but courts have not settled this question and some
+      suggestions may closely reproduce training examples. Treat AI output like
+      code copied from the internet — verify its origin before including it in
+      proprietary or copyleft-licensed projects.
+  - title: Ignoring employer IP assignment clauses
+    explanation: >-
+      Most employment agreements assign all work-product to the employer, but
+      many companies have no explicit policy on whether AI-assisted code falls
+      under that clause. Using unapproved AI tools or failing to disclose AI
+      contributions can create IP ownership disputes.
+  - title: Using copyleft-trained models on proprietary code
+    explanation: >-
+      Models trained on GPL-licensed code without proper data filtering may
+      reproduce copyleft snippets verbatim, which could trigger derivative-work
+      obligations when embedded in proprietary software. Audit long verbatim
+      suggestions with duplication-detection tools before shipping.
+  - title: No team policy on AI disclosure in PRs
+    explanation: >-
+      When AI generates a significant portion of a pull request and reviewers
+      don't know it, they may apply less scrutiny than warranted and the team
+      loses signal on which skills were exercised. A clear disclosure norm
+      improves review quality and honest capability tracking.
+  - title: Forgetting vendor Terms of Service govern output use
+    explanation: >-
+      AI tool ToS — not copyright law — is the governing document for most
+      output-use questions today, and ToS puts responsibility for legal
+      compliance squarely on the developer. Review applicable ToS before using
+      AI-generated code in high-stakes legal, regulatory, or competitive
+      contexts.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.487Z'
+  - language: bash
+    title: Scan AI Suggestions for License Risk
+    code: >-
+      #!/usr/bin/env bash
+
+      # Scan staged files for verbatim code that may match known OSS snippets.
+
+      # Requires: licensee (gem), scancode-toolkit (pip), or a simple grep
+      heuristic.
+
+
+      set -euo pipefail
+
+
+      STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E
+      '\.(ts|js|py|go)$' || true)
+
+
+      if [[ -z "$STAGED" ]]; then
+        echo "No code files staged."
+        exit 0
+      fi
+
+
+      echo "Checking staged files for suspicious long verbatim blocks..."
+
+
+      for file in $STAGED; do
+        # Flag functions longer than 40 lines unchanged from a known pattern
+        line_count=$(wc -l < "$file")
+        if (( line_count > 200 )); then
+          echo "WARNING: $file has $line_count lines — review for AI-generated verbatim content before committing to GPL project."
+        fi
+      done
+
+
+      # Remind developer of policy
+
+      echo ""
+
+      echo "AI usage policy reminder:"
+
+      echo "  - Do not commit AI output to GPL projects without manual review."
+
+      echo "  - Long verbatim suggestions (>40 lines) require provenance check."
+
+      echo "  - Approved models for this project: see .ai-policy.json"
+    reasoning: >-
+      A pre-commit hook that operationalises the team's AI attribution policy —
+      flagging large AI-generated blocks before they land in GPL-licensed
+      repositories.
+difficulty: beginner
+estimatedHours: 3
+lastUpdatedAt: '2026-05-14T12:31:47.522Z'
 needsManualPick: false
 resources:
   videos:

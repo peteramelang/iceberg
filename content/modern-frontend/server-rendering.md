@@ -7,8 +7,9 @@ summary: >-
   SSR vs SSG vs ISR vs RSC — trade-offs in latency, hosting cost, freshness, and
   developer ergonomics for each rendering mode.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Generate HTML on the server (SSG, SSR, ISR) or use React Server Components to
+  reduce client JavaScript. Choose based on content freshness and interactivity
+  needs.
 definition: >-
   Server rendering is the broad category of strategies that move some or all of
   HTML generation to a server or build step rather than leaving it entirely to
@@ -45,29 +46,147 @@ definition: >-
   it.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The rendering strategy conversation always sounds more complicated than it is
+  because the surface area of acronyms is large but the underlying trade-off
+  space is small. There are really only two variables: when is HTML generated
+  (build time or request time) and where does data fetching happen (server or
+  client). Every named strategy—SSG, SSR, ISR, RSC—is a position in that
+  two-dimensional space. Once you can locate each strategy in that space, the
+  trade-offs become obvious rather than arbitrary. SSG is build-time HTML with
+  server-side data fetching, cached forever. SSR is request-time HTML with
+  server-side data fetching, cached per-request. ISR is build-time HTML with
+  background revalidation, cached with expiry. RSC moves data fetching to server
+  components that can interleave with client components in the same tree.
+
+
+  The production stakes are real and the wrong choice has lasting consequences.
+  A team that chooses SSR for a marketing site pays for compute on every
+  pageview that a CDN-cached SSG response would have served for free. A team
+  that chooses SSG for an authenticated dashboard has to either live with stale
+  data or implement a client-side fetch layer that effectively makes every page
+  a half-SSG, half-SPA hybrid with the complexity of both. Getting the rendering
+  strategy right early saves months of painful partial migrations later.
+
+
+  The 80/20 is this: default to SSG, and add SSR only for routes that can
+  demonstrate they need real-time data per request. Most pages on most sites do
+  not need to be generated fresh for every visitor. Product listings, blog
+  posts, marketing pages, documentation—all of these can tolerate the freshness
+  model of ISR (regenerate every 60 seconds, serve stale while regenerating)
+  without any user-visible consequence. The routes that genuinely need SSR are:
+  authenticated user-specific pages, shopping carts and checkout flows, pages
+  that vary by geography or A/B cohort without a shared cache key, and any page
+  that makes a database query whose result changes faster than ISR's
+  revalidation window.
+
+
+  React Server Components deserve a more careful treatment because the mental
+  model is genuinely new and the failure modes are different. The key insight is
+  that RSC separates the component tree from the JavaScript delivery boundary. A
+  server component can be a large, data-fetching component that renders to a
+  custom wire format on the server and contributes zero bytes to the client JS
+  bundle—it is never sent to the browser at all. Client components are opted
+  into with `'use client'` and are the only components that ship JS, handle
+  events, or use hooks. The failure mode that bites teams first is importing a
+  server component from a client component, which is illegal because the client
+  cannot call server-side code. Visualizing the tree as two interleaved
+  layers—server and client, with data flowing down and events flowing up—is the
+  mental model that makes RSC feel coherent rather than arbitrary.
+
+
+  For teams choosing a new stack today, Next.js App Router is the pragmatic
+  choice if RSC is appealing because it is the only production-ready RSC
+  implementation. Remix is compelling for SSR-first applications with strong
+  form handling needs—its loader/action model is a clean separation of data
+  fetching from rendering that predates RSC. Astro is compelling for
+  content-heavy sites where SSG is the default and interactivity is additive.
+  SvelteKit is worth serious consideration if TypeScript-only is not a hard
+  requirement and the team values small runtime size. The strategy choice and
+  the framework choice are coupled but not identical: the framework constrains
+  which strategies are idiomatic, but most frameworks support multiple
+  strategies at the route level.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Using SSR for pages that could be statically generated
+    explanation: >-
+      Adding a running server and per-request compute cost to routes whose data
+      changes at most hourly is wasteful and introduces availability risk.
+      Default to SSG or ISR and add SSR only to routes that require per-request,
+      per-user data.
+  - title: ISR stale windows larger than the data's acceptable freshness
+    explanation: >-
+      Setting a 24-hour ISR revalidation window on a pricing page or inventory
+      listing means users see stale data for up to a day after a change. Match
+      revalidation intervals to the actual data freshness requirement, not the
+      default or a round number.
+  - title: SSR performance hurt by waterfall data fetching
+    explanation: >-
+      Sequential awaits in SSR render functions — each waiting for the previous
+      query before starting the next — add server latency that the user feels as
+      time-to-first-byte. Parallelize independent data fetches with Promise.all
+      before the render.
+  - title: RSC client/server boundary confusion causes 'use client' sprawl
+    explanation: >-
+      Teams adopting React Server Components often mark most components as `'use
+      client'` when they hit the first hook, effectively opting out of the
+      server rendering benefit. Understand which components actually need
+      browser APIs or state before adding the directive.
+  - title: No caching headers on SSR responses means CDN can't help
+    explanation: >-
+      SSR pages served without Cache-Control headers are re-rendered on every
+      request even when the content could be edge-cached. Explicitly set
+      appropriate cache-control directives for each route's data
+      characteristics.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Next.js RSC Server Component Fetches Data
+    code: >-
+      // app/dashboard/page.tsx — React Server Component (no 'use client')
+
+      // Runs only on the server: direct DB access, no useEffect, no API route
+      needed.
+
+      import { db } from "@/lib/db";
+
+      import { auth } from "@/lib/auth";
+
+      import { MetricCard } from "./MetricCard"; // client component for
+      interactivity
+
+
+      export const revalidate = 60; // ISR: re-render at most every 60 seconds
+
+
+      export default async function DashboardPage() {
+        const session = await auth();
+        if (!session) return <div>Unauthorized</div>;
+
+        // Direct DB query — no fetch(), no API route, no waterfall
+        const metrics = await db
+          .selectFrom("events")
+          .select(["type", db.fn.count("id").as("count")])
+          .where("user_id", "=", session.userId)
+          .where("created_at", ">=", new Date(Date.now() - 86_400_000))
+          .groupBy("type")
+          .execute();
+
+        return (
+          <main>
+            <h1>Dashboard</h1>
+            <div style={{ display: "flex", gap: 16 }}>
+              {metrics.map(m => (
+                <MetricCard key={m.type} label={m.type} value={Number(m.count)} />
+              ))}
+            </div>
+          </main>
+        );
+      }
+    reasoning: >-
+      Shows a React Server Component doing direct database access with ISR
+      revalidation — concretely illustrating how RSC eliminates the API-route
+      round-trip while letting ISR control freshness.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.532Z'
+estimatedHours: 8
+lastUpdatedAt: '2026-05-14T12:31:47.582Z'
 needsManualPick: false
 resources:
   videos:

@@ -7,8 +7,8 @@ summary: >-
   Detect and reduce fabricated APIs, made-up types, and false claims from AI
   output — grounding, verification, and skepticism patterns.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  AI invents plausible-looking but wrong code. Verify outputs against docs, test
+  rigorously, and use retrieval or reference-based prompting to ground answers.
 definition: >-
   Hallucination mitigation is the practice of detecting and reducing false or
   fabricated outputs from AI coding tools — invented function signatures,
@@ -44,29 +44,154 @@ definition: >-
   architectural decisions.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Hallucination in AI coding tools is less like making things up at random and
+  more like a very confident developer working from memory. The model has seen
+  an enormous amount of code, documentation, and discussion about programming
+  patterns — and it synthesizes from that training. Most of the time the
+  synthesis is correct. But when a library changed its API between the model's
+  training cutoff and today, or when a function signature exists in only one
+  obscure project, or when the algorithm is in a domain thin in training data,
+  the model will fill the gap with something plausible rather than admitting
+  uncertainty. That confidently wrong output is what makes hallucination a
+  production risk: the code compiles, looks right, passes a superficial review,
+  and then fails in ways that take time to trace back to the root cause.
+
+
+  The 80/20 of mitigation is grounding plus your existing toolchain. Grounding
+  means you don't ask the model to recall API details from memory — you give it
+  the actual type definitions, the actual function signatures, the actual
+  documentation. The model's parametric memory is a starting point, not a source
+  of truth for production code. Your existing toolchain — type checker, linter,
+  test suite — is the other half of the equation. TypeScript's compiler will
+  catch a hallucinated method call. A test suite will catch a subtly wrong
+  algorithm. The mitigation strategy that works in practice is not primarily
+  about prompting better; it's about treating AI output as a draft that must
+  pass your existing quality gates before it's trusted.
+
+
+  The failure mode teams fall into is treating AI output as reviewed once the
+  model explains its reasoning. A model will happily justify wrong code with
+  plausible-sounding explanations. The explanation is also generated text,
+  subject to the same statistical-synthesis process as the code itself. The
+  discipline is to verify the code, not the explanation: compile it, run the
+  tests, check the API calls against official docs. If you find yourself nodding
+  along to a model's explanation without running the code, you're in the
+  hallucination trap.
+
+
+  For libraries or APIs with significant post-training changes, or for
+  domain-specific tools with limited training coverage, grounding becomes
+  non-negotiable. Including the relevant section of the official documentation
+  in your context window — even if it's verbose — is the single most reliable
+  way to get correct API usage. This is technically context engineering, but the
+  framing matters: you're not just improving quality, you're replacing uncertain
+  memory with authoritative ground truth. Retrieval-augmented generation systems
+  do this automatically, but even in manual workflows, the habit of 'include the
+  docs' outperforms the habit of 'trust the model.'
+
+
+  In the broader AI-assisted development ecosystem, hallucination mitigation is
+  the practice that calibrates your relationship with AI tools correctly.
+  Developers who skip it tend to oscillate between over-trust (shipping
+  hallucinated code without verification) and under-trust (dismissing AI tools
+  after a string of bad experiences). The calibrated posture is to use AI tools
+  for what they're genuinely reliable at — common patterns, structural
+  generation, boilerplate, code in well-represented domains — and to apply
+  systematic verification for everything that goes to production. That
+  calibration is what makes AI coding tools a durable productivity gain rather
+  than a source of unpredictable noise.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Treating confident AI output as ground truth
+    explanation: >-
+      Models produce wrong API signatures, nonexistent library methods, and
+      plausible-but-incorrect algorithms with the same confident tone as correct
+      output. The compiler, type checker, and test suite are the ground truth —
+      AI output is always a draft to be verified.
+  - title: No type definitions or API docs in context
+    explanation: >-
+      Asking a model to use a library without providing its actual type
+      signatures or documentation forces it to rely on memorized training data,
+      which may be outdated or incorrect. Ground the model in real, current
+      source material for anything beyond standard library calls.
+  - title: Skipping compile and test before trusting generated code
+    explanation: >-
+      The most common hallucination in AI-generated code is a function call with
+      the wrong argument count or type, which a type checker or test suite
+      catches instantly. Never commit AI-generated code without running the full
+      type-check and test pipeline locally.
+  - title: Hallucination risk highest for recent or obscure APIs
+    explanation: >-
+      AI coding tools are reliable for patterns well-represented in training
+      data and much less reliable for libraries released or substantially
+      changed after the training cutoff. For any dependency added in the last
+      year, verify method signatures directly against the official docs.
+  - title: Not asking the model to flag its own uncertainty
+    explanation: >-
+      Models asked 'write this function' will produce something, even when they
+      should say 'I'm not sure about this API.' Explicitly prompting 'if you're
+      uncertain about any part, say so' surfaces hedges that tell you where to
+      verify independently.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: Ground AI with Real Type Definitions
+    code: >-
+      import Anthropic from "@anthropic-ai/sdk";
+
+      import { readFileSync } from "node:fs";
+
+
+      const client = new Anthropic();
+
+
+      // Instead of relying on the model's memory of your API, inject the real
+      types.
+
+      async function generateWithGrounding(task: string): Promise<string> {
+        // Inject actual type definitions so the model can't hallucinate function signatures
+        const types = readFileSync("src/lib/api-types.ts", "utf8");
+        const errors = readFileSync("src/lib/errors.ts", "utf8");
+
+        const res = await client.messages.create({
+          model: "claude-opus-4-5",
+          max_tokens: 1024,
+          system: [
+            "You must only use the types and functions shown in the provided source files.",
+            "Do not invent type names, method signatures, or imports not shown.",
+            "If unsure, say so explicitly rather than guessing."
+          ].join(" "),
+          messages: [{
+            role: "user",
+            content: [
+              `Task: ${task}`,
+              "",
+              "### src/lib/api-types.ts",
+              "```typescript",
+              types.slice(0, 3000),
+              "```",
+              "",
+              "### src/lib/errors.ts",
+              "```typescript",
+              errors.slice(0, 1000),
+              "```"
+            ].join("\n")
+          }]
+        });
+
+        return res.content.find(b => b.type === "text")?.text ?? "";
+      }
+
+
+      const code = await generateWithGrounding("Write a handler that calls
+      createUser and returns AppError on failure.");
+
+      console.log(code);
+    reasoning: >-
+      Demonstrates grounding: injecting real type definition files into context
+      forces the model to use actual signatures rather than hallucinating
+      plausible-but-wrong ones.
 difficulty: intermediate
 estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.497Z'
+lastUpdatedAt: '2026-05-14T12:31:47.534Z'
 needsManualPick: false
 resources:
   videos:

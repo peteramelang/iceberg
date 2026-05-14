@@ -224,6 +224,6 @@ shortExplainerVideo:
     implicitly by showing what the tool does. Tight, within duration bounds, no
     tutorial bloat.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.541Z'
+lastUpdatedAt: '2026-05-14T12:33:14.420Z'
 ---
 <!-- user notes -->

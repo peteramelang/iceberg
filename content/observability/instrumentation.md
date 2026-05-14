@@ -348,6 +348,6 @@ tldr: >-
   Record metrics and event traces throughout your code so you can see what's
   happening in production and diagnose problems in minutes instead of hours.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.897Z'
+lastUpdatedAt: '2026-05-14T12:31:47.599Z'
 ---
 <!-- user notes -->

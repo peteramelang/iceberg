@@ -7,8 +7,8 @@ summary: >-
   Systematic debugging: hypothesis-driven investigation, when to add logs vs use
   a debugger, root cause vs symptom.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Form a hypothesis, run a small experiment, and update based on evidence. Avoid
+  random code changes; track what you've eliminated.
 definition: >-
   The debugging mindset is a disciplined, hypothesis-driven approach to finding
   and fixing defects rather than randomly changing code until tests pass. A
@@ -36,29 +36,167 @@ definition: >-
   most common traps of tunnel vision and confirmation bias.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Debugging is the activity that exposes how an engineer actually thinks.
+  Writing code is mostly synthesis — you build something according to a plan.
+  Debugging is analysis — you encounter a system behaving in a way you did not
+  predict, and you have to figure out why using only the evidence it leaves
+  behind. Most engineers are undertrained in this because the curriculum skips
+  it: textbooks show you how to write programs, not how to reconstruct what went
+  wrong in one.
+
+
+  In production, the stakes change the game in two ways. First, you often cannot
+  reproduce the problem locally. The crash happens in a distributed system
+  across three services, with timing dependencies, under load, with real user
+  data you do not have locally. Second, you cannot pause it. A debugger attached
+  to a running production instance is either impossible or dangerous; structured
+  logging and distributed tracing are not optional conveniences, they are the
+  primary tool. Engineers who have only ever debugged locally by setting
+  breakpoints will be nearly helpless when something goes wrong in prod for the
+  first time.
+
+
+  The 80/20 of debugging is the hypothesis-first discipline. Before touching
+  anything — before adding a log, before reading the code, before asking anyone
+  — write down what you think the bug is and why. This sounds almost insultingly
+  simple, but it forces two things: it makes your current mental model explicit
+  so you can see where it breaks, and it gives you a falsifiable prediction that
+  you can test with a targeted experiment. The engineers who debug fastest are
+  not the ones who know the most; they are the ones who generate crisp
+  hypotheses and run tight experiments to test them. Random changes to see what
+  happens is the slowest path to the answer, and it also leaves you with less
+  understanding than when you started.
+
+
+  The failure mode to watch most carefully is confirmation bias — the tendency
+  to interpret ambiguous evidence as supporting your existing theory. You read a
+  log line, it could mean two things, and you unconsciously choose the
+  interpretation that confirms what you already believe. The fix is to actively
+  look for evidence that would falsify your hypothesis, not just confirm it.
+  David Agans calls this 'quit thinking and look': when you catch yourself
+  reasoning about what must be happening based on what you think the code does,
+  stop and look at what the code actually does. Source code and production
+  behavior are different things.
+
+
+  The distinction between symptoms and causes is the central mental model. A
+  NullPointerException on line 347 is not the bug; it is where the bug surfaced.
+  The actual cause might be in a constructor three layers up that set a field to
+  null under a specific condition. Following the symptom back to the cause
+  requires working against the intuition to fix what is in front of you. Stack
+  traces are helpful for finding the symptom; git bisect and binary search
+  through logs are how you find the cause. Any technique that helps you answer
+  'what changed?' is your friend, because in most production systems the answer
+  to 'why is this broken?' is 'because something changed'.
+
+
+  Debugging fits into the broader craft landscape as the skill that validates
+  all your other instrumentation investments. Good observability, structured
+  logging, and distributed tracing are not useful in steady state — they only
+  pay off when something goes wrong. The discipline of hypothesis-driven
+  debugging is also what makes on-call rotations survivable: engineers who
+  approach pages with a systematic method resolve incidents faster, page less,
+  and write more useful postmortems than those who rely on pattern-matching
+  intuition alone.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Changing code without a hypothesis first
+    explanation: >-
+      Modifying things randomly until the bug disappears is the most common and
+      costly debugging anti-pattern — it produces fixes that mask the real cause
+      and often introduce new bugs. Always form a specific, falsifiable
+      hypothesis about the root cause before touching any code.
+  - title: Treating the symptom as the cause
+    explanation: >-
+      A NullPointerException on line 200 is not the bug — it is the observable
+      consequence of an invariant violated elsewhere. Effective debuggers work
+      backwards from the symptom to find where the invariant was broken, not
+      forward from the crash site.
+  - title: Tunnel vision after the first plausible theory
+    explanation: >-
+      Once a reasonable hypothesis exists, confirmation bias causes engineers to
+      interpret all subsequent evidence in its favor. Keep at least one
+      alternative hypothesis active and explicitly try to disprove your leading
+      theory before acting on it.
+  - title: Not reading the full error message and stack trace
+    explanation: >-
+      The majority of debugging time wasted by developers is spent hunting for
+      what the stack trace already says. Read the entire error — including the
+      cause chain — before opening a file. The line number in the trace is often
+      the answer.
+  - title: Skipping bisect for regressions with known-good history
+    explanation: >-
+      When a bug was introduced by a commit in a range of known-good history,
+      git bisect finds the offending commit in O(log N) steps — faster than
+      reading every change manually. Reaching for bisect before code archaeology
+      is a professional-level time saver.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.509Z'
+  - language: bash
+    title: Git Bisect to Find Regression Commit
+    code: >-
+      #!/usr/bin/env bash
+
+      # Hypothesis-driven debugging: use git bisect to binary-search for the
+      commit
+
+      # that introduced a bug. Replace the test command with your own check.
+
+
+      set -euo pipefail
+
+
+      # Start bisect session
+
+      git bisect start
+
+
+      # Mark the current HEAD as bad (bug is present here)
+
+      git bisect bad HEAD
+
+
+      # Mark the last known-good commit or tag
+
+      git bisect good v2.1.0
+
+
+      # Run automated bisect: git checks out commits, runs this command.
+
+      # Exit 0 = good, exit 1 = bad — git binary-searches the range.
+
+      git bisect run bash -c '
+        pnpm build --silent 2>/dev/null &&
+        pnpm test --testPathPattern="auth" --silent 2>/dev/null
+        exit $?
+      '
+
+
+      # When done, git prints the first bad commit.
+
+      # Always reset after bisect:
+
+      git bisect reset
+
+
+      # ---- Alternative: manual step-through ----
+
+      # git bisect start
+
+      # git bisect bad
+
+      # git bisect good v2.1.0
+
+      # # git checks out midpoint; test manually, then:
+
+      # git bisect good   # or: git bisect bad
+
+      # # repeat until git identifies the culprit
+    reasoning: >-
+      Git bisect is the canonical hypothesis-driven debugging tool for
+      regressions — binary search replaces hours of guesswork, and automating
+      the test command makes it hands-off.
+difficulty: beginner
+estimatedHours: 3
+lastUpdatedAt: '2026-05-14T12:31:47.551Z'
 needsManualPick: false
 resources:
   videos:

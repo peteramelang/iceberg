@@ -7,8 +7,8 @@ summary: >-
   Durable background jobs — BullMQ, pg-boss, Temporal, Inngest — with
   at-least-once semantics, schedules, and retries.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Queue work outside the request cycle to keep endpoints fast. Use durable
+  queues, ensure idempotent workers, and implement retry logic.
 definition: >-
   Background jobs are units of work executed outside the synchronous
   request/response cycle, allowing applications to offload slow or failure-prone
@@ -37,29 +37,146 @@ definition: >-
   dedicated server and steeper learning curve.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The moment you route a credit card charge, a transactional email, or a video
+  encoding job through your synchronous request handler, you've made a mistake
+  that will bite you in production. Slow third-party calls time out, users stare
+  at spinners, and a single upstream hiccup causes your entire request pool to
+  drain. Background job queues exist to isolate that work from the HTTP cycle —
+  producers enqueue a payload and return immediately, while workers pick it up
+  independently. This is not a premature optimization; it is table stakes for
+  any application that touches external services.
+
+
+  The 80/20 of picking a queue is simpler than the ecosystem makes it look. If
+  your app already runs Postgres and your job volume is measured in thousands
+  per day rather than millions, pg-boss is the correct starting point — you add
+  zero infrastructure and get durable persistence, SKIP LOCKED-based
+  concurrency, and a reasonable scheduling API. If you are on Node.js and
+  already running Redis for sessions or caching, BullMQ gives you excellent
+  developer ergonomics and cron scheduling. Resist the urge to reach for
+  Temporal on day one; its operational overhead and learning curve are real
+  costs you only justify when workflows are genuinely long-running, multi-step,
+  or involve external approval gates.
+
+
+  The failure modes in background job systems cluster around two themes:
+  exactly-once assumptions and silent queue growth. At-least-once delivery is
+  the default, which means your workers will occasionally process the same job
+  twice — after a worker crash, after a timeout, after a retry storm. Workers
+  that are not idempotent will double-charge cards, send duplicate welcome
+  emails, and generate phantom records. This is not a hypothetical; it happens
+  in production, and building idempotency into handlers from the start is far
+  cheaper than discovering the problem after the fact. The second failure mode
+  is the job queue silently filling up because workers are overwhelmed or broken
+  — jobs are enqueued faster than they are consumed, latency climbs, and nothing
+  alerts you until a user complains. Queue depth and processing latency are the
+  two metrics you must monitor.
+
+
+  The useful mental model is to think of a job queue as a durable buffer with a
+  contract: the producer promises the work will happen eventually, the worker
+  promises to acknowledge completion or signal failure so the queue can retry.
+  What makes this contract meaningful is persistence — Redis-backed queues
+  survive worker crashes but not Redis crashes without AOF persistence enabled,
+  while Postgres-backed queues survive both. Managed durable-execution platforms
+  like Inngest and Trigger.dev push the contract further: they store execution
+  history, make function steps individually retriable, and let you view the
+  state of any workflow at any point in time from a dashboard without deploying
+  a sidecar server.
+
+
+  In the broader ecosystem, background jobs sit between your API layer and every
+  external dependency with unpredictable latency or failure rates. That includes
+  payment processors, email providers, third-party APIs, AI model calls, and
+  your own internal services that have separate deployment lifecycles. Getting
+  comfortable with job queues early means you can expose new capabilities —
+  scheduled reports, bulk exports, async onboarding flows — without any risk of
+  degrading your core request path. The teams that treat background jobs as an
+  afterthought spend enormous time debugging production incidents that would
+  have been impossible if the work had been queued in the first place.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Non-idempotent job handlers break under retries
+    explanation: >-
+      At-least-once delivery guarantees the job will run again if a worker
+      crashes or the queue doesn't receive an acknowledgment. A handler that
+      charges a card, sends an email, or increments a counter without
+      idempotency guards will duplicate those effects on retry.
+  - title: No dead-letter queue means silent job loss
+    explanation: >-
+      Jobs that exceed their retry budget are discarded unless a dead-letter
+      queue is configured to capture them. Without DLQ inspection, failed jobs
+      disappear and the underlying problem often goes unnoticed until a user
+      reports missing data.
+  - title: Blocking the HTTP response while waiting for job completion
+    explanation: >-
+      Enqueuing a job and then polling for its result inside the request handler
+      defeats the purpose of async processing and causes timeouts under load.
+      Fire-and-forget with a status-polling endpoint or webhook callback is the
+      correct pattern.
+  - title: Unbounded concurrency causes downstream service overload
+    explanation: >-
+      Spinning up workers without concurrency limits means a queue backlog gets
+      processed in a burst that overwhelms the database or third-party API it
+      depends on. Configure per-worker and per-queue concurrency limits before
+      going to production.
+  - title: Cron jobs without overlap protection run concurrently
+    explanation: >-
+      A scheduled job that takes longer than its interval will overlap with the
+      next invocation unless the queue enforces single-concurrency or uses a
+      distributed lock. Overlapping cron instances routinely cause
+      double-processing of records and corrupted aggregations.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
+    title: BullMQ Worker with Idempotent Handler
+    code: |-
+      import { Queue, Worker } from "bullmq";
+      import { Redis } from "ioredis";
+
+      const connection = new Redis({ maxRetriesPerRequest: null });
+
+      // Producer: enqueue a job (idempotency key prevents duplicates)
+      export const emailQueue = new Queue("email", { connection });
+
+      export async function enqueueWelcomeEmail(userId: string) {
+        await emailQueue.add(
+          "welcome",
+          { userId },
+          {
+            jobId: `welcome:${userId}`, // idempotent — duplicate enqueues are no-ops
+            attempts: 5,
+            backoff: { type: "exponential", delay: 2000 }
+          }
+        );
+      }
+
+      // Worker: consumes jobs, safe to call multiple times
+      const worker = new Worker(
+        "email",
+        async (job) => {
+          const { userId } = job.data as { userId: string };
+          console.log(`[${job.id}] Sending welcome email to user ${userId}`);
+
+          // Actual send — must be idempotent (check DB if already sent)
+          await sendEmail(userId);
+        },
+        { connection, concurrency: 5 }
+      );
+
+      worker.on("failed", (job, err) => {
+        console.error(`Job ${job?.id} failed:`, err.message);
+      });
+
+      async function sendEmail(userId: string) {
+        // Placeholder: call your email provider SDK here
+        console.log(`Email sent to ${userId}`);
+      }
+    reasoning: >-
+      Shows BullMQ with a stable jobId for idempotent enqueuing and exponential
+      backoff retries — the two patterns that prevent duplicate emails and
+      handle transient failures.
 difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.520Z'
+estimatedHours: 6
+lastUpdatedAt: '2026-05-14T12:31:47.570Z'
 needsManualPick: false
 resources:
   videos:

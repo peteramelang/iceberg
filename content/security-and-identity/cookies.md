@@ -285,6 +285,6 @@ shortExplainerVideo:
     for computer science fundamentals; this is the canonical academic-quality
     explainer on HTTP cookies.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.579Z'
+lastUpdatedAt: '2026-05-14T12:33:14.493Z'
 ---
 <!-- user notes -->

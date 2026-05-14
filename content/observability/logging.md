@@ -339,6 +339,6 @@ tldr: >-
   Record structured logs so you can reconstruct exactly what your system did
   when investigating problems—no guessing, just query the timeline.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.898Z'
+lastUpdatedAt: '2026-05-14T12:31:47.601Z'
 ---
 <!-- user notes -->

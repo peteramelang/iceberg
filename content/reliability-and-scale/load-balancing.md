@@ -299,6 +299,6 @@ tldr: >-
   Route incoming traffic across multiple servers so no single one becomes a
   failure point, and you can scale up or deploy without downtime.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.905Z'
+lastUpdatedAt: '2026-05-14T12:31:47.609Z'
 ---
 <!-- user notes -->

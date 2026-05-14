@@ -377,6 +377,6 @@ tldr: >-
   systems—so policy violations get caught automatically, not by accident during
   an audit.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.871Z'
+lastUpdatedAt: '2026-05-14T12:31:47.561Z'
 ---
 <!-- user notes -->

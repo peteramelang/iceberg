@@ -264,6 +264,6 @@ shortExplainerVideo:
     and recovery strategy. Strong preferred source, authoritative and
     non-tutorial. Within the 600-second limit.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.546Z'
+lastUpdatedAt: '2026-05-14T12:33:14.430Z'
 ---
 <!-- user notes -->

@@ -366,6 +366,6 @@ shortExplainerVideo:
     distinctions, and graceful degradation. High quality channel with 15k+
     views, clear animation-based explainer, no tutorial bloat.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.572Z'
+lastUpdatedAt: '2026-05-14T12:33:14.478Z'
 ---
 <!-- user notes -->

@@ -7,8 +7,8 @@ summary: >-
   Reproducible local environments via devcontainers, nix, or docker compose —
   the cure for 'works on my machine' bugs.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Codify your development environment in a Docker container. Developers run a
+  single command and get the exact setup without manual installation.
 definition: >-
   Dev containers are Docker-based development environments described in a
   `devcontainer.json` file that lives alongside your project code. Instead of
@@ -37,29 +37,136 @@ definition: >-
   enjoy the broadest IDE support and lowest friction for most teams.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The cost of environment drift is almost entirely invisible until it isn't. A
+  new engineer spends two days getting the project to run locally; a senior
+  engineer wastes an afternoon debugging a test failure that only reproduces on
+  their specific OS version; a contractor can't get started without an hour of
+  back-and-forth in Slack. None of these incidents show up in an incident
+  report, and none of them generate a postmortem, so teams chronically
+  underinvest in environment reproducibility until the pain becomes acute. Dev
+  containers are the most pragmatic solution available today for teams where
+  most developers use VS Code, JetBrains, or GitHub Codespaces — commit a
+  `devcontainer.json`, and anyone can be in a working environment in minutes
+  rather than days.
+
+
+  The 80/20 of actually using dev containers well is understanding that the
+  config is code, not documentation. The worst-case scenario is a
+  `devcontainer.json` that references a mutable `:latest` image and a
+  `postCreateCommand` that runs fifteen curl commands — it will drift, it will
+  break on a Tuesday morning, and no one will know why. The right approach is a
+  pinned base image, a lockfile inside the container, and lifecycle scripts that
+  are idempotent. The features system — composable additions like "add Node 22"
+  or "add the GitHub CLI" — is genuinely good and worth using instead of
+  hand-rolling Dockerfiles for common tooling combinations.
+
+
+  The failure modes that bite teams are mostly about the gap between the
+  development container and production. A fat dev container with every debugging
+  tool, linter, and language server is correct for developer ergonomics, but it
+  can mask issues that only appear in a lean production image — missing native
+  libraries, different glibc versions, path assumptions that worked in the
+  container but not in the deployed artifact. The other failure mode is Apple
+  Silicon: if your base image is `amd64` and your developers are on M-series
+  Macs, you will eventually hit a native dependency that silently compiles wrong
+  or crashes at runtime. Always specify multi-arch base images or add
+  `--platform linux/amd64` to your Dockerfile and accept the emulation overhead.
+
+
+  The mental model that makes dev containers click is thinking of the container
+  as the project's development API contract. Just as a public API has a version
+  and a spec, the dev container is the specification for what a working
+  development environment looks like. When you upgrade a runtime or add a
+  dependency, you update the spec. This shifts environment maintenance from
+  tribal knowledge — instructions buried in a README that are always slightly
+  out of date — to executable configuration that can be tested in CI. GitHub
+  Codespaces runs the same `devcontainer.json` in the cloud, which means you can
+  validate the environment on every pull request without touching anyone's
+  laptop.
+
+
+  In the ecosystem, dev containers occupy a different niche than Nix or `mise`.
+  Nix offers stronger reproducibility guarantees and works natively on macOS
+  without Docker, but the learning curve is steep and the mental model is
+  genuinely foreign to most developers. `mise` and `asdf` handle runtime version
+  pinning well but don't give you the OS-level isolation that catches subtler
+  environmental issues. Dev containers give up some of Nix's purity for far
+  lower friction — which is the right trade for teams where not everyone is a
+  systems programmer and the goal is eliminating the two-day onboarding tax, not
+  achieving bit-for-bit reproducibility.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Slow image builds kill the developer experience
+    explanation: >-
+      Dev container images that install every tool from scratch on every rebuild
+      make open-from-cold a multi-minute ordeal, defeating the reproducibility
+      benefit. Use pre-built base images and layer only project-specific
+      additions on top; cache layers aggressively.
+  - title: Apple Silicon architecture mismatch causes subtle failures
+    explanation: >-
+      Linux/amd64 container images running on Apple Silicon via Rosetta
+      emulation can produce different behavior for native binaries,
+      byte-order-sensitive code, and some npm packages with native addons.
+      Always test on the actual target architecture and specify platform
+      explicitly in the config.
+  - title: Secrets baked into the container image
+    explanation: >-
+      Developers often include API keys or tokens in postCreateCommand scripts
+      or Dockerfile ENV instructions, leaking them to anyone who can pull the
+      image. Inject secrets at runtime via environment variables or a secrets
+      manager, never at image build time.
+  - title: Dev container diverges from production container silently
+    explanation: >-
+      A dev container optimized for ergonomics — fat base image, extra debug
+      tools, different Node version — can mask behaviors that only appear in the
+      slim production image. Keep the runtime version pinned identically between
+      dev and prod layers.
+  - title: No versioned devcontainer.json causes onboarding drift
+    explanation: >-
+      When devcontainer.json is not committed to the repository or is updated
+      without team communication, different developers run on different
+      environments without knowing it. Treat devcontainer.json as a code
+      contract: review changes, version them, and communicate breaking changes.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
+  - language: json
+    title: devcontainer.json for Node TypeScript Project
+    code: |-
+      {
+        "name": "myapp-dev",
+        "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+        "features": {
+          "ghcr.io/devcontainers/features/node:1": { "version": "20" },
+          "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+        },
+        "forwardPorts": [3000, 5432],
+        "postCreateCommand": "pnpm install",
+        "postStartCommand": "pnpm db:migrate",
+        "customizations": {
+          "vscode": {
+            "extensions": [
+              "dbaeumer.vscode-eslint",
+              "esbenp.prettier-vscode",
+              "Prisma.prisma",
+              "ms-vscode.vscode-typescript-next"
+            ],
+            "settings": {
+              "editor.formatOnSave": true,
+              "editor.defaultFormatter": "esbenp.prettier-vscode",
+              "typescript.tsdk": "node_modules/typescript/lib"
+            }
+          }
+        },
+        "remoteEnv": {
+          "DATABASE_URL": "postgresql://postgres:postgres@localhost:5432/myapp",
+          "NODE_ENV": "development"
+        }
+      }
+    reasoning: >-
+      A complete devcontainer.json showing features, port forwarding,
+      post-create hooks, VS Code extension pinning, and environment variables —
+      the six things every team's config needs.
+difficulty: beginner
 estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.521Z'
+lastUpdatedAt: '2026-05-14T12:31:47.571Z'
 needsManualPick: false
 resources:
   videos:

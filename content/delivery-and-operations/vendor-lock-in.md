@@ -199,6 +199,6 @@ tldr: >-
   Avoid becoming trapped by one vendor. Keep data portable and abstract the
   services you might swap, so you have options when pricing changes.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:27:20.535Z'
+lastUpdatedAt: '2026-05-14T12:33:14.413Z'
 ---
 <!-- user notes -->

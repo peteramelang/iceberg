@@ -257,6 +257,6 @@ tldr: >-
   Cap how many requests each user can make per minute so one bad actor or
   misbehaving client can't overwhelm your entire service.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.915Z'
+lastUpdatedAt: '2026-05-14T12:31:47.628Z'
 ---
 <!-- user notes -->

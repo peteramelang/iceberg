@@ -7,8 +7,8 @@ summary: >-
   Write the README first. ADRs as code. Doc tests. Treat documentation as an API
   contract with future readers.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Write docs before code to clarify requirements and catch design gaps early. A
+  clear README often reveals missing functionality.
 definition: >-
   Documentation-Driven Development (DDD) is the practice of writing
   documentation — READMEs, API references, Architecture Decision Records, or
@@ -36,29 +36,140 @@ definition: >-
   reference are mixed together.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The most common objection to documentation is that it goes stale. This is
+  true, and it is also a symptom of doing documentation wrong. When docs are
+  written after the code, as a separate afterthought artifact, they are coupled
+  to a snapshot of reality that immediately starts drifting. When docs are
+  written before or alongside the code — as constraints that the code must
+  satisfy — the relationship inverts. Stale docs become visible instantly
+  because the code no longer does what the docs say, rather than silently wrong
+  because the docs no longer describe what the code does.
+
+
+  The 80/20 of documentation-driven development is the README-first discipline
+  for APIs and the ADR discipline for architecture decisions. Writing the README
+  before you write the code forces a clarity of intent that design documents and
+  whiteboard diagrams rarely achieve. If you cannot write a clear 'getting
+  started' section, you do not yet understand what you are building well enough
+  to build it. Awkward installation instructions usually mean awkward
+  installation; a usage example that requires ten steps to do something simple
+  usually means the interface is too complex. The README becomes a specification
+  that the code either satisfies or does not. Architecture Decision Records
+  extend this to the why layer: they capture not just what the system does but
+  what alternatives were rejected and on what grounds, which is the information
+  future maintainers most desperately need and most rarely have.
+
+
+  The failure mode that kills most documentation efforts is category confusion.
+  Teams write tutorials when they need reference docs, or write reference docs
+  when what users need is a how-to guide for a specific task. The result is
+  technically accurate but impossible to use — like a dictionary that lists
+  every word but provides no sentence examples. The Diátaxis framework provides
+  a useful forcing function: before writing anything, ask whether you are
+  writing a tutorial (learning-oriented, for new users), a how-to guide
+  (task-oriented, assumes baseline knowledge), a reference
+  (information-oriented, exhaustive), or an explanation (understanding-oriented,
+  covers the 'why'). These four types answer different questions for different
+  readers, and mixing them in a single document serves none of them well.
+
+
+  Doc tests are the mechanism that eliminates the staleness problem for the most
+  critical documentation: code examples. In Python, Rust, and increasingly other
+  ecosystems, the examples in your API docs can be executed as part of the test
+  suite. This means a code change that breaks the documented behavior also
+  breaks the build — you cannot silently drift. The investment to set this up is
+  small; the compounding benefit over the life of a codebase is substantial. Any
+  API that is more than superficially complex should have at minimum a handful
+  of executable examples covering the happy path and the most common error
+  cases.
+
+
+  In the ecosystem of developer craft, documentation-driven development is the
+  practice that most directly serves future engineers — including your future
+  self. Every undocumented design decision is a trap for the next person who has
+  to change that part of the code, including six-months-from-now you. Teams that
+  build the habit of capturing intent at decision time are effectively investing
+  in their own future velocity: onboarding new engineers costs a fraction of
+  what it costs in teams where knowledge lives only in the heads of the original
+  authors. This is not about covering your bases or being professional for its
+  own sake. It is a productivity investment with one of the highest and most
+  durable returns in software engineering.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Writing documentation after the code is done
+    explanation: >-
+      Documentation written post-hoc describes what was built, not what should
+      have been built — any design awkwardness is already locked in. Writing the
+      README or API doc first forces interface clarity before a line of
+      implementation is committed.
+  - title: Mixing tutorial and reference content in the same document
+    explanation: >-
+      Blending step-by-step instructions with exhaustive API details in one wall
+      of text serves neither learner well — tutorials require narrative flow,
+      reference requires completeness and scanability. Keep them separate
+      following the Diátaxis four-quadrant model.
+  - title: Code examples that drift from reality and mislead readers
+    explanation: >-
+      Docs with manual code examples go stale as the API evolves, creating user
+      confusion and support load. Make examples executable via doc tests, CI
+      notebook checks, or runnable snippets so stale examples fail visibly
+      rather than quietly misleading users.
+  - title: 'ADRs never written, so decision rationale is lost'
+    explanation: >-
+      Without Architecture Decision Records, the team perpetually rediscovers
+      why a constraint or pattern exists, relitigating past decisions at cost. A
+      five-sentence ADR capturing context, options, and rationale prevents that
+      regression and onboards new engineers faster.
+  - title: 'Documentation treated as a deliverable, not a living asset'
+    explanation: >-
+      Docs written at launch and never updated become inaccurate faster than the
+      code they describe. Assign documentation ownership, include doc updates in
+      the PR checklist for feature changes, and audit for staleness on a regular
+      schedule.
 codeExamples:
   - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.510Z'
+    title: JSDoc as Executable Contract with Tests
+    code: |-
+      /**
+       * Paginate an array into fixed-size pages.
+       *
+       * @param items - The full array to paginate.
+       * @param page  - 1-based page number.
+       * @param size  - Items per page (1–100).
+       * @returns The slice for the requested page and total page count.
+       *
+       * @example
+       * paginate([1,2,3,4,5], 1, 2) // => { items: [1, 2], totalPages: 3 }
+       * paginate([1,2,3,4,5], 3, 2) // => { items: [5],    totalPages: 3 }
+       * paginate([],           1, 10) // => { items: [],    totalPages: 0 }
+       */
+      export function paginate<T>(
+        items: T[],
+        page: number,
+        size: number
+      ): { items: T[]; totalPages: number } {
+        if (size < 1 || size > 100) throw new RangeError("size must be 1–100");
+        if (page < 1) throw new RangeError("page must be >= 1");
+        const totalPages = Math.ceil(items.length / size);
+        const start = (page - 1) * size;
+        return { items: items.slice(start, start + size), totalPages };
+      }
+
+      // --- Tests derived directly from the JSDoc examples ---
+      import { describe, it, expect } from "vitest";
+      describe("paginate", () => {
+        it("returns the correct slice", () => {
+          expect(paginate([1,2,3,4,5], 1, 2)).toEqual({ items: [1,2], totalPages: 3 });
+          expect(paginate([1,2,3,4,5], 3, 2)).toEqual({ items: [5],   totalPages: 3 });
+          expect(paginate([],           1, 10)).toEqual({ items: [],   totalPages: 0 });
+        });
+      });
+    reasoning: >-
+      Writing the JSDoc @example first (documentation-driven) then deriving
+      tests directly from those examples — the pattern that keeps docs and code
+      in sync.
+difficulty: beginner
+estimatedHours: 3
+lastUpdatedAt: '2026-05-14T12:31:47.552Z'
 needsManualPick: false
 resources:
   videos:

@@ -7,8 +7,8 @@ summary: >-
   Ask AI coding tools for code that compiles, runs, and matches your codebase
   conventions — through clear intent, examples, and constraints.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Be specific about what you want, show examples of your codebase style, and
+  break complex requests into steps. Better prompts yield better code.
 definition: >-
   Prompting for code is the skill of communicating with AI coding tools in ways
   that produce code that compiles, runs correctly, and matches your codebase's
@@ -42,29 +42,149 @@ definition: >-
   from AI tools from those who find them unreliable.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Prompting for code is not a soft skill that autocomplete power users stumble
+  into — it's a structured practice with real leverage, and the difference
+  between developers who get consistent value from AI coding tools and those who
+  find them unreliable often comes down to how precisely they specify what they
+  want. The model responds to the intent you express, not the intent you have in
+  your head. A vague request produces a reasonable interpretation of what you
+  might have meant, which is a different thing from what you actually needed.
+  Developing the habit of specifying the output format, the constraints, the
+  patterns to follow, and the scope of change turns AI coding tools from
+  hit-or-miss to reliable.
+
+
+  The 80/20 of effective code prompting is specificity and constraints.
+  Specificity means stating what you want in terms of the concrete artifact — a
+  function with this signature, an interface with these fields, a test that
+  covers this edge case — rather than describing the goal at an abstract level.
+  Constraints mean telling the model what not to do as explicitly as what to do:
+  don't add new dependencies, don't refactor unrelated code, don't introduce
+  abstractions that aren't already in this codebase. The 'do not' constraints
+  are often more important than the positive instructions because they prevent
+  the model from doing something technically correct but unwanted. Few-shot
+  examples — showing the model one or two instances of the pattern you want —
+  are the highest-leverage single technique for matching codebase conventions.
+
+
+  The dominant failure mode for experienced developers is underspecifying
+  because they know what they mean. The model doesn't share your context, your
+  mental model of the architecture, or your opinions about what good code looks
+  like in this codebase. What feels like obvious context to you — 'add error
+  handling' — is genuinely ambiguous to a model that has seen error handling
+  implemented hundreds of different ways. Being explicit feels pedantic until
+  you've spent time debugging AI output that was plausibly correct but didn't
+  match your system. The pedantry pays off.
+
+
+  The meta-skill is distinguishing between a prompting problem and a capability
+  problem. When the model produces plausible-but-wrong output, the question is:
+  would a better-specified prompt fix this, or is this a domain where the model
+  genuinely lacks reliable capability? Prompting problems respond to iteration —
+  more specific constraints, examples, a different framing. Capability limits
+  don't: even with excellent prompts, the model will produce confidently wrong
+  output for things it's not reliable on. Learning to make that distinction
+  quickly — and knowing when to break a complex task into smaller, more
+  precisely specified sub-prompts — is what separates professional use of AI
+  coding tools from the amateur version.
+
+
+  Prompting for code sits as the foundational layer of everything else in
+  AI-assisted development. Context engineering determines what the model can
+  see; prompting determines how precisely you direct what it does with what it
+  sees. Good prompts make agent loops reliable, make AI review actionable, and
+  make hallucination mitigation easier because the model has less reason to fill
+  gaps with invented content when you've specified exactly what you need. It's
+  also the skill with the lowest barrier to start improving — you don't need to
+  change your tooling, you just need to be more explicit in the next
+  conversation.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: 'Vague prompts produce generic, unshippable code'
+    explanation: >-
+      Prompts like 'add error handling' or 'refactor this function' leave the
+      model to invent conventions, types, and patterns that don't match your
+      codebase. Include the function signature, the error type to use, and an
+      example of the pattern you expect.
+  - title: Omitting what the model should NOT do
+    explanation: >-
+      AI models default to being helpful in ways you didn't ask for —
+      refactoring unrelated code, adding logging you don't want, or importing
+      new dependencies. Explicitly state out-of-scope actions to prevent them.
+  - title: Confusing 'model at its capability limit' with 'bad prompt'
+    explanation: >-
+      Some failures are caused by an underconstrained prompt; others happen
+      because the task genuinely exceeds what the model can do reliably in one
+      shot. Diagnosing which is which prevents wasted iteration — break hard
+      tasks into smaller sub-prompts rather than rephrasing indefinitely.
+  - title: No examples means no pattern to match
+    explanation: >-
+      Describing a coding convention in prose is less reliable than showing the
+      model an existing function that exemplifies it. Few-shot examples of the
+      exact style — including file imports, error handling shape, and return
+      type — dramatically reduce style drift.
+  - title: Accepting first output without iterative refinement
+    explanation: >-
+      First-pass AI code is a draft, not a final answer. The discipline of
+      treating it as a starting point — running it, checking edge cases, and
+      asking targeted follow-up questions — is where most of the value is
+      captured.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
-estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.501Z'
+  - language: bash
+    title: Structured Prompt Template for Code Tasks
+    code: >-
+      #!/usr/bin/env bash
+
+      # A reusable prompt template that produces consistent, on-convention code.
+
+      # Pass GOAL, LANG, PATTERN_FILE, and CONSTRAINT as env vars or args.
+
+
+      GOAL="${1:-Add rate limiting to the /api/login endpoint}"
+
+      LANG="${2:-typescript}"
+
+      PATTERN_FILE="${3:-src/middleware/auth.ts}"
+
+      CONSTRAINT="${4:-Use our existing RateLimiter class. No new npm
+      packages.}"
+
+
+      read -r -d '' PROMPT << ENDOFPROMPT
+
+      You are a ${LANG} expert. Implement the following:
+
+
+      Goal: ${GOAL}
+
+
+      Constraints:
+
+      - ${CONSTRAINT}
+
+      - Match the style and patterns in the reference file exactly.
+
+      - Do NOT refactor unrelated code.
+
+      - Do NOT add comments unless they explain non-obvious logic.
+
+      - Output ONLY the changed file contents, no explanation.
+
+
+      Reference file (${PATTERN_FILE}):
+
+      $(cat "${PATTERN_FILE}" 2>/dev/null || echo "(file not found)")
+
+      ENDOFPROMPT
+
+
+      echo "$PROMPT" | claude --print
+    reasoning: >-
+      A bash template demonstrating the key structural elements of an effective
+      code prompt: goal, explicit constraints, a negative example of what NOT to
+      do, and a reference pattern file.
+difficulty: beginner
+estimatedHours: 3
+lastUpdatedAt: '2026-05-14T12:31:47.537Z'
 needsManualPick: false
 resources:
   videos:

@@ -287,6 +287,6 @@ shortExplainerVideo:
     definitive short-form explainer on CI/CD from the most authoritative
     concise-explainer channel for developers.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.523Z'
+lastUpdatedAt: '2026-05-14T12:33:14.389Z'
 ---
 <!-- user notes -->

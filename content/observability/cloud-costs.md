@@ -293,6 +293,6 @@ shortExplainerVideo:
     Fireship is authoritative; this is the canonical short-form cloud cost
     explainer with real monetary stakes.
   source: ai-researcher
-lastUpdatedAt: '2026-05-14T12:27:20.565Z'
+lastUpdatedAt: '2026-05-14T12:33:14.465Z'
 ---
 <!-- user notes -->

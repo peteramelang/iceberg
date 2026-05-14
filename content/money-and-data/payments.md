@@ -326,6 +326,6 @@ tldr: >-
   Wire up a payment processor securely so you can charge users reliably without
   storing their card numbers or accidentally double-charging them.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.889Z'
+lastUpdatedAt: '2026-05-14T12:31:47.591Z'
 ---
 <!-- user notes -->

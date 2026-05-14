@@ -311,6 +311,6 @@ tldr: >-
   Find which part of your system is actually slow by measuring everything, then
   fix the biggest bottleneck—usually a database query or external service call.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:11:25.904Z'
+lastUpdatedAt: '2026-05-14T12:31:47.608Z'
 ---
 <!-- user notes -->

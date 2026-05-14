@@ -7,8 +7,8 @@ summary: >-
   Reproducible setups, editor configuration, language servers, terminal
   multiplexers — the 5 percent setup investment that compounds.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Reproducible setup lets all developers arrive at the same working state.
+  Automate installation and verify it works in CI.
 definition: >-
   A local development environment is the complete configuration of tools,
   runtimes, editor settings, and shell utilities on a developer's machine that
@@ -41,29 +41,174 @@ definition: >-
   become muscle memory.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  The local development environment is infrastructure, not preference. Teams
+  treat it as preference — everyone has their own setup, maintained
+  individually, undocumented and idiosyncratic — and then wonder why onboarding
+  takes a week and why 'it works on my machine' is a phrase anyone ever needs to
+  say. The time investment to build a reproducible, documented, fast local
+  environment is front-loaded and modest; the time it saves over a project's
+  lifetime is large and continuous. It is one of the highest-leverage
+  investments a team can make in the first month of a project.
+
+
+  The 80/20 is: get the feedback loop under one second, and make the setup
+  reproducible in under thirty minutes. Everything else is optimization. The
+  reason the feedback loop matters so much is that developer throughput is gated
+  by iteration rate: the faster you can make a change and see its effect, the
+  more hypotheses you can test per hour, which is what determines how fast you
+  solve hard problems. A setup where running tests takes forty-five seconds
+  trains engineers to batch their changes and run tests infrequently, which
+  means longer debugging cycles and more changes between each feedback point. A
+  setup where tests run in under a second trains engineers to run them
+  constantly, which surfaces problems immediately. The tooling choice matters
+  less than the result: whatever combination of test runner, language runtime,
+  and editor gets you under one second is the right stack.
+
+
+  Reproducibility is the property that eliminates the largest category of wasted
+  time. When the setup is documented and repeatable — either through a
+  checked-in script, a devcontainer, or a tool like mise that pins runtime
+  versions — a new engineer can be productive in an afternoon instead of a week,
+  and an existing engineer who gets a new laptop does not lose a day. The common
+  failure mode here is that setup documentation exists but drifts: someone
+  changes the required Node version, updates a dependency, or adds a new service
+  to the local stack, and the README is not updated. The fix is to treat the
+  setup script as code that is tested — ideally by running it from scratch in CI
+  occasionally, or at minimum by convention that setup changes require a README
+  update in the same PR.
+
+
+  Editor configuration deserves more respect than it gets. The Language Server
+  Protocol changed the editor landscape permanently: any editor that implements
+  an LSP client gets the same rename, go-to-definition, find-references, and
+  inline-error capabilities as any other, which means the choice between Neovim,
+  VS Code, and Zed is genuinely now a preference question rather than a
+  productivity question. What is not a preference question is whether your LSP
+  is configured correctly for your stack. An unconfigured or misconfigured
+  language server means missing autocomplete, missing inline errors, and manual
+  navigation through files — all of which are slow and error-prone. The one-time
+  investment of getting the language server right for your primary language pays
+  dividends every day.
+
+
+  Terminal tooling has a compounding character that most developers
+  underestimate until they watch a senior engineer work. fzf for fuzzy file and
+  history search, ripgrep for fast code search that respects gitignore, a shell
+  with good completion, and git aliases for common operations — none of these
+  individually is dramatic, but together they reduce the tax on every action.
+  The engineer who types `rg 'payment_intent'` and gets results in 200ms has a
+  fundamentally different relationship with their codebase than the one who uses
+  a slow recursive grep or navigates through a GUI file browser. The same
+  applies to tmux or a terminal multiplexer: persistent sessions mean you never
+  lose your work context when your laptop sleeps, and named windows mean
+  switching between contexts takes a keystroke instead of rebuilding your
+  terminal layout.
+
+
+  In the ecosystem of developer craft, the local environment is the substrate on
+  which every other practice runs. Test-driven development is only viable if
+  running tests is fast. Debugging is only effective if you can reproduce the
+  problem locally. Code review is only thorough if the reviewer can check out a
+  branch and run it easily. Investing in the local environment is investing in
+  all of these simultaneously.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: No pinned runtime versions across the team
+    explanation: >-
+      When developers run different Node, Python, or Ruby versions, bugs that
+      only appear on certain minor versions are nearly impossible to reproduce.
+      Use a version manager with a lockfile (.nvmrc, .python-version,
+      .tool-versions) committed to the repo.
+  - title: Setup documented as prose instead of a script
+    explanation: >-
+      A README with numbered steps for installing dependencies, configuring
+      environment variables, and seeding the database goes stale and is
+      interpreted differently by each developer. An idempotent setup script run
+      by CI is the only documentation that stays correct.
+  - title: No language server configured in the editor
+    explanation: >-
+      Developers who skip LSP setup miss inline errors, go-to-definition, and
+      rename refactoring — capabilities that turn syntax bugs from compile-time
+      discoveries into runtime surprises. The 30-minute LSP setup investment
+      compounds across every day of development.
+  - title: Local environment silently diverges from production config
+    explanation: >-
+      Feature flags, environment variables, and service endpoints that differ
+      between local and production cause code that works locally to fail in
+      staging. Maintain a documented list of intentional environment differences
+      and a way to run locally with production-equivalent settings.
+  - title: Feedback loop longer than five seconds kills flow
+    explanation: >-
+      A test suite or build that takes more than a few seconds trains developers
+      to run it less frequently, compressing bugs into larger batches and making
+      each failure harder to isolate. Invest in watch-mode test runners and
+      incremental builds to keep the inner loop sub-second.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
+  - language: bash
+    title: Reproducible Dev Setup Script with mise
+    code: >-
+      #!/usr/bin/env bash
+
+      # scripts/bootstrap.sh — run once after cloning to get a working dev
+      environment.
+
+      # Uses mise (https://mise.jdx.dev) for reproducible language version
+      management.
+
+
+      set -euo pipefail
+
+
+      echo "==> Checking prerequisites..."
+
+      command -v mise  || { echo "Install mise: curl https://mise.run | sh";
+      exit 1; }
+
+      command -v docker || { echo "Install Docker Desktop"; exit 1; }
+
+
+      echo "==> Installing language versions from .mise.toml..."
+
+      mise install   # reads node = "22.2.0", pnpm = "9", etc.
+
+      mise reshim
+
+
+      echo "==> Installing dependencies..."
+
+      pnpm install --frozen-lockfile
+
+
+      echo "==> Copying environment template..."
+
+      [[ -f .env ]] || cp .env.example .env
+
+
+      echo "==> Starting local services..."
+
+      docker compose up -d postgres redis
+
+
+      echo "==> Waiting for postgres..."
+
+      until docker compose exec postgres pg_isready -U postgres -q; do sleep 1;
+      done
+
+
+      echo "==> Running database migrations..."
+
+      pnpm db:migrate
+
+
+      echo ""
+
+      echo "Done. Run: pnpm dev"
+    reasoning: >-
+      A bootstrap script that installs exact language versions via mise, starts
+      services, and runs migrations — encoding the full setup so any new
+      developer is productive in under 2 minutes.
+difficulty: beginner
 estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.513Z'
+lastUpdatedAt: '2026-05-14T12:31:47.554Z'
 needsManualPick: false
 resources:
   videos:

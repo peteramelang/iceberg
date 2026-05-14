@@ -7,8 +7,9 @@ summary: >-
   Branching strategies that survive AI tooling, rebase vs merge, conventional
   commits, and when to squash.
 tldr: >-
-  Pending tldr — short, plain-language summary written for a non-technical
-  reader or quick skim. Replace before publishing.
+  Trunk-based development ships fast with continuous integration. GitHub Flow
+  scales across teams. Gitflow suits scheduled releases. Pick based on deploy
+  frequency.
 definition: >-
   A Git workflow is the agreed set of rules for how a team branches, commits,
   reviews, and integrates code changes. The three dominant models — trunk-based
@@ -40,29 +41,167 @@ definition: >-
   increasingly important to keep history navigable.
 shortExplainerVideo: null
 narrative: >-
-  Pending narrative — at least 400 characters of plain-English explanation of
-  why this topic matters, what the dominant failure modes are, and how a learner
-  should approach it. Replace this placeholder before publishing. Placeholder
-  body. Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. Placeholder body.
-  Placeholder body. Placeholder body. Placeholder body. 
+  Git workflows matter more than most teams admit until they have suffered
+  without one. The moment you have more than two or three engineers working on
+  the same codebase, you need an explicit agreement about how changes flow from
+  a developer's machine to production — not because git is complicated, but
+  because the absence of agreement creates a local-minimum trap where everyone
+  adapts to each other's habits rather than to any coherent system. The workflow
+  you choose encodes your assumptions about release frequency, deployment risk
+  tolerance, and how much parallel work your team does.
+
+
+  The 80/20 here is to default to trunk-based development unless you have a
+  specific reason not to. Long-lived feature branches are almost always a
+  mistake: the longer a branch lives, the more it diverges from main, the more
+  painful the merge, and the higher the probability that the integration reveals
+  design conflicts that would have been caught earlier if the code had been
+  integrated daily. Trunk-based development forces integration conflicts to
+  surface immediately, when they are cheap to fix, rather than at the end of a
+  sprint, when both branches have accumulated weeks of work on top of the
+  divergence. Feature flags handle the problem of shipping incomplete features —
+  you integrate to main but the code path is off by default until the feature is
+  ready.
+
+
+  The failure mode that destroys git history is treating it as a scratch pad
+  rather than a narrative. When a team has no commit conventions, git log
+  becomes noise — a wall of 'fix', 'wip', 'asdf', and 'final final v3' commits
+  that conveys nothing about why changes were made. The cost of this is subtle
+  but real: bisecting a regression requires reading individual commits to
+  understand what changed and why, which is impossible if the commits have no
+  semantic structure. Conventional Commits solves this almost entirely. Typing
+  `feat(payments): add retry logic for failed Stripe webhooks` instead of `fix
+  stuff` takes fifteen seconds and produces a log that can be used to generate
+  changelogs automatically, drive semantic versioning, and tell the story of the
+  codebase to engineers who join two years later.
+
+
+  The rebase-versus-merge debate is mostly settled for practical teams once you
+  define the goal. Rebase produces clean linear history that is trivially
+  bisectable and reads like intentional work; merge preserves branch topology
+  that shows how parallel work was integrated but produces merge commits that
+  add noise to the main branch history. The pragmatic middle ground that most
+  healthy teams land on: rebase locally to clean up your own work-in-progress
+  commits before pushing, then use squash-merge to land PRs on main as single
+  coherent units. Squash-merge is especially valuable in 2025, when AI-assisted
+  coding generates many small 'works now' commits that are meaningful during
+  development but add nothing to the main branch narrative.
+
+
+  With AI tooling becoming a standard part of how code gets written, the git
+  workflow has a new pressure point: the granularity of commits. A developer
+  pair-programming with an AI assistant might generate fifty commits in a
+  morning, none of which are individually meaningful. Without discipline around
+  squashing and conventional commits, main branch history becomes unusable as a
+  diagnostic tool. This is not hypothetical — teams that have adopted
+  AI-assisted coding without updating their git discipline are already
+  accumulating this debt. The workflow question for the next few years is not
+  just about branch strategy; it is about how to maintain a navigable history
+  when the rate of code generation has increased by an order of magnitude.
+
+
+  Git workflows position interestingly in the broader ecosystem because they are
+  the connective tissue between individual developer practice and the CI/CD
+  pipeline. Trunk-based development is almost a prerequisite for continuous
+  deployment — you cannot deploy continuously if your integration points are
+  weeks apart. Conventional commits connect the workflow to automated release
+  tooling. Getting the workflow right is foundational work that makes every
+  downstream practice — deployment automation, changelog generation, rollback
+  strategy — dramatically easier.
 pitfalls:
-  - title: (pitfall 1 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 2 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
-  - title: (pitfall 3 pending)
-    explanation: Pending — at least 40 characters explaining why this is a common mistake.
+  - title: Long-lived feature branches cause painful merge conflicts
+    explanation: >-
+      Branches that diverge from main for weeks accumulate conflicts that take
+      longer to resolve than the feature took to write. Trunk-based development
+      or at minimum daily integration to a shared feature flag branch prevents
+      the drift from becoming unmanageable.
+  - title: No squash strategy leaves AI-generated commit noise in main
+    explanation: >-
+      AI coding tools produce many small, often cryptic commits that clutter git
+      log and make bisect noisy. Establish a squash-merge or clean-history
+      policy for main so the log remains a useful narrative of intent, not a
+      record of every agent iteration.
+  - title: Force-pushing shared branches overwrites teammates' work
+    explanation: >-
+      Running `git push --force` on a branch others have pulled or built on top
+      of silently discards their commits. Use `--force-with-lease` which only
+      force-pushes if no new commits have appeared on the remote since your last
+      fetch.
+  - title: 'Commit messages as descriptions of what, not why'
+    explanation: >-
+      A commit that says 'update auth.ts' is useless six months later; one that
+      says 'require MFA for admin routes to close CVE-2025-1234' is permanently
+      informative. The diff shows what changed; the message must explain why the
+      change was necessary.
+  - title: No branch protection or CI gate on main
+    explanation: >-
+      A main branch that anyone can push to directly without review or passing
+      CI accumulates broken commits and bypasses the entire review culture.
+      Branch protection with required status checks is the technical enforcement
+      layer for every other workflow practice.
 codeExamples:
-  - language: typescript
-    title: (pending)
-    code: // pending code example with at least 20 chars of real code
-    reasoning: pending
-difficulty: intermediate
+  - language: bash
+    title: Conventional Commits Hook with Commitlint
+    code: >-
+      #!/usr/bin/env bash
+
+      # .husky/commit-msg  — enforces Conventional Commits format
+
+      # Install: pnpm add -D @commitlint/cli @commitlint/config-conventional
+      husky
+
+      # Init: npx husky init && echo "npx commitlint --edit \$1" >
+      .husky/commit-msg
+
+
+      # commitlint.config.ts (alongside this hook):
+
+      # export default { extends: ['@commitlint/config-conventional'] };
+
+
+      # Valid examples:
+
+      #   feat(auth): add OAuth2 login
+
+      #   fix(payments): handle card decline on retry
+
+      #   chore: update pnpm lockfile
+
+      #   docs(api): document rate limit headers
+
+      #   BREAKING CHANGE: rename userId to user_id in all responses
+
+
+      # The hook itself (installed by husky automatically):
+
+      npx --no -- commitlint --edit "$1"
+
+
+      # Manual squash-merge workflow for clean history:
+
+      # 1. Work on feature branch with any WIP commit messages
+
+      # 2. Before opening PR, squash to one conventional commit:
+
+      git log --oneline main..HEAD
+
+      # 3. Interactive rebase to squash:
+
+      git rebase -i main
+
+      # 4. Merge with squash to keep main linear:
+
+      git switch main && git merge --squash feature/my-feature
+
+      git commit -m "feat(billing): add annual subscription plan"
+    reasoning: >-
+      Shows commitlint hook setup plus the squash-merge workflow — the two git
+      practices that keep history navigable when AI tooling generates many small
+      interim commits.
+difficulty: beginner
 estimatedHours: 4
-lastUpdatedAt: '2026-05-14T12:26:04.511Z'
+lastUpdatedAt: '2026-05-14T12:31:47.553Z'
 needsManualPick: false
 resources:
   videos:
