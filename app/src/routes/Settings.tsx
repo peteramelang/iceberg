@@ -1,15 +1,22 @@
-import { useRef, useState } from "react";
-import { Page } from "../components/layout/Page.js";
-import { Section } from "../components/layout/Section.js";
-import { Head } from "../components/layout/Head.js";
-import { progressStore, bookmarkStore, notesStore } from "../stores/index.js";
-import type { ExportPayload, ImportResult } from "../stores/types.js";
+import { MainColumn } from "../components/layout/MainColumn.js";
+import { useTheme } from "../hooks/useTheme.js";
+import { progressStore, bookmarkStore, notesStore, activityStore } from "../stores/index.js";
+import type { ExportPayload } from "../stores/types.js";
+
+function downloadJSON(filename: string, data: unknown): void {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
 
 export function Settings() {
-  const fileInput = useRef<HTMLInputElement>(null);
-  const [status, setStatus] = useState<string>("");
+  const { mode, set } = useTheme();
 
-  function doExport() {
+  const onExport = () => {
     const payload: ExportPayload = {
       format: "iceberg-progress",
       version: 1,
@@ -20,53 +27,90 @@ export function Settings() {
         notes: notesStore.exportData()
       }
     };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `iceberg-progress-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+    downloadJSON(`iceberg-progress-${new Date().toISOString().slice(0, 10)}.json`, payload);
+  };
 
-  async function doImport(file: File, mode: "merge" | "replace") {
+  const onImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
     const text = await file.text();
     let payload: ExportPayload;
-    try { payload = JSON.parse(text); } catch { setStatus("[!] invalid JSON"); return; }
-    if (payload.format !== "iceberg-progress") { setStatus("[!] not an iceberg-progress export"); return; }
-    if (payload.version !== 1) { setStatus(`[!] unsupported version ${payload.version}`); return; }
+    try { payload = JSON.parse(text) as ExportPayload; }
+    catch { alert("Invalid JSON."); return; }
+    if (payload.format !== "iceberg-progress" || payload.version !== 1) {
+      alert("Unsupported export format."); return;
+    }
+    const mode = confirm("Replace existing data with this file? Click Cancel to merge instead.") ? "replace" : "merge";
+    progressStore.importData(payload.data.progress, mode);
+    bookmarkStore.importData(payload.data.bookmarks, mode);
+    notesStore.importData(payload.data.notes, mode);
+    alert("Import complete.");
+    e.target.value = "";
+  };
 
-    const r1: ImportResult = progressStore.importData(payload.data.progress, mode);
-    const r2 = bookmarkStore.importData(payload.data.bookmarks, mode);
-    const r3 = notesStore.importData(payload.data.notes, mode);
-    setStatus(`[x] imported: ${r1.topicsMerged} topics, ${r2.bookmarksMerged} bookmarks, ${r3.notesMerged} notes${r3.conflicts.length ? ` (conflicts: ${r3.conflicts.join(", ")})` : ""}`);
-  }
+  const onClearAll = () => {
+    if (!confirm("Clear all local progress, bookmarks, notes, and activity? This cannot be undone.")) return;
+    localStorage.removeItem("iceberg.progress");
+    localStorage.removeItem("iceberg.bookmarks");
+    localStorage.removeItem("iceberg.notes");
+    activityStore.clear();
+    location.reload();
+  };
 
   return (
-    <Page>
-      <Head title="Settings" />
-      <Section label="Export">
-        <button onClick={doExport} className="px-lg py-xs bg-ink text-canvas rounded-sm">[+] download progress</button>
-      </Section>
-      <Section label="Import">
-        <input ref={fileInput} type="file" accept="application/json" className="block" />
-        <div className="mt-md flex gap-md">
-          <button
-            onClick={() => fileInput.current?.files?.[0] && doImport(fileInput.current.files[0], "merge")}
-            className="px-lg py-xs border border-hairline-strong rounded-sm"
-          >[+] merge</button>
-          <button
-            onClick={() => {
-              if (!fileInput.current?.files?.[0]) return;
-              if (confirm("Replace all local progress with imported data?")) {
-                doImport(fileInput.current.files[0], "replace");
-              }
-            }}
-            className="px-lg py-xs border border-danger text-danger rounded-sm"
-          >[!] replace</button>
-        </div>
-        {status && <div className="mt-md text-caption-md">{status}</div>}
-      </Section>
-    </Page>
+    <div className="p-xl">
+      <MainColumn maxWidth="max-w-[720px]">
+        <header className="mb-xl">
+          <h1 className="text-display-xl m-0">Settings</h1>
+        </header>
+
+        <section className="mb-xl">
+          <h2 className="text-label text-text-mute uppercase mb-md">Appearance</h2>
+          <div className="flex gap-sm">
+            {(["light","dark","system"] as const).map(m => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => set(m)}
+                aria-pressed={mode === m}
+                className={[
+                  "px-md py-sm rounded-sm border capitalize",
+                  mode === m ? "bg-accent border-accent text-white" : "border-border text-text-mute hover:text-text hover:border-text-dim"
+                ].join(" ")}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-xl">
+          <h2 className="text-label text-text-mute uppercase mb-md">Data</h2>
+          <div className="flex flex-wrap gap-sm">
+            <button type="button" onClick={onExport} className="px-md py-sm rounded-sm border border-border text-text-mute hover:text-text hover:border-text-dim">Export progress (JSON)</button>
+            <label className="px-md py-sm rounded-sm border border-border text-text-mute hover:text-text hover:border-text-dim cursor-pointer">
+              Import progress
+              <input type="file" accept="application/json" onChange={onImport} className="hidden" />
+            </label>
+            <button type="button" onClick={onClearAll} className="px-md py-sm rounded-sm border border-danger text-danger hover:bg-danger hover:text-white">Clear all data</button>
+          </div>
+        </section>
+
+        <section className="mb-xl">
+          <h2 className="text-label text-text-mute uppercase mb-md">Keyboard shortcuts</h2>
+          <ul className="text-body text-text-mute">
+            <li className="py-xs border-t border-border-soft first:border-t-0"><kbd className="font-mono text-caption border border-border rounded-sm px-xs">⌘K</kbd> open search palette</li>
+            <li className="py-xs border-t border-border-soft"><kbd className="font-mono text-caption border border-border rounded-sm px-xs">Esc</kbd> close palette / drawer</li>
+            <li className="py-xs border-t border-border-soft"><kbd className="font-mono text-caption border border-border rounded-sm px-xs">↑ ↓</kbd> move palette selection</li>
+            <li className="py-xs border-t border-border-soft"><kbd className="font-mono text-caption border border-border rounded-sm px-xs">Enter</kbd> select / navigate</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-label text-text-mute uppercase mb-md">About</h2>
+          <p className="text-body text-text-mute">iceberg — a guided curriculum for production-readiness. <a href="/whats-new" className="text-accent hover:underline">What's new</a> · <a href="/credits" className="text-accent hover:underline">Credits</a></p>
+        </section>
+      </MainColumn>
+    </div>
   );
 }
