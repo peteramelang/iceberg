@@ -3,7 +3,7 @@
   "$id": "https://iceberg.local/schemas/topic-frontmatter.json",
   "title": "Iceberg Topic Frontmatter",
   "type": "object",
-  "required": ["slug", "title", "phase", "order", "summary", "definition", "narrative", "pitfalls", "codeExamples", "difficulty", "estimatedHours", "resources", "provenance", "needsManualPick"],
+  "required": ["slug", "title", "phase", "order", "summary", "tldr", "definition", "narrative", "pitfalls", "codeExamples", "difficulty", "estimatedHours", "lastUpdatedAt", "resources", "provenance", "needsManualPick"],
   "additionalProperties": false,
   "properties": {
     "slug": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
@@ -11,7 +11,27 @@
     "phase": { "type": "string" },
     "order": { "type": "integer", "minimum": 1 },
     "summary": { "type": "string", "minLength": 1 },
+    "tldr": { "type": "string", "minLength": 40, "maxLength": 320 },
     "definition": { "type": "string", "minLength": 1 },
+    "shortExplainerVideo": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["url", "title", "author", "durationSeconds", "reasoning"],
+          "additionalProperties": false,
+          "properties": {
+            "url": { "type": "string", "format": "uri" },
+            "title": { "type": "string", "minLength": 1 },
+            "author": { "type": "string", "minLength": 1 },
+            "durationSeconds": { "type": "integer", "minimum": 15, "maximum": 600 },
+            "reasoning": { "type": "string", "minLength": 1 },
+            "source": { "enum": ["ai-researcher", "human-curator"] }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "lastUpdatedAt": { "type": "string", "format": "date-time" },
     "narrative": { "type": "string", "minLength": 400 },
     "pitfalls": {
       "type": "array",

@@ -17,18 +17,30 @@ export interface CodeExample {
 
 export type Difficulty = "beginner" | "intermediate" | "advanced";
 
+export interface ShortExplainerVideo {
+  url: string;
+  title: string;
+  author: string;
+  durationSeconds: number;
+  reasoning: string;
+  source?: AttributionSource;
+}
+
 export interface TopicFrontmatter {
   slug: string;
   title: string;
   phase: string;
   order: number;
   summary: string;
+  tldr: string;
   definition: string;
+  shortExplainerVideo: ShortExplainerVideo | null;
   narrative: string;
   pitfalls: Pitfall[];
   codeExamples: CodeExample[];
   difficulty: Difficulty;
   estimatedHours: number;
+  lastUpdatedAt: string;
   needsManualPick: boolean;
   resources: {
     videos: { short: VideoResource | null; long: VideoResource | null };
@@ -97,7 +109,9 @@ export function scaffoldTopicStub(path: string, input: ScaffoldInput): void {
     phase: input.phase,
     order: input.order,
     summary: input.summary,
+    tldr: "Pending tldr — short, plain-language summary written for a non-technical reader or quick skim. Replace before publishing.",
     definition: "(pending research)",
+    shortExplainerVideo: null,
     narrative: "Pending narrative — at least 400 characters of plain-English explanation of why this topic matters, what the dominant failure modes are, and how a learner should approach it. Replace this placeholder before publishing. " + "Placeholder body. ".repeat(20),
     pitfalls: [
       { title: "(pitfall 1 pending)", explanation: "Pending — at least 40 characters explaining why this is a common mistake." },
@@ -109,6 +123,7 @@ export function scaffoldTopicStub(path: string, input: ScaffoldInput): void {
     ],
     difficulty: "intermediate",
     estimatedHours: 4,
+    lastUpdatedAt: new Date().toISOString(),
     needsManualPick: false,
     resources: { videos: { short: null, long: null }, articles: [], services: [], courses: [] },
     provenance: {
