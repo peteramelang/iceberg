@@ -10,6 +10,12 @@ import { resourceTotalFor } from "../content/derived.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 
+function formatUpdated(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toISOString().slice(0, 10);
+}
+
 export function Path() {
   useStoreTick(l => progressStore.subscribe(l));
   const { pathSlug } = useParams();
@@ -32,8 +38,11 @@ export function Path() {
       <Head title={p.title} description={p.description} />
       <MainColumn>
         <header className="mb-xl">
-          <div className="text-label text-text-mute uppercase mb-sm">{p.audience} · ~{p.estimatedHours}h · {p.topics.length} topics</div>
-          <h1 className="text-display-xl m-0 mb-xs">{p.title}</h1>
+          <div className="text-label text-text-mute uppercase mb-sm">{p.audience} · ~{p.estimatedHours}h · {p.topics.length} topics · Updated {formatUpdated(p.lastUpdatedAt)}</div>
+          <h1 className="text-display-xl m-0 mb-md">{p.title}</h1>
+          <div className="bg-panel-2 border border-border-soft rounded p-lg mb-md">
+            <p className="text-title text-text leading-[1.55] m-0">{p.tldr}</p>
+          </div>
           <p className="text-body text-text-mute max-w-[720px]">{p.description}</p>
         </header>
         <section>
