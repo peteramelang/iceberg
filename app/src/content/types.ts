@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export type Difficulty = "beginner" | "intermediate" | "advanced";
+
 const AttributionFields = {
   license: z.string().optional(),
   source: z.enum(["ai-researcher", "human-curator"]).optional()
