@@ -80,7 +80,7 @@ export const TopicFrontmatterSchema = z.object({
   summary: z.string(),
   tldr: z.string().min(40).max(320),
   definition: z.string(),
-  shortExplainerVideo: ShortExplainerVideoSchema.nullable(),
+  shortExplainerVideo: ShortExplainerVideoSchema.nullable().optional(),
   narrative: z.string().min(400),
   pitfalls: z.array(PitfallSchema).min(3).max(8),
   codeExamples: z.array(CodeExampleSchema).min(1).max(3),

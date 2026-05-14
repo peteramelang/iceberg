@@ -103,6 +103,9 @@ const handCrafted: Array<[string, string, Edge["type"], number, string]> = [
 for (const [from, to, type, weight, reasoning] of handCrafted) {
   // Skip if either endpoint not in taxonomy
   if (!taxonomy.topics[from] || !taxonomy.topics[to]) continue;
+  // Skip if an edge of the same type already exists between this pair (in either direction)
+  const dup = edges.some(e => e.type === type && ((e.from === from && e.to === to) || (e.from === to && e.to === from)));
+  if (dup) continue;
   edges.push({ from, to, type, weight, reasoning });
 }
 

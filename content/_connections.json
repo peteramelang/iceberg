@@ -1983,13 +1983,6 @@
       "reasoning": "Beginners frequently use the term 'authentication' when they mean 'authorization' and vice versa."
     },
     {
-      "from": "idempotency",
-      "to": "payments",
-      "type": "prerequisite",
-      "weight": 0.9,
-      "reasoning": "Idempotency keys are foundational to safe payment retries."
-    },
-    {
       "from": "alerting",
       "to": "incident-response",
       "type": "pairs-with",
@@ -2004,25 +1997,11 @@
       "reasoning": "Traces are the primary tool for identifying latency hotspots."
     },
     {
-      "from": "feature-flags",
-      "to": "ab-testing",
-      "type": "prerequisite",
-      "weight": 0.85,
-      "reasoning": "A/B testing relies on feature-flag-style targeting infrastructure."
-    },
-    {
       "from": "schema-migrations",
       "to": "rollbacks",
       "type": "pairs-with",
       "weight": 0.7,
       "reasoning": "Migration reversibility is a precondition for safe rollbacks."
-    },
-    {
-      "from": "message-queues",
-      "to": "dead-letter-queues",
-      "type": "prerequisite",
-      "weight": 0.95,
-      "reasoning": "DLQs are a feature of the queue infrastructure they protect."
     },
     {
       "from": "caching",
@@ -2072,13 +2051,6 @@
       "type": "related",
       "weight": 0.7,
       "reasoning": "Both topics concern what you must not let leave the perimeter."
-    },
-    {
-      "from": "module-bundlers",
-      "to": "server-rendering",
-      "type": "related",
-      "weight": 0.6,
-      "reasoning": "Bundling and rendering modes interact at build time."
     },
     {
       "from": "server-rendering",
@@ -2219,13 +2191,6 @@
       "type": "pairs-with",
       "weight": 0.8,
       "reasoning": "On-call rotation design is a primary lever for sustainable pace."
-    },
-    {
-      "from": "pair-and-mob-programming",
-      "to": "code-review-craft",
-      "type": "related",
-      "weight": 0.6,
-      "reasoning": "Pairing changes the review surface."
     },
     {
       "from": "documentation-driven-development",

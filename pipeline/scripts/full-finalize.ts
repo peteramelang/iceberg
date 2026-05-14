@@ -5,6 +5,18 @@ import { readTopicFile, writeTopicFile, type TopicFrontmatter } from "../lib/con
 import { readLedger, writeLedger, setTopicStageStatus, setStageStatus } from "../lib/ledger.js";
 import { validateConnections } from "../lib/validate.js";
 
+// SAFETY: this script overwrites every topic's `definition` and `resources`
+// with values from `.git/iceberg-runs/`. Topics that were researched outside
+// the original run pipeline (e.g. via apply-research-new.ts) will be wiped
+// to `needsManualPick: true` because their run files don't exist. Require
+// --force to acknowledge this.
+if (!process.argv.includes("--force")) {
+  console.error("Refusing to run without --force.");
+  console.error("This script overwrites topic definitions and resources from .git/iceberg-runs/.");
+  console.error("If you only want to regenerate _connections.json, use regen-connections.ts instead.");
+  process.exit(2);
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, "..", "..");
 const ledgerPath = join(repoRoot, "content", "_ledger.json");
