@@ -8,6 +8,8 @@
 
 [MIT licensed code](./LICENSE) · [CC BY-SA 4.0 content](./LICENSE-content.md) · [226 credited creators](./CREDITS.md)
 
+🤖 **Built entirely with AI** — every line of code, every topic, every connection in this repo was written by [Claude Code](https://claude.com/claude-code). The author directed and reviewed; the agent did the keystrokes.
+
 </div>
 
 ---
@@ -105,6 +107,12 @@ Bug reports are most useful with: browser + OS, the URL you were on, what you ex
 - **Source code** (`app/`, `pipeline/`, scripts, configs) — [MIT License](./LICENSE)
 - **Curriculum content** (`content/**/*.md`, taxonomy, connections) — [CC BY-SA 4.0](./LICENSE-content.md)
 - **Linked resources** — owned by their original creators; iceberg curates and links but does not redistribute. See [CREDITS.md](./CREDITS.md).
+
+## Built with AI, end to end
+
+Iceberg is an experiment in what one person directing an AI agent can ship. **The entire repository — app code, pipeline, prompts, schemas, curriculum, design system — was written by [Claude Code](https://claude.com/claude-code).** The human role was scoping, taste, review, and the occasional "no, do it this way." The content pipeline (`pipeline/`) is itself a multi-agent system: Claude proposes the taxonomy, dispatches parallel sub-agents to research each topic, runs adversarial review on the picks, checks liveness, builds the connection graph, and writes the narratives.
+
+If you're curious what "AI-built, human-directed" actually looks like in a real codebase, the commit history and the `pipeline/` directory are the receipts.
 
 ## Acknowledgements
 
