@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { connectionsForTopic, topByWeight, EDGE_TOKEN, EDGE_LABEL, type EdgeType, type RelatedConnection } from "../../utils/connectionHelpers.js";
+import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 
 const W = 300;
 const H = 260;
@@ -96,16 +97,7 @@ export function ConnectionMap({ topicSlug, topicTitle }: { topicSlug: string; to
         {visible.map(c => {
           const s = slots.get(c);
           if (!s) return null;
-          const color = EDGE_TOKEN[c.type];
-          return (
-            <g key={`node-${c.type}-${c.otherSlug}`}>
-              <a href={`/topic/${c.otherSlug}`} aria-label={`${c.otherTitle} — ${EDGE_LABEL[c.type]}`}>
-                <circle cx={s.x} cy={s.y} r={NODE_R} fill="var(--panel-2)" stroke={color} />
-                <text x={s.x} y={s.y - 2} textAnchor="middle" fill={color} fontSize="8.5">{EDGE_LABEL[c.type].split(" ")[0]?.toLowerCase()}</text>
-                <text x={s.x} y={s.y + 9} textAnchor="middle" fill="var(--text)" fontSize="9.5">{truncate(c.otherTitle, 11)}</text>
-              </a>
-            </g>
-          );
+          return <ConnectionNode key={`node-${c.type}-${c.otherSlug}`} c={c} x={s.x} y={s.y} />;
         })}
       </svg>
       <div className="mt-xs flex flex-wrap gap-md text-caption text-text-dim">
@@ -121,6 +113,20 @@ export function ConnectionMap({ topicSlug, topicTitle }: { topicSlug: string; to
         {extra > 0 && <span className="ml-md text-text-dim text-caption">+{extra} more</span>}
       </div>
     </div>
+  );
+}
+
+function ConnectionNode({ c, x, y }: { c: RelatedConnection; x: number; y: number }) {
+  const color = EDGE_TOKEN[c.type];
+  const pulse = useCompletionPulse(c.otherSlug);
+  return (
+    <g className={pulse ? "pulse-stroke" : undefined}>
+      <a href={`/topic/${c.otherSlug}`} aria-label={`${c.otherTitle} — ${EDGE_LABEL[c.type]}`}>
+        <circle cx={x} cy={y} r={NODE_R} fill="var(--panel-2)" stroke={color} strokeWidth={pulse ? 2 : 1} />
+        <text x={x} y={y - 2} textAnchor="middle" fill={color} fontSize="8.5">{EDGE_LABEL[c.type].split(" ")[0]?.toLowerCase()}</text>
+        <text x={x} y={y + 9} textAnchor="middle" fill="var(--text)" fontSize="9.5">{truncate(c.otherTitle, 11)}</text>
+      </a>
+    </g>
   );
 }
 

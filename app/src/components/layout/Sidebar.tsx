@@ -3,6 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { taxonomy, topics } from "../../content/index.js";
 import { progressStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
+import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 import { ProgressMarker } from "../domain/ProgressMarker.js";
 
 function totalResourcesFor(slug: string): number {
@@ -88,39 +89,14 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               </button>
               {isOpen && (
                 <ul>
-                  {phaseTopics.map(slug => {
-                    const t = topics.find(x => x.frontmatter.slug === slug)?.frontmatter;
-                    if (!t) return null;
-                    const prog = progressStore.getTopicProgress(slug);
-                    const total = totalResourcesFor(slug);
-                    const checked = Object.values(prog.resources).filter(Boolean).length;
-                    const state: "empty" | "partial" | "done" = prog.completed ? "done" : checked > 0 ? "partial" : "empty";
-                    const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
-                    const active = currentTopicSlug === slug;
-                    return (
-                      <li key={slug}>
-                        <NavLink
-                          to={`/topic/${slug}`}
-                          onClick={onNavigate}
-                          className={[
-                            "block pl-[38px] pr-lg py-[6px] border-l-2",
-                            active ? "border-accent bg-panel-2 text-text" : "border-transparent text-text-mute hover:text-text hover:bg-panel-2"
-                          ].join(" ")}
-                        >
-                          <div className="flex items-center gap-sm text-caption">
-                            <ProgressMarker state={state} />
-                            <span className="truncate">{t.title}</span>
-                          </div>
-                          <div className="ml-[17px] mt-[5px] h-[2px] bg-border-soft rounded-pill overflow-hidden">
-                            <div
-                              className={state === "done" ? "h-full bg-green" : "h-full bg-accent"}
-                              style={{ width: `${pct}%` }}
-                            />
-                          </div>
-                        </NavLink>
-                      </li>
-                    );
-                  })}
+                  {phaseTopics.map(slug => (
+                    <SidebarTopicRow
+                      key={slug}
+                      slug={slug}
+                      active={currentTopicSlug === slug}
+                      onNavigate={onNavigate}
+                    />
+                  ))}
                 </ul>
               )}
             </li>
@@ -128,6 +104,42 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </ul>
     </aside>
+  );
+}
+
+function SidebarTopicRow({
+  slug, active, onNavigate
+}: { slug: string; active: boolean; onNavigate?: () => void }) {
+  const t = topics.find(x => x.frontmatter.slug === slug)?.frontmatter;
+  const pulse = useCompletionPulse(slug);
+  if (!t) return null;
+  const prog = progressStore.getTopicProgress(slug);
+  const total = totalResourcesFor(slug);
+  const checked = Object.values(prog.resources).filter(Boolean).length;
+  const state: "empty" | "partial" | "done" = prog.completed ? "done" : checked > 0 ? "partial" : "empty";
+  const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+  return (
+    <li>
+      <NavLink
+        to={`/topic/${slug}`}
+        onClick={onNavigate}
+        className={[
+          "block pl-[38px] pr-lg py-[6px] border-l-2",
+          active ? "border-accent bg-panel-2 text-text" : "border-transparent text-text-mute hover:text-text hover:bg-panel-2"
+        ].join(" ")}
+      >
+        <div className="flex items-center gap-sm text-caption">
+          <ProgressMarker state={state} pulse={pulse} />
+          <span className="truncate">{t.title}</span>
+        </div>
+        <div className="ml-[17px] mt-[5px] h-[2px] bg-border-soft rounded-pill overflow-hidden">
+          <div
+            className={state === "done" ? "h-full bg-green" : "h-full bg-accent"}
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+      </NavLink>
+    </li>
   );
 }
 

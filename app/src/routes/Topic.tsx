@@ -18,6 +18,7 @@ import { getTopic, taxonomy } from "../content/index.js";
 import { getPathBySlug } from "../utils/pathHelpers.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
+import { useCompletionPulse } from "../hooks/useCompletionPulse.js";
 import { connectionsForTopic } from "../utils/connectionHelpers.js";
 
 function resourceTotal(fm: import("../content/types.js").TopicFrontmatter): number {
@@ -57,6 +58,7 @@ export function Topic() {
   const prog = progressStore.getTopicProgress(fm.slug);
   const total = resourceTotal(fm);
   const checked = Object.values(prog.resources).filter(Boolean).length;
+  const pulse = useCompletionPulse(fm.slug);
 
   const allConn = useMemo(() => connectionsForTopic(fm.slug), [fm.slug]);
 
@@ -231,7 +233,7 @@ export function Topic() {
       <RightRail>
         <RailCard title="Progress">
           <div className="flex items-center gap-md">
-            <ProgressRing value={total === 0 ? 0 : checked / total} done={prog.completed}>
+            <ProgressRing value={total === 0 ? 0 : checked / total} done={prog.completed} pulse={pulse}>
               <span className="text-body-strong">{total === 0 ? 0 : Math.round((checked / total) * 100)}%</span>
             </ProgressRing>
             <div>
