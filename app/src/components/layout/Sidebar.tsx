@@ -135,6 +135,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <nav className="mt-auto py-sm border-t border-border-soft shrink-0" aria-label="Meta">
         <SidebarItem to="/whats-new" label="What's new" onNavigate={onNavigate} icon="✦" />
         <SidebarItem to="/about" label="About" onNavigate={onNavigate} icon="ⓘ" />
+        <SidebarItem to="/credits" label="Credits" onNavigate={onNavigate} icon="♥" />
         <SidebarItem to="/settings" label="Settings" onNavigate={onNavigate} icon="⚙" />
       </nav>
     </aside>
