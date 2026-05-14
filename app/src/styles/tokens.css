@@ -1,6 +1,61 @@
-/* CSS variables mirroring DESIGN.md tokens. Add as needed. */
-:root {
-  --color-canvas: #fdfcfc;
-  --color-ink: #201d1d;
-  --color-hairline: rgba(15, 0, 0, 0.12);
+/* Design tokens — see docs/superpowers/specs/2026-05-14-ui-redesign-design.md §1. */
+
+:root,
+[data-theme="dark"] {
+  --bg: #0a0a0c;
+  --panel: #111114;
+  --panel-2: #16161b;
+  --panel-3: #1c1c22;
+  --border: #26262e;
+  --border-soft: #1d1d24;
+  --text: #e8e8ee;
+  --text-mute: #9a9aa6;
+  --text-dim: #686874;
+  --accent: #7c5cff;
+  --accent-hover: #9377ff;
+  --accent-soft: rgba(124, 92, 255, 0.16);
+  --green: #30d158;
+  --amber: #ff9f0a;
+  --blue: #5ac8fa;
+  --pink: #ff6b9d;
+  --danger: #ff5c5c;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.02) inset;
+
+  /* Connection edge palette */
+  --edge-prereq: var(--amber);
+  --edge-pairs: var(--accent);
+  --edge-related: var(--blue);
+  --edge-confused: var(--pink);
+
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #fbfbfd;
+  --panel: #ffffff;
+  --panel-2: #f3f4f8;
+  --panel-3: #e8eaf0;
+  --border: #d8dae3;
+  --border-soft: #e8eaf0;
+  --text: #1c1c22;
+  --text-mute: #5b5e6a;
+  --text-dim: #8a8c98;
+  --accent: #5b3df5;
+  --accent-hover: #4528d3;
+  --accent-soft: rgba(91, 61, 245, 0.12);
+  --green: #128a35;
+  --amber: #b76b06;
+  --blue: #0a6db8;
+  --pink: #c01e6a;
+  --danger: #c0291d;
+  --shadow-card: 0 1px 2px rgba(20, 22, 30, 0.04);
+
+  --edge-prereq: var(--amber);
+  --edge-pairs: var(--accent);
+  --edge-related: var(--blue);
+  --edge-confused: var(--pink);
+
+  color-scheme: light;
 }
