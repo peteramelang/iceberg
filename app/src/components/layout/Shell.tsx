@@ -1,11 +1,10 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Sidebar } from "./Sidebar.js";
 import { Topbar } from "./Topbar.js";
+import { SearchPalette } from "../interactive/SearchPalette.js";
 import { taxonomy, topics } from "../../content/index.js";
 import { progressStore } from "../../stores/index.js";
 import { useStoreSubscription } from "../../hooks/useStoreSubscription.js";
-
-function SearchPalette(_: { open: boolean; onClose: () => void }) { return null; }
 
 export function Shell({ children }: { children: ReactNode }) {
   useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
@@ -26,6 +25,12 @@ export function Shell({ children }: { children: ReactNode }) {
 
   const openSearch = useCallback(() => setSearchOpen(true), []);
   const closeDrawer = useCallback(() => setDrawer(false), []);
+
+  useEffect(() => {
+    const onOpen = () => setSearchOpen(true);
+    window.addEventListener("iceberg-open-search", onOpen as EventListener);
+    return () => window.removeEventListener("iceberg-open-search", onOpen as EventListener);
+  }, []);
 
   return (
     <div className="min-h-[100dvh] flex bg-bg text-text">
