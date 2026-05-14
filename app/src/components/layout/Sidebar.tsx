@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { getTopic, taxonomy, topics, connections } from "../../content/index.js";
 import { phasesSorted, resourceTotalFor } from "../../content/derived.js";
-import { progressStore } from "../../stores/index.js";
+import { progressStore, bookmarkStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 import { ProgressMarker } from "../domain/ProgressMarker.js";
@@ -159,6 +159,7 @@ function SidebarSection({ label, children }: { label: string; children: React.Re
 function SidebarTopicRow({
   slug, active, onNavigate
 }: { slug: string; active: boolean; onNavigate?: () => void }) {
+  useStoreTick(l => bookmarkStore.subscribe(l));
   const t = getTopic(slug)?.frontmatter;
   const pulse = useCompletionPulse(slug);
   if (!t) return null;
@@ -167,6 +168,7 @@ function SidebarTopicRow({
   const checked = Object.values(prog.resources).filter(Boolean).length;
   const state: "empty" | "partial" | "done" = prog.completed ? "done" : checked > 0 ? "partial" : "empty";
   const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+  const bookmarked = bookmarkStore.isBookmarked(slug);
   return (
     <li>
       <NavLink
@@ -180,6 +182,9 @@ function SidebarTopicRow({
         <div className="flex items-center gap-sm text-caption">
           <ProgressMarker state={state} pulse={pulse} />
           <span className="truncate">{t.title}</span>
+          {bookmarked && (
+            <span aria-label="Bookmarked" className="text-accent shrink-0 text-[12px] leading-none">★</span>
+          )}
         </div>
         <div className="ml-[17px] mt-[5px] h-[2px] bg-border-soft rounded-pill overflow-hidden">
           <div
