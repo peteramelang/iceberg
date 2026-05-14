@@ -26,13 +26,22 @@ export function ResumeHero({
 }) {
   const phaseTitle = getPhase(topic.phase)?.title ?? topic.phase;
   const resumeWidth = resourceTotalCount === 0 ? 0 : Math.round((resourceCheckedCount / resourceTotalCount) * 100);
+
+  // Spec §4: first-visit fallback shifts the eyebrow + button to "Start with…"
+  // instead of "Welcome back / Resume →". Detect via "no progress anywhere"
+  // signal (overallCompleted is the topic count from getOverallProgress,
+  // and resourceCheckedCount is on the currently-shown topic).
+  const firstVisit = overallCompleted === 0 && resourceCheckedCount === 0;
+
   return (
     <section
       className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-xl p-xl border border-border rounded mb-xl"
       style={{ background: "linear-gradient(135deg, color-mix(in oklab, var(--accent) 18%, transparent), color-mix(in oklab, var(--blue) 10%, transparent))" }}
     >
       <div>
-        <div className="text-label text-text-mute uppercase mb-sm">Welcome back · pick up where you left off</div>
+        <div className="text-label text-text-mute uppercase mb-sm">
+          {firstVisit ? `Start your journey · ${phaseTitle}` : "Welcome back · pick up where you left off"}
+        </div>
         <h1 className="text-display-lg m-0 mb-xs">{topic.title}</h1>
         <p className="text-body text-text-mute max-w-[520px] mb-md">{topic.summary}</p>
         <div className="h-[6px] bg-border-soft/30 rounded-pill overflow-hidden mb-sm max-w-[360px]">
@@ -40,7 +49,7 @@ export function ResumeHero({
         </div>
         <div className="text-caption text-text-mute tabular-nums mb-md">{resourceCheckedCount} / {resourceTotalCount} resources · {phaseTitle}</div>
         <Link to={`/topic/${topic.slug}`} className="inline-flex items-center gap-sm bg-accent text-white px-md py-sm rounded-sm font-medium hover:bg-accent-hover">
-          Resume →
+          {firstVisit ? `Start with ${topic.title} →` : "Resume →"}
         </Link>
       </div>
       <div className="flex flex-col items-center justify-center gap-sm">

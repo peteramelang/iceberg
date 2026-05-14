@@ -1,11 +1,31 @@
 import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { getTopic, taxonomy } from "../../content/index.js";
+import { getTopic, taxonomy, topics, connections } from "../../content/index.js";
 import { phasesSorted, resourceTotalFor } from "../../content/derived.js";
 import { progressStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 import { ProgressMarker } from "../domain/ProgressMarker.js";
+
+// First topic with no incoming prerequisite edge — the natural starting
+// point for a brand-new user with no progress.
+const PREREQ_FREE_FIRST_SLUG = (() => {
+  const targets = new Set<string>();
+  for (const e of connections) if (e.type === "prerequisite") targets.add(e.to);
+  return topics.find(t => !targets.has(t.frontmatter.slug))?.frontmatter.slug
+    ?? topics[0]?.frontmatter.slug
+    ?? null;
+})();
+
+// "Continue" target: spec §2.2 says this should navigate to the
+// last-touched topic, or the first prereq-free topic if none. Computed at
+// each Sidebar render via useStoreTick subscription on progressStore.
+function resumeTarget(): string {
+  const last = progressStore.getLastTouchedTopic();
+  if (last) return `/topic/${last}`;
+  if (PREREQ_FREE_FIRST_SLUG) return `/topic/${PREREQ_FREE_FIRST_SLUG}`;
+  return "/";
+}
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   useStoreTick(l => progressStore.subscribe(l));
@@ -47,7 +67,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       </div>
 
       <nav className="py-sm" aria-label="Primary">
-        <SidebarItem to="/" label="Continue" onNavigate={onNavigate} icon="◐" exact />
+        <SidebarItem to={resumeTarget()} label="Continue" onNavigate={onNavigate} icon="◐" />
         <SidebarItem to="/bookmarks" label="Bookmarks" onNavigate={onNavigate} icon="★" />
         <SidebarItem to="/paths" label="Paths" onNavigate={onNavigate} icon="⇢" />
         <SidebarItem to="/whats-new" label="What's new" onNavigate={onNavigate} icon="✦" />
