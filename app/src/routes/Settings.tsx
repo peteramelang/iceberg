@@ -76,7 +76,9 @@ export function Settings() {
     bookmarkStore.importData([], "replace");
     notesStore.importData({}, "replace");
     activityStore.clear();
-    location.reload();
+    // Subscribers re-render via emit() inside each store's importData/clear.
+    // No reload needed — theme stays, scroll position preserved.
+    alert("All local data cleared.");
   };
 
   return (
