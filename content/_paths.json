@@ -155,6 +155,117 @@
         "alerting"
       ],
       "lastUpdatedAt": "2026-05-14T12:08:53.920Z"
+    },
+    {
+      "slug": "ai-first-web-developer",
+      "title": "AI-First Web Developer",
+      "tldr": "Learn to ship full-stack web apps in 2026 using AI coding tools as your primary development accelerator — from prompting to agents to cost control.",
+      "description": "Teaches developers how to build and deploy production-quality full-stack applications by harnessing AI coding tools effectively. Covers prompting, context engineering, agent loops, safety, and supporting frontend/backend skills needed to ship real products.",
+      "audience": "Developer new to AI-assisted coding who wants to ship full-stack apps",
+      "estimatedHours": 28,
+      "topics": [
+        "local-dev-environment",
+        "prompting-for-code",
+        "context-engineering",
+        "hallucination-mitigation",
+        "agent-loops",
+        "ai-code-review",
+        "ai-security-and-pii",
+        "ai-coding-cost-management",
+        "server-rendering",
+        "type-safe-orms",
+        "authentication",
+        "error-handling"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "modern-frontend-foundations",
+      "title": "Modern Frontend Foundations",
+      "tldr": "Get a backend developer up to speed on modern web frontend in 2026 — bundlers, rendering strategies, hydration, type-safe APIs, state, performance, and design systems.",
+      "description": "Closes the knowledge gap for backend developers who need to understand how modern frontends are built and delivered. Covers the rendering, bundling, performance, and component-system concepts that have shifted dramatically since 2020.",
+      "audience": "Backend developer getting current on modern web frontend",
+      "estimatedHours": 20,
+      "topics": [
+        "module-bundlers",
+        "server-rendering",
+        "hydration-and-islands",
+        "type-safe-api-calls",
+        "state-management-modern",
+        "image-and-media-pipelines",
+        "web-vitals",
+        "design-systems"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "modern-backend-foundations",
+      "title": "Modern Backend Foundations",
+      "tldr": "Bring a frontend developer up to speed on modern backend in 2026 — type-safe databases, background jobs, webhooks, file uploads, realtime, edge runtimes, and search.",
+      "description": "Equips frontend developers with the backend fundamentals they need to build production-ready services in 2026. Covers the data, async, and platform topics that underpin any full-stack app, grounded in production-readiness basics.",
+      "audience": "Frontend developer getting current on modern backend",
+      "estimatedHours": 25,
+      "topics": [
+        "secrets-management",
+        "error-handling",
+        "logging",
+        "type-safe-orms",
+        "schema-migrations",
+        "background-jobs",
+        "webhooks-as-platform",
+        "file-uploads-and-streaming",
+        "realtime-protocols",
+        "edge-runtimes",
+        "search-and-vector-store"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "ai-coding-tools-operator",
+      "title": "AI Coding Tools Operator",
+      "tldr": "For senior developers integrating AI into their team's workflow — how to prompt, review, evaluate, and govern AI-generated code without losing quality or control.",
+      "description": "Helps experienced engineers set up safe, effective AI-assisted workflows for their teams. Covers prompting patterns, context engineering, code review with AI, evals, MCP tooling, security, licensing, and the craft practices that keep quality high.",
+      "audience": "Senior developer integrating AI tools into team workflow",
+      "estimatedHours": 17,
+      "topics": [
+        "prompting-for-code",
+        "context-engineering",
+        "ai-code-review",
+        "hallucination-mitigation",
+        "ai-security-and-pii",
+        "ai-attribution-and-licensing",
+        "mcp-and-tooling",
+        "ai-evals",
+        "git-workflows",
+        "code-review-craft"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
+    },
+    {
+      "slug": "greenfield-solo-builder",
+      "title": "Greenfield Solo Builder",
+      "tldr": "Ship your first AI-assisted product end-to-end: from local dev setup and database design through auth, payments, CI/CD, and the performance basics that keep users coming back.",
+      "description": "A comprehensive end-to-end path for indie hackers and solo founders building their first production product with AI assistance. Covers every layer from environment setup and prompting through data, auth, payments, delivery, and user-facing performance.",
+      "audience": "Indie hacker or solo founder shipping a first AI-assisted product",
+      "estimatedHours": 35,
+      "topics": [
+        "local-dev-environment",
+        "prompting-for-code",
+        "git-workflows",
+        "secrets-management",
+        "type-safe-orms",
+        "data-integrity",
+        "schema-migrations",
+        "authentication",
+        "server-rendering",
+        "web-vitals",
+        "test-coverage",
+        "environments",
+        "ci-cd",
+        "payments",
+        "error-handling"
+      ],
+      "lastUpdatedAt": "2026-05-14T12:41:08.040Z"
     }
   ]
 }
