@@ -6,6 +6,7 @@ import { progressStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 import { ProgressMarker } from "../domain/ProgressMarker.js";
+import { BrandMark } from "./BrandMark.js";
 
 // First topic with no incoming prerequisite edge — the natural starting
 // point for a brand-new user with no progress.
@@ -61,7 +62,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     <aside className="w-[260px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin">
       <div className="h-[52px] flex items-center gap-sm px-lg border-b border-border-soft">
         <NavLink to="/" onClick={onNavigate} className="flex items-center gap-sm font-semibold tracking-tight text-text">
-          <span aria-hidden className="inline-block w-[22px] h-[22px] rounded-[6px]" style={{ background: "linear-gradient(135deg, var(--accent), var(--blue))" }} />
+          <BrandMark size={22} />
           iceberg
         </NavLink>
       </div>
