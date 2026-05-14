@@ -1,5 +1,8 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+
+const POPOVER_WIDTH = 280;
+const GAP = 8;
 
 interface InfoDotProps {
   reasoning: string;
@@ -14,6 +17,7 @@ export function InfoDot({ reasoning, label = "Why this was picked" }: InfoDotPro
   const [pos, setPos] = useState<{ top: number; left: number; placement: "above" | "below" } | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const popoverId = useId();
 
   // Compute popover position synchronously after open flips true so the
   // popover never flashes at (0,0). useLayoutEffect runs before paint.
@@ -22,9 +26,6 @@ export function InfoDot({ reasoning, label = "Why this was picked" }: InfoDotPro
     const rect = triggerRef.current.getBoundingClientRect();
     const viewportH = window.innerHeight;
     const viewportW = window.innerWidth;
-    const POPOVER_WIDTH = 280;
-    const GAP = 8;
-
     // Place below by default; flip above if trigger sits in the bottom third.
     const placeAbove = rect.bottom > (viewportH * 2) / 3;
     const top = placeAbove
@@ -54,7 +55,10 @@ export function InfoDot({ reasoning, label = "Why this was picked" }: InfoDotPro
       }
     }
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     }
     document.addEventListener("mousedown", onDocClick);
     document.addEventListener("keydown", onKey);
@@ -71,6 +75,7 @@ export function InfoDot({ reasoning, label = "Why this was picked" }: InfoDotPro
         type="button"
         aria-label={label}
         aria-expanded={open}
+        aria-describedby={open ? popoverId : undefined}
         onClick={() => setOpen(o => !o)}
         className="inline-flex items-center justify-center w-[14px] h-[14px] rounded-pill border border-current text-text-dim hover:text-text-mute text-[9px] font-semibold leading-none align-middle"
       >
@@ -79,19 +84,14 @@ export function InfoDot({ reasoning, label = "Why this was picked" }: InfoDotPro
       {open && pos && createPortal(
         <div
           ref={popoverRef}
-          role="tooltip"
+          id={popoverId}
           style={{
             position: "absolute",
-            top: pos.placement === "above" ? undefined : pos.top,
-            // For "above", translate(-100%) on Y via inline style isn't ideal
-            // in absolute mode; compute the bottom-anchored top via measuring
-            // after first render. Easiest: use the dot's top and translateY(-100%).
-            ...(pos.placement === "above" && triggerRef.current
-              ? { top: triggerRef.current.getBoundingClientRect().top + window.scrollY - 8, transform: "translateY(-100%)" }
-              : {}),
+            top: pos.top,
             left: pos.left,
-            width: 280,
-            zIndex: 50
+            width: POPOVER_WIDTH,
+            zIndex: 50,
+            ...(pos.placement === "above" ? { transform: "translateY(-100%)" } : {}),
           }}
           className="bg-panel border border-border-soft rounded p-md shadow-card text-body text-text leading-[1.5]"
         >
