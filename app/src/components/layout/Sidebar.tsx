@@ -59,65 +59,99 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const phases = phasesSorted;
 
   return (
-    <aside className="w-[260px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin">
-      <div className="h-[52px] flex items-center gap-sm px-lg border-b border-border-soft">
+    <aside className="w-[260px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin flex flex-col">
+      <div className="h-[52px] flex items-center gap-sm px-lg border-b border-border-soft shrink-0">
         <NavLink to="/" onClick={onNavigate} className="flex items-center gap-sm font-semibold tracking-tight text-text">
           <BrandMark size={22} />
           iceberg
         </NavLink>
       </div>
 
-      <nav className="py-sm" aria-label="Primary">
+      {/* Primary: forward-action navigation. Home is the dashboard;
+          Continue is "drop me back into the topic I was on". */}
+      <nav className="py-sm shrink-0" aria-label="Primary">
+        <SidebarItem to="/" label="Home" onNavigate={onNavigate} icon="⌂" exact />
         <SidebarItem to={resumeTarget()} label="Continue" onNavigate={onNavigate} icon="◐" />
-        <SidebarItem to="/bookmarks" label="Bookmarks" onNavigate={onNavigate} icon="★" />
+      </nav>
+
+      <SidebarDivider />
+
+      <SidebarSection label="Study">
         <SidebarItem to="/paths" label="Paths" onNavigate={onNavigate} icon="⇢" />
-        <SidebarItem to="/whats-new" label="What's new" onNavigate={onNavigate} icon="✦" />
+        <SidebarItem to="/bookmarks" label="Bookmarks" onNavigate={onNavigate} icon="★" />
+      </SidebarSection>
+
+      <SidebarDivider />
+
+      <SidebarSection label="Explore">
         <SidebarItem to="/graph" label="Graph" onNavigate={onNavigate} icon="⟁" />
+      </SidebarSection>
+
+      <SidebarDivider />
+
+      <SidebarSection label="Curriculum">
+        <ul className="pb-xl">
+          {phases.map(phase => {
+            const isOpen = manualExpanded.has(phase.slug) || phase.slug === currentPhase;
+            const phaseTopics = phase.topics;
+            const completed = phaseTopics.filter(s => progressStore.getTopicProgress(s).completed).length;
+            const topicsListId = `sidebar-phase-${phase.slug}-topics`;
+            return (
+              <li key={phase.slug}>
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={topicsListId}
+                  onClick={() => togglePhase(phase.slug)}
+                  className={[
+                    "w-full text-left flex items-center gap-sm px-lg py-[7px] text-body hover:bg-panel-2",
+                    phase.slug === currentPhase ? "bg-panel-2 text-text" : "text-text-mute"
+                  ].join(" ")}
+                >
+                  <span aria-hidden className="text-text-dim text-[10px] w-[12px] inline-block">{isOpen ? "▾" : "▸"}</span>
+                  <span className="flex-1 truncate">{phase.title}</span>
+                  <span className="text-text-dim text-caption tabular-nums">{completed} / {phaseTopics.length}</span>
+                </button>
+                {isOpen && (
+                  <ul id={topicsListId}>
+                    {phaseTopics.map(slug => (
+                      <SidebarTopicRow
+                        key={slug}
+                        slug={slug}
+                        active={currentTopicSlug === slug}
+                        onNavigate={onNavigate}
+                      />
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </SidebarSection>
+
+      {/* Site chrome — pinned to bottom via mt-auto. mt-auto only works
+          because the <aside> uses flex flex-col. */}
+      <nav className="mt-auto py-sm border-t border-border-soft shrink-0" aria-label="Meta">
+        <SidebarItem to="/whats-new" label="What's new" onNavigate={onNavigate} icon="✦" />
         <SidebarItem to="/about" label="About" onNavigate={onNavigate} icon="ⓘ" />
         <SidebarItem to="/settings" label="Settings" onNavigate={onNavigate} icon="⚙" />
       </nav>
-
-      <div className="px-lg py-sm text-label text-text-dim uppercase">Curriculum</div>
-
-      <ul className="pb-xl">
-        {phases.map(phase => {
-          const isOpen = manualExpanded.has(phase.slug) || phase.slug === currentPhase;
-          const phaseTopics = phase.topics;
-          const completed = phaseTopics.filter(s => progressStore.getTopicProgress(s).completed).length;
-          const topicsListId = `sidebar-phase-${phase.slug}-topics`;
-          return (
-            <li key={phase.slug}>
-              <button
-                type="button"
-                aria-expanded={isOpen}
-                aria-controls={topicsListId}
-                onClick={() => togglePhase(phase.slug)}
-                className={[
-                  "w-full text-left flex items-center gap-sm px-lg py-[7px] text-body hover:bg-panel-2",
-                  phase.slug === currentPhase ? "bg-panel-2 text-text" : "text-text-mute"
-                ].join(" ")}
-              >
-                <span aria-hidden className="text-text-dim text-[10px] w-[12px] inline-block">{isOpen ? "▾" : "▸"}</span>
-                <span className="flex-1 truncate">{phase.title}</span>
-                <span className="text-text-dim text-caption tabular-nums">{completed} / {phaseTopics.length}</span>
-              </button>
-              {isOpen && (
-                <ul id={topicsListId}>
-                  {phaseTopics.map(slug => (
-                    <SidebarTopicRow
-                      key={slug}
-                      slug={slug}
-                      active={currentTopicSlug === slug}
-                      onNavigate={onNavigate}
-                    />
-                  ))}
-                </ul>
-              )}
-            </li>
-          );
-        })}
-      </ul>
     </aside>
+  );
+}
+
+function SidebarDivider() {
+  // Hairline rule between sections; sits flush with section padding.
+  return <div aria-hidden className="border-t border-border-soft mx-lg my-sm" />;
+}
+
+function SidebarSection({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="shrink-0">
+      <div className="px-lg pt-sm pb-xs text-label text-text-dim uppercase">{label}</div>
+      {children}
+    </div>
   );
 }
 
