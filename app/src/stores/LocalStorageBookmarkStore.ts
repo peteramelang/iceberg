@@ -1,14 +1,16 @@
 import type { BookmarkStore } from "./BookmarkStore.js";
 import type { Bookmark, ImportResult } from "./types.js";
+import { BookmarkListSchema, safeRead } from "./schemas.js";
 
 const KEY = "iceberg.v1.bookmarks";
 
 function read(): Bookmark[] {
-  const raw = localStorage.getItem(KEY);
-  if (!raw) return [];
-  try { return JSON.parse(raw) as Bookmark[]; } catch { return []; }
+  return safeRead(KEY, BookmarkListSchema, []);
 }
-function write(list: Bookmark[]) { localStorage.setItem(KEY, JSON.stringify(list)); }
+function write(list: Bookmark[]) {
+  if (typeof localStorage === "undefined") return;
+  try { localStorage.setItem(KEY, JSON.stringify(list)); } catch { /* quota / private-browsing */ }
+}
 
 function keyOf(b: Bookmark) { return `${b.topic}::${b.resource ?? ""}`; }
 

@@ -1,7 +1,20 @@
+import { z } from "zod";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { useTheme } from "../hooks/useTheme.js";
 import { progressStore, bookmarkStore, notesStore, activityStore } from "../stores/index.js";
 import type { ExportPayload } from "../stores/types.js";
+import { BookmarkListSchema, NotesMapSchema, TopicProgressSchema } from "../stores/schemas.js";
+
+const ExportPayloadSchema = z.object({
+  format: z.literal("iceberg-progress"),
+  version: z.literal(1),
+  exportedAt: z.string(),
+  data: z.object({
+    progress: z.record(z.string(), TopicProgressSchema),
+    bookmarks: BookmarkListSchema,
+    notes: NotesMapSchema
+  })
+});
 
 function downloadJSON(filename: string, data: unknown): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -34,12 +47,15 @@ export function Settings() {
     const file = e.target.files?.[0];
     if (!file) return;
     const text = await file.text();
-    let payload: ExportPayload;
-    try { payload = JSON.parse(text) as ExportPayload; }
+    let raw: unknown;
+    try { raw = JSON.parse(text); }
     catch { alert("Invalid JSON."); return; }
-    if (payload.format !== "iceberg-progress" || payload.version !== 1) {
-      alert("Unsupported export format."); return;
+    const parsed = ExportPayloadSchema.safeParse(raw);
+    if (!parsed.success) {
+      alert("Unsupported or malformed export file.");
+      return;
     }
+    const payload = parsed.data;
     const importMode = confirm("Replace existing data with this file? Click Cancel to merge instead.") ? "replace" : "merge";
     progressStore.importData(payload.data.progress, importMode);
     bookmarkStore.importData(payload.data.bookmarks, importMode);

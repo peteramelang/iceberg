@@ -1,7 +1,8 @@
-import type { ActivityStore, ActivityEntry } from "./ActivityStore.js";
+import type { ActivityStore, ActivityEntry, ActivityType } from "./ActivityStore.js";
 
 const KEY = "iceberg.activity";
 const MAX = 50;
+const VALID_TYPES = new Set<ActivityType>(["completed", "checked", "bookmarked", "unbookmarked"]);
 
 function read(): ActivityEntry[] {
   if (typeof localStorage === "undefined") return [];
@@ -14,10 +15,14 @@ function read(): ActivityEntry[] {
 }
 
 function isEntry(x: unknown): x is ActivityEntry {
-  return !!x && typeof x === "object"
-    && typeof (x as ActivityEntry).type === "string"
-    && typeof (x as ActivityEntry).topicSlug === "string"
-    && typeof (x as ActivityEntry).at === "number";
+  if (!x || typeof x !== "object") return false;
+  const e = x as Record<string, unknown>;
+  return VALID_TYPES.has(e.type as ActivityType)
+    && typeof e.topicSlug === "string"
+    && typeof e.topicTitle === "string"
+    && typeof e.at === "number"
+    && (e.resourceKey === undefined || typeof e.resourceKey === "string")
+    && (e.resourceTitle === undefined || typeof e.resourceTitle === "string");
 }
 
 export class LocalStorageActivityStore implements ActivityStore {
@@ -27,7 +32,9 @@ export class LocalStorageActivityStore implements ActivityStore {
     const list = read();
     list.unshift({ ...entry, at: Date.now() });
     while (list.length > MAX) list.pop();
-    localStorage.setItem(KEY, JSON.stringify(list));
+    if (typeof localStorage !== "undefined") {
+      try { localStorage.setItem(KEY, JSON.stringify(list)); } catch { /* quota / private-browsing */ }
+    }
     this.emit();
   }
 
@@ -36,7 +43,9 @@ export class LocalStorageActivityStore implements ActivityStore {
   }
 
   clear(): void {
-    localStorage.removeItem(KEY);
+    if (typeof localStorage !== "undefined") {
+      try { localStorage.removeItem(KEY); } catch { /* no-op */ }
+    }
     this.emit();
   }
 
