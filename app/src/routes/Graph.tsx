@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ReactFlow, Background, Controls, type Edge, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { Head } from "../components/layout/Head.js";
 import { topics, connections, taxonomy } from "../content/index.js";
 import { topicBySlug } from "../content/derived.js";
 import { progressStore } from "../stores/index.js";
@@ -125,6 +126,7 @@ export function Graph() {
 
   return (
     <div className="flex h-[calc(100dvh-52px)]">
+      <Head title="Graph" description="Visualize prerequisite, pairs-with, related, and confusion edges across topics." />
       <h1 className="sr-only">Topic graph</h1>
       <div className="flex-1 relative">
         <div className="absolute top-md left-md z-10 flex gap-sm bg-panel border border-border-soft rounded-sm p-sm">

@@ -43,7 +43,8 @@ export function ResourceChecklist({ fm }: { fm: TopicFrontmatter }) {
               aria-pressed={checked}
               aria-label={`${checked ? "Mark unchecked" : "Mark checked"}: ${item.label}`}
               onClick={() => progressStore.setResourceChecked(fm.slug, item.key, !checked)}
-              className="w-full flex items-center gap-sm text-left text-caption text-text-mute hover:text-text py-[3px]"
+              // Min-height pushes the row to ≥24px tall (WCAG 2.5.8 target).
+              className="w-full min-h-[28px] flex items-center gap-sm text-left text-caption text-text-mute hover:text-text"
             >
               <span
                 className={[
@@ -55,7 +56,7 @@ export function ResourceChecklist({ fm }: { fm: TopicFrontmatter }) {
                 ✓
               </span>
               <span className="truncate flex-1">{item.label}</span>
-              <span className="text-text-dim text-[10px] uppercase tracking-[0.04em] shrink-0">{item.kind}</span>
+              <span aria-hidden className="text-text-dim text-[10px] uppercase tracking-[0.04em] shrink-0">{item.kind}</span>
             </button>
           </li>
         );

@@ -24,9 +24,9 @@ export function Topbar({
           type="button"
           aria-label="Open navigation"
           onClick={onToggleSidebar}
-          className="md:hidden h-8 w-8 rounded-sm flex items-center justify-center hover:bg-panel-2 text-text-mute"
+          className="md:hidden h-11 w-11 -ml-sm rounded-sm flex items-center justify-center hover:bg-panel-2 text-text-mute"
         >
-          ☰
+          <span aria-hidden>☰</span>
         </button>
       )}
       <button
@@ -47,7 +47,7 @@ export function Topbar({
           type="button"
           aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
           onClick={() => themeStore.set(theme === "dark" ? "light" : "dark")}
-          className="h-8 w-8 rounded-sm flex items-center justify-center hover:bg-panel-2 hover:text-text"
+          className="h-11 w-11 rounded-sm flex items-center justify-center hover:bg-panel-2 hover:text-text"
         >
           <span aria-hidden>{theme === "dark" ? "☼" : "☾"}</span>
         </button>

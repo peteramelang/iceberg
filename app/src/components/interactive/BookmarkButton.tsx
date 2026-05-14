@@ -20,7 +20,7 @@ export function BookmarkButton({ slug }: { slug: string }) {
         on ? "bg-panel-2 border-accent text-accent" : "bg-panel border-border text-text-mute hover:text-text hover:border-text-dim"
       ].join(" ")}
     >
-      <span>{on ? "★" : "☆"}</span>
+      <span aria-hidden>{on ? "★" : "☆"}</span>
       {on ? "Bookmarked" : "Bookmark"}
     </button>
   );

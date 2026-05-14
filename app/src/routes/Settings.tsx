@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { useTheme } from "../hooks/useTheme.js";
 import { progressStore, bookmarkStore, notesStore, activityStore } from "../stores/index.js";
@@ -18,12 +19,17 @@ const ExportPayloadSchema = z.object({
 
 function downloadJSON(filename: string, data: unknown): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
+  a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
+  // Defer to next tick so the browser starts the download before we revoke.
+  // Otherwise we leak the blob URL (memory + same-origin-fetchable handle)
+  // until the tab closes.
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 export function Settings() {
@@ -75,6 +81,7 @@ export function Settings() {
 
   return (
     <div className="p-xl">
+      <Head title="Settings" />
       <MainColumn maxWidth="max-w-[720px]">
         <header className="mb-xl">
           <h1 className="text-display-xl m-0">Settings</h1>
@@ -131,7 +138,14 @@ export function Settings() {
 
         <section>
           <h2 className="text-label text-text-mute uppercase mb-md">About</h2>
-          <p className="text-body text-text-mute">iceberg — a guided curriculum for production-readiness. <a href="/whats-new" className="text-accent hover:underline">What's new</a> · <a href="/credits" className="text-accent hover:underline">Credits</a></p>
+          <p className="text-body text-text-mute mb-sm">iceberg — a guided curriculum for production-readiness.</p>
+          <ul className="text-caption text-text-mute flex flex-col gap-xs">
+            <li>Version <span className="font-mono tabular-nums">{__APP_VERSION__}</span></li>
+            <li><a href="/whats-new" className="text-accent hover:underline">What's new</a></li>
+            <li><a href="/credits" className="text-accent hover:underline">Credits</a></li>
+            <li><a href="https://github.com/peteramelang/iceberg" target="_blank" rel="noreferrer noopener" className="text-accent hover:underline">Repository ↗</a></li>
+            <li><a href="https://github.com/peteramelang/iceberg/blob/main/LICENSE" target="_blank" rel="noreferrer noopener" className="text-accent hover:underline">License (code: MIT, content: CC BY-SA 4.0)</a></li>
+          </ul>
         </section>
       </MainColumn>
     </div>

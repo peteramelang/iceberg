@@ -131,7 +131,12 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
           className="w-full h-12 px-lg bg-transparent text-text outline-none border-b border-border-soft text-body"
           aria-label="Search query"
         />
-        <div className="max-h-[60vh] overflow-y-auto scrollbar-thin">
+        <div
+          className="max-h-[60vh] overflow-y-auto scrollbar-thin"
+          role="status"
+          aria-live="polite"
+          aria-atomic="false"
+        >
           {flat.length === 0 && (
             <div className="px-lg py-md text-text-mute text-body">No results.</div>
           )}

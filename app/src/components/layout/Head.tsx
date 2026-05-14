@@ -24,8 +24,10 @@ export function Head({ title, description, jsonLd, canonical }: HeadProps) {
       <meta name="twitter:description" content={desc} />
       {canonical && <link rel="canonical" href={canonical} />}
       {jsonLd && (
+        // Escape `<` to prevent the rare-but-classic JSON-in-script XSS
+        // where a string in `jsonLd` could close the surrounding <script>.
         <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
+          {JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
         </script>
       )}
     </Helmet>

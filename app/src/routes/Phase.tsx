@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { RightRail, RailCard } from "../components/layout/RightRail.js";
 import { TopicCard } from "../components/domain/TopicCard.js";
@@ -52,6 +53,7 @@ export function Phase() {
 
   return (
     <div className="p-xl flex flex-col lg:flex-row gap-xl">
+      <Head title={phase.title} description={phase.description} />
       <MainColumn maxWidth="max-w-[720px]">
         <header className="mb-xl">
           <div className="text-label text-text-mute uppercase mb-sm flex items-center gap-sm">

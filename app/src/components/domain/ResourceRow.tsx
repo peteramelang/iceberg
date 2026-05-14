@@ -43,18 +43,25 @@ export function ResourceRow({
   };
 
   return (
-    <div className="grid grid-cols-[22px_1fr_auto] gap-md items-center px-md py-md bg-panel border border-border-soft rounded-sm hover:bg-panel-2 hover:border-border">
+    <div className="grid grid-cols-[28px_1fr_auto] gap-md items-center px-md py-md bg-panel border border-border-soft rounded-sm hover:bg-panel-2 hover:border-border">
       <button
         type="button"
         onClick={onToggle}
         aria-pressed={checked}
         aria-label={checked ? `Mark "${title}" unchecked` : `Mark "${title}" checked`}
-        className={[
-          "w-[18px] h-[18px] rounded-sm border-[1.5px] flex items-center justify-center",
-          checked ? "bg-accent border-accent text-white" : "border-border text-transparent hover:text-text-dim"
-        ].join(" ")}
+        // 28×28 hit area (≥WCAG 2.5.8 24px minimum); the inner span is the
+        // 18×18 visual checkbox glyph so the design stays compact.
+        className="w-[28px] h-[28px] flex items-center justify-center -ml-[5px]"
       >
-        ✓
+        <span
+          aria-hidden
+          className={[
+            "block w-[18px] h-[18px] rounded-sm border-[1.5px] flex items-center justify-center text-[12px]",
+            checked ? "bg-accent border-accent text-white" : "border-border text-transparent"
+          ].join(" ")}
+        >
+          ✓
+        </span>
       </button>
       <a
         href={url}

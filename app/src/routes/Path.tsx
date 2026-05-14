@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { RightRail, RailCard } from "../components/layout/RightRail.js";
 import { TopicCard } from "../components/domain/TopicCard.js";
@@ -28,6 +29,7 @@ export function Path() {
 
   return (
     <div className="p-xl flex flex-col lg:flex-row gap-xl">
+      <Head title={p.title} description={p.description} />
       <MainColumn>
         <header className="mb-xl">
           <div className="text-label text-text-mute uppercase mb-sm">{p.audience} · ~{p.estimatedHours}h · {p.topics.length} topics</div>
@@ -61,11 +63,18 @@ export function Path() {
             </div>
           </div>
         </RailCard>
-        {nextSlug && (
+        {nextSlug ? (
           <RailCard title="Up next in this path">
             <div className="text-body-strong text-text mb-md">{nextTitle}</div>
             <Link to={`/topic/${nextSlug}?from-path=${p.slug}`} className="inline-flex items-center gap-sm bg-accent text-white px-md py-sm rounded-sm font-medium hover:bg-accent-hover">
               Start →
+            </Link>
+          </RailCard>
+        ) : (
+          <RailCard title="Path complete">
+            <div className="text-body text-text">Nice — you've finished every topic in this path.</div>
+            <Link to="/paths" className="mt-md inline-block text-accent hover:text-accent-hover">
+              Browse other paths →
             </Link>
           </RailCard>
         )}

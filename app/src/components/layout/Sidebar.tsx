@@ -82,23 +82,25 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           const isOpen = manualExpanded.has(phase.slug) || phase.slug === currentPhase;
           const phaseTopics = phase.topics;
           const completed = phaseTopics.filter(s => progressStore.getTopicProgress(s).completed).length;
+          const topicsListId = `sidebar-phase-${phase.slug}-topics`;
           return (
             <li key={phase.slug}>
               <button
                 type="button"
                 aria-expanded={isOpen}
+                aria-controls={topicsListId}
                 onClick={() => togglePhase(phase.slug)}
                 className={[
                   "w-full text-left flex items-center gap-sm px-lg py-[7px] text-body hover:bg-panel-2",
                   phase.slug === currentPhase ? "bg-panel-2 text-text" : "text-text-mute"
                 ].join(" ")}
               >
-                <span className="text-text-dim text-[10px] w-[12px] inline-block">{isOpen ? "▾" : "▸"}</span>
+                <span aria-hidden className="text-text-dim text-[10px] w-[12px] inline-block">{isOpen ? "▾" : "▸"}</span>
                 <span className="flex-1 truncate">{phase.title}</span>
                 <span className="text-text-dim text-caption tabular-nums">{completed} / {phaseTopics.length}</span>
               </button>
               {isOpen && (
-                <ul>
+                <ul id={topicsListId}>
                   {phaseTopics.map(slug => (
                     <SidebarTopicRow
                       key={slug}

@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
+import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { useChangelog } from "../hooks/useChangelog.js";
-import { topics } from "../content/index.js";
+import { getTopic } from "../content/index.js";
 
 export function WhatsNew() {
   const entries = useChangelog();
-  const titleBySlug = new Map<string, string>();
-  for (const t of topics) titleBySlug.set(t.frontmatter.slug, t.frontmatter.title);
 
   return (
     <div className="p-xl">
+      <Head title="What's new" description="Curriculum updates derived from the git history of content/." />
       <MainColumn maxWidth="max-w-[960px]">
         <header className="mb-xl">
           <h1 className="text-display-xl m-0 mb-xs">What's new</h1>
@@ -20,12 +20,18 @@ export function WhatsNew() {
           <article key={e.sha} className="py-lg border-t border-border-soft first:border-t-0">
             <div className="flex items-baseline gap-md mb-xs text-caption text-text-dim">
               <span className="tabular-nums">{e.date.slice(0, 10)}</span>
-              <span className="font-mono">{e.sha}</span>
+              <span className="font-mono">{e.sha.slice(0, 7)}</span>
             </div>
             <div className="text-body-strong text-text mb-sm">{e.message}</div>
             <div className="flex flex-wrap gap-xs">
               {e.touchedTopics.map(slug => (
-                <Link key={slug} to={`/topic/${slug}`} className="text-caption px-xs py-[1px] border border-border-soft rounded-sm text-text-mute hover:text-text hover:border-border">{titleBySlug.get(slug) ?? slug}</Link>
+                <Link
+                  key={slug}
+                  to={`/topic/${slug}`}
+                  className="text-caption px-xs py-[1px] border border-border-soft rounded-sm text-text-mute hover:text-text hover:border-border"
+                >
+                  {getTopic(slug)?.frontmatter.title ?? slug}
+                </Link>
               ))}
             </div>
           </article>

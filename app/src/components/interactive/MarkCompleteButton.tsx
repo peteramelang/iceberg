@@ -33,7 +33,7 @@ export function MarkCompleteButton({ slug }: { slug: string }) {
         done ? "bg-green text-white" : "bg-accent text-white hover:bg-accent-hover"
       ].join(" ")}
     >
-      {done ? "✓ Completed" : "Mark complete"}
+      {done ? <><span aria-hidden>✓</span> Completed</> : "Mark complete"}
     </button>
   );
 }

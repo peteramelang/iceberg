@@ -18,6 +18,18 @@ export function Shell({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("iceberg-open-search", onOpen as EventListener);
   }, []);
 
+  // Esc dismisses the mobile drawer (the same way it dismisses the search
+  // palette). SearchPalette owns its own Esc listener and bails out early
+  // when it's not open, so the two handlers don't fight.
+  useEffect(() => {
+    if (!drawer) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeDrawer();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [drawer, closeDrawer]);
+
   return (
     <div className="min-h-[100dvh] flex bg-bg text-text">
       <a
@@ -28,14 +40,26 @@ export function Shell({ children }: { children: ReactNode }) {
       </a>
       <div className="hidden md:block"><Sidebar /></div>
       {drawer && (
-        <div className="fixed inset-0 z-40 md:hidden">
-          <div className="absolute inset-0 bg-black/50" onClick={closeDrawer} />
+        <div
+          className="fixed inset-0 z-40 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation"
+        >
+          <button
+            type="button"
+            aria-label="Close navigation"
+            onClick={closeDrawer}
+            className="absolute inset-0 bg-black/50 cursor-default"
+          />
           <div className="absolute left-0 top-0 h-full"><Sidebar onNavigate={closeDrawer} /></div>
         </div>
       )}
       <div className="flex-1 min-w-0 flex flex-col">
         <Topbar onOpenSearch={openSearch} onToggleSidebar={openDrawer} />
-        <main id="main" className="flex-1 min-w-0">{children}</main>
+        {/* 1480px cap per spec §1. left-aligned within the cap so right rails
+            still anchor cleanly; only kicks in on ultra-wide displays. */}
+        <main id="main" className="flex-1 min-w-0 w-full max-w-[1480px]">{children}</main>
       </div>
       <SearchPalette open={searchOpen} onClose={closeSearch} />
     </div>

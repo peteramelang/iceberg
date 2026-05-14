@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { TopicCard } from "../components/domain/TopicCard.js";
 import { bookmarkStore } from "../stores/index.js";
@@ -19,6 +20,7 @@ export function Bookmarks() {
 
   return (
     <div className="p-xl">
+      <Head title="Bookmarks" description="Your saved topics, grouped by phase." />
       <MainColumn maxWidth="max-w-[960px]">
         <header className="mb-xl">
           <h1 className="text-display-xl m-0 mb-xs">Bookmarks</h1>
@@ -28,6 +30,7 @@ export function Bookmarks() {
           <div className="text-text-mute italic">No bookmarks yet. Bookmark a topic from its detail page to find it here.</div>
         ) : groups.map(({ phase, slugs }) => {
           const isCollapsed = collapsed.has(phase.slug);
+          const groupId = `bookmarks-phase-${phase.slug}`;
           return (
             <section key={phase.slug} className="mb-xl">
               <button
@@ -38,14 +41,15 @@ export function Bookmarks() {
                   return next;
                 })}
                 aria-expanded={!isCollapsed}
+                aria-controls={groupId}
                 className="flex items-baseline gap-md mb-md text-text"
               >
-                <span className="text-text-dim text-caption">{isCollapsed ? "▸" : "▾"}</span>
+                <span aria-hidden className="text-text-dim text-caption">{isCollapsed ? "▸" : "▾"}</span>
                 <h2 className="text-label text-text-mute uppercase m-0">{phase.title}</h2>
                 <span className="text-caption text-text-dim tabular-nums">{slugs.length}</span>
               </button>
               {!isCollapsed && (
-                <div>
+                <div id={groupId}>
                   {slugs.map(slug => {
                     const fm = getTopic(slug)?.frontmatter;
                     if (!fm) return null;

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { ResumeHero } from "../components/domain/ResumeHero.js";
 import { PathCard } from "../components/domain/PathCard.js";
@@ -67,6 +68,7 @@ export function Home() {
 
   return (
     <div className="p-xl">
+      <Head title="iceberg — production-readiness curriculum" />
       <MainColumn maxWidth="max-w-[1040px]">
         {resumeTopic && (
           <ResumeHero

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Head } from "../components/layout/Head.js";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { RightRail, RailCard } from "../components/layout/RightRail.js";
 import { JumpNav, type JumpPill } from "../components/interactive/JumpNav.js";
@@ -85,6 +86,7 @@ export function Topic() {
 
   return (
     <div className="p-xl flex flex-col lg:flex-row gap-xl">
+      <Head title={fm.title} description={fm.summary} />
       <MainColumn>
         <header className="mb-md">
           {fromPath && (
