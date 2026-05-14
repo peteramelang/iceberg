@@ -42,15 +42,19 @@ export interface RelatedConnection {
   direction: "outgoing" | "incoming";
 }
 
+const TITLE_BY_SLUG: ReadonlyMap<string, string> = (() => {
+  const m = new Map<string, string>();
+  for (const t of topics) m.set(t.frontmatter.slug, t.frontmatter.title);
+  return m;
+})();
+
 export function connectionsForTopic(slug: string): RelatedConnection[] {
-  const titleBySlug = new Map<string, string>();
-  for (const t of topics) titleBySlug.set(t.frontmatter.slug, t.frontmatter.title);
   const out: RelatedConnection[] = [];
   for (const e of connections) {
     if (e.from === slug) {
-      out.push({ type: e.type, otherSlug: e.to, otherTitle: titleBySlug.get(e.to) ?? e.to, reasoning: e.reasoning, weight: e.weight, direction: "outgoing" });
+      out.push({ type: e.type, otherSlug: e.to, otherTitle: TITLE_BY_SLUG.get(e.to) ?? e.to, reasoning: e.reasoning, weight: e.weight, direction: "outgoing" });
     } else if (e.to === slug) {
-      out.push({ type: e.type, otherSlug: e.from, otherTitle: titleBySlug.get(e.from) ?? e.from, reasoning: e.reasoning, weight: e.weight, direction: "incoming" });
+      out.push({ type: e.type, otherSlug: e.from, otherTitle: TITLE_BY_SLUG.get(e.from) ?? e.from, reasoning: e.reasoning, weight: e.weight, direction: "incoming" });
     }
   }
   return out;
