@@ -36,7 +36,7 @@ function buildIndex(): SearchItem[] {
       id: `topic:${fm.slug}`,
       title: fm.title,
       subtitle: getPhase(fm.phase)?.title ?? fm.phase,
-      text: `${fm.title} ${fm.summary} ${fm.definition} ${fm.slug}`,
+      text: `${fm.title} ${fm.tldr} ${fm.summary} ${fm.definition} ${fm.slug}`,
       href: `/topic/${fm.slug}`,
       badge: fm.difficulty
     });
@@ -107,7 +107,7 @@ function buildIndex(): SearchItem[] {
       id: `path:${p.slug}`,
       title: p.title,
       subtitle: `Path · ${p.audience}`,
-      text: `${p.title} ${p.description} ${p.audience}`,
+      text: `${p.title} ${p.tldr} ${p.description} ${p.audience}`,
       href: `/path/${p.slug}`
     });
   }
