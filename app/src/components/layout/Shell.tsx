@@ -34,6 +34,12 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex bg-bg text-text">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only fixed top-sm left-sm z-50 bg-accent text-white px-md py-sm rounded-sm"
+      >
+        Skip to main content
+      </a>
       <div className="hidden md:block"><Sidebar /></div>
       {drawer && (
         <div className="fixed inset-0 z-40 md:hidden">
@@ -48,7 +54,7 @@ export function Shell({ children }: { children: ReactNode }) {
           onOpenSearch={openSearch}
           onToggleSidebar={() => setDrawer(true)}
         />
-        <main className="flex-1 min-w-0">{children}</main>
+        <main id="main" className="flex-1 min-w-0">{children}</main>
       </div>
       <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
