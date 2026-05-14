@@ -8,6 +8,7 @@ import { Graph } from "./routes/Graph.js";
 import { Credits } from "./routes/Credits.js";
 import { Paths } from "./routes/Paths.js";
 import { Path } from "./routes/Path.js";
+import { WhatsNew } from "./routes/WhatsNew.js";
 
 export function App() {
   return (
@@ -21,6 +22,7 @@ export function App() {
       <Route path="/credits" element={<Credits />} />
       <Route path="/paths" element={<Paths />} />
       <Route path="/path/:pathSlug" element={<Path />} />
+      <Route path="/whats-new" element={<WhatsNew />} />
     </Routes>
   );
 }

@@ -2,11 +2,15 @@
   "name": "iceberg",
   "version": "0.1.0",
   "private": true,
-  "workspaces": ["app", "pipeline"],
+  "workspaces": [
+    "app",
+    "pipeline"
+  ],
   "scripts": {
     "dev": "npm run dev --workspace=app",
-    "build": "npm run build:content --workspace=pipeline && npm run build --workspace=app",
+    "build": "npm run build:content --workspace=pipeline && npm run generate:changelog && npm run build --workspace=app",
     "build:content": "npm run build:content --workspace=pipeline",
+    "generate:changelog": "tsx scripts/generate-changelog.ts",
     "preview": "npm run preview --workspace=app",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
@@ -16,5 +20,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
   }
 }

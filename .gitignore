@@ -8,6 +8,7 @@ node_modules/
 # Build outputs
 app/dist/
 app/src/content/topics.generated.json
+app/public/changelog.json
 
 # Smoke run output
 content-smoke/
