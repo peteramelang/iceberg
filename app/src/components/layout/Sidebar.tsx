@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { getTopic, taxonomy, topics, connections } from "../../content/index.js";
 import { phasesSorted, resourceTotalFor } from "../../content/derived.js";
-import { progressStore } from "../../stores/index.js";
+import { progressStore, bookmarkStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 import { useCompletionPulse } from "../../hooks/useCompletionPulse.js";
 import { ProgressMarker } from "../domain/ProgressMarker.js";
@@ -59,7 +59,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const phases = phasesSorted;
 
   return (
-    <aside className="w-[260px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin flex flex-col">
+    <aside className="w-[300px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin flex flex-col">
       <div className="h-[52px] flex items-center gap-sm px-lg border-b border-border-soft shrink-0">
         <NavLink to="/" onClick={onNavigate} className="flex items-center gap-sm font-semibold tracking-tight text-text">
           <BrandMark size={22} />
@@ -135,6 +135,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <nav className="mt-auto py-sm border-t border-border-soft shrink-0" aria-label="Meta">
         <SidebarItem to="/whats-new" label="What's new" onNavigate={onNavigate} icon="✦" />
         <SidebarItem to="/about" label="About" onNavigate={onNavigate} icon="ⓘ" />
+        <SidebarItem to="/credits" label="Credits" onNavigate={onNavigate} icon="♥" />
         <SidebarItem to="/settings" label="Settings" onNavigate={onNavigate} icon="⚙" />
       </nav>
     </aside>
@@ -158,6 +159,7 @@ function SidebarSection({ label, children }: { label: string; children: React.Re
 function SidebarTopicRow({
   slug, active, onNavigate
 }: { slug: string; active: boolean; onNavigate?: () => void }) {
+  useStoreTick(l => bookmarkStore.subscribe(l));
   const t = getTopic(slug)?.frontmatter;
   const pulse = useCompletionPulse(slug);
   if (!t) return null;
@@ -166,6 +168,7 @@ function SidebarTopicRow({
   const checked = Object.values(prog.resources).filter(Boolean).length;
   const state: "empty" | "partial" | "done" = prog.completed ? "done" : checked > 0 ? "partial" : "empty";
   const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+  const bookmarked = bookmarkStore.isBookmarked(slug);
   return (
     <li>
       <NavLink
@@ -179,6 +182,9 @@ function SidebarTopicRow({
         <div className="flex items-center gap-sm text-caption">
           <ProgressMarker state={state} pulse={pulse} />
           <span className="truncate">{t.title}</span>
+          {bookmarked && (
+            <span aria-label="Bookmarked" className="text-accent shrink-0 text-[12px] leading-none">★</span>
+          )}
         </div>
         <div className="ml-[17px] mt-[5px] h-[2px] bg-border-soft rounded-pill overflow-hidden">
           <div

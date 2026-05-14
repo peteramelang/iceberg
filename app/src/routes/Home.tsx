@@ -136,11 +136,38 @@ export function Home() {
               <h2 className="text-label text-text-mute uppercase m-0">All phases</h2>
               <span className="text-caption text-text-dim">{phases.length}</span>
             </header>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-md">
-              {phases.map((p, i) => (
-                <PhaseTile key={p.slug} index={i + 1} slug={p.slug} title={p.title} topicSlugs={p.topics} />
-              ))}
-            </div>
+            {(() => {
+              // Split point: the original curriculum had 7 production-readiness
+              // phases; the extension added 4 modern-fullstack-and-AI phases at
+              // the end. Edit this constant if the curriculum arcs ever shift.
+              const FOUNDATION_PHASE_COUNT = 7;
+              const foundations = phases.slice(0, FOUNDATION_PHASE_COUNT);
+              const modern = phases.slice(FOUNDATION_PHASE_COUNT);
+              return (
+                <>
+                  {foundations.length > 0 && (
+                    <>
+                      <h3 className="text-label text-text-dim uppercase mt-md mb-md">Production-Readiness Foundations</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-md">
+                        {foundations.map((p, i) => (
+                          <PhaseTile key={p.slug} index={i + 1} slug={p.slug} title={p.title} topicSlugs={p.topics} />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {modern.length > 0 && (
+                    <>
+                      <h3 className="text-label text-text-dim uppercase mt-xl mb-md">Modern Full-Stack + AI</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-md">
+                        {modern.map((p, i) => (
+                          <PhaseTile key={p.slug} index={FOUNDATION_PHASE_COUNT + i + 1} slug={p.slug} title={p.title} topicSlugs={p.topics} />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              );
+            })()}
           </section>
         )}
 
