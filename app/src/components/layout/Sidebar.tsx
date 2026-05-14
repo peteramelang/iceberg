@@ -59,7 +59,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const phases = phasesSorted;
 
   return (
-    <aside className="w-[260px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin flex flex-col">
+    <aside className="w-[300px] shrink-0 bg-panel border-r border-border h-[100dvh] sticky top-0 overflow-y-auto scrollbar-thin flex flex-col">
       <div className="h-[52px] flex items-center gap-sm px-lg border-b border-border-soft shrink-0">
         <NavLink to="/" onClick={onNavigate} className="flex items-center gap-sm font-semibold tracking-tight text-text">
           <BrandMark size={22} />
