@@ -1,5 +1,6 @@
 import { progressStore, activityStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
+import { InfoDot } from "../interactive/InfoDot.js";
 
 type ResourceKind = "Video" | "Article" | "Service" | "Course";
 
@@ -11,7 +12,7 @@ const KIND_COLOR: Record<ResourceKind, { fg: string; bg: string; border: string 
 };
 
 export function ResourceRow({
-  topicSlug, topicTitle, resourceKey, kind, title, meta, url, secondaryMeta
+  topicSlug, topicTitle, resourceKey, kind, title, meta, url, secondaryMeta, reasoning
 }: {
   topicSlug: string;
   topicTitle: string;
@@ -21,6 +22,7 @@ export function ResourceRow({
   meta: string;
   url: string;
   secondaryMeta?: string;
+  reasoning?: string;
 }) {
   useStoreTick(l => progressStore.subscribe(l));
   const checked = progressStore.getTopicProgress(topicSlug).resources[resourceKey] === true;
@@ -63,21 +65,28 @@ export function ResourceRow({
           ✓
         </span>
       </button>
-      <a
-        href={url}
-        target="_blank"
-        rel="noreferrer noopener"
-        className="min-w-0 outline-offset-2"
-      >
-        <div className="flex items-center gap-sm flex-wrap">
-          <span
-            className="inline-block text-[11px] px-xs py-[1px] rounded-sm border"
-            style={{ color: c.fg, background: c.bg, borderColor: c.border }}
-          >{kind}</span>
-          <span className="text-body-strong text-text truncate">{title}</span>
-        </div>
-        <div className="text-caption text-text-mute mt-xs truncate">{meta}</div>
-      </a>
+      <div className="min-w-0">
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="block outline-offset-2"
+        >
+          <div className="flex items-center gap-sm flex-wrap">
+            <span
+              className="inline-block text-[11px] px-xs py-[1px] rounded-sm border"
+              style={{ color: c.fg, background: c.bg, borderColor: c.border }}
+            >{kind}</span>
+            <span className="text-body-strong text-text truncate">{title}</span>
+          </div>
+          <div className="text-caption text-text-mute mt-xs truncate">{meta}</div>
+        </a>
+        {reasoning && (
+          <div className="mt-xs">
+            <InfoDot reasoning={reasoning} label={`Why "${title}" was picked`} />
+          </div>
+        )}
+      </div>
       {secondaryMeta && <div className="text-caption text-text-dim tabular-nums">{secondaryMeta}</div>}
     </div>
   );
