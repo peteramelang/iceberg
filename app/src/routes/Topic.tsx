@@ -16,7 +16,7 @@ import { BookmarkButton } from "../components/interactive/BookmarkButton.js";
 import { NotesField } from "../components/interactive/NotesField.js";
 import { getTopic, taxonomy } from "../content/index.js";
 import { getPathBySlug } from "../utils/pathHelpers.js";
-import { progressStore, activityStore } from "../stores/index.js";
+import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { connectionsForTopic } from "../utils/connectionHelpers.js";
 
@@ -76,10 +76,6 @@ export function Topic() {
     out.push({ id: "notes", label: "Notes" });
     return out;
   }, [fm, allConn]);
-
-  const onResourceClick = (key: string, title: string) => {
-    activityStore.append({ type: "checked", topicSlug: fm.slug, topicTitle: fm.title, resourceKey: key, resourceTitle: title });
-  };
 
   return (
     <div className="p-xl flex flex-col lg:flex-row gap-xl">
@@ -141,14 +137,10 @@ export function Topic() {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.videos.short && (
-                <span onClick={() => onResourceClick("videos.short", fm.resources.videos.short!.title)}>
-                  <ResourceRow topicSlug={fm.slug} resourceKey="videos.short" kind="Video" title={fm.resources.videos.short.title} meta={fm.resources.videos.short.author} url={fm.resources.videos.short.url} secondaryMeta={`${fm.resources.videos.short.durationMinutes} min`} />
-                </span>
+                <ResourceRow topicSlug={fm.slug} topicTitle={fm.title} resourceKey="videos.short" kind="Video" title={fm.resources.videos.short.title} meta={fm.resources.videos.short.author} url={fm.resources.videos.short.url} secondaryMeta={`${fm.resources.videos.short.durationMinutes} min`} />
               )}
               {fm.resources.videos.long && (
-                <span onClick={() => onResourceClick("videos.long", fm.resources.videos.long!.title)}>
-                  <ResourceRow topicSlug={fm.slug} resourceKey="videos.long" kind="Video" title={fm.resources.videos.long.title} meta={fm.resources.videos.long.author} url={fm.resources.videos.long.url} secondaryMeta={`${fm.resources.videos.long.durationMinutes} min`} />
-                </span>
+                <ResourceRow topicSlug={fm.slug} topicTitle={fm.title} resourceKey="videos.long" kind="Video" title={fm.resources.videos.long.title} meta={fm.resources.videos.long.author} url={fm.resources.videos.long.url} secondaryMeta={`${fm.resources.videos.long.durationMinutes} min`} />
               )}
             </div>
           </section>
@@ -162,9 +154,7 @@ export function Topic() {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.articles.map((a, i) => (
-                <span key={i} onClick={() => onResourceClick(`articles.${i}`, a.title)}>
-                  <ResourceRow topicSlug={fm.slug} resourceKey={`articles.${i}`} kind="Article" title={a.title} meta={a.publisher ?? a.author ?? a.kind} url={a.url} />
-                </span>
+                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`articles.${i}`} kind="Article" title={a.title} meta={a.publisher ?? a.author ?? a.kind} url={a.url} />
               ))}
             </div>
           </section>
@@ -178,9 +168,7 @@ export function Topic() {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.services.map((s, i) => (
-                <span key={i} onClick={() => onResourceClick(`services.${i}`, s.name)}>
-                  <ResourceRow topicSlug={fm.slug} resourceKey={`services.${i}`} kind="Service" title={s.name} meta={`${s.category}${s.vendor ? " · " + s.vendor : ""}`} url={s.url} />
-                </span>
+                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`services.${i}`} kind="Service" title={s.name} meta={`${s.category}${s.vendor ? " · " + s.vendor : ""}`} url={s.url} />
               ))}
             </div>
           </section>
@@ -194,9 +182,7 @@ export function Topic() {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.courses.map((c, i) => (
-                <span key={i} onClick={() => onResourceClick(`courses.${i}`, c.title)}>
-                  <ResourceRow topicSlug={fm.slug} resourceKey={`courses.${i}`} kind="Course" title={c.title} meta={`${c.provider}${c.paid ? " · paid" : " · free"}`} url={c.url} />
-                </span>
+                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`courses.${i}`} kind="Course" title={c.title} meta={`${c.provider}${c.paid ? " · paid" : " · free"}`} url={c.url} />
               ))}
             </div>
           </section>

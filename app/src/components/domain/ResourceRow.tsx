@@ -1,4 +1,4 @@
-import { progressStore } from "../../stores/index.js";
+import { progressStore, activityStore } from "../../stores/index.js";
 import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 
 type ResourceKind = "Video" | "Article" | "Service" | "Course";
@@ -11,9 +11,10 @@ const KIND_COLOR: Record<ResourceKind, { fg: string; bg: string; border: string 
 };
 
 export function ResourceRow({
-  topicSlug, resourceKey, kind, title, meta, url, secondaryMeta
+  topicSlug, topicTitle, resourceKey, kind, title, meta, url, secondaryMeta
 }: {
   topicSlug: string;
+  topicTitle: string;
   resourceKey: string;
   kind: ResourceKind;
   title: string;
@@ -25,31 +26,42 @@ export function ResourceRow({
   const checked = progressStore.getTopicProgress(topicSlug).resources[resourceKey] === true;
   const c = KIND_COLOR[kind];
 
-  const toggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    progressStore.setResourceChecked(topicSlug, resourceKey, !checked);
+  // Toggle = check/uncheck. Only log "checked" activity on transition false→true;
+  // unchecking is corrective and doesn't merit an activity-feed entry.
+  const onToggle = () => {
+    const next = !checked;
+    progressStore.setResourceChecked(topicSlug, resourceKey, next);
+    if (next) {
+      activityStore.append({
+        type: "checked",
+        topicSlug,
+        topicTitle,
+        resourceKey,
+        resourceTitle: title
+      });
+    }
   };
 
   return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noreferrer noopener"
-      className="grid grid-cols-[22px_1fr_auto] gap-md items-center px-md py-md bg-panel border border-border-soft rounded-sm hover:bg-panel-2 hover:border-border"
-    >
+    <div className="grid grid-cols-[22px_1fr_auto] gap-md items-center px-md py-md bg-panel border border-border-soft rounded-sm hover:bg-panel-2 hover:border-border">
       <button
         type="button"
-        onClick={toggle}
+        onClick={onToggle}
         aria-pressed={checked}
-        aria-label={checked ? "Mark unchecked" : "Mark checked"}
+        aria-label={checked ? `Mark "${title}" unchecked` : `Mark "${title}" checked`}
         className={[
           "w-[18px] h-[18px] rounded-sm border-[1.5px] flex items-center justify-center",
-          checked ? "bg-accent border-accent text-white" : "border-border text-transparent"
+          checked ? "bg-accent border-accent text-white" : "border-border text-transparent hover:text-text-dim"
         ].join(" ")}
       >
         ✓
       </button>
-      <div className="min-w-0">
+      <a
+        href={url}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="min-w-0 outline-offset-2"
+      >
         <div className="flex items-center gap-sm flex-wrap">
           <span
             className="inline-block text-[11px] px-xs py-[1px] rounded-sm border"
@@ -58,8 +70,8 @@ export function ResourceRow({
           <span className="text-body-strong text-text truncate">{title}</span>
         </div>
         <div className="text-caption text-text-mute mt-xs truncate">{meta}</div>
-      </div>
+      </a>
       {secondaryMeta && <div className="text-caption text-text-dim tabular-nums">{secondaryMeta}</div>}
-    </a>
+    </div>
   );
 }
