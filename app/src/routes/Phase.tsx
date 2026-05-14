@@ -5,7 +5,7 @@ import { TopicCard } from "../components/domain/TopicCard.js";
 import { ProgressRing } from "../components/domain/ProgressRing.js";
 import { taxonomy, topics, connections } from "../content/index.js";
 import { progressStore } from "../stores/index.js";
-import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../hooks/useStoreSubscription.js";
 
 function resourceTotalFor(slug: string): number {
   const t = topics.find(x => x.frontmatter.slug === slug);
@@ -19,7 +19,7 @@ function resourceTotalFor(slug: string): number {
 }
 
 export function Phase() {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const { phaseSlug } = useParams();
   const phase = taxonomy?.phases.find(p => p.slug === phaseSlug);
   if (!phase || !taxonomy) {

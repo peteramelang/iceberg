@@ -1,5 +1,5 @@
 import { progressStore } from "../../stores/index.js";
-import { useStoreSubscription } from "../../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 
 type ResourceKind = "Video" | "Article" | "Service" | "Course";
 
@@ -21,7 +21,7 @@ export function ResourceRow({
   url: string;
   secondaryMeta?: string;
 }) {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const checked = progressStore.getTopicProgress(topicSlug).resources[resourceKey] === true;
   const c = KIND_COLOR[kind];
 

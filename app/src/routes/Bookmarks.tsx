@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { TopicCard } from "../components/domain/TopicCard.js";
 import { bookmarkStore } from "../stores/index.js";
-import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { taxonomy, topics } from "../content/index.js";
 
 function totalRes(slug: string): number {
@@ -17,7 +17,7 @@ function totalRes(slug: string): number {
 }
 
 export function Bookmarks() {
-  useStoreSubscription(l => bookmarkStore.subscribe(l), () => Date.now());
+  useStoreTick(l => bookmarkStore.subscribe(l));
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const list = bookmarkStore.list().filter(b => !b.resource);
   const bookmarkedSlugs = new Set(list.map(b => b.topic));

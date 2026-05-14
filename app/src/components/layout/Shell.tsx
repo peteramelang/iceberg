@@ -4,10 +4,10 @@ import { Topbar } from "./Topbar.js";
 import { SearchPalette } from "../interactive/SearchPalette.js";
 import { taxonomy, topics } from "../../content/index.js";
 import { progressStore } from "../../stores/index.js";
-import { useStoreSubscription } from "../../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 
 export function Shell({ children }: { children: ReactNode }) {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const [drawer, setDrawer] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 

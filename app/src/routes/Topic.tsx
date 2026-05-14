@@ -16,7 +16,7 @@ import { BookmarkButton } from "../components/interactive/BookmarkButton.js";
 import { NotesField } from "../components/interactive/NotesField.js";
 import { getTopic, taxonomy } from "../content/index.js";
 import { progressStore, activityStore } from "../stores/index.js";
-import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { connectionsForTopic } from "../utils/connectionHelpers.js";
 
 function resourceTotal(fm: import("../content/types.js").TopicFrontmatter): number {
@@ -28,7 +28,7 @@ function resourceTotal(fm: import("../content/types.js").TopicFrontmatter): numb
 }
 
 export function Topic() {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const { topicSlug } = useParams();
   const entry = topicSlug ? getTopic(topicSlug) : undefined;
   if (!entry || !taxonomy) return <div className="p-xl text-text-mute">Topic not found.</div>;

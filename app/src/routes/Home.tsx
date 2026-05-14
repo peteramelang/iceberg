@@ -6,7 +6,7 @@ import { PhaseTile } from "../components/domain/PhaseTile.js";
 import { ActivityRow } from "../components/domain/ActivityRow.js";
 import { taxonomy, topics, connections, paths } from "../content/index.js";
 import { progressStore } from "../stores/index.js";
-import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { useActivity } from "../hooks/useActivity.js";
 
 function totalResourcesFor(slug: string): number {
@@ -21,7 +21,7 @@ function totalResourcesFor(slug: string): number {
 }
 
 export function Home() {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const activity = useActivity(5);
 
   const totalRes: Record<string, number> = {};

@@ -1,9 +1,9 @@
 import { bookmarkStore, activityStore } from "../../stores/index.js";
-import { useStoreSubscription } from "../../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 import { getTopic } from "../../content/index.js";
 
 export function BookmarkButton({ slug }: { slug: string }) {
-  useStoreSubscription(l => bookmarkStore.subscribe(l), () => Date.now());
+  useStoreTick(l => bookmarkStore.subscribe(l));
   const on = bookmarkStore.isBookmarked(slug);
   const onClick = () => {
     bookmarkStore.toggle(slug);

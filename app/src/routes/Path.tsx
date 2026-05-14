@@ -6,7 +6,7 @@ import { ProgressRing } from "../components/domain/ProgressRing.js";
 import { getPathBySlug } from "../utils/pathHelpers.js";
 import { topics } from "../content/index.js";
 import { progressStore } from "../stores/index.js";
-import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../hooks/useStoreSubscription.js";
 
 function totalRes(slug: string): number {
   const t = topics.find(x => x.frontmatter.slug === slug);
@@ -20,7 +20,7 @@ function totalRes(slug: string): number {
 }
 
 export function Path() {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const { pathSlug } = useParams();
   const p = pathSlug ? getPathBySlug(pathSlug) : undefined;
   if (!p) return <div className="p-xl text-text-mute">Path not found.</div>;

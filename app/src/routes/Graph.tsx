@@ -4,7 +4,7 @@ import { ReactFlow, Background, Controls, type Edge, type Node } from "@xyflow/r
 import "@xyflow/react/dist/style.css";
 import { topics, connections, taxonomy } from "../content/index.js";
 import { progressStore } from "../stores/index.js";
-import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { useResolvedTheme } from "../hooks/useResolvedTheme.js";
 import { DifficultyBadge } from "../components/domain/DifficultyBadge.js";
 import { ProgressRing } from "../components/domain/ProgressRing.js";
@@ -46,7 +46,7 @@ function layoutNodes(): Map<string, { x: number; y: number }> {
 }
 
 export function Graph() {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const theme = useResolvedTheme();
   const [params] = useSearchParams();
   const focusSlug = params.get("focus");

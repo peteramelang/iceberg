@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { taxonomy, topics } from "../../content/index.js";
 import { progressStore } from "../../stores/index.js";
-import { useStoreSubscription } from "../../hooks/useStoreSubscription.js";
+import { useStoreTick } from "../../hooks/useStoreSubscription.js";
 import { ProgressMarker } from "../domain/ProgressMarker.js";
 
 function totalResourcesFor(slug: string): number {
@@ -17,7 +17,7 @@ function totalResourcesFor(slug: string): number {
 }
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
-  useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
+  useStoreTick(l => progressStore.subscribe(l));
   const location = useLocation();
   const currentTopicSlug = useMemo(() => {
     const m = location.pathname.match(/^\/topic\/([^/]+)/);
