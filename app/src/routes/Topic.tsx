@@ -24,6 +24,36 @@ import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { useCompletionPulse } from "../hooks/useCompletionPulse.js";
 import { connectionsForTopic } from "../utils/connectionHelpers.js";
+import { InfoDot } from "../components/interactive/InfoDot.js";
+
+function formatUpdated(iso: string): string {
+  // Render ISO datetime as YYYY-MM-DD. Returns the raw input on parse failure
+  // so the page doesn't blank out on malformed data (defensive — schema says
+  // it's always valid).
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toISOString().slice(0, 10);
+}
+
+function youtubeEmbedUrl(watchUrl: string): string | null {
+  // Accepts https://www.youtube.com/watch?v=<id> (the canonical form used
+  // throughout content). Returns the matching /embed/ URL, or null if the
+  // input doesn't parse.
+  try {
+    const u = new URL(watchUrl);
+    const id = u.searchParams.get("v");
+    if (!id) return null;
+    return `https://www.youtube.com/embed/${id}`;
+  } catch {
+    return null;
+  }
+}
+
+function formatDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
 
 // Route wrapper: resolves the topic and the optional ?from-path= context,
 // handles not-found, then renders TopicView. No hooks here — they all live
@@ -119,8 +149,9 @@ function TopicView({ fm, fromPath }: TopicViewProps) {
             <h1 className="text-display-xl m-0">{fm.title}</h1>
             <DifficultyBadge difficulty={fm.difficulty} hours={fm.estimatedHours} />
           </div>
-          <p className="text-body text-text-mute mt-sm max-w-[720px]">{fm.summary}</p>
         </header>
+
+        <Primer fm={fm} />
 
         <JumpNav pills={pills} />
 
@@ -158,10 +189,10 @@ function TopicView({ fm, fromPath }: TopicViewProps) {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.videos.short && (
-                <ResourceRow topicSlug={fm.slug} topicTitle={fm.title} resourceKey="videos.short" kind="Video" title={fm.resources.videos.short.title} meta={fm.resources.videos.short.author} url={fm.resources.videos.short.url} secondaryMeta={`${fm.resources.videos.short.durationMinutes} min`} />
+                <ResourceRow topicSlug={fm.slug} topicTitle={fm.title} resourceKey="videos.short" kind="Video" title={fm.resources.videos.short.title} meta={fm.resources.videos.short.author} url={fm.resources.videos.short.url} secondaryMeta={`${fm.resources.videos.short.durationMinutes} min`} reasoning={fm.resources.videos.short.reasoning} />
               )}
               {fm.resources.videos.long && (
-                <ResourceRow topicSlug={fm.slug} topicTitle={fm.title} resourceKey="videos.long" kind="Video" title={fm.resources.videos.long.title} meta={fm.resources.videos.long.author} url={fm.resources.videos.long.url} secondaryMeta={`${fm.resources.videos.long.durationMinutes} min`} />
+                <ResourceRow topicSlug={fm.slug} topicTitle={fm.title} resourceKey="videos.long" kind="Video" title={fm.resources.videos.long.title} meta={fm.resources.videos.long.author} url={fm.resources.videos.long.url} secondaryMeta={`${fm.resources.videos.long.durationMinutes} min`} reasoning={fm.resources.videos.long.reasoning} />
               )}
             </div>
           </section>
@@ -175,7 +206,7 @@ function TopicView({ fm, fromPath }: TopicViewProps) {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.articles.map((a, i) => (
-                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`articles.${i}`} kind="Article" title={a.title} meta={a.publisher ?? a.author ?? a.kind} url={a.url} />
+                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`articles.${i}`} kind="Article" title={a.title} meta={a.publisher ?? a.author ?? a.kind} url={a.url} reasoning={a.reasoning} />
               ))}
             </div>
           </section>
@@ -189,7 +220,7 @@ function TopicView({ fm, fromPath }: TopicViewProps) {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.services.map((s, i) => (
-                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`services.${i}`} kind="Service" title={s.name} meta={`${s.category}${s.vendor ? " · " + s.vendor : ""}`} url={s.url} />
+                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`services.${i}`} kind="Service" title={s.name} meta={`${s.category}${s.vendor ? " · " + s.vendor : ""}`} url={s.url} reasoning={s.reasoning} />
               ))}
             </div>
           </section>
@@ -203,7 +234,7 @@ function TopicView({ fm, fromPath }: TopicViewProps) {
             </header>
             <div className="flex flex-col gap-sm">
               {fm.resources.courses.map((c, i) => (
-                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`courses.${i}`} kind="Course" title={c.title} meta={`${c.provider}${c.paid ? " · paid" : " · free"}`} url={c.url} />
+                <ResourceRow key={i} topicSlug={fm.slug} topicTitle={fm.title} resourceKey={`courses.${i}`} kind="Course" title={c.title} meta={`${c.provider}${c.paid ? " · paid" : " · free"}`} url={c.url} reasoning={c.reasoning} />
               ))}
             </div>
           </section>
@@ -247,6 +278,10 @@ function TopicView({ fm, fromPath }: TopicViewProps) {
             </Link>
           </section>
         )}
+
+        <div className="pt-xl mt-xl border-t border-border-soft text-caption text-text-dim">
+          Updated {formatUpdated(fm.lastUpdatedAt)}
+        </div>
       </MainColumn>
 
       <RightRail>
@@ -272,5 +307,44 @@ function TopicView({ fm, fromPath }: TopicViewProps) {
         </RailCard>
       </RightRail>
     </div>
+  );
+}
+
+function Primer({ fm }: { fm: TopicFrontmatter }) {
+  const v = fm.shortExplainerVideo;
+  const embedUrl = v ? youtubeEmbedUrl(v.url) : null;
+
+  return (
+    <section
+      className={[
+        "mb-xl bg-panel-2 border border-border-soft rounded p-lg",
+        v && embedUrl
+          ? "grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,360px)] gap-lg items-start"
+          : ""
+      ].join(" ")}
+    >
+      <p className="text-title text-text leading-[1.55] m-0">{fm.tldr}</p>
+      {v && embedUrl && (
+        <div>
+          <div className="aspect-video w-full rounded-sm overflow-hidden bg-black">
+            <iframe
+              src={embedUrl}
+              title={v.title}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full border-0"
+            />
+          </div>
+          <div className="mt-sm flex items-start gap-sm">
+            <div className="min-w-0 flex-1">
+              <div className="text-body-strong text-text truncate">{v.title}</div>
+              <div className="text-caption text-text-mute truncate">{v.author} · {formatDuration(v.durationSeconds)}</div>
+            </div>
+            <InfoDot reasoning={v.reasoning} label={`Why this primer was picked`} />
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
