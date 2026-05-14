@@ -59,8 +59,8 @@ export function Graph() {
 
   const [enabled, setEnabled] = useState<Record<EdgeType, boolean>>({
     "prerequisite": true,
-    "pairs-with": false,
-    "related": false,
+    "pairs-with": true,
+    "related": true,
     "often-confused-with": false
   });
   const [selected, setSelected] = useState<string | null>(focusSlug);
