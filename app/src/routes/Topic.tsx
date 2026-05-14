@@ -323,7 +323,10 @@ function Primer({ fm }: { fm: TopicFrontmatter }) {
           : ""
       ].join(" ")}
     >
-      <p className="text-[15px] leading-[1.6] text-text m-0">{fm.tldr}</p>
+      <div>
+        <div className="text-label text-text-dim uppercase mb-xs">TL;DR</div>
+        <p className="text-[15px] leading-[1.6] text-text m-0">{fm.tldr}</p>
+      </div>
       {v && embedUrl && (
         <div>
           <div className="aspect-video w-full rounded-sm overflow-hidden bg-black">
