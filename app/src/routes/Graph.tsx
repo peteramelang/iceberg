@@ -1,13 +1,15 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ReactFlow, Background, Controls, type Edge, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { topics, connections, taxonomy } from "../content/index.js";
+import { topicBySlug } from "../content/derived.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { useResolvedTheme } from "../hooks/useResolvedTheme.js";
 import { DifficultyBadge } from "../components/domain/DifficultyBadge.js";
 import { ProgressRing } from "../components/domain/ProgressRing.js";
+import { connectionsForTopic, EDGE_LABEL, EDGE_ORDER, type EdgeType as ConnEdgeType } from "../utils/connectionHelpers.js";
 
 const EDGE_TYPES = ["prerequisite", "pairs-with", "related", "often-confused-with"] as const;
 type EdgeType = typeof EDGE_TYPES[number];
@@ -46,6 +48,9 @@ function layoutNodes(): Map<string, { x: number; y: number }> {
 }
 
 export function Graph() {
+  // Tick on progress events; nodes are computed unmemoed so completion
+  // colors update immediately (C11 fix: previous useMemo deps didn't
+  // include progress and went stale until selection/filter changed).
   useStoreTick(l => progressStore.subscribe(l));
   const theme = useResolvedTheme();
   const [params] = useSearchParams();
@@ -60,10 +65,16 @@ export function Graph() {
   });
   const [selected, setSelected] = useState<string | null>(focusSlug);
 
+  // I18: react to URL changes (focusSlug) when component stays mounted
+  // (e.g. clicking a "?focus=" link while on /graph).
+  useEffect(() => {
+    setSelected(focusSlug);
+  }, [focusSlug]);
+
   const EDGE_COLOR = theme === "dark" ? EDGE_COLOR_DARK : EDGE_COLOR_LIGHT;
   const positions = useMemo(layoutNodes, []);
 
-  const nodes: Node[] = useMemo(() => topics
+  const nodes: Node[] = topics
     .filter(t => !phaseFilter || t.frontmatter.phase === phaseFilter)
     .map(t => {
       const fm = t.frontmatter;
@@ -84,13 +95,13 @@ export function Graph() {
           fontSize: 11
         }
       };
-    }), [phaseFilter, positions, selected]);
+    });
 
-  const edges: Edge[] = useMemo(() => connections
+  const edges: Edge[] = connections
     .filter(e => enabled[e.type as EdgeType])
     .filter(e => !phaseFilter || (
-      topics.find(t => t.frontmatter.slug === e.from)?.frontmatter.phase === phaseFilter
-      || topics.find(t => t.frontmatter.slug === e.to)?.frontmatter.phase === phaseFilter
+      topicBySlug.get(e.from)?.frontmatter.phase === phaseFilter
+      || topicBySlug.get(e.to)?.frontmatter.phase === phaseFilter
     ))
     .map(e => ({
       id: `${e.from}-${e.type}-${e.to}`,
@@ -98,13 +109,23 @@ export function Graph() {
       target: e.to,
       animated: false,
       style: { stroke: EDGE_COLOR[e.type as EdgeType], strokeDasharray: e.type === "pairs-with" ? "4 4" : undefined }
-    })), [enabled, phaseFilter, EDGE_COLOR]);
+    }));
 
   const onNodeClick = useCallback((_: unknown, node: Node) => setSelected(node.id), []);
-  const sel = selected ? topics.find(t => t.frontmatter.slug === selected)?.frontmatter : null;
+  const onPaneClick = useCallback(() => setSelected(null), []);
+  const sel = selected ? topicBySlug.get(selected)?.frontmatter : null;
+  const selConnections = useMemo(() => (sel ? connectionsForTopic(sel.slug) : []), [sel]);
+  const selConnectionsByType = useMemo(() => {
+    const grouped: Record<ConnEdgeType, typeof selConnections> = {
+      "prerequisite": [], "pairs-with": [], "related": [], "often-confused-with": []
+    };
+    for (const c of selConnections) grouped[c.type].push(c);
+    return grouped;
+  }, [selConnections]);
 
   return (
     <div className="flex h-[calc(100dvh-52px)]">
+      <h1 className="sr-only">Topic graph</h1>
       <div className="flex-1 relative">
         <div className="absolute top-md left-md z-10 flex gap-sm bg-panel border border-border-soft rounded-sm p-sm">
           {EDGE_TYPES.map(t => (
@@ -129,6 +150,7 @@ export function Graph() {
           nodes={nodes}
           edges={edges}
           onNodeClick={onNodeClick}
+          onPaneClick={onPaneClick}
           colorMode={theme}
           fitView
         >
@@ -138,7 +160,14 @@ export function Graph() {
       </div>
       {sel && (
         <aside className="w-[280px] shrink-0 border-l border-border bg-panel p-lg overflow-y-auto scrollbar-thin">
-          <button type="button" onClick={() => setSelected(null)} className="text-text-mute hover:text-text text-caption mb-md">× close</button>
+          <button
+            type="button"
+            onClick={() => setSelected(null)}
+            aria-label="Close topic panel"
+            className="text-text-mute hover:text-text text-caption mb-md"
+          >
+            × close
+          </button>
           <h2 className="text-display-lg m-0 mb-xs">{sel.title}</h2>
           <DifficultyBadge difficulty={sel.difficulty} hours={sel.estimatedHours} size="sm" />
           <p className="text-body text-text-mute mt-md leading-[1.5]">{sel.summary}</p>
@@ -157,6 +186,38 @@ export function Graph() {
           <Link to={`/topic/${sel.slug}`} className="mt-md inline-flex items-center gap-sm bg-accent text-white px-md py-sm rounded-sm font-medium hover:bg-accent-hover">
             Go to topic →
           </Link>
+          {selConnections.length > 0 && (
+            <div className="mt-xl">
+              <h3 className="text-label text-text-mute uppercase mb-sm">Connections</h3>
+              <div className="flex flex-col gap-md">
+                {EDGE_ORDER.map(type => {
+                  const list = selConnectionsByType[type];
+                  if (list.length === 0) return null;
+                  return (
+                    <div key={type}>
+                      <div className="text-caption text-text-dim uppercase mb-xs">{EDGE_LABEL[type]}</div>
+                      <ul className="flex flex-col gap-xs">
+                        {list.slice(0, 4).map(c => (
+                          <li key={`${type}-${c.otherSlug}`}>
+                            <Link
+                              to={`/topic/${c.otherSlug}`}
+                              className="block text-body text-text hover:text-accent"
+                            >
+                              <div className="truncate">{c.otherTitle}</div>
+                              <div className="text-caption text-text-mute truncate">{c.reasoning}</div>
+                            </Link>
+                          </li>
+                        ))}
+                        {list.length > 4 && (
+                          <li className="text-caption text-text-dim">+{list.length - 4} more</li>
+                        )}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </aside>
       )}
     </div>
