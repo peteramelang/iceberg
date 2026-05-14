@@ -236,9 +236,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 8
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Test product changes on different user groups to prove what actually works,
+  not just guess. Prevents confident mistakes.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.847Z'
 ---
 <!-- user notes -->

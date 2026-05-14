@@ -282,9 +282,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 5
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Prevent bad data from entering your system by enforcing rules at the database
+  level (like preventing orphaned records) and wrapping critical operations in
+  transactions.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.886Z'
 ---
 <!-- user notes -->

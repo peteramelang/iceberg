@@ -224,9 +224,10 @@ codeExamples:
 difficulty: beginner
 estimatedHours: 2
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Define who to contact at each crisis level so on-call engineers know
+  immediately—no guessing, no delays during a 3am outage, just predetermined
+  decisions.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.880Z'
 ---
 <!-- user notes -->

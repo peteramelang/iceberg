@@ -191,9 +191,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 4
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Decide how long to keep different types of data (user logs 30 days, financial
+  records 7 years) and automate deletion to manage costs and comply with privacy
+  laws.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.876Z'
 ---
 <!-- user notes -->

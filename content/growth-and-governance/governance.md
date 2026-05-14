@@ -373,9 +373,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 5
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Set up automated rules to enforce security and compliance across your
+  systems—so policy violations get caught automatically, not by accident during
+  an audit.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.871Z'
 ---
 <!-- user notes -->

@@ -233,9 +233,10 @@ codeExamples:
 difficulty: beginner
 estimatedHours: 2
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Write accurate runbooks, decision records, and onboarding guides so knowledge
+  survives when people leave and on-call engineers can fix things at 3am without
+  guessing.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.870Z'
 ---
 <!-- user notes -->

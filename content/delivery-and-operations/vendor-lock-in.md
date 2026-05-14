@@ -196,9 +196,9 @@ codeExamples:
 difficulty: beginner
 estimatedHours: 2
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Avoid becoming trapped by one vendor. Keep data portable and abstract the
+  services you might swap, so you have options when pricing changes.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.866Z'
 ---
 <!-- user notes -->

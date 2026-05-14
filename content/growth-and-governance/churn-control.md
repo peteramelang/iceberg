@@ -209,9 +209,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 6
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Stop customers from leaving. Catch payment failures early, fix them, and reach
+  out to disengaged users before they cancel.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.867Z'
 ---
 <!-- user notes -->

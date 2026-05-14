@@ -102,6 +102,72 @@
         "documentation",
         "dependency-management"
       ]
+    },
+    {
+      "slug": "ai-assisted-development",
+      "title": "AI-Assisted Development",
+      "order": 8,
+      "description": "Get useful, correct, safe output from AI coding tools — prompting, context, agents, evals, security, cost. Vendor-neutral patterns for working with Claude, Cursor, Copilot, ChatGPT, and beyond.",
+      "topics": [
+        "prompting-for-code",
+        "context-engineering",
+        "agent-loops",
+        "ai-code-review",
+        "mcp-and-tooling",
+        "ai-evals",
+        "hallucination-mitigation",
+        "ai-security-and-pii",
+        "ai-coding-cost-management",
+        "ai-attribution-and-licensing"
+      ]
+    },
+    {
+      "slug": "modern-frontend",
+      "title": "Modern Frontend",
+      "order": 9,
+      "description": "Browser-side concerns the production-readiness phases assume but never teach: bundling, rendering strategies, hydration, type-safe APIs, web vitals, design systems.",
+      "topics": [
+        "module-bundlers",
+        "server-rendering",
+        "hydration-and-islands",
+        "type-safe-api-calls",
+        "state-management-modern",
+        "image-and-media-pipelines",
+        "web-vitals",
+        "design-systems"
+      ]
+    },
+    {
+      "slug": "modern-backend-and-platform",
+      "title": "Modern Backend & Platform",
+      "order": 10,
+      "description": "Backend topics adjacent to production-readiness: monorepos, dev containers, type-safe ORMs, edge runtimes, realtime protocols, durable jobs, vector search.",
+      "topics": [
+        "monorepos",
+        "dev-containers",
+        "type-safe-orms",
+        "edge-runtimes",
+        "realtime-protocols",
+        "background-jobs",
+        "search-and-vector-store",
+        "file-uploads-and-streaming",
+        "webhooks-as-platform"
+      ]
+    },
+    {
+      "slug": "developer-experience-and-craft",
+      "title": "Developer Experience & Craft",
+      "order": 11,
+      "description": "The human side: local environment, debugging mindset, code review craft, git workflows, documentation-driven development, sustainable pace.",
+      "topics": [
+        "local-dev-environment",
+        "debugging-mindset",
+        "code-review-craft",
+        "git-workflows",
+        "documentation-driven-development",
+        "pair-and-mob-programming",
+        "sustainable-pace"
+      ]
     }
   ],
   "topics": {
@@ -862,6 +928,481 @@
         "supply-chain"
       ],
       "addedByStage0": true
+    },
+    "prompting-for-code": {
+      "slug": "prompting-for-code",
+      "title": "Prompting for Code",
+      "phase": "ai-assisted-development",
+      "order": 1,
+      "summary": "Ask AI coding tools for code that compiles, runs, and matches your codebase conventions — through clear intent, examples, and constraints.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "prompting",
+        "workflow"
+      ],
+      "addedByStage0": false
+    },
+    "context-engineering": {
+      "slug": "context-engineering",
+      "title": "Context Engineering",
+      "phase": "ai-assisted-development",
+      "order": 2,
+      "summary": "Curate what an AI tool sees — files, docs, examples, schemas — so it has enough signal to be accurate and not so much that it gets confused.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "context",
+        "rag"
+      ],
+      "addedByStage0": false
+    },
+    "agent-loops": {
+      "slug": "agent-loops",
+      "title": "Agent Loops",
+      "phase": "ai-assisted-development",
+      "order": 3,
+      "summary": "Autonomous coding agents that plan, edit, run, and verify in a loop. When to use them, how to bound them, what oversight they require.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "agents",
+        "autonomy"
+      ],
+      "addedByStage0": false
+    },
+    "ai-code-review": {
+      "slug": "ai-code-review",
+      "title": "AI Code Review",
+      "phase": "ai-assisted-development",
+      "order": 4,
+      "summary": "Use AI as a reviewer and as a reviewee — second-opinion workflows, regression checks, and review prompts that catch what tests miss.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "review",
+        "quality"
+      ],
+      "addedByStage0": false
+    },
+    "mcp-and-tooling": {
+      "slug": "mcp-and-tooling",
+      "title": "MCP and AI Tooling",
+      "phase": "ai-assisted-development",
+      "order": 5,
+      "summary": "Model Context Protocol and the broader pattern of giving AI tools structured access to filesystems, databases, browsers, and your own systems.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "mcp",
+        "tooling"
+      ],
+      "addedByStage0": false
+    },
+    "ai-evals": {
+      "slug": "ai-evals",
+      "title": "AI Evals",
+      "phase": "ai-assisted-development",
+      "order": 6,
+      "summary": "Measure whether AI features (or AI-assisted workflows) actually work — offline test sets, online metrics, golden examples, regression catches.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "evals",
+        "testing"
+      ],
+      "addedByStage0": false
+    },
+    "hallucination-mitigation": {
+      "slug": "hallucination-mitigation",
+      "title": "Hallucination Mitigation",
+      "phase": "ai-assisted-development",
+      "order": 7,
+      "summary": "Detect and reduce fabricated APIs, made-up types, and false claims from AI output — grounding, verification, and skepticism patterns.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "reliability",
+        "verification"
+      ],
+      "addedByStage0": false
+    },
+    "ai-security-and-pii": {
+      "slug": "ai-security-and-pii",
+      "title": "AI Security & PII",
+      "phase": "ai-assisted-development",
+      "order": 8,
+      "summary": "What not to paste into a model, prompt injection, data exfiltration risks, vendor data-handling policies, and how to redact safely.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "security",
+        "privacy"
+      ],
+      "addedByStage0": false
+    },
+    "ai-coding-cost-management": {
+      "slug": "ai-coding-cost-management",
+      "title": "AI Coding Cost Management",
+      "phase": "ai-assisted-development",
+      "order": 9,
+      "summary": "Token economics for AI coding tools — model selection, batching, caching, when the cheapest model is the most expensive because of extra turns.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "cost",
+        "economics"
+      ],
+      "addedByStage0": false
+    },
+    "ai-attribution-and-licensing": {
+      "slug": "ai-attribution-and-licensing",
+      "title": "AI Attribution & Licensing",
+      "phase": "ai-assisted-development",
+      "order": 10,
+      "summary": "Legal and team implications of AI-generated code — copyright, license compatibility, attribution practices, contribution policies.",
+      "prerequisites": [],
+      "tags": [
+        "ai",
+        "legal",
+        "licensing"
+      ],
+      "addedByStage0": false
+    },
+    "module-bundlers": {
+      "slug": "module-bundlers",
+      "title": "Module Bundlers",
+      "phase": "modern-frontend",
+      "order": 1,
+      "summary": "Vite, Turbopack, esbuild, Rspack — what bundlers do, what they skip, and when native ESM lets you stop bundling for development.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "bundling",
+        "build"
+      ],
+      "addedByStage0": false
+    },
+    "server-rendering": {
+      "slug": "server-rendering",
+      "title": "Server Rendering Strategies",
+      "phase": "modern-frontend",
+      "order": 2,
+      "summary": "SSR vs SSG vs ISR vs RSC — trade-offs in latency, hosting cost, freshness, and developer ergonomics for each rendering mode.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "ssr",
+        "rendering"
+      ],
+      "addedByStage0": false
+    },
+    "hydration-and-islands": {
+      "slug": "hydration-and-islands",
+      "title": "Hydration and Islands Architecture",
+      "phase": "modern-frontend",
+      "order": 3,
+      "summary": "Why hydration is slow, how partial hydration and islands (Astro, Qwik, Marko) reduce JS shipped to the browser.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "hydration",
+        "performance"
+      ],
+      "addedByStage0": false
+    },
+    "type-safe-api-calls": {
+      "slug": "type-safe-api-calls",
+      "title": "Type-Safe API Calls",
+      "phase": "modern-frontend",
+      "order": 4,
+      "summary": "End-to-end types between server and client via tRPC, OpenAPI codegen, or GraphQL codegen — and when to pick which.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "types",
+        "api"
+      ],
+      "addedByStage0": false
+    },
+    "state-management-modern": {
+      "slug": "state-management-modern",
+      "title": "Modern State Management",
+      "phase": "modern-frontend",
+      "order": 5,
+      "summary": "Zustand, Jotai, Redux Toolkit, signals — and why less client state usually beats a better state library.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "state"
+      ],
+      "addedByStage0": false
+    },
+    "image-and-media-pipelines": {
+      "slug": "image-and-media-pipelines",
+      "title": "Image and Media Pipelines",
+      "phase": "modern-frontend",
+      "order": 6,
+      "summary": "Modern image formats (AVIF, WebP), responsive images, video streaming basics, and how CDNs handle media transforms.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "media",
+        "performance"
+      ],
+      "addedByStage0": false
+    },
+    "web-vitals": {
+      "slug": "web-vitals",
+      "title": "Web Vitals",
+      "phase": "modern-frontend",
+      "order": 7,
+      "summary": "LCP, INP, CLS — the metrics Google ranks on, how to measure them in the field vs lab, and the highest-leverage fixes.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "performance",
+        "metrics"
+      ],
+      "addedByStage0": false
+    },
+    "design-systems": {
+      "slug": "design-systems",
+      "title": "Design Systems",
+      "phase": "modern-frontend",
+      "order": 8,
+      "summary": "Tokens, primitives, headless UI, shadcn-style copy-in vs npm-distributed — and when a design system pays for itself.",
+      "prerequisites": [],
+      "tags": [
+        "frontend",
+        "design-systems",
+        "ui"
+      ],
+      "addedByStage0": false
+    },
+    "monorepos": {
+      "slug": "monorepos",
+      "title": "Monorepos",
+      "phase": "modern-backend-and-platform",
+      "order": 1,
+      "summary": "Turborepo, Nx, pnpm workspaces — when sharing a repo across packages helps, when it hurts, and how to keep CI fast.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "monorepo",
+        "tooling"
+      ],
+      "addedByStage0": false
+    },
+    "dev-containers": {
+      "slug": "dev-containers",
+      "title": "Dev Containers",
+      "phase": "modern-backend-and-platform",
+      "order": 2,
+      "summary": "Reproducible local environments via devcontainers, nix, or docker compose — the cure for 'works on my machine' bugs.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "devex",
+        "containers"
+      ],
+      "addedByStage0": false
+    },
+    "type-safe-orms": {
+      "slug": "type-safe-orms",
+      "title": "Type-Safe ORMs",
+      "phase": "modern-backend-and-platform",
+      "order": 3,
+      "summary": "Prisma, Drizzle, Kysely — type-safe queries, migration ergonomics, N+1 prevention, and when to drop the ORM for raw SQL.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "orm",
+        "database"
+      ],
+      "addedByStage0": false
+    },
+    "edge-runtimes": {
+      "slug": "edge-runtimes",
+      "title": "Edge Runtimes",
+      "phase": "modern-backend-and-platform",
+      "order": 4,
+      "summary": "Cloudflare Workers, Vercel Edge, Deno Deploy — what runs there, what doesn't, and where the latency wins are real.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "edge",
+        "compute"
+      ],
+      "addedByStage0": false
+    },
+    "realtime-protocols": {
+      "slug": "realtime-protocols",
+      "title": "Realtime Protocols",
+      "phase": "modern-backend-and-platform",
+      "order": 5,
+      "summary": "Websockets vs SSE vs long-polling — when to choose each, scaling pub/sub, and when NOT to go realtime.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "realtime",
+        "protocols"
+      ],
+      "addedByStage0": false
+    },
+    "background-jobs": {
+      "slug": "background-jobs",
+      "title": "Background Jobs",
+      "phase": "modern-backend-and-platform",
+      "order": 6,
+      "summary": "Durable background jobs — BullMQ, pg-boss, Temporal, Inngest — with at-least-once semantics, schedules, and retries.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "jobs",
+        "async"
+      ],
+      "addedByStage0": false
+    },
+    "search-and-vector-store": {
+      "slug": "search-and-vector-store",
+      "title": "Search and Vector Stores",
+      "phase": "modern-backend-and-platform",
+      "order": 7,
+      "summary": "Full-text search (Postgres FTS, Meilisearch, Typesense) and vector stores (pgvector, Qdrant) — choosing between them and combining.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "search",
+        "vectors"
+      ],
+      "addedByStage0": false
+    },
+    "file-uploads-and-streaming": {
+      "slug": "file-uploads-and-streaming",
+      "title": "File Uploads and Streaming",
+      "phase": "modern-backend-and-platform",
+      "order": 8,
+      "summary": "Multipart uploads, signed URLs, resumable uploads, virus scanning, and on-the-fly image transforms.",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "uploads",
+        "storage"
+      ],
+      "addedByStage0": false
+    },
+    "webhooks-as-platform": {
+      "slug": "webhooks-as-platform",
+      "title": "Webhooks as a Platform",
+      "phase": "modern-backend-and-platform",
+      "order": 9,
+      "summary": "Receiving webhooks safely (idempotency, signing, replay) and emitting them reliably (delivery, retries, observability).",
+      "prerequisites": [],
+      "tags": [
+        "backend",
+        "webhooks",
+        "integration"
+      ],
+      "addedByStage0": false
+    },
+    "local-dev-environment": {
+      "slug": "local-dev-environment",
+      "title": "Local Dev Environment",
+      "phase": "developer-experience-and-craft",
+      "order": 1,
+      "summary": "Reproducible setups, editor configuration, language servers, terminal multiplexers — the 5 percent setup investment that compounds.",
+      "prerequisites": [],
+      "tags": [
+        "devex",
+        "tooling",
+        "setup"
+      ],
+      "addedByStage0": false
+    },
+    "debugging-mindset": {
+      "slug": "debugging-mindset",
+      "title": "Debugging Mindset",
+      "phase": "developer-experience-and-craft",
+      "order": 2,
+      "summary": "Systematic debugging: hypothesis-driven investigation, when to add logs vs use a debugger, root cause vs symptom.",
+      "prerequisites": [],
+      "tags": [
+        "devex",
+        "debugging",
+        "craft"
+      ],
+      "addedByStage0": false
+    },
+    "code-review-craft": {
+      "slug": "code-review-craft",
+      "title": "Code Review Craft",
+      "phase": "developer-experience-and-craft",
+      "order": 3,
+      "summary": "The human side of PR review — what good feedback looks like, how to push back kindly, what to nitpick vs let go.",
+      "prerequisites": [],
+      "tags": [
+        "devex",
+        "review",
+        "communication"
+      ],
+      "addedByStage0": false
+    },
+    "git-workflows": {
+      "slug": "git-workflows",
+      "title": "Git Workflows",
+      "phase": "developer-experience-and-craft",
+      "order": 4,
+      "summary": "Branching strategies that survive AI tooling, rebase vs merge, conventional commits, and when to squash.",
+      "prerequisites": [],
+      "tags": [
+        "devex",
+        "git",
+        "workflow"
+      ],
+      "addedByStage0": false
+    },
+    "documentation-driven-development": {
+      "slug": "documentation-driven-development",
+      "title": "Documentation-Driven Development",
+      "phase": "developer-experience-and-craft",
+      "order": 5,
+      "summary": "Write the README first. ADRs as code. Doc tests. Treat documentation as an API contract with future readers.",
+      "prerequisites": [],
+      "tags": [
+        "devex",
+        "documentation",
+        "design"
+      ],
+      "addedByStage0": false
+    },
+    "pair-and-mob-programming": {
+      "slug": "pair-and-mob-programming",
+      "title": "Pair and Mob Programming",
+      "phase": "developer-experience-and-craft",
+      "order": 6,
+      "summary": "When pairing multiplies output and when it halves it — including the AI pair-programmer as a case in this.",
+      "prerequisites": [],
+      "tags": [
+        "devex",
+        "collaboration",
+        "ai"
+      ],
+      "addedByStage0": false
+    },
+    "sustainable-pace": {
+      "slug": "sustainable-pace",
+      "title": "Sustainable Pace",
+      "phase": "developer-experience-and-craft",
+      "order": 7,
+      "summary": "Recognizing burnout, on-call recovery, deep-work cycles — the engineering-discipline version of mental health.",
+      "prerequisites": [],
+      "tags": [
+        "devex",
+        "burnout",
+        "health"
+      ],
+      "addedByStage0": false
     }
   }
 }

@@ -343,9 +343,9 @@ codeExamples:
 difficulty: advanced
 estimatedHours: 14
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Design systems to handle 10x more traffic without rebuilding everything. The
+  database is usually the bottleneck; smart caching multiplies capacity.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.909Z'
 ---
 <!-- user notes -->

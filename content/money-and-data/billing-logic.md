@@ -306,9 +306,9 @@ codeExamples:
 difficulty: advanced
 estimatedHours: 16
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Get the money math right. Invoices, refunds, credits, and retries for failed
+  payments all need to match what customers are actually charged.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.883Z'
 ---
 <!-- user notes -->

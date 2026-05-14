@@ -294,9 +294,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 6
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Verify users are really who they claim to be. Do this right and your login is
+  secure; do it wrong and sessions get stolen.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.911Z'
 ---
 <!-- user notes -->

@@ -248,9 +248,10 @@ codeExamples:
 difficulty: advanced
 estimatedHours: 14
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Set realistic recovery targets (data loss tolerance and downtime tolerance),
+  run regular restore drills, and maintain accessible runbooks so you can
+  actually recover when disaster strikes.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.878Z'
 ---
 <!-- user notes -->

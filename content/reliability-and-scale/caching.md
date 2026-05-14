@@ -325,9 +325,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 8
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Store frequently used data closer to users to make apps faster and cut
+  database load. The trade-off: stale data until you refresh it.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.900Z'
 ---
 <!-- user notes -->

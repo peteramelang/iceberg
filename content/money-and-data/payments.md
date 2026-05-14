@@ -323,9 +323,9 @@ codeExamples:
 difficulty: advanced
 estimatedHours: 12
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Wire up a payment processor securely so you can charge users reliably without
+  storing their card numbers or accidentally double-charging them.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.889Z'
 ---
 <!-- user notes -->

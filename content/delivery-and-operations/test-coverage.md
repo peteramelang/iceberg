@@ -250,9 +250,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 5
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Test code at layers: small unit tests, real integration tests, then critical
+  user workflows end-to-end. Catches bugs before customers do.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.864Z'
 ---
 <!-- user notes -->

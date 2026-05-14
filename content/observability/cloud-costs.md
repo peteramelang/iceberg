@@ -278,9 +278,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 5
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Track where cloud money is going and shut down wasteful things. Oversized
+  servers, always-on test environments, and forgotten resources are pure loss.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.894Z'
 ---
 <!-- user notes -->

@@ -300,9 +300,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 5
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Handle data creation, reading, updates, and deletion safely. Soft delete to
+  preserve history, prevent concurrent edits from overwriting each other, and
+  make bulk operations retryable.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.885Z'
 ---
 <!-- user notes -->

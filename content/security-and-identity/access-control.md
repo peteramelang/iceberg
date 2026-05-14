@@ -265,9 +265,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 8
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Enforce who can do what in your app. Admin sees everything, viewer sees
+  limited data, and unauthorized users see nothing. The difference between a
+  safe app and a breach.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.910Z'
 ---
 <!-- user notes -->

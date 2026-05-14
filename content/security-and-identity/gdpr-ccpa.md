@@ -340,9 +340,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 8
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Let users see their data, delete it, and correct it—and know where all their
+  personal information lives so you can actually fulfill those requests within
+  30-45 days.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.914Z'
 ---
 <!-- user notes -->

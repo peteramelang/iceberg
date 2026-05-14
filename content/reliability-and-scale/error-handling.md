@@ -350,9 +350,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 5
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Distinguish between temporary failures (retry them) and permanent ones (fail
+  fast), log rich context, and design systems to degrade gracefully instead of
+  crashing completely.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.903Z'
 ---
 <!-- user notes -->

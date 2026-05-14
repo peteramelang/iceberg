@@ -333,9 +333,10 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 4
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Use separate development, test, and production systems with isolated data so
+  bugs get caught before reaching real users and staging actually resembles
+  production.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.858Z'
 ---
 <!-- user notes -->

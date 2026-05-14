@@ -312,9 +312,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 6
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Change database structure safely while live. Add new columns, migrate data,
+  then remove old ones across separate deployments to avoid downtime.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.890Z'
 ---
 <!-- user notes -->

@@ -301,9 +301,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 4
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Design operations to handle retries safely by tracking each request with a
+  unique ID—so retrying a failed payment or email never creates duplicates.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.887Z'
 ---
 <!-- user notes -->

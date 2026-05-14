@@ -246,9 +246,9 @@ codeExamples:
 difficulty: beginner
 estimatedHours: 3
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Give support staff dashboards and tools so they can solve problems without
+  asking engineers to run database queries.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.874Z'
 ---
 <!-- user notes -->

@@ -301,9 +301,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 6
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Prepare to quickly undo a bad software release without losing data. Keep a
+  backup production environment ready so you can switch traffic back instantly.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.863Z'
 ---
 <!-- user notes -->

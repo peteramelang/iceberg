@@ -210,9 +210,9 @@ codeExamples:
 difficulty: intermediate
 estimatedHours: 3
 tldr: >-
-  Pending tldr — short, plain-language summary for a non-technical reader or
-  quick skim. Replace before publishing.
+  Rotate engineers on production duty and automate fixes so on-call doesn't mean
+  staying awake all night—the system should self-heal, not require heroes.
 shortExplainerVideo: null
-lastUpdatedAt: '2026-05-14T12:08:53.920Z'
+lastUpdatedAt: '2026-05-14T12:11:25.882Z'
 ---
 <!-- user notes -->
