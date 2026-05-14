@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { CodeExample } from "../../content/types.js";
 import { useResolvedTheme } from "../../hooks/useResolvedTheme.js";
+import { getHighlighter } from "../../utils/shikiHighlighter.js";
 
 export function CodeExamples({ items }: { items: CodeExample[] }) {
   return (
@@ -21,8 +22,8 @@ function CodeBlock({ ex }: { ex: CodeExample }) {
   useEffect(() => {
     let cancelled = false;
     const themeName = theme === "dark" ? "github-dark-default" : "github-light";
-    import("shiki")
-      .then(({ codeToHtml }) => codeToHtml(ex.code, { lang: ex.language, theme: themeName }))
+    getHighlighter()
+      .then(h => h.codeToHtml(ex.code, { lang: ex.language, theme: themeName }))
       .then(h => { if (!cancelled) setHtml(h); })
       .catch(() => { if (!cancelled) setHtml(`<pre><code>${escape(ex.code)}</code></pre>`); });
     return () => { cancelled = true; };
