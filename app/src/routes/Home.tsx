@@ -5,6 +5,7 @@ import { HairlineRule } from "../components/layout/HairlineRule.js";
 import { taxonomy, topics } from "../content/index.js";
 import { progressStore } from "../stores/index.js";
 import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
+import { PathStrip } from "../components/domain/PathStrip.js";
 
 export function Home() {
   useStoreSubscription(l => progressStore.subscribe(l), () => Date.now());
@@ -38,6 +39,13 @@ export function Home() {
             <Link to={`/topic/${last}`} className="underline">{last}</Link>
           </div>
         )}
+      </Section>
+
+      <Section label="Learning Paths">
+        <PathStrip />
+        <div className="mt-md text-caption-md">
+          <Link to="/paths" className="underline">all paths &gt;&gt;</Link>
+        </div>
       </Section>
 
       <Section label="Phases">
