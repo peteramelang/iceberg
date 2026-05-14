@@ -51,19 +51,19 @@ export function Topic() {
               <ResourceRow
                 topicSlug={fm.slug}
                 resourceKey="videos.short"
+                kind="Video"
                 title={fm.resources.videos.short.title}
                 url={fm.resources.videos.short.url}
-                attribution={fm.resources.videos.short.author}
-                meta={`${fm.resources.videos.short.durationMinutes} min`}
+                meta={`${fm.resources.videos.short.author} · ${fm.resources.videos.short.durationMinutes} min`}
               />
               {fm.resources.videos.long && (
                 <ResourceRow
                   topicSlug={fm.slug}
                   resourceKey="videos.long"
+                  kind="Video"
                   title={fm.resources.videos.long.title}
                   url={fm.resources.videos.long.url}
-                  attribution={fm.resources.videos.long.author}
-                  meta={`${fm.resources.videos.long.durationMinutes} min`}
+                  meta={`${fm.resources.videos.long.author} · ${fm.resources.videos.long.durationMinutes} min`}
                 />
               )}
             </Section>
@@ -76,10 +76,10 @@ export function Topic() {
                   key={i}
                   topicSlug={fm.slug}
                   resourceKey={`articles.${i}`}
+                  kind="Article"
                   title={a.title}
                   url={a.url}
-                  attribution={a.author ?? a.publisher}
-                  meta={a.kind}
+                  meta={`${a.author ?? a.publisher ?? ""} · ${a.kind}`.replace(/^ · /, "")}
                 />
               ))}
             </Section>
@@ -92,10 +92,10 @@ export function Topic() {
                   key={i}
                   topicSlug={fm.slug}
                   resourceKey={`services.${i}`}
+                  kind="Service"
                   title={s.name}
                   url={s.url}
-                  attribution={s.vendor && s.vendor !== s.name ? s.vendor : undefined}
-                  meta={s.category}
+                  meta={s.vendor && s.vendor !== s.name ? `${s.vendor} · ${s.category}` : s.category}
                 />
               ))}
             </Section>
@@ -108,10 +108,10 @@ export function Topic() {
                   key={i}
                   topicSlug={fm.slug}
                   resourceKey={`courses.${i}`}
+                  kind="Course"
                   title={c.title}
                   url={c.url}
-                  attribution={c.instructor}
-                  meta={`${c.provider}${c.paid ? " · paid" : ""}`}
+                  meta={`${c.instructor ? c.instructor + " · " : ""}${c.provider}${c.paid ? " · paid" : ""}`}
                 />
               ))}
             </Section>
