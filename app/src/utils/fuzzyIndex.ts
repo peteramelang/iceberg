@@ -1,49 +1,152 @@
 import Fuse from "fuse.js";
-import { topics, taxonomy } from "../content/index.js";
+import { getPhase, taxonomy, topics, connections, paths } from "../content/index.js";
 
-interface IndexEntry {
-  slug: string;
+export type SearchKind = "topic" | "phase" | "resource" | "connection" | "path";
+
+export interface SearchItem {
+  kind: SearchKind;
+  id: string;          // unique key for React
   title: string;
-  summary: string;
-  definition: string;
-  resources: string;
+  subtitle: string;    // parent topic / phase / "type"
+  text: string;        // searchable haystack
+  href: string;
+  badge?: string;
 }
 
-const entries: IndexEntry[] = topics.map(t => {
-  const fm = t.frontmatter;
-  const r = fm.resources;
-  const resourceTitles: string[] = [];
-  if (r.videos.short) resourceTitles.push(r.videos.short.title);
-  if (r.videos.long) resourceTitles.push(r.videos.long.title);
-  for (const a of r.articles) resourceTitles.push(a.title);
-  for (const s of r.services) resourceTitles.push(s.name);
-  for (const c of r.courses) resourceTitles.push(c.title);
-  return {
-    slug: fm.slug,
-    title: fm.title,
-    summary: fm.summary,
-    definition: fm.definition,
-    resources: resourceTitles.join(" · ")
-  };
-});
+function buildIndex(): SearchItem[] {
+  const items: SearchItem[] = [];
 
-export const fuse = new Fuse(entries, {
-  keys: [
-    { name: "title", weight: 0.5 },
-    { name: "summary", weight: 0.25 },
-    { name: "definition", weight: 0.15 },
-    { name: "resources", weight: 0.1 }
-  ],
-  threshold: 0.4,
-  ignoreLocation: true,
-  includeMatches: true,
-  minMatchCharLength: 2
-});
+  if (taxonomy) {
+    for (const phase of taxonomy.phases) {
+      items.push({
+        kind: "phase",
+        id: `phase:${phase.slug}`,
+        title: phase.title,
+        subtitle: "Phase",
+        text: `${phase.title} ${phase.description}`,
+        href: `/phase/${phase.slug}`
+      });
+    }
+  }
 
-export function search(query: string, limit = 8) {
-  if (!query) return [];
-  return fuse.search(query, { limit }).map(r => {
-    const t = taxonomy?.topics[r.item.slug];
-    return { slug: r.item.slug, title: t?.title ?? r.item.title, summary: t?.summary ?? r.item.summary };
-  });
+  for (const t of topics) {
+    const fm = t.frontmatter;
+    items.push({
+      kind: "topic",
+      id: `topic:${fm.slug}`,
+      title: fm.title,
+      subtitle: getPhase(fm.phase)?.title ?? fm.phase,
+      text: `${fm.title} ${fm.summary} ${fm.definition} ${fm.slug}`,
+      href: `/topic/${fm.slug}`,
+      badge: fm.difficulty
+    });
+
+    const phaseTitle = getPhase(fm.phase)?.title ?? fm.phase;
+    if (fm.resources.videos.short) {
+      const v = fm.resources.videos.short;
+      items.push({
+        kind: "resource",
+        id: `res:${fm.slug}:videos.short`,
+        title: v.title,
+        subtitle: `Video · in ${fm.title}`,
+        text: `${v.title} ${v.author} ${fm.title} ${phaseTitle}`,
+        href: `/topic/${fm.slug}#videos`,
+        badge: "Video"
+      });
+    }
+    if (fm.resources.videos.long) {
+      const v = fm.resources.videos.long;
+      items.push({
+        kind: "resource",
+        id: `res:${fm.slug}:videos.long`,
+        title: v.title,
+        subtitle: `Video · in ${fm.title}`,
+        text: `${v.title} ${v.author} ${fm.title} ${phaseTitle}`,
+        href: `/topic/${fm.slug}#videos`,
+        badge: "Video"
+      });
+    }
+    fm.resources.articles.forEach((a, i) => {
+      items.push({
+        kind: "resource",
+        id: `res:${fm.slug}:articles.${i}`,
+        title: a.title,
+        subtitle: `Article · in ${fm.title}`,
+        text: `${a.title} ${a.publisher ?? ""} ${a.author ?? ""} ${fm.title}`,
+        href: `/topic/${fm.slug}#articles`,
+        badge: "Article"
+      });
+    });
+    fm.resources.services.forEach((s, i) => {
+      items.push({
+        kind: "resource",
+        id: `res:${fm.slug}:services.${i}`,
+        title: s.name,
+        subtitle: `Service · in ${fm.title}`,
+        text: `${s.name} ${s.vendor ?? ""} ${s.category} ${fm.title}`,
+        href: `/topic/${fm.slug}#services`,
+        badge: "Service"
+      });
+    });
+    fm.resources.courses.forEach((c, i) => {
+      items.push({
+        kind: "resource",
+        id: `res:${fm.slug}:courses.${i}`,
+        title: c.title,
+        subtitle: `Course · in ${fm.title}`,
+        text: `${c.title} ${c.provider} ${fm.title}`,
+        href: `/topic/${fm.slug}#courses`,
+        badge: "Course"
+      });
+    });
+  }
+
+  for (const p of paths) {
+    items.push({
+      kind: "path",
+      id: `path:${p.slug}`,
+      title: p.title,
+      subtitle: `Path · ${p.audience}`,
+      text: `${p.title} ${p.description} ${p.audience}`,
+      href: `/path/${p.slug}`
+    });
+  }
+
+  const titleBySlug = new Map<string, string>();
+  for (const t of topics) titleBySlug.set(t.frontmatter.slug, t.frontmatter.title);
+  for (const e of connections) {
+    const fromTitle = titleBySlug.get(e.from) ?? e.from;
+    const toTitle = titleBySlug.get(e.to) ?? e.to;
+    items.push({
+      kind: "connection",
+      id: `conn:${e.from}-${e.type}-${e.to}`,
+      title: `${fromTitle} → ${toTitle}`,
+      subtitle: `${e.type.replace("-", " ")} connection`,
+      text: `${fromTitle} ${toTitle} ${e.type} ${e.reasoning}`,
+      href: `/topic/${e.from}#connections`,
+      badge: e.type
+    });
+  }
+
+  return items;
+}
+
+let _fuse: Fuse<SearchItem> | null = null;
+let _items: SearchItem[] = [];
+
+export function getFuse(): { fuse: Fuse<SearchItem>; items: SearchItem[] } {
+  if (!_fuse) {
+    _items = buildIndex();
+    _fuse = new Fuse(_items, {
+      keys: [
+        { name: "title", weight: 0.6 },
+        { name: "text", weight: 0.4 }
+      ],
+      threshold: 0.38,
+      ignoreLocation: true,
+      includeScore: true,
+      minMatchCharLength: 2
+    });
+  }
+  return { fuse: _fuse, items: _items };
 }

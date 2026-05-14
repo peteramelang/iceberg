@@ -1,14 +1,16 @@
 import type { NotesStore } from "./NotesStore.js";
 import type { ImportResult } from "./types.js";
+import { NotesMapSchema, safeRead } from "./schemas.js";
 
 const KEY = "iceberg.v1.notes";
 
 function read(): Record<string, string> {
-  const raw = localStorage.getItem(KEY);
-  if (!raw) return {};
-  try { return JSON.parse(raw) as Record<string, string>; } catch { return {}; }
+  return safeRead(KEY, NotesMapSchema, {});
 }
-function write(d: Record<string, string>) { localStorage.setItem(KEY, JSON.stringify(d)); }
+function write(d: Record<string, string>) {
+  if (typeof localStorage === "undefined") return;
+  try { localStorage.setItem(KEY, JSON.stringify(d)); } catch { /* quota / private-browsing */ }
+}
 
 export class LocalStorageNotesStore implements NotesStore {
   private listeners = new Set<() => void>();

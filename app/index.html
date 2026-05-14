@@ -3,7 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Content Security Policy. The static SPA fetches only /changelog.json
+      (same-origin), no third-party scripts, no remote images. Tailwind
+      injects inline <style> at runtime so style-src needs 'unsafe-inline';
+      ditto for Shiki's generated highlight markup written via
+      dangerouslySetInnerHTML. WASM is needed for Shiki's Oniguruma engine.
+      Image data: scheme is for the JetBrains Mono font CSS @font-face
+      definitions and any future inline SVGs.
+
+      'unsafe-inline' is also kept on script-src for the theme bootstrap
+      below — it must run synchronously before paint to avoid FOUC, and
+      moving it to an external file means an extra blocking request on
+      first paint. A SHA-based whitelist would be cleaner but requires
+      a build-time plugin; deferred.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval';
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: blob:;
+      font-src 'self' data:;
+      connect-src 'self';
+      frame-ancestors 'none';
+      base-uri 'self';
+      form-action 'self';
+      object-src 'none';
+    " />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>iceberg — production-readiness curriculum</title>
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem("iceberg.theme");
+          // Mirror LocalStorageThemeStore's allowlist — without this an
+          // attacker (or buggy extension) could write "system\"></html><...>"
+          // and pollute the data-theme attribute. setAttribute itself does
+          // not parse HTML so the attack surface is small, but it's still
+          // good hygiene.
+          var m = (raw === "light" || raw === "dark" || raw === "system") ? raw : "system";
+          var resolved = (m === "system")
+            ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : m;
+          document.documentElement.setAttribute("data-theme", resolved);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

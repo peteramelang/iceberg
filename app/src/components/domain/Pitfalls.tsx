@@ -1,12 +1,25 @@
-export function Pitfalls({ items }: { items: { title: string; explanation: string }[] }) {
+import type { Pitfall } from "../../content/types.js";
+
+export function Pitfalls({ items }: { items: Pitfall[] }) {
   return (
-    <ul className="space-y-md">
+    <ol className="m-0 p-0 list-none">
       {items.map((p, i) => (
-        <li key={i} className="border-l-2 border-danger pl-md py-xs">
-          <div className="text-body-strong">[!] {p.title}</div>
-          <div className="text-body text-mute mt-xs">{p.explanation}</div>
+        <li
+          key={i}
+          className={[
+            "grid grid-cols-[34px_1fr] gap-md py-lg",
+            i === 0 ? "pt-xs" : "border-t border-border-soft"
+          ].join(" ")}
+        >
+          <span className="font-mono text-caption text-text-dim tabular-nums tracking-wide pt-[3px]">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <div>
+            <div className="text-body-strong text-text mb-xs">{p.title}</div>
+            <div className="text-body text-text-mute leading-[1.6] max-w-[620px]">{p.explanation}</div>
+          </div>
         </li>
       ))}
-    </ul>
+    </ol>
   );
 }

@@ -1,5 +1,6 @@
 import type { ProgressStore } from "./ProgressStore.js";
 import type { TopicProgress, OverallProgress, ImportResult } from "./types.js";
+import { ProgressSnapshotSchema, safeRead } from "./schemas.js";
 
 const KEY = "iceberg.v1.progress";
 
@@ -8,12 +9,11 @@ interface Snapshot {
 }
 
 function readSnapshot(): Snapshot {
-  const raw = localStorage.getItem(KEY);
-  if (!raw) return { topics: {} };
-  try { return JSON.parse(raw) as Snapshot; } catch { return { topics: {} }; }
+  return safeRead(KEY, ProgressSnapshotSchema, { topics: {} });
 }
 function writeSnapshot(s: Snapshot) {
-  localStorage.setItem(KEY, JSON.stringify(s));
+  if (typeof localStorage === "undefined") return;
+  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* quota / private-browsing */ }
 }
 
 export class LocalStorageProgressStore implements ProgressStore {
@@ -56,6 +56,7 @@ export class LocalStorageProgressStore implements ProgressStore {
     if (!cur) return;
     cur.completed = false;
     cur.lastTouchedAt = new Date().toISOString();
+    snap.topics[slug] = cur;
     writeSnapshot(snap);
     this.emit();
   }

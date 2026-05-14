@@ -1,28 +1,66 @@
-import { Link } from "react-router-dom";
-import { Page } from "../components/layout/Page.js";
-import { Section } from "../components/layout/Section.js";
+import { useState } from "react";
 import { Head } from "../components/layout/Head.js";
+import { MainColumn } from "../components/layout/MainColumn.js";
+import { TopicCard } from "../components/domain/TopicCard.js";
 import { bookmarkStore } from "../stores/index.js";
-import { useStoreSubscription } from "../hooks/useStoreSubscription.js";
-import { getTopic } from "../content/index.js";
+import { useStoreTick } from "../hooks/useStoreSubscription.js";
+import { getTopic, taxonomy } from "../content/index.js";
+import { resourceTotalFor } from "../content/derived.js";
 
 export function Bookmarks() {
-  const list = useStoreSubscription(l => bookmarkStore.subscribe(l), () => bookmarkStore.list());
+  useStoreTick(l => bookmarkStore.subscribe(l));
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const list = bookmarkStore.list().filter(b => !b.resource);
+  const bookmarkedSlugs = new Set(list.map(b => b.topic));
+
+  if (!taxonomy) return null;
+  const groups = taxonomy.phases
+    .map(p => ({ phase: p, slugs: p.topics.filter(s => bookmarkedSlugs.has(s)) }))
+    .filter(g => g.slugs.length > 0);
+
   return (
-    <Page>
-      <Head title="Bookmarks" />
-      <Section label="Bookmarks">
-        {list.length === 0 && <div className="text-mute">[ ] no bookmarks yet</div>}
-        {list.map((b, i) => {
-          const t = getTopic(b.topic);
+    <div className="p-xl">
+      <Head title="Bookmarks" description="Your saved topics, grouped by phase." />
+      <MainColumn maxWidth="max-w-[960px]">
+        <header className="mb-xl">
+          <h1 className="text-display-xl m-0 mb-xs">Bookmarks</h1>
+          <p className="text-body text-text-mute">{list.length} bookmarked topic{list.length === 1 ? "" : "s"}.</p>
+        </header>
+        {groups.length === 0 ? (
+          <div className="text-text-mute italic">No bookmarks yet. Bookmark a topic from its detail page to find it here.</div>
+        ) : groups.map(({ phase, slugs }) => {
+          const isCollapsed = collapsed.has(phase.slug);
+          const groupId = `bookmarks-phase-${phase.slug}`;
           return (
-            <div key={i} className="py-sm border-b border-hairline">
-              <Link to={`/topic/${b.topic}`} className="underline">{t?.frontmatter.title ?? b.topic}</Link>
-              {b.resource && <span className="text-caption-md text-mute ml-md">{b.resource}</span>}
-            </div>
+            <section key={phase.slug} className="mb-xl">
+              <button
+                type="button"
+                onClick={() => setCollapsed(prev => {
+                  const next = new Set(prev);
+                  if (next.has(phase.slug)) next.delete(phase.slug); else next.add(phase.slug);
+                  return next;
+                })}
+                aria-expanded={!isCollapsed}
+                aria-controls={groupId}
+                className="flex items-baseline gap-md mb-md text-text"
+              >
+                <span aria-hidden className="text-text-dim text-caption">{isCollapsed ? "▸" : "▾"}</span>
+                <h2 className="text-label text-text-mute uppercase m-0">{phase.title}</h2>
+                <span className="text-caption text-text-dim tabular-nums">{slugs.length}</span>
+              </button>
+              {!isCollapsed && (
+                <div id={groupId}>
+                  {slugs.map(slug => {
+                    const fm = getTopic(slug)?.frontmatter;
+                    if (!fm) return null;
+                    return <TopicCard key={slug} fm={fm} totalResources={resourceTotalFor(slug)} />;
+                  })}
+                </div>
+              )}
+            </section>
           );
         })}
-      </Section>
-    </Page>
+      </MainColumn>
+    </div>
   );
 }

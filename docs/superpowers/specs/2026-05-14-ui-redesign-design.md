@@ -10,6 +10,13 @@ Replace the current Berkeley-Mono cream/manpage chrome with a modern dark-themed
 
 The redesign is structural (layout + information architecture + light/dark theming) — it does **not** redesign the content pipeline. All existing data fields are preserved and rendered; the five new fields from the content-depth plan get first-class UI treatment.
 
+## Execution model
+
+- **Branch:** `ui-redesign-v2`, off `main`. The app is rebuilt in parallel and merged when complete; `main` keeps shipping the current app until the switchover.
+- **Approach:** treat `app/src/` as a rebuild rather than an in-place migration. The current Berkeley-Mono shell, the existing `PrimaryNav`, `Page`, and the per-route components are all replaced rather than refactored. Stores (`ProgressStore`, `BookmarkStore`, `NotesStore`) and the content loader / Zod schemas are reused unchanged.
+- **Data layer is frozen:** the content-depth pipeline has run; `content/` is the source of truth for this redesign. No pipeline or schema work is in scope.
+- **Session model:** the implementation plan is executed in a fresh session via subagent-driven development — this spec + the resulting plan are the only required context for that session.
+
 ## Out of scope
 
 - Custom illustrated brand mark (iceberg-shaped logo). A gradient-square placeholder is used everywhere `brand-mark` appears. Designing the final mark is a separate task.

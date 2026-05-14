@@ -1,37 +1,42 @@
 import { Link } from "react-router-dom";
-import { Page } from "../components/layout/Page.js";
-import { Section } from "../components/layout/Section.js";
 import { Head } from "../components/layout/Head.js";
+import { MainColumn } from "../components/layout/MainColumn.js";
 import { useChangelog } from "../hooks/useChangelog.js";
 import { getTopic } from "../content/index.js";
 
 export function WhatsNew() {
   const entries = useChangelog();
+
   return (
-    <Page>
-      <Head title="What's New" description="Recent changes to the iceberg curriculum." />
-      <Section label="What's New">
-        <p className="text-body text-mute mb-xl max-w-prose">
-          Every content change committed to <code>content/</code>, newest first.
-        </p>
-        {entries.length === 0 && <div className="text-mute">[ ] loading…</div>}
+    <div className="p-xl">
+      <Head title="What's new" description="Curriculum updates derived from the git history of content/." />
+      <MainColumn maxWidth="max-w-[960px]">
+        <header className="mb-xl">
+          <h1 className="text-display-xl m-0 mb-xs">What's new</h1>
+          <p className="text-body text-text-mute">Curriculum updates derived from the git history of <span className="font-mono">content/</span>.</p>
+        </header>
+        {entries.length === 0 && <div className="text-text-mute italic">No entries yet.</div>}
         {entries.map(e => (
-          <div key={e.sha} className="py-lg border-b border-hairline">
-            <div className="text-caption-md text-mute">{e.date.slice(0,10)} · {e.sha}</div>
-            <div className="text-body mt-xs">{e.message}</div>
-            <div className="mt-sm flex flex-wrap gap-sm">
-              {e.touchedTopics.map(slug => {
-                const t = getTopic(slug);
-                return (
-                  <Link key={slug} to={`/topic/${slug}`} className="text-caption-md underline">
-                    {t?.frontmatter.title ?? slug}
-                  </Link>
-                );
-              })}
+          <article key={e.sha} className="py-lg border-t border-border-soft first:border-t-0">
+            <div className="flex items-baseline gap-md mb-xs text-caption text-text-dim">
+              <span className="tabular-nums">{e.date.slice(0, 10)}</span>
+              <span className="font-mono">{e.sha.slice(0, 7)}</span>
             </div>
-          </div>
+            <div className="text-body-strong text-text mb-sm">{e.message}</div>
+            <div className="flex flex-wrap gap-xs">
+              {e.touchedTopics.map(slug => (
+                <Link
+                  key={slug}
+                  to={`/topic/${slug}`}
+                  className="text-caption px-xs py-[1px] border border-border-soft rounded-sm text-text-mute hover:text-text hover:border-border"
+                >
+                  {getTopic(slug)?.frontmatter.title ?? slug}
+                </Link>
+              ))}
+            </div>
+          </article>
         ))}
-      </Section>
-    </Page>
+      </MainColumn>
+    </div>
   );
 }
