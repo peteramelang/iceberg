@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { MainColumn } from "../components/layout/MainColumn.js";
 import { RightRail, RailCard } from "../components/layout/RightRail.js";
 import { JumpNav, type JumpPill } from "../components/interactive/JumpNav.js";
@@ -15,6 +15,7 @@ import { MarkCompleteButton } from "../components/interactive/MarkCompleteButton
 import { BookmarkButton } from "../components/interactive/BookmarkButton.js";
 import { NotesField } from "../components/interactive/NotesField.js";
 import { getTopic, taxonomy } from "../content/index.js";
+import { getPathBySlug } from "../utils/pathHelpers.js";
 import { progressStore, activityStore } from "../stores/index.js";
 import { useStoreTick } from "../hooks/useStoreSubscription.js";
 import { connectionsForTopic } from "../utils/connectionHelpers.js";
@@ -30,11 +31,28 @@ function resourceTotal(fm: import("../content/types.js").TopicFrontmatter): numb
 export function Topic() {
   useStoreTick(l => progressStore.subscribe(l));
   const { topicSlug } = useParams();
+  const [searchParams] = useSearchParams();
   const entry = topicSlug ? getTopic(topicSlug) : undefined;
   if (!entry || !taxonomy) return <div className="p-xl text-text-mute">Topic not found.</div>;
   const fm = entry.frontmatter;
   const phase = taxonomy.phases.find(p => p.slug === fm.phase);
   const phaseIndex = phase ? phase.topics.indexOf(fm.slug) + 1 : 0;
+
+  // Path context: when the user arrived from a path's "Start →" link, the
+  // ?from-path= query param identifies which path they're walking. We render
+  // an additional eyebrow line and a "next in path" suggestion at the bottom.
+  const fromPathSlug = searchParams.get("from-path");
+  const fromPath = fromPathSlug ? getPathBySlug(fromPathSlug) : undefined;
+  const nextInPath = useMemo(() => {
+    if (!fromPath) return null;
+    const idx = fromPath.topics.indexOf(fm.slug);
+    if (idx < 0 || idx === fromPath.topics.length - 1) return null;
+    const nextSlug = fromPath.topics[idx + 1];
+    if (!nextSlug) return null;
+    const nextTopic = getTopic(nextSlug);
+    if (!nextTopic) return null;
+    return { slug: nextSlug, title: nextTopic.frontmatter.title, position: idx + 2, total: fromPath.topics.length };
+  }, [fromPath, fm.slug]);
 
   const prog = progressStore.getTopicProgress(fm.slug);
   const total = resourceTotal(fm);
@@ -67,8 +85,17 @@ export function Topic() {
     <div className="p-xl flex flex-col lg:flex-row gap-xl">
       <MainColumn>
         <header className="mb-md">
+          {fromPath && (
+            <div className="text-label text-text-mute uppercase mb-sm flex items-center gap-sm">
+              <span className="inline-block w-[6px] h-[6px] rounded-full bg-accent" />
+              In path:{" "}
+              <Link to={`/path/${fromPath.slug}`} className="text-accent hover:text-accent-hover">
+                {fromPath.title}
+              </Link>
+            </div>
+          )}
           <div className="text-label text-text-mute uppercase mb-sm flex items-center gap-sm">
-            <span className="inline-block w-[6px] h-[6px] rounded-full bg-accent" />
+            {!fromPath && <span className="inline-block w-[6px] h-[6px] rounded-full bg-accent" />}
             {phase?.title} · Topic {phaseIndex} of {phase?.topics.length}
           </div>
           <div className="flex items-center gap-md flex-wrap">
@@ -189,6 +216,30 @@ export function Topic() {
           <h2 className="text-label text-text-mute uppercase mb-md">Your notes</h2>
           <NotesField slug={fm.slug} />
         </section>
+
+        {fromPath && nextInPath && (
+          <section className="pt-xl mt-xl border-t border-border-soft">
+            <div className="text-label text-text-mute uppercase mb-sm">Next in {fromPath.title}</div>
+            <Link
+              to={`/topic/${nextInPath.slug}?from-path=${fromPath.slug}`}
+              className="grid grid-cols-[auto_1fr_auto] items-center gap-md p-lg bg-panel border border-border-soft rounded hover:bg-panel-2 hover:border-border"
+            >
+              <span className="font-mono text-caption text-text-dim tabular-nums">
+                {String(nextInPath.position).padStart(2, "0")} / {String(nextInPath.total).padStart(2, "0")}
+              </span>
+              <span className="text-body-strong text-text">{nextInPath.title}</span>
+              <span className="text-text-mute">→</span>
+            </Link>
+          </section>
+        )}
+        {fromPath && !nextInPath && (
+          <section className="pt-xl mt-xl border-t border-border-soft">
+            <div className="text-label text-text-mute uppercase mb-sm">End of path</div>
+            <Link to={`/path/${fromPath.slug}`} className="text-accent hover:text-accent-hover text-body">
+              ← Back to {fromPath.title}
+            </Link>
+          </section>
+        )}
       </MainColumn>
 
       <RightRail>
