@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Page } from "../components/layout/Page.js";
 import { Section } from "../components/layout/Section.js";
+import { Head } from "../components/layout/Head.js";
 import { getPath, taxonomy } from "../content/index.js";
 import { ProgressMarker } from "../components/domain/ProgressMarker.js";
 import { progressStore } from "../stores/index.js";
@@ -14,6 +15,7 @@ export function Path() {
 
   return (
     <Page>
+      <Head title={path.title} description={path.description} />
       <Section>
         <Link to="/paths" className="text-caption-md text-mute no-underline">&lt;&lt; all paths</Link>
         <h1 className="text-display-xl mt-md">{path.title}</h1>

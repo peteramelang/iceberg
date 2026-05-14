@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { Page } from "../components/layout/Page.js";
 import { Section } from "../components/layout/Section.js";
+import { Head } from "../components/layout/Head.js";
 import { ResourceRow } from "../components/domain/ResourceRow.js";
 import { ConnectionSidebar } from "../components/domain/ConnectionSidebar.js";
 import { NotesField } from "../components/interactive/NotesField.js";
@@ -20,6 +21,7 @@ export function Topic() {
 
   return (
     <Page>
+      <Head title={fm.title} description={fm.summary} jsonLd={{ "@context": "https://schema.org", "@type": "LearningResource", name: fm.title, description: fm.summary, educationalLevel: fm.difficulty, timeRequired: `PT${Math.ceil(fm.estimatedHours)}H`, teaches: fm.title, isPartOf: { "@type": "Course", name: phase?.title } }} />
       <div className="grid md:grid-cols-[1fr_240px] gap-xl">
         <div>
           <Section>

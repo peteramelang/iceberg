@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Page } from "../components/layout/Page.js";
 import { Section } from "../components/layout/Section.js";
+import { Head } from "../components/layout/Head.js";
 import { getPhase, taxonomy, topics } from "../content/index.js";
 import { ProgressMarker } from "../components/domain/ProgressMarker.js";
 import { progressStore } from "../stores/index.js";
@@ -15,6 +16,7 @@ export function Phase() {
 
   return (
     <Page>
+      <Head title={phase?.title ?? "Phase"} description={phase?.description} />
       <Section>
         <Link to="/" className="text-caption-md text-mute no-underline">&lt;&lt; back</Link>
         <h1 className="text-display-xl mt-md">{phase.title}</h1>

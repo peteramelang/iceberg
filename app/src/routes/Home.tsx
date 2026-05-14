@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Page } from "../components/layout/Page.js";
 import { Section } from "../components/layout/Section.js";
+import { Head } from "../components/layout/Head.js";
 import { HairlineRule } from "../components/layout/HairlineRule.js";
 import { taxonomy, topics } from "../content/index.js";
 import { progressStore } from "../stores/index.js";
@@ -24,6 +25,7 @@ export function Home() {
 
   return (
     <Page>
+      <Head title="iceberg — production-readiness curriculum" />
       <Section>
         <h1 className="text-display-xl">iceberg</h1>
         <p className="text-body mt-lg max-w-prose">

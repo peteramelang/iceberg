@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactFlow, Background, Controls, type Node, type Edge } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Page } from "../components/layout/Page.js";
+import { Head } from "../components/layout/Head.js";
 import { taxonomy, connections } from "../content/index.js";
 
 export function Graph() {
@@ -47,6 +48,7 @@ export function Graph() {
 
   return (
     <Page>
+      <Head title="Knowledge Graph" />
       <div className="h-[70vh] border border-hairline">
         <ReactFlow
           nodes={nodes}

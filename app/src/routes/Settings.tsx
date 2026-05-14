@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Page } from "../components/layout/Page.js";
 import { Section } from "../components/layout/Section.js";
+import { Head } from "../components/layout/Head.js";
 import { progressStore, bookmarkStore, notesStore } from "../stores/index.js";
 import type { ExportPayload, ImportResult } from "../stores/types.js";
 
@@ -43,6 +44,7 @@ export function Settings() {
 
   return (
     <Page>
+      <Head title="Settings" />
       <Section label="Export">
         <button onClick={doExport} className="px-lg py-xs bg-ink text-canvas rounded-sm">[+] download progress</button>
       </Section>

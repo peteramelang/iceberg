@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Page } from "../components/layout/Page.js";
 import { Section } from "../components/layout/Section.js";
+import { Head } from "../components/layout/Head.js";
 import { useChangelog } from "../hooks/useChangelog.js";
 import { getTopic } from "../content/index.js";
 
@@ -8,6 +9,7 @@ export function WhatsNew() {
   const entries = useChangelog();
   return (
     <Page>
+      <Head title="What's New" description="Recent changes to the iceberg curriculum." />
       <Section label="What's New">
         <p className="text-body text-mute mb-xl max-w-prose">
           Every content change committed to <code>content/</code>, newest first.

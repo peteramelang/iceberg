@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { Page } from "../components/layout/Page.js";
 import { Section } from "../components/layout/Section.js";
+import { Head } from "../components/layout/Head.js";
 import { paths } from "../content/index.js";
 
 export function Paths() {
   return (
     <Page>
+      <Head title="Learning Paths" description="Opinionated curriculum sequences for specific developer audiences." />
       <Section label="Learning Paths">
         <p className="text-body text-mute mb-xl max-w-prose">
           Each path is an opinionated sequence of topics for a specific audience and goal. Start at the top, work down.
